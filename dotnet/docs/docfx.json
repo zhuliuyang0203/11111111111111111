@@ -10,6 +10,7 @@
         }
       ],
       "dest": "webdriver",
+      "namespaceLayout": "nested",
       "outputFormat": "apiPage"
     },
     {
@@ -22,6 +23,7 @@
         }
       ],
       "dest": "support",
+      "namespaceLayout": "nested",
       "outputFormat": "apiPage"
     }
 
@@ -50,7 +52,7 @@
       "modern"
     ],
     "globalMetadata": {
-      "_appName": "Selenium .NET API Docs",
+      "_appName": "Selenium .NET API",
       "_appLogoPath": "images/logo.svg",
       "_appFaviconPath": "images/favicon.ico",
       "_enableSearch": true

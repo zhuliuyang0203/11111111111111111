@@ -1,4 +1,9 @@
-- name: WebDriver
-  href: webdriver/toc.yml
-- name: Support
-  href: support/toc.yml
+- name: Intro
+  href: index.md
+
+- name: Modules
+  items:
+  - name: Selenium.WebDriver
+    href: webdriver/OpenQA.Selenium.yml
+  - name: Selenium.Support
+    href: support/OpenQA.Selenium.Support.yml
