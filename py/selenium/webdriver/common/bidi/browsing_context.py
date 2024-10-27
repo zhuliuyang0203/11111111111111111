@@ -15,62 +15,27 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import re
 import typing
 from dataclasses import dataclass
-from dataclasses import fields
-from dataclasses import is_dataclass
 
-from selenium.webdriver.common.bidi.cdp import import_devtools
+from .bidi import BidiCommand
+from .bidi import BidiObject
 
-devtools = import_devtools("")
-event_class = devtools.util.event_class
+BrowsingContext = str
+
+Navigation = str
+
+ReadinessState = typing.Literal["none", "interactive", "complete"]
 
 
 @dataclass
-class NavigateParameters:
-    context: str
+class NavigateParameters(BidiObject):
+    context: BrowsingContext
     url: str
-    wait: str = "complete"
-
-    def to_json(self):
-        json = {}
-        for field in fields(self):
-            key = field.name
-            value = getattr(self, key)
-            if not value:
-                continue
-            if is_dataclass(value):
-                value = value.to_json()
-            json[re.sub(r"^_", "", key)] = value
-        return json
-
-    @classmethod
-    def from_json(cls, json):
-        return cls(**json)
+    wait: typing.Optional[ReadinessState] = None
 
 
 @dataclass
-class Navigate:
+class Navigate(BidiCommand):
     params: NavigateParameters
     method: typing.Literal["browsingContext.navigate"] = "browsingContext.navigate"
-
-    def to_json(self):
-        json = {}
-        for field in fields(self):
-            key = field.name
-            value = getattr(self, key)
-            if not value:
-                continue
-            if is_dataclass(value):
-                value = value.to_json()
-            json[re.sub(r"^_", "", key)] = value
-        return json
-
-    @classmethod
-    def from_json(cls, json):
-        return cls(**json)
-
-    def cmd(self):
-        result = yield self.to_json()
-        return result

@@ -26,7 +26,7 @@ def session_subscribe(*events, browsing_contexts=None):
     if browsing_contexts is None:
         browsing_contexts = []
     if browsing_contexts:
-        cmd_dict["params"]["browsingContexts"] = browsing_contexts
+        cmd_dict["params"]["browsing_contexts"] = browsing_contexts
     _ = yield cmd_dict
     return None
 
@@ -41,6 +41,6 @@ def session_unsubscribe(*events, browsing_contexts=None):
     if browsing_contexts is None:
         browsing_contexts = []
     if browsing_contexts:
-        cmd_dict["params"]["browsingContexts"] = browsing_contexts
+        cmd_dict["params"]["browsing_contexts"] = browsing_contexts
     _ = yield cmd_dict
     return None

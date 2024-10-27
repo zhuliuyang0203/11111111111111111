@@ -49,7 +49,7 @@ class Network:
             return intercept
 
     async def get(self, url, conn):
-        params = NavigateParameters(context=self.driver.current_window_handle, url=url)
+        params = NavigateParameters(context=self.driver.current_window_handle, url=url, wait="complete")
         await conn.execute(Navigate(params).cmd())
 
     async def remove_request_handler(self):

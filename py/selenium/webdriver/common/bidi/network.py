@@ -15,241 +15,99 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import re
 import typing
 from dataclasses import dataclass
-from dataclasses import fields
-from dataclasses import is_dataclass
 
 from selenium.webdriver.common.bidi.cdp import import_devtools
 from selenium.webdriver.common.bidi.session import session_subscribe
 from selenium.webdriver.common.bidi.session import session_unsubscribe
 
+from . import browsing_context
 from . import script
+from .bidi import BidiCommand
+from .bidi import BidiEvent
+from .bidi import BidiObject
 
 devtools = import_devtools("")
 event_class = devtools.util.event_class
 
-
-@dataclass
-class StringValue:
-    value: str
-    _type: typing.Literal["string"] = "string"
-
-    def to_json(self):
-        json = {}
-        for field in fields(self):
-            key = field.name
-            value = getattr(self, key)
-            if value is None:
-                continue
-            if is_dataclass(value):
-                value = value.to_json()
-            json[re.sub(r"^_", "", key)] = value
-        return json
-
-    @classmethod
-    def from_json(cls, json):
-        return cls(**json)
+InterceptPhase = typing.Literal["beforeRequestSent", "responseStarted", "authRequired"]
 
 
 @dataclass
-class Base64Value:
-    value: str
-    _type: typing.Literal["base64"] = "base64"
-
-    def to_json(self):
-        json = {}
-        for field in fields(self):
-            key = field.name
-            value = getattr(self, key)
-            if value is None:
-                continue
-            if is_dataclass(value):
-                value = value.to_json()
-            json[re.sub(r"^_", "", key)] = value
-        return json
-
-    @classmethod
-    def from_json(cls, json):
-        return cls(**json)
-
-
-@dataclass
-class UrlPatternPattern:
-    protocol: typing.Optional[str]
-    hostname: typing.Optional[str]
-    port: typing.Optional[str]
-    pathname: typing.Optional[str]
-    search: typing.Optional[str]
+class UrlPatternPattern(BidiObject):
     _type: typing.Literal["pattern"] = "pattern"
-
-    def to_json(self):
-        json = {}
-        for field in fields(self):
-            key = field.name
-            value = getattr(self, key)
-            if value is None:
-                continue
-            if is_dataclass(value):
-                value = value.to_json()
-            json[re.sub(r"^_", "", key)] = value
-        return json
-
-    @classmethod
-    def from_json(cls, json):
-        return cls(**json)
+    protocol: typing.Optional[str] = None
+    hostname: typing.Optional[str] = None
+    port: typing.Optional[str] = None
+    pathname: typing.Optional[str] = None
+    search: typing.Optional[str] = None
 
 
 @dataclass
-class UrlPatternString:
+class UrlPatternString(BidiObject):
     pattern: str
     _type: typing.Literal["string"] = "string"
 
-    def to_json(self):
-        json = {}
-        for field in fields(self):
-            key = field.name
-            value = getattr(self, key)
-            if value is None:
-                continue
-            if is_dataclass(value):
-                value = value.to_json()
-            json[re.sub(r"^_", "", key)] = value
-        return json
 
-    @classmethod
-    def from_json(cls, json):
-        return cls(**json)
+UrlPattern = typing.Union[UrlPatternPattern, UrlPatternString]
 
 
 @dataclass
-class CookieHeader:
+class AddInterceptParameters(BidiObject):
+    phases: typing.List[InterceptPhase]
+    contexts: typing.Optional[typing.List[browsing_context.BrowsingContext]] = None
+    urlPatterns: typing.Optional[typing.List[UrlPattern]] = None
+
+
+@dataclass
+class AddIntercept(BidiCommand):
+    params: AddInterceptParameters
+    method: typing.Literal["network.addIntercept"] = "network.addIntercept"
+
+
+Request = str
+
+
+@dataclass
+class StringValue(BidiObject):
+    value: str
+    _type: typing.Literal["string"] = "string"
+
+
+@dataclass
+class Base64Value(BidiObject):
+    value: str
+    _type: typing.Literal["base64"] = "base64"
+
+
+BytesValue = typing.Union[StringValue, Base64Value]
+
+
+@dataclass
+class Header(BidiObject):
     name: str
-    value: typing.Union[StringValue, Base64Value]
+    value: BytesValue
 
-    def to_json(self):
-        json = {}
-        for field in fields(self):
-            key = field.name
-            value = getattr(self, key)
-            if value is None:
-                continue
-            if is_dataclass(value):
-                value = value.to_json()
-            json[re.sub(r"^_", "", key)] = value
-        return json
 
-    @classmethod
-    def from_json(cls, json):
-        return cls(**json)
+SameSite = typing.Literal["strict", "lax", "none"]
 
 
 @dataclass
-class Header:
+class Cookie(BidiObject):
     name: str
-    value: typing.Union[StringValue, Base64Value]
-
-    def to_json(self):
-        json = {}
-        for field in fields(self):
-            key = field.name
-            value = getattr(self, key)
-            if value is None:
-                continue
-            if is_dataclass(value):
-                value = value.to_json()
-            json[re.sub(r"^_", "", key)] = value
-        return json
-
-    @classmethod
-    def from_json(cls, json):
-        return cls(**json)
-
-
-@dataclass
-class ContinueRequestParameters:
-    request: str
-    body: typing.Optional[typing.Union[StringValue, Base64Value]] = None
-    cookies: typing.Optional[typing.List[CookieHeader]] = None
-    headers: typing.Optional[typing.List[Header]] = None
-    method: typing.Optional[str] = None
-    url: typing.Optional[str] = None
-
-    def to_json(self):
-        json = {}
-        for field in fields(self):
-            key = field.name
-            value = getattr(self, key)
-            if value is None:
-                continue
-            if is_dataclass(value):
-                value = value.to_json()
-            json[re.sub(r"^_", "", key)] = value
-        return json
-
-    @classmethod
-    def from_json(cls, json):
-        return cls(**json)
-
-
-@dataclass
-class ContinueRequest:
-    params: ContinueRequestParameters
-    method: typing.Literal["network.continueRequest"] = "network.continueRequest"
-
-    def to_json(self):
-        json = {}
-        for field in fields(self):
-            key = field.name
-            value = getattr(self, key)
-            if value is None:
-                continue
-            if is_dataclass(value):
-                value = value.to_json()
-            json[re.sub(r"^_", "", key)] = value
-        return json
-
-    @classmethod
-    def from_json(cls, json):
-        return cls(**json)
-
-    def cmd(self):
-        result = yield self.to_json()
-        return result
-
-
-@dataclass
-class Cookie:
-    name: str
-    value: typing.Union[StringValue, Base64Value]
+    value: BytesValue
     domain: str
     path: str
     size: int
     httpOnly: bool
     secure: bool
-    sameSite: typing.Literal["strict", "lax", "none"]
-    expiry: typing.Optional[int]
-
-    def to_json(self):
-        json = {}
-        for field in fields(self):
-            key = field.name
-            value = getattr(self, key)
-            if value is None:
-                continue
-            if is_dataclass(value):
-                value = value.to_json()
-            json[re.sub(r"^_", "", key)] = value
-        return json
-
-    @classmethod
-    def from_json(cls, json):
-        return cls(**json)
+    sameSite: SameSite
+    expiry: typing.Optional[int] = None
 
 
 @dataclass
-class FetchTimingInfo:
+class FetchTimingInfo(BidiObject):
     timeOrigin: float
     requestTime: float
     redirectStart: float
@@ -264,254 +122,89 @@ class FetchTimingInfo:
     responseStart: float
     responseEnd: float
 
-    def to_json(self):
-        json = {}
-        for field in fields(self):
-            key = field.name
-            value = getattr(self, key)
-            if value is None:
-                continue
-            if is_dataclass(value):
-                value = value.to_json()
-            json[re.sub(r"^_", "", key)] = value
-        return json
-
-    @classmethod
-    def from_json(cls, json):
-        return cls(**json)
-
 
 @dataclass
-class RequestData:
-    request: str
+class RequestData(BidiObject):
+    request: Request
     url: str
     method: str
-    headers: typing.Optional[typing.List[Header]]
-    cookies: typing.Optional[typing.List[Cookie]]
     headersSize: int
-    bodySize: typing.Optional[int]
     timings: FetchTimingInfo
+    headers: typing.Optional[typing.List[Header]] = None
+    cookies: typing.Optional[typing.List[Cookie]] = None
+    bodySize: typing.Optional[int] = None
 
-    def to_json(self):
-        json = {}
-        for field in fields(self):
-            key = field.name
-            value = getattr(self, key)
-            if value is None:
-                continue
-            if is_dataclass(value):
-                value = value.to_json()
-            json[re.sub(r"^_", "", key)] = value
-        return json
 
-    @classmethod
-    def from_json(cls, json):
-        return cls(**json)
+Intercept = str
 
 
 @dataclass
-class BaseParameters:
-    isBlocked: bool
-    redirectCount: int
-    request: RequestData
-    timestamp: int
-    intercepts: typing.Optional[typing.List[str]] = None
-    navigation: typing.Optional[str] = None
-    context: typing.Optional[str] = None
-
-    def to_json(self):
-        json = {}
-        for field in fields(self):
-            key = field.name
-            value = getattr(self, key)
-            if value is None:
-                continue
-            if is_dataclass(value):
-                value = value.to_json()
-            json[re.sub(r"^_", "", key)] = value
-        return json
-
-    @classmethod
-    def from_json(cls, json):
-        return cls(**json)
-
-
-@dataclass
-class Initiator:
+class Initiator(BidiObject):
     _type: typing.Literal["parser", "script", "preflight", "other"]
     columnNumber: typing.Optional[int] = None
     lineNumber: typing.Optional[int] = None
     stackTrace: typing.Optional[script.StackTrace] = None
-    request: typing.Optional[str] = None
-
-    def to_json(self):
-        json = {}
-        for field in fields(self):
-            key = field.name
-            value = getattr(self, key)
-            if value is None:
-                continue
-            if is_dataclass(value):
-                value = value.to_json()
-            json[re.sub(r"^_", "", key)] = value
-        return json
-
-    @classmethod
-    def from_json(cls, json):
-        return cls(**json)
+    request: typing.Optional[Request] = None
 
 
 @dataclass
-class BeforeRequestSentParameters:
+class BeforeRequestSentParameters(BidiObject):
     isBlocked: bool
     redirectCount: int
     request: RequestData
     timestamp: int
     initiator: Initiator
-    intercepts: typing.Optional[typing.List[str]] = None
-    navigation: typing.Optional[str] = None
-    context: typing.Optional[str] = None
-
-    def to_json(self):
-        json = {}
-        for field in fields(self):
-            key = field.name
-            value = getattr(self, key)
-            if value is None:
-                continue
-            if is_dataclass(value):
-                value = value.to_json()
-            json[re.sub(r"^_", "", key)] = value
-        return json
-
-    @classmethod
-    def from_json(cls, json):
-        return cls(**json)
+    context: typing.Optional[browsing_context.BrowsingContext] = None
+    navigation: typing.Optional[browsing_context.Navigation] = None
+    intercepts: typing.Optional[typing.List[Intercept]] = None
 
 
-@event_class("network.beforeRequestSent")
 @dataclass
-class BeforeRequestSent:
+@event_class("network.beforeRequestSent")
+class BeforeRequestSent(BidiEvent):
     params: BeforeRequestSentParameters
     method: typing.Literal["network.beforeRequestSent"] = "network.beforeRequestSent"
-
-    def to_json(self):
-        json = {}
-        for field in fields(self):
-            key = field.name
-            value = getattr(self, key)
-            if value is None:
-                continue
-            if is_dataclass(value):
-                value = value.to_json()
-            json[re.sub(r"^_", "", key)] = value
-        return json
 
     @classmethod
     def from_json(cls, json):
         params = BeforeRequestSentParameters.from_json(json)
         return cls(params)
 
-
 @dataclass
-class AddInterceptParameters:
-    phases: typing.List[typing.Literal["beforeRequestSent", "responseStarted", "authRequired"]]
-    contexts: typing.Optional[typing.List[str]] = None
-    urlPatterns: typing.Optional[typing.List[typing.Union[UrlPatternPattern, UrlPatternString]]] = None
-
-    def to_json(self):
-        json = {}
-        for field in fields(self):
-            key = field.name
-            value = getattr(self, key)
-            if value is None:
-                continue
-            if is_dataclass(value):
-                value = value.to_json()
-            json[re.sub(r"^_", "", key)] = value
-        return json
-
-    @classmethod
-    def from_json(cls, json):
-        return cls(**json)
+class CookieHeader(BidiObject):
+    name: str
+    value: BytesValue
 
 
 @dataclass
-class AddIntercept:
-    params: AddInterceptParameters
-    method: typing.Literal["network.addIntercept"] = "network.addIntercept"
-
-    def to_json(self):
-        json = {}
-        for field in fields(self):
-            key = field.name
-            value = getattr(self, key)
-            if value is None:
-                continue
-            if is_dataclass(value):
-                value = value.to_json()
-            json[re.sub(r"^_", "", key)] = value
-        return json
-
-    @classmethod
-    def from_json(cls, json):
-        return cls(**json)
-
-    def cmd(self):
-        result = yield self.to_json()
-        return result
+class ContinueRequestParameters(BidiObject):
+    request: Request
+    body: typing.Optional[BytesValue] = None
+    cookies: typing.Optional[typing.List[CookieHeader]] = None
+    headers: typing.Optional[typing.List[Header]] = None
+    method: typing.Optional[str] = None
+    url: typing.Optional[str] = None
 
 
 @dataclass
-class RemoveInterceptParameters:
-    intercept: str
-
-    def to_json(self):
-        json = {}
-        for field in fields(self):
-            key = field.name
-            value = getattr(self, key)
-            if value is None:
-                continue
-            if is_dataclass(value):
-                value = value.to_json()
-            json[re.sub(r"^_", "", key)] = value
-        return json
-
-    @classmethod
-    def from_json(cls, json):
-        return cls(**json)
+class ContinueRequest(BidiCommand):
+    params: ContinueRequestParameters
+    method: typing.Literal["network.continueRequest"] = "network.continueRequest"
 
 
 @dataclass
-class RemoveIntercept:
+class RemoveInterceptParameters(BidiObject):
+    intercept: Intercept
+
+
+@dataclass
+class RemoveIntercept(BidiCommand):
     params: RemoveInterceptParameters
     method: typing.Literal["network.removeIntercept"] = "network.removeIntercept"
-
-    def to_json(self):
-        json = {}
-        for field in fields(self):
-            key = field.name
-            value = getattr(self, key)
-            if value is None:
-                continue
-            if is_dataclass(value):
-                value = value.to_json()
-            json[re.sub(r"^_", "", key)] = value
-        return json
-
-    @classmethod
-    def from_json(cls, json):
-        return cls(**json)
-
-    def cmd(self):
-        result = yield self.to_json()
-        return result
 
 
 class Network:
     def __init__(self, conn):
-
         self.conn = conn
         self.callbacks = {}
 
