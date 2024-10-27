@@ -193,7 +193,6 @@ namespace OpenQA.Selenium.Environment
             return options;
         }
 
-
         private T MergeOptions<T>(object baseOptions, DriverOptions overriddenOptions) where T : DriverOptions, new()
         {
             // If the driver type has a static DefaultOptions property,
