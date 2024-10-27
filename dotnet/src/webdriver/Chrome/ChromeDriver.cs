@@ -83,7 +83,7 @@ namespace OpenQA.Selenium.Chrome
         /// </summary>
         /// <param name="options">The <see cref="ChromeOptions"/> to be used with the Chrome driver.</param>
         public ChromeDriver(ChromeOptions options)
-            : this(ChromeDriverService.CreateDefaultService(), options, RemoteWebDriver.DefaultCommandTimeout)
+            : this(ChromeDriverService.CreateDefaultService(), options, RemoteWebDriver.DefaultCommandTimeout, true)
         {
         }
 
@@ -125,7 +125,7 @@ namespace OpenQA.Selenium.Chrome
         /// <param name="options">The <see cref="ChromeOptions"/> to be used with the Chrome driver.</param>
         /// <param name="commandTimeout">The maximum amount of time to wait for each command.</param>
         public ChromeDriver(string chromeDriverDirectory, ChromeOptions options, TimeSpan commandTimeout)
-            : this(ChromeDriverService.CreateDefaultService(chromeDriverDirectory), options, commandTimeout)
+            : this(ChromeDriverService.CreateDefaultService(chromeDriverDirectory), options, commandTimeout, disposeDriverService: true)
         {
         }
 
@@ -136,7 +136,7 @@ namespace OpenQA.Selenium.Chrome
         /// <param name="service">The <see cref="ChromeDriverService"/> to use.</param>
         /// <param name="options">The <see cref="ChromeOptions"/> used to initialize the driver.</param>
         public ChromeDriver(ChromeDriverService service, ChromeOptions options)
-            : this(service, options, RemoteWebDriver.DefaultCommandTimeout)
+            : this(service, options, RemoteWebDriver.DefaultCommandTimeout, disposeDriverService: true)
         {
         }
 
@@ -147,7 +147,13 @@ namespace OpenQA.Selenium.Chrome
         /// <param name="options">The <see cref="ChromeOptions"/> to be used with the Chrome driver.</param>
         /// <param name="commandTimeout">The maximum amount of time to wait for each command.</param>
         public ChromeDriver(ChromeDriverService service, ChromeOptions options, TimeSpan commandTimeout)
-            : base(service, options, commandTimeout)
+            : base(service, options, commandTimeout, disposeDriverService: true)
+        {
+            this.AddCustomChromeCommands();
+        }
+
+        public ChromeDriver(ChromeDriverService service, ChromeOptions options, TimeSpan commandTimeout, bool disposeDriverService = true)
+            : base(service, options, commandTimeout, disposeDriverService)
         {
             this.AddCustomChromeCommands();
         }

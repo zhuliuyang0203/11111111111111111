@@ -728,6 +728,7 @@ namespace OpenQA.Selenium
             {
                 this.sessionId = null;
             }
+
             this.executor.Dispose();
         }
 
