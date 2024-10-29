@@ -48,6 +48,7 @@ from .exceptions import UnexpectedAlertPresentException
 from .exceptions import UnexpectedTagNameException
 from .exceptions import UnknownMethodException
 from .exceptions import WebDriverException
+from .exceptions import DetachedShadowRootException
 
 __all__ = [
     "WebDriverException",
@@ -83,4 +84,5 @@ __all__ = [
     "InvalidSessionIdException",
     "SessionNotCreatedException",
     "UnknownMethodException",
+    "DetachedShadowRootException"
 ]

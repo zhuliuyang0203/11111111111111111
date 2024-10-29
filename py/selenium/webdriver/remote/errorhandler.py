@@ -23,6 +23,7 @@ from selenium.common.exceptions import ElementClickInterceptedException
 from selenium.common.exceptions import ElementNotInteractableException
 from selenium.common.exceptions import ElementNotSelectableException
 from selenium.common.exceptions import ElementNotVisibleException
+from selenium.common.exceptions import DetachedShadowRootException
 from selenium.common.exceptions import ImeActivationFailedException
 from selenium.common.exceptions import ImeNotAvailableException
 from selenium.common.exceptions import InsecureCertificateException
@@ -88,6 +89,7 @@ class ExceptionMapping:
     UNABLE_TO_CAPTURE_SCREEN = ScreenshotException
     ELEMENT_CLICK_INTERCEPTED = ElementClickInterceptedException
     UNKNOWN_METHOD = UnknownMethodException
+    DETACHED_SHADOW_ROOT = DetachedShadowRootException
 
 
 class ErrorCode:
@@ -131,6 +133,7 @@ class ErrorCode:
     UNABLE_TO_CAPTURE_SCREEN = [63, "unable to capture screen"]
     ELEMENT_CLICK_INTERCEPTED = [64, "element click intercepted"]
     UNKNOWN_METHOD = ["unknown method exception"]
+    DETACHED_SHADOW_ROOT = [65,"detached shadow root"]
 
     METHOD_NOT_ALLOWED = [405, "unsupported operation"]
 

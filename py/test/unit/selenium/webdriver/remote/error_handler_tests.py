@@ -240,7 +240,11 @@ def test_raises_exception_for_unknown_method(handler, code):
 def test_raises_exception_for_method_not_allowed(handler, code):
     with pytest.raises(exceptions.WebDriverException):
         handler.check_response({"status": code, "value": "foo"})
-
+        
+@pytest.mark.parametrize("code", ErrorCode.DETACHED_SHADOW_ROOT)
+def test_raises_exception_for_invalid_selector(handler, code):
+    with pytest.raises(exceptions.DetachedShadowRootException):
+        handler.check_response({"status": code, "value": "foo"})
 
 @pytest.mark.parametrize("key", ["stackTrace", "stacktrace"])
 def test_relays_exception_stacktrace(handler, key):
