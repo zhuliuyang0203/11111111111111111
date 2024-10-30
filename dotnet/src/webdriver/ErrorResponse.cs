@@ -27,11 +27,6 @@ namespace OpenQA.Selenium
     /// </summary>
     public class ErrorResponse
     {
-        private StackTraceElement[]? stackTrace;
-        private string message = string.Empty;
-        private string className = string.Empty;
-        private string screenshot = string.Empty;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ErrorResponse"/> class.
         /// </summary>
@@ -51,23 +46,21 @@ namespace OpenQA.Selenium
                 if (responseValue.TryGetValue("message", out object? messageObj)
                     && messageObj?.ToString() is string message)
                 {
-                    this.message = message;
+                    this.Message = message;
                 }
                 else
                 {
-                    this.message = "The error did not contain a message.";
+                    this.Message = "The error did not contain a message.";
                 }
 
-                if (responseValue.TryGetValue("screen", out object? screenObj)
-                    && screenObj?.ToString() is string screen)
+                if (responseValue.TryGetValue("screen", out object? screenObj))
                 {
-                    this.screenshot = screen;
+                    this.Screenshot = screenObj?.ToString();
                 }
 
-                if (responseValue.TryGetValue("class", out object? classObj)
-                    && classObj?.ToString() is string @class)
+                if (responseValue.TryGetValue("class", out object? classObj))
                 {
-                    this.className = @class;
+                    this.ClassName = classObj?.ToString();
                 }
 
                 if (responseValue.TryGetValue("stackTrace", out object? stackTraceObj)
@@ -84,7 +77,7 @@ namespace OpenQA.Selenium
                             }
                         }
 
-                        this.stackTrace = stackTraceList.ToArray();
+                        this.StackTrace = stackTraceList.ToArray();
                     }
                 }
             }
@@ -93,38 +86,22 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Gets or sets the message from the response
         /// </summary>
-        public string Message
-        {
-            get { return this.message; }
-            set { this.message = value; }
-        }
+        public string? Message { get; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the class name that threw the error
         /// </summary>
-        public string ClassName
-        {
-            get { return this.className; }
-            set { this.className = value; }
-        }
+        public string? ClassName { get; }
 
+        // TODO: (JimEvans) Change this to return an Image.
         /// <summary>
         /// Gets or sets the screenshot of the error
         /// </summary>
-        public string Screenshot
-        {
-            // TODO: (JimEvans) Change this to return an Image.
-            get { return this.screenshot; }
-            set { this.screenshot = value; }
-        }
+        public string? Screenshot { get; }
 
         /// <summary>
         /// Gets or sets the stack trace of the error
         /// </summary>
-        public StackTraceElement[]? StackTrace
-        {
-            get { return this.stackTrace; }
-            set { this.stackTrace = value; }
-        }
+        public StackTraceElement[]? StackTrace { get; }
     }
 }
