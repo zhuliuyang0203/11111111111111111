@@ -35,7 +35,11 @@ namespace OpenQA.Selenium.Remote
         /// </summary>
         /// <param name="keySequence">The sequence to test for file existence.</param>
         /// <returns><see langword="true"/> if the key sequence represents a file; otherwise, <see langword="false"/>.</returns>
-        public bool IsFile([NotNullWhen(true)] string? keySequence)
+        public bool IsFile(
+#if NET
+            [NotNullWhen(true)]
+#endif
+        string? keySequence)
         {
             return File.Exists(keySequence);
         }

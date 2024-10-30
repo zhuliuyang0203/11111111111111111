@@ -72,7 +72,7 @@ namespace OpenQA.Selenium
         /// <returns>The final message for exception</returns>
         protected static string GetMessage(string? message)
         {
-            return message + "; " + supportMsg + supportUrl;
+            return $"{message}; {supportMsg}{supportUrl}";
         }
     }
 }

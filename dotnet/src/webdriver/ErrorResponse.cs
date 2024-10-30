@@ -44,52 +44,41 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="responseValue">A <see cref="Dictionary{K, V}"/> containing names and values of
         /// the properties of this <see cref="ErrorResponse"/>.</param>
-        public ErrorResponse(Dictionary<string, object>? responseValue)
+        public ErrorResponse(Dictionary<string, object?>? responseValue)
         {
             if (responseValue != null)
             {
-                if (responseValue.ContainsKey("message"))
+                if (responseValue.TryGetValue("message", out object? messageObj)
+                    && messageObj?.ToString() is string message)
                 {
-                    if (responseValue["message"] != null)
-                    {
-                        this.message = responseValue["message"].ToString() ?? "";
-                    }
-                    else
-                    {
-                        this.message = "The error did not contain a message.";
-                    }
+                    this.message = message;
+                }
+                else
+                {
+                    this.message = "The error did not contain a message.";
                 }
 
-                if (responseValue.ContainsKey("screen") && responseValue["screen"] != null)
+                if (responseValue.TryGetValue("screen", out object? screenObj)
+                    && screenObj?.ToString() is string screen)
                 {
-                    this.screenshot = responseValue["screen"].ToString() ?? "";
+                    this.screenshot = screen;
                 }
 
-                if (responseValue.ContainsKey("class") && responseValue["class"] != null)
+                if (responseValue.TryGetValue("class", out object? classObj)
+                    && classObj?.ToString() is string @class)
                 {
-                    this.className = responseValue["class"].ToString() ?? "";
+                    this.className = @class;
                 }
 
-                if (responseValue.ContainsKey("stackTrace") || responseValue.ContainsKey("stacktrace"))
+                if (responseValue.TryGetValue("stackTrace", out object? stackTraceObj)
+                    || responseValue.TryGetValue("stacktrace", out stackTraceObj))
                 {
-                    object[]? stackTraceArray = null;
-
-                    if (responseValue.ContainsKey("stackTrace"))
-                    {
-                        stackTraceArray = responseValue["stackTrace"] as object[];
-                    }
-                    else if (responseValue.ContainsKey("stacktrace"))
-                    {
-                        stackTraceArray = responseValue["stacktrace"] as object[];
-                    }
-
-                    if (stackTraceArray != null)
+                    if (stackTraceObj is object?[] stackTraceArray)
                     {
                         List<StackTraceElement> stackTraceList = new List<StackTraceElement>();
-                        foreach (object rawStackTraceElement in stackTraceArray)
+                        foreach (object? rawStackTraceElement in stackTraceArray)
                         {
-                            Dictionary<string, object>? elementAsDictionary = rawStackTraceElement as Dictionary<string, object>;
-                            if (elementAsDictionary != null)
+                            if (rawStackTraceElement is Dictionary<string, object?> elementAsDictionary)
                             {
                                 stackTraceList.Add(new StackTraceElement(elementAsDictionary));
                             }

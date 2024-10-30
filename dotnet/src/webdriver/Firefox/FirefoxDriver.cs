@@ -249,7 +249,9 @@ namespace OpenQA.Selenium.Firefox
         /// <summary>
         /// Gets a value indicating whether a DevTools session is active.
         /// </summary>
+#if NET
         [MemberNotNullWhen(true, nameof(devToolsSession))]
+#endif
         public bool HasActiveDevToolsSession
         {
             get { return this.devToolsSession != null; }

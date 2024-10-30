@@ -34,7 +34,11 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="keySequence">The sequence to test for file existence.</param>
         /// <returns>This method always returns <see langword="false"/> in this implementation.</returns>
-        public bool IsFile([NotNullWhen(true)] string? keySequence)
+        public bool IsFile(
+#if NET
+            [NotNullWhen(true)]
+#endif
+        string? keySequence)
         {
             return false;
         }
