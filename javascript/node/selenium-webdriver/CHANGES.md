@@ -1,15 +1,9 @@
 ## 4.26.0
 
---> Mark the selenium-webdriver npm as publishable
---> [ci] Setting nightly versions
---> [js] Close BiDi websocket connection (#14507)
---> [js] Fix comment
---> [JS] move from npm to pnpm (#14579)
-
-- [js] use only pnpm and remove npm refs (#14572)
-- remove lock file refs
-  --> [JS] update dependencies to latest versions to resolve security alerts
-  --> Update supported versions for Chrome DevTools
+- Add CDP for Chrome 130 and remove 127
+- Fix sendKeys command fail on FileDetector.handleFile error (#14663)
+- Update dependencies to latest versions to resolve security alerts
+- Close BiDi websocket connection (#14507)
 
 ## 4.25.0
 
