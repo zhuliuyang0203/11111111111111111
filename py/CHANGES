@@ -1,3 +1,8 @@
+Selenium 4.26.1
+* DeprecationWarning raised in default webdriver init (#14690)
+* Remote connection use timeout from ClientConfig (#14692)
+* Add backward compatibility for AppiumConnection (#14696)
+
 Selenium 4.26.0
 * Add CDP for Chrome 130 and remove 127
 * Added more internal logging for CDP (#14668)
