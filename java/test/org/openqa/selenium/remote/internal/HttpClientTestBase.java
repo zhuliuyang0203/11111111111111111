@@ -61,7 +61,7 @@ public abstract class HttpClientTestBase {
 
   protected abstract HttpClient.Factory createFactory();
 
-  static HttpHandler delegate;
+  static volatile HttpHandler delegate;
   static AppServer server;
 
   private static final Logger LOG = Logger.getLogger(HttpClientTestBase.class.getName());
