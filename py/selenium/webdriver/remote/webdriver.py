@@ -1232,9 +1232,9 @@ class WebDriver(BaseWebDriver):
         """Selects an account from the dialog by index."""
         self.execute(Command.SELECT_FEDCM_ACCOUNT, {"accountIndex": index})
 
-    def get_fedcm_dialog_type(self) -> str:
+    def get_fedcm_dialog_type(self):
         """Gets the type of the dialog currently being shown."""
-        return self.execute(Command.GET_FEDCM_DIALOG_TYPE)["value"]
+        return self.execute(Command.GET_FEDCM_DIALOG_TYPE)
 
     def get_fedcm_title(self) -> str:
         """Gets the title of the dialog."""
@@ -1244,9 +1244,9 @@ class WebDriver(BaseWebDriver):
         """Gets the subtitle of the dialog."""
         return self.execute(Command.GET_FEDCM_TITLE).get("subtitle")
 
-    def get_fedcm_account_list(self) -> list:
+    def get_fedcm_account_list(self):
         """Gets the list of accounts shown in the dialog."""
-        return self.execute(Command.GET_FEDCM_ACCOUNT_LIST)["value"]
+        return self.execute(Command.GET_FEDCM_ACCOUNT_LIST)
 
     def set_fedcm_delay(self, enabled: bool) -> None:
         """Disables the promise rejection delay for FedCM.

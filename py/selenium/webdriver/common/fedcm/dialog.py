@@ -33,35 +33,33 @@ class Dialog:
     @property
     def type(self) -> Optional[str]:
         """Gets the type of the dialog currently being shown."""
-        result = self._driver.execute("getFedCmDialogType")
-        return result["value"] if result else None
+        return self._driver.get_fedcm_dialog_type()
 
     @property
     def title(self) -> str:
         """Gets the title of the dialog."""
-        # return self._driver.execute("getFedCmTitle").get("title")
         return self._driver.get_fedcm_title()
 
     @property
     def subtitle(self) -> Optional[str]:
         """Gets the subtitle of the dialog."""
-        result = self._driver.execute("getFedCmTitle")
+        result = self._driver.get_fedcm_subtitle()
         return result.get("subtitle") if result else None
 
     @property
     def get_accounts(self) -> List[Account]:
         """Gets the list of accounts shown in the dialog."""
-        accounts = self._driver.execute("getFedCmAccountList")
+        accounts = self._driver.get_fedcm_account_list()
         return [Account(account) for account in accounts]
 
     def select_account(self, index: int) -> None:
         """Selects an account from the dialog by index."""
-        self._driver.execute("selectFedCmAccount", {"accountIndex": index})
+        self._driver.select_fedcm_account(index)
 
     def click_continue(self) -> None:
         """Clicks the continue button in the dialog."""
-        self._driver.execute("clickFedCmDialogButton", {"dialogButton": "ConfirmIdpLoginContinue"})
+        self._driver.click_fedcm_dialog_button()
 
     def cancel(self) -> None:
         """Cancels/dismisses the dialog."""
-        self._driver.execute("cancelFedCmDialog")
+        self._driver.cancel_fedcm_dialog()
