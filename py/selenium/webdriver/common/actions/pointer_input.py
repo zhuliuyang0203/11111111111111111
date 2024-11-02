@@ -14,8 +14,8 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-import typing
-from typing import Union
+
+from typing import Union, Dict, Any, Optional
 
 from selenium.common.exceptions import InvalidArgumentException
 from selenium.webdriver.remote.webelement import WebElement
@@ -41,7 +41,7 @@ class PointerInput(InputDevice):
         duration=DEFAULT_MOVE_DURATION,
         x: float = 0,
         y: float = 0,
-        origin: typing.Optional[WebElement] = None,
+        origin: Optional[WebElement] = None,
         **kwargs,
     ):
         action = {"type": "pointerMove", "duration": duration, "x": x, "y": y, **kwargs}
@@ -67,7 +67,7 @@ class PointerInput(InputDevice):
     def encode(self):
         return {"type": self.type, "parameters": {"pointerType": self.kind}, "id": self.name, "actions": self.actions}
 
-    def _convert_keys(self, actions: typing.Dict[str, typing.Any]):
+    def _convert_keys(self, actions: Dict[str, Any]):
         out = {}
         for k, v in actions.items():
             if v is None:
