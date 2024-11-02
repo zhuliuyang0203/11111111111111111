@@ -16,7 +16,6 @@
 // limitations under the License.
 // </copyright>
 
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 #nullable enable
@@ -36,8 +35,8 @@ namespace OpenQA.Selenium.Remote
         /// <param name="keySequence">The sequence to test for file existence.</param>
         /// <returns><see langword="true"/> if the key sequence represents a file; otherwise, <see langword="false"/>.</returns>
         public bool IsFile(
-#if NET
-            [NotNullWhen(true)]
+#if NET8_0_OR_GREATER
+            [System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
 #endif
         string? keySequence)
         {

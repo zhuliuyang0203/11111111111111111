@@ -16,8 +16,6 @@
 // limitations under the License.
 // </copyright>
 
-using System.Diagnostics.CodeAnalysis;
-
 #nullable enable
 
 namespace OpenQA.Selenium
@@ -35,8 +33,8 @@ namespace OpenQA.Selenium
         /// <param name="keySequence">The sequence to test for file existence.</param>
         /// <returns><see langword="true"/> if the key sequence represents a file; otherwise, <see langword="false"/>.</returns>
         bool IsFile(
-#if NET
-            [NotNullWhen(true)]
+#if NET8_0_OR_GREATER
+            [System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
 #endif
         string? keySequence);
     }

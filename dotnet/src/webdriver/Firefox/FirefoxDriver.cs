@@ -21,7 +21,6 @@ using OpenQA.Selenium.Remote;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
@@ -249,8 +248,8 @@ namespace OpenQA.Selenium.Firefox
         /// <summary>
         /// Gets a value indicating whether a DevTools session is active.
         /// </summary>
-#if NET
-        [MemberNotNullWhen(true, nameof(devToolsSession))]
+#if NET8_0_OR_GREATER
+        [System.Diagnostics.CodeAnalysis.MemberNotNullWhen(true, nameof(devToolsSession))]
 #endif
         public bool HasActiveDevToolsSession
         {
