@@ -46,7 +46,6 @@ class Dialog:
         result = self._driver.get_fedcm_subtitle()
         return result.get("subtitle") if result else None
 
-    @property
     def get_accounts(self) -> List[Account]:
         """Gets the list of accounts shown in the dialog."""
         accounts = self._driver.get_fedcm_account_list()

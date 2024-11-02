@@ -1224,29 +1224,33 @@ class WebDriver(BaseWebDriver):
         self.execute(Command.DELETE_DOWNLOADABLE_FILES)
 
     # Federated Credential Management (FedCM)
-    def cancel_fedcm_dialog(self) -> None:
-        """Cancels/dismisses the FedCM dialog."""
-        self.execute(Command.CANCEL_FEDCM_DIALOG)
+    def get_fedcm_title(self) -> str:
+        """Gets the title of the dialog."""
+        return self.execute(Command.GET_FEDCM_TITLE)["value"].get("title")
+
+    def get_fedcm_subtitle(self) -> Optional[str]:
+        """Gets the subtitle of the dialog."""
+        return self.execute(Command.GET_FEDCM_TITLE)["value"].get("subtitle")
+
+    def get_fedcm_dialog_type(self):
+        """Gets the type of the dialog currently being shown."""
+        return self.execute(Command.GET_FEDCM_DIALOG_TYPE).get("value")
+
+    def get_fedcm_account_list(self):
+        """Gets the list of accounts shown in the dialog."""
+        return self.execute(Command.GET_FEDCM_ACCOUNT_LIST).get("value")
 
     def select_fedcm_account(self, index: int) -> None:
         """Selects an account from the dialog by index."""
         self.execute(Command.SELECT_FEDCM_ACCOUNT, {"accountIndex": index})
 
-    def get_fedcm_dialog_type(self):
-        """Gets the type of the dialog currently being shown."""
-        return self.execute(Command.GET_FEDCM_DIALOG_TYPE)
+    def click_fedcm_dialog_button(self) -> None:
+        """Clicks the continue button in the dialog."""
+        self.execute(Command.CLICK_FEDCM_DIALOG_BUTTON, {"dialogButton": "ConfirmIdpLoginContinue"})
 
-    def get_fedcm_title(self) -> str:
-        """Gets the title of the dialog."""
-        return self.execute(Command.GET_FEDCM_TITLE).get("title")
-
-    def get_fedcm_subtitle(self) -> Optional[str]:
-        """Gets the subtitle of the dialog."""
-        return self.execute(Command.GET_FEDCM_TITLE).get("subtitle")
-
-    def get_fedcm_account_list(self):
-        """Gets the list of accounts shown in the dialog."""
-        return self.execute(Command.GET_FEDCM_ACCOUNT_LIST)
+    def cancel_fedcm_dialog(self) -> None:
+        """Cancels/dismisses the FedCM dialog."""
+        self.execute(Command.CANCEL_FEDCM_DIALOG)
 
     def set_fedcm_delay(self, enabled: bool) -> None:
         """Disables the promise rejection delay for FedCM.
@@ -1267,7 +1271,3 @@ class WebDriver(BaseWebDriver):
         can be triggered again immediately.
         """
         self.execute(Command.RESET_FEDCM_COOLDOWN)
-
-    def click_fedcm_dialog_button(self) -> None:
-        """Clicks the continue button in the dialog."""
-        self.execute(Command.CLICK_FEDCM_DIALOG_BUTTON, {"dialogButton": "ConfirmIdpLoginContinue"})

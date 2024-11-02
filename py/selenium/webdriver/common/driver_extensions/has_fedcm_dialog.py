@@ -33,7 +33,7 @@ class HasFedCmDialog(WebDriver):
         privacy reasons. This method allows turning it off to let tests
         run faster where this is not relevant.
         """
-        self.execute("setFedCmDelay", {"enabled": enable})
+        self.set_fedcm_delay(enable)
 
     def fedcm_cooldown(self):
         """Resets the FedCm dialog cooldown.

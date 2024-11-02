@@ -34,31 +34,31 @@ def dialog(mock_driver):
 
 def test_click_continue(dialog, mock_driver):
     dialog.click_continue()
-    mock_driver.execute.assert_called_with("clickFedCmDialogButton", {"dialogButton": "ConfirmIdpLoginContinue"})
+    mock_driver.click_fedcm_dialog_button.assert_called_once()
 
 
 def test_cancel(dialog, mock_driver):
     dialog.cancel()
-    mock_driver.execute.assert_called_with("cancelFedCmDialog")
+    mock_driver.cancel_fedcm_dialog.assert_called_once()
 
 
 def test_select_account(dialog, mock_driver):
     dialog.select_account(1)
-    mock_driver.execute.assert_called_with("selectFedCmAccount", {"accountIndex": 1})
+    mock_driver.select_fedcm_account.assert_called_once_with(1)
 
 
 def test_type(dialog, mock_driver):
-    mock_driver.execute.return_value = {"value": "AccountChooser"}
+    mock_driver.get_fedcm_dialog_type.return_value = "AccountChooser"
     assert dialog.type == "AccountChooser"
 
 
 def test_title(dialog, mock_driver):
-    mock_driver.execute.return_value = {"title": "Sign in"}
+    mock_driver.get_fedcm_title.return_value = "Sign in"
     assert dialog.title == "Sign in"
 
 
 def test_subtitle(dialog, mock_driver):
-    mock_driver.execute.return_value = {"subtitle": "Choose an account"}
+    mock_driver.get_fedcm_subtitle.return_value = {"subtitle": "Choose an account"}
     assert dialog.subtitle == "Choose an account"
 
 
@@ -67,8 +67,10 @@ def test_get_accounts(dialog, mock_driver):
         {"name": "Account1", "email": "account1@example.com"},
         {"name": "Account2", "email": "account2@example.com"},
     ]
-    mock_driver.execute.return_value = accounts_data
+    mock_driver.get_fedcm_account_list.return_value = accounts_data
     accounts = dialog.get_accounts()
     assert len(accounts) == 2
     assert accounts[0].name == "Account1"
     assert accounts[0].email == "account1@example.com"
+    assert accounts[1].name == "Account2"
+    assert accounts[1].email == "account2@example.com"
