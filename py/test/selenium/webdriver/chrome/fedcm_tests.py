@@ -22,8 +22,8 @@ from selenium.common.exceptions import NoAlertPresentException
 
 class TestFedCM:
     @pytest.fixture(autouse=True)
-    def setup(self, driver, fedcm_webserver):
-        driver.get(fedcm_webserver.where_is("fedcm/fedcm.html", localhost=True))
+    def setup(self, driver, extended_webserver):
+        driver.get(extended_webserver.where_is("fedcm/fedcm.html", localhost=True))
         self.dialog = driver.fedcm_dialog
 
     def test_no_dialog_present(self, driver):

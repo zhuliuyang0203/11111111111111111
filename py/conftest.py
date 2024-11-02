@@ -330,8 +330,8 @@ def webserver(request):
     webserver.stop()
 
 
-@pytest.fixture(scope="session")
-def fedcm_webserver(request):
+@pytest.fixture(autouse=True, scope="session")
+def extended_webserver(request):
     """Webserver fixture specifically for FedCM tests using ExtendedHandler."""
     host = get_lan_ip() if request.config.getoption("use_lan_ip") else None
     webserver = SimpleWebServer(host=host, handler_class=ExtendedHandler)
