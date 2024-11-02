@@ -36,7 +36,7 @@ public class LogEntries implements Iterable<LogEntry> {
 
   public LogEntries(Iterable<LogEntry> entries) {
     this.entries =
-      unmodifiableList(StreamSupport.stream(entries.spliterator(), false).collect(toList()));
+        unmodifiableList(StreamSupport.stream(entries.spliterator(), false).collect(toList()));
   }
 
   /**
