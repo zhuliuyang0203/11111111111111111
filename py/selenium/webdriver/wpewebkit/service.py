@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 import shutil
-import typing
+from typing import Optional, List, Mapping
 
 from selenium.webdriver.common import service
 
@@ -37,9 +37,9 @@ class Service(service.Service):
         self,
         executable_path: str = DEFAULT_EXECUTABLE_PATH,
         port: int = 0,
-        log_output: typing.Optional[str] = None,
-        service_args: typing.Optional[typing.List[str]] = None,
-        env: typing.Optional[typing.Mapping[str, str]] = None,
+        log_output: Optional[str] = None,
+        service_args: Optional[List[str]] = None,
+        env: Optional[Mapping[str, str]] = None,
         **kwargs,
     ):
         self.service_args = service_args or []
@@ -51,5 +51,5 @@ class Service(service.Service):
             **kwargs,
         )
 
-    def command_line_args(self) -> typing.List[str]:
+    def command_line_args(self) -> List[str]:
         return ["-p", f"{self.port}"] + self.service_args
