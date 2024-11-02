@@ -21,6 +21,7 @@ import socket
 import subprocess
 import time
 from test.selenium.webdriver.common.network import get_lan_ip
+from test.selenium.webdriver.common.webserver import ExtendedHandler
 from test.selenium.webdriver.common.webserver import SimpleWebServer
 from urllib.request import urlopen
 
@@ -324,6 +325,16 @@ def webserver(request):
     host = get_lan_ip() if request.config.getoption("use_lan_ip") else None
 
     webserver = SimpleWebServer(host=host)
+    webserver.start()
+    yield webserver
+    webserver.stop()
+
+
+@pytest.fixture(scope="session")
+def fedcm_webserver(request):
+    """Webserver fixture specifically for FedCM tests using ExtendedHandler."""
+    host = get_lan_ip() if request.config.getoption("use_lan_ip") else None
+    webserver = SimpleWebServer(host=host, handler_class=ExtendedHandler)
     webserver.start()
     yield webserver
     webserver.stop()
