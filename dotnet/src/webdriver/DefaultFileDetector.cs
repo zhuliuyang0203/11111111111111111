@@ -18,6 +18,8 @@
 
 #nullable enable
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace OpenQA.Selenium
 {
     /// <summary>
@@ -32,11 +34,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="keySequence">The sequence to test for file existence.</param>
         /// <returns>This method always returns <see langword="false"/> in this implementation.</returns>
-        public bool IsFile(
-#if NET8_0_OR_GREATER
-            [System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
-#endif
-        string? keySequence)
+        public bool IsFile([NotNullWhen(true)] string? keySequence)
         {
             return false;
         }
