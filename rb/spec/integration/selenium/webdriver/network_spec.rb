@@ -19,7 +19,6 @@
 # under the License.
 
 require_relative 'spec_helper'
-require_relative '../../../../lib/selenium/webdriver/common/network'
 
 module Selenium
   module WebDriver

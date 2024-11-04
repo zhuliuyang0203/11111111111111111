@@ -19,8 +19,6 @@
 # under the License.
 
 require_relative '../spec_helper'
-require_relative '../../../../../lib/selenium/webdriver/bidi/session'
-require_relative '../../../../../lib/selenium/webdriver/bidi/network'
 
 module Selenium
   module WebDriver
