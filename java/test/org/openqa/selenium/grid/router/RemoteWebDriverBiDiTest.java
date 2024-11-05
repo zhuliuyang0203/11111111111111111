@@ -61,7 +61,7 @@ class RemoteWebDriverBiDiTest {
 
   @BeforeAll
   static void serverSetup() {
-    server = new NettyAppServer();
+    server = new NettyAppServer(false);
     server.start();
   }
 
