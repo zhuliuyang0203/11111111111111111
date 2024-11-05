@@ -428,7 +428,6 @@ namespace OpenQA.Selenium.Interactions
             }, Throws.InvalidOperationException.With.Message.EqualTo("Device under the name \"test\" is not a keyboard. Actual input type: Wheel"));
         }
 
-
         private bool FuzzyPositionMatching(int expectedX, int expectedY, string locationTuple)
         {
             string[] splitString = locationTuple.Split(',');
