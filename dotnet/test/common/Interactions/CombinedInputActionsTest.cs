@@ -401,14 +401,18 @@ namespace OpenQA.Selenium.Interactions
         [Test]
         public void ShouldHandleClashingDeviceNamesGracefully()
         {
-            var actionsWithKeyboard = new Actions(driver)
-                .SetActiveKeyboard("test")
-                .KeyDown(Keys.Shift).KeyUp(Keys.Shift);
+            var actionsWithPointer = new Actions(driver)
+                .SetActivePointer(PointerKind.Mouse, "test")
+                .Click();
 
             Assert.That(() =>
             {
-                actionsWithKeyboard.SetActiveWheel("test");
-            }, Throws.InvalidOperationException.With.Message.EqualTo("Device under the name \"test\" is not a wheel. Actual input type: Key"));
+                actionsWithPointer.SetActiveWheel("test");
+            }, Throws.InvalidOperationException.With.Message.EqualTo("Device under the name \"test\" is not a wheel. Actual input type: Pointer"));
+
+            var actionsWithKeyboard = new Actions(driver)
+                .SetActiveKeyboard("test")
+                .KeyDown(Keys.Shift).KeyUp(Keys.Shift);
 
             Assert.That(() =>
             {
