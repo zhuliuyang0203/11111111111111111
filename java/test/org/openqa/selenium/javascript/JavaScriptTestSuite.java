@@ -30,11 +30,14 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.build.InProject;
 import org.openqa.selenium.environment.GlobalTestEnvironment;
+import org.openqa.selenium.environment.InProcessTestEnvironment;
+import org.openqa.selenium.environment.TestEnvironment;
 import org.openqa.selenium.environment.webserver.AppServer;
 import org.openqa.selenium.testing.drivers.WebDriverBuilder;
 
@@ -45,6 +48,8 @@ class JavaScriptTestSuite {
 
   private final long timeout;
 
+  private TestEnvironment testEnvironment;
+
   public JavaScriptTestSuite() {
     this.timeout = Math.max(0, Long.getLong("js.test.timeout", 0));
     this.driverSupplier = new DriverSupplier();
@@ -54,8 +59,17 @@ class JavaScriptTestSuite {
     return InProject.findRunfilesRoot() != null;
   }
 
+  @BeforeEach
+  public void setup() {
+    // this field is actually in use, javascript test do access it
+    testEnvironment = GlobalTestEnvironment.getOrCreate(InProcessTestEnvironment::new);
+  }
+
   @AfterEach
   public void teardown() throws IOException {
+    if (testEnvironment != null) {
+      testEnvironment.stop();
+    }
     if (driverSupplier != null) {
       ((Closeable) driverSupplier).close();
     }
