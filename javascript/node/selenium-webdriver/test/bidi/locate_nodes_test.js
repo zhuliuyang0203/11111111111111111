@@ -19,7 +19,7 @@
 
 const assert = require('node:assert')
 const { Browser } = require('selenium-webdriver')
-const { Pages, suite, ignore} = require('../../lib/test')
+const { Pages, suite, ignore } = require('../../lib/test')
 const BrowsingContext = require('selenium-webdriver/bidi/browsingContext')
 const { Locator } = require('selenium-webdriver/bidi/browsingContext')
 const { ScriptManager } = require('selenium-webdriver/index')
@@ -152,13 +152,7 @@ suite(
           startNodes.push(new ReferenceValue(node.handle, node.sharedId))
         })
 
-        const elements = await browsingContext.locateNodes(
-          Locator.css('input'),
-          50,
-          'none',
-          undefined,
-          startNodes,
-        )
+        const elements = await browsingContext.locateNodes(Locator.css('input'), 50, 'none', undefined, startNodes)
 
         assert.strictEqual(elements.length, 35)
       })
