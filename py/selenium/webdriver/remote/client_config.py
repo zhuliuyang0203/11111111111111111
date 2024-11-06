@@ -209,7 +209,10 @@ class ClientConfig:
     @auth_type.setter
     def auth_type(self, value: str) -> None:
         """Sets the type of authentication to the remote server if it is not
-        using basic with username and password."""
+        using basic with username and password.
+
+        Support values: Bearer, X-API-Key. For others, please use `extra_headers` instead
+        """
         self._auth_type = value
 
     @property
@@ -220,10 +223,7 @@ class ClientConfig:
     @token.setter
     def token(self, value: str) -> None:
         """Sets the token used for authentication to the remote server if
-        auth_type is not basic.
-
-        Support values: Bearer, X-API-Key. For others, please use `extra_headers` instead.
-        """
+        auth_type is not basic."""
         self._token = value
 
     @property

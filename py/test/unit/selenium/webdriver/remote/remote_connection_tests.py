@@ -69,8 +69,13 @@ def test_get_remote_connection_headers_defaults():
 
 def test_get_remote_connection_headers_adds_auth_header_if_pass():
     url = "http://user:pass@remote"
-    headers = RemoteConnection.get_remote_connection_headers(parse.urlparse(url))
+    with pytest.warns(None) as record:
+        headers = RemoteConnection.get_remote_connection_headers(parse.urlparse(url))
     assert headers.get("Authorization") == "Basic dXNlcjpwYXNz"
+    assert (
+        record[0].message.args[0]
+        == "Embedding username and password in URL could be insecure, use ClientConfig instead"
+    )
 
 
 def test_get_remote_connection_headers_adds_keep_alive_if_requested():
@@ -126,13 +131,15 @@ def test_get_proxy_url_https_via_client_config():
         proxy=Proxy({"proxyType": ProxyType.MANUAL, "sslProxy": "https://admin:admin@http_proxy.com:8080"}),
     )
     remote_connection = RemoteConnection(client_config=client_config)
-    proxy_url = remote_connection._client_config.get_proxy_url()
-    assert proxy_url == "https://admin:admin@http_proxy.com:8080"
+    conn = remote_connection._get_connection_manager()
+    assert isinstance(conn, urllib3.ProxyManager)
+    conn.proxy_url = "https://http_proxy.com:8080"
+    conn.connection_pool_kw["proxy_headers"] = urllib3.make_headers(proxy_basic_auth="admin:admin")
 
 
 def test_get_proxy_url_http_via_client_config():
     client_config = ClientConfig(
-        remote_server_addr="https://localhost:4444",
+        remote_server_addr="http://localhost:4444",
         proxy=Proxy(
             {
                 "proxyType": ProxyType.MANUAL,
@@ -142,8 +149,10 @@ def test_get_proxy_url_http_via_client_config():
         ),
     )
     remote_connection = RemoteConnection(client_config=client_config)
-    proxy_url = remote_connection._client_config.get_proxy_url()
-    assert proxy_url == "https://admin:admin@http_proxy.com:8080"
+    conn = remote_connection._get_connection_manager()
+    assert isinstance(conn, urllib3.ProxyManager)
+    conn.proxy_url = "http://http_proxy.com:8080"
+    conn.connection_pool_kw["proxy_headers"] = urllib3.make_headers(proxy_basic_auth="admin:admin")
 
 
 def test_get_proxy_direct_via_client_config():
@@ -151,6 +160,8 @@ def test_get_proxy_direct_via_client_config():
         remote_server_addr="http://localhost:4444", proxy=Proxy({"proxyType": ProxyType.DIRECT})
     )
     remote_connection = RemoteConnection(client_config=client_config)
+    conn = remote_connection._get_connection_manager()
+    assert isinstance(conn, urllib3.PoolManager)
     proxy_url = remote_connection._client_config.get_proxy_url()
     assert proxy_url is None
 
@@ -162,6 +173,8 @@ def test_get_proxy_system_matches_no_proxy_via_client_config():
         remote_server_addr="http://localhost:4444", proxy=Proxy({"proxyType": ProxyType.SYSTEM})
     )
     remote_connection = RemoteConnection(client_config=client_config)
+    conn = remote_connection._get_connection_manager()
+    assert isinstance(conn, urllib3.PoolManager)
     proxy_url = remote_connection._client_config.get_proxy_url()
     assert proxy_url is None
     os.environ.pop("HTTP_PROXY")

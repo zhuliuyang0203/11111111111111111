@@ -22,6 +22,7 @@ import warnings
 from base64 import b64encode
 from typing import Optional
 from urllib import parse
+from urllib.parse import urlparse
 
 import urllib3
 
@@ -258,16 +259,14 @@ class RemoteConnection:
         return headers
 
     def _identify_http_proxy_auth(self):
-        url = self._proxy_url
-        url = url[url.find(":") + 3 :]
-        return "@" in url and len(url[: url.find("@")]) > 0
+        parsed_url = urlparse(self._proxy_url)
+        if parsed_url.username and parsed_url.password:
+            return True
 
     def _separate_http_proxy_auth(self):
-        url = self._proxy_url
-        protocol = url[: url.find(":") + 3]
-        no_protocol = url[len(protocol) :]
-        auth = no_protocol[: no_protocol.find("@")]
-        proxy_without_auth = protocol + no_protocol[len(auth) + 1 :]
+        parsed_url = urlparse(self._proxy_url)
+        proxy_without_auth = f"{parsed_url.scheme}://{parsed_url.hostname}:{parsed_url.port}"
+        auth = f"{parsed_url.username}:{parsed_url.password}"
         return proxy_without_auth, auth
 
     def _get_connection_manager(self):
