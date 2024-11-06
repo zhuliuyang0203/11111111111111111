@@ -243,17 +243,17 @@
     },
     "io.grpc:grpc-api": {
       "shasums": {
-        "jar": "b5120a11da5ce5ddfab019bbb69f5868529c9b5def1ba5b283251cc95fb3ba91",
-        "sources": "3e4b31496f2c8b7cd51b425af767c72d44b38fdbb56a6e8c247acb8a721c4e8c"
+        "jar": "d88d815e07fe58a7572dda5d2823485b61706564f289a1e74281705d50ac2d5b",
+        "sources": "791d817c56f03690df499020479e23494b79ab6ed578f4f50285d83d45a1f35d"
       },
-      "version": "1.68.0"
+      "version": "1.68.1"
     },
     "io.grpc:grpc-context": {
       "shasums": {
-        "jar": "45f85a394466f963f1f7a5c5555e6dda35efd05ce1c687203a217d7048f6f089",
-        "sources": "31d4fc1054b5c0bc75924e82ca425dcf624f895e7525da900b94cfa87a2bea53"
+        "jar": "1df4f0310a7e7836bc2948afa95105f5ee27b5d468488aded74e7ff620359076",
+        "sources": "6f5941f8531f6eea4ff922d2019757d06dc5857327ff9b9858ace45c0cf0ef8b"
       },
-      "version": "1.68.0"
+      "version": "1.68.1"
     },
     "io.lettuce:lettuce-core": {
       "shasums": {
