@@ -308,7 +308,7 @@ namespace OpenQA.Selenium
 
             Dictionary<string, object> filter = new Dictionary<string, object>();
             filter["kind"] = "near";
-            filter["args"] = new List<object>() { GetSerializableObject(locator), "distance", atMostDistanceInPixels };
+            filter["args"] = new List<object>() { GetSerializableObject(locator), atMostDistanceInPixels };
             this.filters.Add(filter);
 
             return new RelativeBy(this.root, this.filters);
