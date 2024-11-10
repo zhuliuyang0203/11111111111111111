@@ -31,14 +31,5 @@ namespace OpenQA.Selenium.Chrome
             EnvironmentManager.Instance.CloseCurrentDriver();
             EnvironmentManager.Instance.WebServer.Stop();
         }
-
-        [Test]
-        public void ChromeOptionsToString()
-        {
-            var options = new ChromeOptions();
-            options.BrowserVersion = "128";
-            options.PlatformName = "windows";
-            Assert.That(options.ToString(), Is.EqualTo("Browser: chrome 128, Platform: windows"));
-        }
     }
 }

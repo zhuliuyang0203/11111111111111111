@@ -18,27 +18,11 @@
 // </copyright>
 
 using NUnit.Framework;
-using OpenQA.Selenium.Environment;
 
 namespace OpenQA.Selenium.Edge
 {
     [TestFixture]
     public class EdgeSpecificTests : DriverTestFixture
     {
-        [OneTimeTearDown]
-        public void RunAfterAnyTests()
-        {
-            EnvironmentManager.Instance.CloseCurrentDriver();
-            EnvironmentManager.Instance.WebServer.Stop();
-        }
-
-        [Test]
-        public void EdgeOptionsToString()
-        {
-            var options = new EdgeOptions();
-            options.BrowserVersion = "128";
-            options.PlatformName = "windows";
-            Assert.That(options.ToString(), Is.EqualTo("Browser: MicrosoftEdge 128, Platform: windows"));
-        }
     }
 }

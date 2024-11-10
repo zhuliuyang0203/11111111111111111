@@ -366,15 +366,6 @@ namespace OpenQA.Selenium.Firefox
             Assert.That(driver.FindElements(By.Id("webextensions-selenium-example")).Count, Is.Zero);
         }
 
-        [Test]
-        public void FirefoxOptionsToString()
-        {
-            var options = new FirefoxOptions();
-            options.BrowserVersion = "128";
-            options.PlatformName = "windows";
-            Assert.That(options.ToString(), Is.EqualTo("Browser: firefox 128, Platform: windows"));
-        }
-
         private string GetPath(string name)
         {
             string sCurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;

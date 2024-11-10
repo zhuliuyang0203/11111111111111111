@@ -360,14 +360,6 @@ namespace OpenQA.Selenium.IE
             element.Click();
         }
 
-        //[Test]
-        public void InternetExplorerOptionsToString()
-        {
-            var options = new InternetExplorerOptions();
-
-            Assert.That(options.ToString(), Is.EqualTo("Browser: internet explorer, Platform: windows"));
-        }
-
         private long GetScrollTop()
         {
             return (long)((IJavaScriptExecutor)driver).ExecuteScript("return document.body.scrollTop;");

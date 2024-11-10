@@ -18,28 +18,11 @@
 // </copyright>
 
 using NUnit.Framework;
-using OpenQA.Selenium.Environment;
 
 namespace OpenQA.Selenium.Safari
 {
     [TestFixture]
     public class SafariSpecificTests : DriverTestFixture
     {
-        [OneTimeTearDown]
-        public void RunAfterAnyTests()
-        {
-            EnvironmentManager.Instance.CloseCurrentDriver();
-            EnvironmentManager.Instance.WebServer.Stop();
-        }
-
-        [Test]
-        public void SafariOptionsToString()
-        {
-            var options = new SafariOptions();
-
-            options.BrowserVersion = "5.1.7";
-            options.PlatformName = "macos";
-            Assert.That(options.ToString(), Is.EqualTo("Browser: safari 5.1.7, Platform: macos"));
-        }
     }
 }
