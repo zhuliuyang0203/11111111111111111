@@ -21,8 +21,10 @@ using OpenQA.Selenium.Internal;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 
 namespace OpenQA.Selenium
 {
@@ -108,8 +110,31 @@ namespace OpenQA.Selenium
             filterParameters["filters"] = this.filters;
             parameters["relative"] = filterParameters;
             object rawElements = js.ExecuteScript(wrappedAtom, parameters);
-            ReadOnlyCollection<IWebElement> elements = rawElements as ReadOnlyCollection<IWebElement>;
-            return elements;
+
+            if (rawElements is ReadOnlyCollection<IWebElement> elements)
+            {
+                return elements;
+            }
+
+            // De-serializer quirk - if the response is empty then the de-serializer will not know we're getting back elements
+            // We will have a ReadOnlyCollection<object>
+
+            if (rawElements is ReadOnlyCollection<object> elementsObj)
+            {
+                if (elementsObj.Count == 0)
+                {
+#if NET8_0_OR_GREATER
+                    return ReadOnlyCollection<IWebElement>.Empty;
+#else
+                    return new List<IWebElement>().AsReadOnly();
+#endif
+                }
+
+                Debug.Fail("Unreachable");
+                return elementsObj.Select(element => (IWebElement)element).ToList().AsReadOnly();
+            }
+
+            return (ReadOnlyCollection<IWebElement>)rawElements;
         }
 
         /// <summary>
