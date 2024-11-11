@@ -200,6 +200,11 @@ namespace OpenQA.Selenium.Firefox
                     this.preferences[key] = longValue.ToString(CultureInfo.InvariantCulture);
                     return;
                 }
+                if (jValue.TryGetValue(out double doubleValue))
+                {
+                    this.preferences[key] = doubleValue.ToString(CultureInfo.InvariantCulture);
+                    return;
+                }
             }
 
             throw new WebDriverException("Value must be string, int or boolean");
