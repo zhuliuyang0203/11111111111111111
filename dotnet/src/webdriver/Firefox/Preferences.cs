@@ -46,7 +46,8 @@ namespace OpenQA.Selenium.Firefox
             {
                 foreach (KeyValuePair<string, JsonNode?> pref in defaultImmutablePreferences)
                 {
-                    this.SetPreferenceValue(pref.Key, pref.Value);
+                    this.ThrowIfPreferenceIsImmutable(pref.Key, pref.Value);
+                    this.preferences[pref.Key] = pref.Value!.ToJsonString();
                     this.immutablePreferences.Add(pref.Key);
                 }
             }
@@ -55,7 +56,8 @@ namespace OpenQA.Selenium.Firefox
             {
                 foreach (KeyValuePair<string, JsonNode?> pref in defaultPreferences)
                 {
-                    this.SetPreferenceValue(pref.Key, pref.Value);
+                    this.ThrowIfPreferenceIsImmutable(pref.Key, pref.Value);
+                    this.preferences[pref.Key] = pref.Value!.ToJsonString();
                 }
             }
         }
@@ -67,10 +69,31 @@ namespace OpenQA.Selenium.Firefox
         /// <param name="value">A <see cref="string"/> value give the preference.</param>
         /// <remarks>If the preference already exists in the currently-set list of preferences,
         /// the value will be updated.</remarks>
-        /// <exception cref="ArgumentNullException">If <paramref name="key"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentNullException">If <paramref name="key"/> or <paramref name="value"/> are <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">
+        /// <para>If <paramref name="value"/> is wrapped with double-quotes.</para>
+        /// <para>-or-</para>
+        /// <para>If the specified preference is immutable.</para>
+        /// </exception>
         internal void SetPreference(string key, string value)
         {
-            this.SetPreferenceValue(key, value);
+            if (key is null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            if (value is null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+
+            if (IsWrappedAsString(value))
+            {
+                throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Preference values must be plain strings: {0}: {1}", key, value));
+            }
+
+            this.ThrowIfPreferenceIsImmutable(key, value);
+            this.preferences[key] = string.Format(CultureInfo.InvariantCulture, "\"{0}\"", value);
         }
 
         /// <summary>
@@ -81,9 +104,16 @@ namespace OpenQA.Selenium.Firefox
         /// <remarks>If the preference already exists in the currently-set list of preferences,
         /// the value will be updated.</remarks>
         /// <exception cref="ArgumentNullException">If <paramref name="key"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">If the specified preference is immutable.</exception>
         internal void SetPreference(string key, int value)
         {
-            this.SetPreferenceValue(key, value);
+            if (key is null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            this.ThrowIfPreferenceIsImmutable(key, value);
+            this.preferences[key] = value.ToString(CultureInfo.InvariantCulture);
         }
 
         /// <summary>
@@ -94,9 +124,16 @@ namespace OpenQA.Selenium.Firefox
         /// <remarks>If the preference already exists in the currently-set list of preferences,
         /// the value will be updated.</remarks>
         /// <exception cref="ArgumentNullException">If <paramref name="key"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">If the specified preference is immutable.</exception>
         internal void SetPreference(string key, bool value)
         {
-            this.SetPreferenceValue(key, value);
+            if (key is null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            this.ThrowIfPreferenceIsImmutable(key, value);
+            this.preferences[key] = value ? "true" : "false";
         }
 
         /// <summary>
@@ -158,56 +195,18 @@ namespace OpenQA.Selenium.Firefox
             return value.StartsWith("\"", StringComparison.OrdinalIgnoreCase) && value.EndsWith("\"", StringComparison.OrdinalIgnoreCase);
         }
 
+        private void ThrowIfPreferenceIsImmutable<TValue>(string preferenceName, TValue value)
+        {
+            if (this.immutablePreferences.Contains(preferenceName))
+            {
+                string message = string.Format(CultureInfo.InvariantCulture, "Preference {0} may not be overridden: frozen value={1}, requested value={2}", preferenceName, this.preferences[preferenceName], value?.ToString());
+                throw new ArgumentException(message);
+            }
+        }
+
         private bool IsSettablePreference(string preferenceName)
         {
             return !this.immutablePreferences.Contains(preferenceName);
-        }
-
-        private void SetPreferenceValue(string key, JsonNode? value)
-        {
-            if (!this.IsSettablePreference(key))
-            {
-                string message = string.Format(CultureInfo.InvariantCulture, "Preference {0} may not be overridden: frozen value={1}, requested value={2}", key, this.preferences[key], value?.ToString());
-                throw new ArgumentException(message);
-            }
-
-            if (value is JsonValue jValue)
-            {
-                if (jValue.TryGetValue(out string? stringValue))
-                {
-                    if (IsWrappedAsString(stringValue))
-                    {
-                        throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Preference values must be plain strings: {0}: {1}", key, value));
-                    }
-
-                    this.preferences[key] = string.Format(CultureInfo.InvariantCulture, "\"{0}\"", value);
-                    return;
-                }
-
-                if (jValue.TryGetValue(out bool boolValue))
-                {
-                    this.preferences[key] = boolValue ? "true" : "false";
-                    return;
-                }
-
-                if (jValue.TryGetValue(out int intValue))
-                {
-                    this.preferences[key] = intValue.ToString(CultureInfo.InvariantCulture);
-                    return;
-                }
-                if (jValue.TryGetValue(out long longValue))
-                {
-                    this.preferences[key] = longValue.ToString(CultureInfo.InvariantCulture);
-                    return;
-                }
-                if (jValue.TryGetValue(out double doubleValue))
-                {
-                    this.preferences[key] = doubleValue.ToString(CultureInfo.InvariantCulture);
-                    return;
-                }
-            }
-
-            throw new WebDriverException("Value must be string, number or boolean");
         }
     }
 }
