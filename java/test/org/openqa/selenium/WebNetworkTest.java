@@ -30,6 +30,7 @@ import java.util.function.Predicate;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.bidi.module.Network;
 import org.openqa.selenium.bidi.network.Header;
+import org.openqa.selenium.environment.webserver.AppServer;
 import org.openqa.selenium.environment.webserver.NettyAppServer;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.http.HttpMethod;
@@ -177,6 +178,7 @@ class WebNetworkTest extends JupiterTestBase {
   }
 
   @Test
+  @NeedsFreshDriver
   @Ignore(Browser.CHROME)
   @Ignore(Browser.EDGE)
   void canAddRequestHandler() {
@@ -192,6 +194,7 @@ class WebNetworkTest extends JupiterTestBase {
   }
 
   @Test
+  @NeedsFreshDriver
   @Ignore(Browser.CHROME)
   @Ignore(Browser.EDGE)
   void canAddRequestHandlerToModifyMethod() {
@@ -210,6 +213,7 @@ class WebNetworkTest extends JupiterTestBase {
   }
 
   @Test
+  @NeedsFreshDriver
   @Ignore(Browser.CHROME)
   @Ignore(Browser.EDGE)
   void canAddRequestHandlerToModifyHeaders() throws InterruptedException {
@@ -266,6 +270,7 @@ class WebNetworkTest extends JupiterTestBase {
   }
 
   @Test
+  @NeedsFreshDriver
   @Ignore(Browser.CHROME)
   @Ignore(Browser.EDGE)
   void canAddRequestHandlerToModifyBody() throws InterruptedException {
@@ -299,6 +304,7 @@ class WebNetworkTest extends JupiterTestBase {
   }
 
   @Test
+  @NeedsFreshDriver
   @Ignore(Browser.CHROME)
   @Ignore(Browser.EDGE)
   void canAddMultipleRequestHandlers() {
@@ -320,6 +326,7 @@ class WebNetworkTest extends JupiterTestBase {
   }
 
   @Test
+  @NeedsFreshDriver
   @Ignore(Browser.CHROME)
   @Ignore(Browser.EDGE)
   void canAddMultipleRequestHandlersWithTheSameFilter() {
@@ -339,6 +346,7 @@ class WebNetworkTest extends JupiterTestBase {
   }
 
   @Test
+  @NeedsFreshDriver
   @Ignore(Browser.CHROME)
   @Ignore(Browser.EDGE)
   void canRemoveRequestHandler() throws InterruptedException {
@@ -398,6 +406,7 @@ class WebNetworkTest extends JupiterTestBase {
   }
 
   @Test
+  @NeedsFreshDriver
   @Ignore(Browser.CHROME)
   @Ignore(Browser.EDGE)
   void canRemoveRequestHandlerThatDoesNotExist() {
@@ -409,6 +418,7 @@ class WebNetworkTest extends JupiterTestBase {
   }
 
   @Test
+  @NeedsFreshDriver
   @Ignore(Browser.CHROME)
   @Ignore(Browser.EDGE)
   void canClearRequestHandlers() {
