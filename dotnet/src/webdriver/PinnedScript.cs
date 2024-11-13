@@ -81,6 +81,6 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Gets or sets the ID of this script.
         /// </summary>
-        internal string ScriptId { get; set; }
+        internal string ScriptId { get; }
     }
 }
