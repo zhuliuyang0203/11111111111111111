@@ -66,8 +66,8 @@ module Selenium
               network.continue_with_request(request_id: request_id)
             end
 
-            driver.navigate.to url_for('simple_page')
-            expect(driver.find_element(tag_name: 'h1').text).to eq('Simple Page')
+            driver.navigate.to url_for('formPage.html')
+            expect(driver.find_element(name: 'login')).to be_displayed
           end
         end
       end
