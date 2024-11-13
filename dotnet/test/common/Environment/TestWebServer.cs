@@ -25,6 +25,7 @@ using System.Net;
 using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.Environment
 {
@@ -178,20 +179,7 @@ namespace OpenQA.Selenium.Environment
         {
             if (webserverProcess != null)
             {
-                using (var httpClient = new HttpClient())
-                {
-                    try
-                    {
-                        using (httpClient.GetAsync(EnvironmentManager.Instance.UrlBuilder.LocalWhereIs("quitquitquit")).GetAwaiter().GetResult())
-                        {
-
-                        }
-                    }
-                    catch (HttpRequestException)
-                    {
-
-                    }
-                }
+                QuitNoThrow().GetAwaiter().GetResult();
 
                 try
                 {
@@ -205,6 +193,19 @@ namespace OpenQA.Selenium.Environment
                 {
                     webserverProcess.Dispose();
                     webserverProcess = null;
+                }
+            }
+
+            static async Task QuitNoThrow()
+            {
+                using var httpClient = new HttpClient();
+
+                Task<HttpResponseMessage> getTask = httpClient.GetAsync(EnvironmentManager.Instance.UrlBuilder.LocalWhereIs("quitquitquit"));
+                await ((Task)getTask).ConfigureAwait(ConfigureAwaitOptions.SuppressThrowing);
+
+                if (getTask.IsCompletedSuccessfully)
+                {
+                    getTask.Result.Dispose();
                 }
             }
         }
