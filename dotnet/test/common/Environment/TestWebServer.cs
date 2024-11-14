@@ -201,12 +201,8 @@ namespace OpenQA.Selenium.Environment
                 using var httpClient = new HttpClient();
 
                 Task<HttpResponseMessage> getTask = httpClient.GetAsync(EnvironmentManager.Instance.UrlBuilder.LocalWhereIs("quitquitquit"));
-                await ((Task)getTask).ConfigureAwait(ConfigureAwaitOptions.SuppressThrowing);
 
-                if (getTask.IsCompletedSuccessfully)
-                {
-                    getTask.Result.Dispose();
-                }
+                await ((Task)getTask).ConfigureAwait(ConfigureAwaitOptions.SuppressThrowing);
             }
         }
     }
