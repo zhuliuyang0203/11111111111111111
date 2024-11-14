@@ -298,7 +298,7 @@ namespace OpenQA.Selenium.Firefox
         {
             using (Stream defaultPrefsStream = ResourceUtilities.GetResourceStream("webdriver_prefs.json", "webdriver_prefs.json"))
             {
-                JsonDocument defaultPreferences = JsonDocument.Parse(defaultPrefsStream);
+                using JsonDocument defaultPreferences = JsonDocument.Parse(defaultPrefsStream);
 
                 JsonElement immutableDefaultPreferences = defaultPreferences.RootElement.GetProperty("frozen");
                 JsonElement editableDefaultPreferences = defaultPreferences.RootElement.GetProperty("mutable");
