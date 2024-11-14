@@ -8,13 +8,6 @@ def url_for(page):
     return webserver.where_is(page)
 
 @pytest.fixture
-def driver():
-    options = webdriver.ChromeOptions()
-    driver = webdriver.Chrome(options=options)
-    yield driver
-    driver.quit()
-
-@pytest.fixture
 def network(driver):
     return Network(driver)
 
