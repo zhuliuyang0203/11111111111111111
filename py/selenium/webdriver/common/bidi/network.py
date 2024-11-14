@@ -72,7 +72,7 @@ class Network:
         """Set a callback function to subscribe to a network event."""
         event = self.EVENTS.get(event, event)
         self.callbacks[event] = callback
-        session_subscribe(self.conn, event, self.handle_event)
+        session_subscribe(self.conn, event, self.__handle_event)
 
     def __handle_event(self, event, data):
         """Perform callback function on event."""
