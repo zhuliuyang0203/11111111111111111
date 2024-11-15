@@ -589,6 +589,7 @@ async def connect_cdp(nursery, url) -> CdpConnection:
     current task. This argument is for unusual use cases, such as
     running inside of a notebook.
     """
+    
     warnings.warn(
             "connect_cdp() is now deprecated for Firefox. Please migrate to the new BiDi implementations", 
             DeprecationWarning, 
