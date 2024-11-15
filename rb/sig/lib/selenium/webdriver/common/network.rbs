@@ -11,15 +11,15 @@ module Selenium
 
       def add_authentication_handler: (String username, String password) -> String
 
-      def add_request_handler: -> untyped
+      def add_request_handler: -> String
 
       def clear_authentication_handlers: -> Hash[nil, nil]
 
-      def clear_request_handlers: -> untyped
+      def clear_request_handlers: -> Hash[nil, nil]
 
       def remove_authentication_handler: (String id) -> nil
 
-      def remove_request_handler: -> untyped
+      def remove_request_handler: -> nil
     end
   end
 end
