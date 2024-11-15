@@ -28,6 +28,13 @@ module Selenium
         #
 
         def devtools
+          if browser == :firefox
+            WebDriver.logger.deprecate(
+              'Driver#devtools on Firefox',
+              'the new BiDi implementation',
+              id: :devtools
+            )
+          end
           @devtools ||= begin
             require 'selenium/devtools'
             Selenium::DevTools.version ||= devtools_version
