@@ -33,7 +33,7 @@ def test_remove_response_handler(network):
     network.add_response_handler(callback)
     network.remove_response_handler(callback)
     pages.load("basicAuth")
-    assert passed[0] == False, "Callback was successful"
+    assert passed[0] == False, "Callback should NOT be successful"
 
 def test_add_request_handler(request):
     passed = [False]
@@ -58,7 +58,7 @@ def test_remove_request_handler(request):
     network_request.add_request_handler(callback)
     network_request.remove_request_handler(callback)
     pages.load("basicAuth")
-    assert passed[0] == False, "Callback was successful"
+    assert passed[0] == False, "Callback should NOT be successful"
 
 def test_add_authentication_handler(network):
     network.add_authentication_handler('test','test')
