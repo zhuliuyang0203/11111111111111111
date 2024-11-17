@@ -16,9 +16,9 @@
 // limitations under the License.
 // </copyright>
 
-#nullable enable
-
 using System.Diagnostics.CodeAnalysis;
+
+#nullable enable
 
 namespace OpenQA.Selenium
 {
