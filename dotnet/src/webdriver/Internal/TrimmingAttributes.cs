@@ -4,7 +4,7 @@
 
 namespace System.Diagnostics.CodeAnalysis
 {
-#if !NET7_0_OR_GREATER
+#if !NET8_0_OR_GREATER
     /// <summary>
     /// Indicates that the specified method requires the ability to generate new code at runtime,
     /// for example through <see cref="System.Reflection"/>.
@@ -38,9 +38,7 @@ namespace System.Diagnostics.CodeAnalysis
         /// </summary>
         public string? Url { get; set; }
     }
-#endif
 
-#if !NET5_0_OR_GREATER
     /// <summary>
     /// Indicates that the specified method requires dynamic access to code that is not referenced
     /// statically, for example through <see cref="System.Reflection"/>.

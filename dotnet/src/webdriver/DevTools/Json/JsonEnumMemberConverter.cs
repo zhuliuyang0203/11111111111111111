@@ -36,7 +36,7 @@ namespace OpenQA.Selenium.DevTools.Json
         public JsonEnumMemberConverter()
         {
             var type = typeof(TEnum);
-#if NET5_0_OR_GREATER
+#if NET8_0_OR_GREATER
             TEnum[] values = Enum.GetValues<TEnum>();
 #else
             Array values = Enum.GetValues(type);
