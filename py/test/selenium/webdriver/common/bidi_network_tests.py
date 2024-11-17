@@ -10,6 +10,7 @@ from selenium.webdriver.common.bidi.network import Request
 def network(driver):
     yield Network(driver)
 
+@pytest.mark.xfail_safari
 def test_add_response_handler(network):
     passed = [False]
 
@@ -22,6 +23,7 @@ def test_add_response_handler(network):
     pages.load("basicAuth")
     assert passed[0] == True, "Callback was NOT successful"
 
+@pytest.mark.xfail_safari
 def test_remove_response_handler(network):
     passed = [False]
 
@@ -35,6 +37,7 @@ def test_remove_response_handler(network):
     pages.load("basicAuth")
     assert passed[0] == False, "Callback should NOT be successful"
 
+@pytest.mark.xfail_safari
 def test_add_request_handler(request):
     passed = [False]
 
@@ -47,6 +50,7 @@ def test_add_request_handler(request):
     pages.load("basicAuth")
     assert passed[0] == True, "Callback was NOT successful"
 
+@pytest.mark.xfail_safari
 def test_remove_request_handler(request):
     passed = [False]
 
@@ -60,11 +64,13 @@ def test_remove_request_handler(request):
     pages.load("basicAuth")
     assert passed[0] == False, "Callback should NOT be successful"
 
+@pytest.mark.xfail_safari
 def test_add_authentication_handler(network):
     network.add_authentication_handler('test','test')
     pages.load("basicAuth")
     assert driver.find_element_by_tag_name('h1').text == 'authorized', "Authentication was NOT successful"
 
+@pytest.mark.xfail_safari
 def test_remove_authentication_handler(network):
     network.add_authentication_handler('test', 'test')
     network.remove_authentication_handler()
