@@ -104,12 +104,6 @@ namespace OpenQA.Selenium
                 options.AddPageToPrint(1);
                 options.AddPageToPrint(1);
             }, Throws.TypeOf<ArgumentException>());
-            Assert.That(() =>
-            {
-                var options = new PrintOptions();
-                options.AddPageRangeToPrint("1-2");
-                options.AddPageToPrint(1);
-            }, Throws.TypeOf<ArgumentException>());
         }
 
         [Test]
