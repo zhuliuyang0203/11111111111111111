@@ -470,6 +470,9 @@ namespace OpenQA.Selenium
         }
 
         [Test]
+        [IgnoreBrowser(Selenium.Browser.IE, "IE does not support Chrome DevTools Protocol")]
+        [IgnoreBrowser(Selenium.Browser.Firefox, "Firefox does not support Chrome DevTools Protocol")]
+        [IgnoreBrowser(Selenium.Browser.Safari, "Safari does not support Chrome DevTools Protocol")]
         public async Task ShouldBeAbleToPinJavascriptCodeAndExecuteRepeatedly()
         {
             IJavaScriptEngine jsEngine = new JavaScriptEngine(driver);
