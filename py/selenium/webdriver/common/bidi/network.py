@@ -53,7 +53,7 @@ class Network:
             'urlPatterns': url_patterns
         }
         command = {'command': 'network.addIntercept', 'params': params}
-        self.conn.execute()
+        self.conn.execute(command)
 
     def __remove_intercept(self, intercept=None, request_id=None):
         """Remove an intercept from the network."""
