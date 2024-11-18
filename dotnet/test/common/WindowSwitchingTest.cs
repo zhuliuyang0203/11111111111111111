@@ -60,14 +60,11 @@ namespace OpenQA.Selenium
         {
             driver.Url = xhtmlTestPage;
             String current = driver.CurrentWindowHandle;
-            try
+
+            Assert.That(() =>
             {
                 driver.SwitchTo().Window("invalid name");
-            }
-            catch (NoSuchWindowException)
-            {
-                // This is expected.
-            }
+            }, Throws.InstanceOf<NoSuchWindowException>());
 
             driver.SwitchTo().Window(current);
         }
@@ -91,12 +88,10 @@ namespace OpenQA.Selenium
 
             try
             {
-                string currentHandle = driver.CurrentWindowHandle;
-                Assert.Fail("NoSuchWindowException expected");
-            }
-            catch (NoSuchWindowException)
-            {
-                // Expected.
+                Assert.That(() =>
+                {
+                    _ = driver.CurrentWindowHandle;
+                }, Throws.InstanceOf<NoSuchWindowException>());
             }
             finally
             {
@@ -123,25 +118,15 @@ namespace OpenQA.Selenium
 
             try
             {
-                try
+                Assert.That(() =>
                 {
-                    string title = driver.Title;
-                    Assert.Fail("NoSuchWindowException expected");
-                }
-                catch (NoSuchWindowException)
-                {
-                    // Expected.
-                }
+                    _ = driver.Title;
+                }, Throws.InstanceOf<NoSuchWindowException>());
 
-                try
+                Assert.That(() =>
                 {
                     driver.FindElement(By.TagName("body"));
-                    Assert.Fail("NoSuchWindowException expected");
-                }
-                catch (NoSuchWindowException)
-                {
-                    // Expected.
-                }
+                }, Throws.InstanceOf<NoSuchWindowException>());
             }
             finally
             {
@@ -169,12 +154,10 @@ namespace OpenQA.Selenium
 
             try
             {
-                string bodyText = body.Text;
-                Assert.Fail("NoSuchWindowException expected");
-            }
-            catch (NoSuchWindowException)
-            {
-                // Expected.
+                Assert.That(() =>
+                {
+                    _ = body.Text;
+                }, Throws.InstanceOf<NoSuchWindowException>());
             }
             finally
             {
@@ -280,15 +263,10 @@ namespace OpenQA.Selenium
             driver.Url = xhtmlTestPage;
             String current = driver.CurrentWindowHandle;
 
-            try
+            Assert.That(() =>
             {
                 driver.SwitchTo().Window("i will never exist");
-                Assert.Fail("Should not be ablt to change to a non-existant window");
-            }
-            catch (NoSuchWindowException)
-            {
-                // expected
-            }
+            }, Throws.InstanceOf<NoSuchWindowException>());
 
             String newHandle = driver.CurrentWindowHandle;
 
@@ -488,9 +466,8 @@ namespace OpenQA.Selenium
                 }
                 catch (NoSuchWindowException)
                 {
+                    return false;
                 }
-
-                return false;
             };
         }
 
@@ -498,16 +475,14 @@ namespace OpenQA.Selenium
         {
             return () =>
             {
-                IAlert alert = null;
                 try
                 {
-                    alert = driver.SwitchTo().Alert();
+                    return driver.SwitchTo().Alert();
                 }
                 catch (NoAlertPresentException)
                 {
+                    return null;
                 }
-
-                return alert;
             };
         }
     }

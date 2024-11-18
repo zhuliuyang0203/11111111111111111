@@ -442,15 +442,11 @@ namespace OpenQA.Selenium
 
             driver.FindElement(By.Id("alert")).Click();
             WaitFor<IAlert>(AlertToBePresent, "No alert found");
-            try
+
+            Assert.That(() =>
             {
-                string title = driver.Title;
-                Assert.Fail("Expected UnhandledAlertException");
-            }
-            catch (UnhandledAlertException e)
-            {
-                Assert.AreEqual("cheese", e.AlertText);
-            }
+                _ = driver.Title;
+            }, Throws.InstanceOf<UnhandledAlertException>().With.Property(nameof(UnhandledAlertException.AlertText)).EqualTo("cheese"));
         }
 
         [Test]
@@ -522,16 +518,14 @@ namespace OpenQA.Selenium
         {
             return () =>
             {
-                IWebElement foundElement = null;
                 try
                 {
-                    foundElement = driver.FindElement(By.Id("open-page-with-onunload-alert"));
+                    return driver.FindElement(By.Id("open-page-with-onunload-alert"));
                 }
                 catch (NoSuchElementException)
                 {
+                    return null;
                 }
-
-                return foundElement;
             };
         }
 
@@ -554,9 +548,8 @@ namespace OpenQA.Selenium
                 }
                 catch (NoSuchWindowException)
                 {
+                    return false;
                 }
-
-                return false;
             };
         }
 

@@ -132,11 +132,8 @@ class NetworkEventsTest : BiDiTestFixture
 
         await using var subscription = await context.Network.OnFetchErrorAsync(tcs.SetResult);
 
-        try
-        {
-            await context.NavigateAsync("https://not_a_valid_url.test", new() { Wait = ReadinessState.Complete });
-        }
-        catch (Exception) { }
+        var navigateTask = context.NavigateAsync("https://not_a_valid_url.test", new() { Wait = ReadinessState.Complete });
+        await ((Task)navigateTask).ConfigureAwait(ConfigureAwaitOptions.SuppressThrowing);
 
         var res = await tcs.Task.WaitAsync(TimeSpan.FromSeconds(5));
 

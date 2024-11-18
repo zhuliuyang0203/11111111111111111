@@ -175,28 +175,18 @@ namespace OpenQA.Selenium
             driver.SwitchTo().Frame(frameElement);
             Assert.AreEqual("2", driver.FindElement(By.Id("pageNumber")).Text);
 
-            try
+            Assert.That(() =>
             {
                 driver.SwitchTo().Frame("third");
-                Assert.Fail();
-            }
-            catch (NoSuchFrameException)
-            {
-                // Do nothing
-            }
+            }, Throws.InstanceOf<NoSuchFrameException>());
 
             driver.SwitchTo().DefaultContent();
             driver.SwitchTo().Frame("third");
 
-            try
+            Assert.That(() =>
             {
                 driver.SwitchTo().Frame("second");
-                Assert.Fail();
-            }
-            catch (NoSuchFrameException)
-            {
-                // Do nothing
-            }
+            }, Throws.InstanceOf<NoSuchFrameException>());
 
             driver.SwitchTo().DefaultContent();
             driver.SwitchTo().Frame("second");
@@ -615,9 +605,8 @@ namespace OpenQA.Selenium
             }
             catch (NoSuchFrameException)
             {
+                return false;
             }
-
-            return false;
         }
 
         private bool FrameExistsAndSwitchedTo(int index)
@@ -629,9 +618,8 @@ namespace OpenQA.Selenium
             }
             catch (NoSuchFrameException)
             {
+                return false;
             }
-
-            return false;
         }
 
         private bool FrameExistsAndSwitchedTo(IWebElement frameElement)
@@ -643,9 +631,8 @@ namespace OpenQA.Selenium
             }
             catch (NoSuchFrameException)
             {
+                return false;
             }
-
-            return false;
         }
     }
 }

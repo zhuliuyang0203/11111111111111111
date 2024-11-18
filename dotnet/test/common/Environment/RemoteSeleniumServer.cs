@@ -66,17 +66,12 @@ namespace OpenQA.Selenium.Environment
 
                 while (!isRunning && DateTime.Now < timeout)
                 {
-                    try
-                    {
-                        using var response = await httpClient.GetAsync("http://localhost:6000/wd/hub/status");
+                    var statusTask = httpClient.GetAsync("http://localhost:6000/wd/hub/status");
+                    await ((Task)statusTask).ConfigureAwait(ConfigureAwaitOptions.SuppressThrowing);
 
-                        if (response.StatusCode == HttpStatusCode.OK)
-                        {
-                            isRunning = true;
-                        }
-                    }
-                    catch (Exception ex) when (ex is HttpRequestException || ex is TimeoutException)
+                    if (statusTask.IsCompletedSuccessfully && statusTask.Result.StatusCode == HttpStatusCode.OK)
                     {
+                        isRunning = true;
                     }
                 }
 
@@ -91,14 +86,10 @@ namespace OpenQA.Selenium.Environment
         {
             if (autoStart && webserverProcess != null && !webserverProcess.HasExited)
             {
-                using var httpClient = new HttpClient();
-
-                try
+                using (var httpClient = new HttpClient())
                 {
-                    using var response = await httpClient.GetAsync("http://localhost:6000/selenium-server/driver?cmd=shutDownSeleniumServer");
-                }
-                catch (Exception ex) when (ex is HttpRequestException || ex is TimeoutException)
-                {
+                    var shutDownTask = httpClient.GetAsync("http://localhost:6000/selenium-server/driver?cmd=shutDownSeleniumServer");
+                    await ((Task)shutDownTask).ConfigureAwait(ConfigureAwaitOptions.SuppressThrowing);
                 }
 
                 webserverProcess.WaitForExit(10000);
