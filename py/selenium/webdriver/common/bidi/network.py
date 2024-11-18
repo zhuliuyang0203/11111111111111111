@@ -119,7 +119,7 @@ class Network:
         def callback_on_url_match(data):
             if url_pattern in data['request']['url']:
                 # create request object to pass to callback
-                request_id = data['request'].get('requestId')
+                request_id = data['request'].get('requestId', None)
                 url = data['request'].get('url')
                 method = data['request'].get('method')
                 headers = data['request'].get('headers', {})
@@ -159,7 +159,7 @@ class Network:
         def callback_on_url_match(data):
             # create response object to pass to callback
             if url_pattern in data['response']['url']:
-                request_id = data['request'].get('requestId')
+                request_id = data['request'].get('requestId', None)
                 url = data['response'].get('url')
                 status_code = data['response'].get('status')
                 body = data['response'].get('body', None)
