@@ -66,18 +66,18 @@ namespace OpenQA.Selenium.Environment
 
                 while (!isRunning && DateTime.Now < timeout)
                 {
-                    var statusTask = httpClient.GetAsync("http://localhost:6000/wd/hub/status");
-                    await ((Task)statusTask).ConfigureAwait(ConfigureAwaitOptions.SuppressThrowing);
-
-                    if (statusTask.IsCompletedSuccessfully && statusTask.Result.StatusCode == HttpStatusCode.OK)
+                    try
                     {
-                        isRunning = true;
-                    }
-                }
+                        using var response = await httpClient.GetAsync("http://localhost:6000/wd/hub/status");
 
-                if (!isRunning)
-                {
-                    throw new TimeoutException("Could not start the remote selenium server in 30 seconds");
+                        if (response.StatusCode == HttpStatusCode.OK)
+                        {
+                            isRunning = true;
+                        }
+                    }
+                    catch (Exception ex) when (ex is HttpRequestException || ex is TimeoutException)
+                    {
+                    }
                 }
             }
         }
@@ -88,8 +88,13 @@ namespace OpenQA.Selenium.Environment
             {
                 using (var httpClient = new HttpClient())
                 {
-                    await ((Task)httpClient.GetAsync("http://localhost:6000/selenium-server/driver?cmd=shutDownSeleniumServer"))
-                        .ConfigureAwait(ConfigureAwaitOptions.SuppressThrowing);
+                    try
+                    {
+                        using var response = await httpClient.GetAsync("http://localhost:6000/selenium-server/driver?cmd=shutDownSeleniumServer");
+                    }
+                    catch (Exception ex) when (ex is HttpRequestException || ex is TimeoutException)
+                    {
+                    }
                 }
 
                 webserverProcess.WaitForExit(10000);
