@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "selenium"
-version = "4.27.0.dev202410311942"
+version = "4.27.0"
 license = "Apache 2.0"
 description = "Official Python bindings for Selenium WebDriver."
 readme = "README.rst"
@@ -52,15 +52,15 @@ SourceCode = "https://github.com/SeleniumHQ/selenium/tree/trunk/py"
 
 [tool.setuptools.package-data]
 selenium_package = [
-    "*.py", 
+    "*.py",
     "*.rst",
-    "*.json", 
-    "*.xpi", 
+    "*.json",
+    "*.xpi",
     "*.js",
     "py.typed",
     "prune*",
     "selenium.egg-info*",
-    "selenium-manager", 
+    "selenium-manager",
     "selenium-manager.exe",
     "CHANGES",
     "LICENSE"
