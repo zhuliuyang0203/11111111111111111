@@ -25,6 +25,7 @@ v4.27.0
 --> [java] consume the input of the connection
 --> [grid] retry creating a session in a distributed grid
 --> Update supported versions for Chrome DevTools
+--> [grid] avoid starting a session which will be disposed after start
 
 v4.26.0
 ======

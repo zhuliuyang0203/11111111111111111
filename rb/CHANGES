@@ -1,4 +1,4 @@
-4.27.0 (2024-11-20)
+4.27.0 (2024-11-21)
 =========================
 --> [ci] Bumping version for nightly
 [skip ci]
@@ -31,6 +31,10 @@ selenium currently supports Ruby >= 3.1, so the current old compatibility code i
 `RFC2396_PARSER` is a somewhat new addition, so some kind of check is still needed.
 It is available in Ruby 3.1 but early patch versions are missing it.
 --> Update supported versions for Chrome DevTools
+--> [rb] implement navigation commands with BiDi (#14094)
+* [rb] create context manager and implement navigation with BiDi
+* replace BrowsingContext class instead of creating new context manager
+* Fix formatting issues
 
 4.26.0 (2024-10-28)
 =========================

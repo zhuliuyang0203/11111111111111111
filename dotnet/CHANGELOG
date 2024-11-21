@@ -18,6 +18,7 @@ v4.27.0
 --> [dotnet] Solidify nullability of `PinnedScript` (#14708)
 --> [dotnet] Add CDP deprecation warning for Firefox (#14759)
 --> Update supported versions for Chrome DevTools
+--> [dotnet] Modernize exception handling in tests via assert that throws (#14776)
 
 v4.26.1
 ======
