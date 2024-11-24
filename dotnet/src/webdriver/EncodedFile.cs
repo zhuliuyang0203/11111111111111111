@@ -42,7 +42,7 @@ namespace OpenQA.Selenium
         protected EncodedFile(string base64EncodedFile)
         {
             this.AsBase64EncodedString = base64EncodedFile ?? throw new ArgumentNullException(nameof(base64EncodedFile));
-            this.AsByteArray = Convert.FromBase64String(this.AsBase64EncodedString);
+            this.AsByteArray = Convert.FromBase64String(base64EncodedFile);
         }
 
         /// <summary>
