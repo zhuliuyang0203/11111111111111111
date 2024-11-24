@@ -117,7 +117,7 @@ namespace OpenQA.Selenium.Edge
         /// <param name="options">The <see cref="EdgeOptions"/> to be used with the Edge driver.</param>
         /// <param name="commandTimeout">The maximum amount of time to wait for each command.</param>
         public EdgeDriver(EdgeDriverService service, EdgeOptions options, TimeSpan commandTimeout)
-            : base(service, options, commandTimeout)
+            : base(service, options, commandTimeout, disposeService: false)
         {
             this.AddCustomEdgeCommands();
         }

@@ -16,11 +16,6 @@ namespace OpenQA.Selenium.Firefox
         {
         }
 
-        public NightlyChannelFirefoxDriver(FirefoxDriverService service)
-            : base(service)
-        {
-        }
-
         public NightlyChannelFirefoxDriver(FirefoxDriverService service, FirefoxOptions options)
             : base(service, options)
         {
