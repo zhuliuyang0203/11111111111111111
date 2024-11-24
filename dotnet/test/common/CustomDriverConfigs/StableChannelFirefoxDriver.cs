@@ -16,6 +16,11 @@ namespace OpenQA.Selenium.Firefox
         {
         }
 
+        public StableChannelFirefoxDriver(FirefoxDriverService service)
+            : base(service)
+        {
+        }
+
         public StableChannelFirefoxDriver(FirefoxDriverService service, FirefoxOptions options)
             : base(service, options)
         {

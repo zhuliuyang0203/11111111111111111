@@ -107,7 +107,6 @@ namespace OpenQA.Selenium.Chromium
         public static readonly string SetPermissionCommand = "setPermission";
 
         private readonly ChromiumDriverService driverService;
-        private readonly bool disposeDriverService;
         private readonly string optionsCapabilityName;
         private DevToolsSession devToolsSession;
 
@@ -128,11 +127,10 @@ namespace OpenQA.Selenium.Chromium
         /// <param name="service">The <see cref="ChromiumDriverService"/> to use.</param>
         /// <param name="options">The <see cref="ChromiumOptions"/> to be used with the ChromiumDriver.</param>
         /// <param name="commandTimeout">The maximum amount of time to wait for each command.</param>
-        protected ChromiumDriver(ChromiumDriverService service, ChromiumOptions options, TimeSpan commandTimeout, bool disposeService)
+        protected ChromiumDriver(ChromiumDriverService service, ChromiumOptions options, TimeSpan commandTimeout)
             : base(StartDriverServiceCommandExecutor(service, options, commandTimeout), ConvertOptionsToCapabilities(options))
         {
             this.driverService = service;
-            this.disposeDriverService = disposeService;
             this.optionsCapabilityName = options.CapabilityName;
         }
 
@@ -471,11 +469,6 @@ namespace OpenQA.Selenium.Chromium
             }
 
             base.Dispose(disposing);
-
-            if (this.disposeDriverService)
-            {
-                this.driverService?.Dispose();
-            }
         }
 
         private static ICapabilities ConvertOptionsToCapabilities(ChromiumOptions options)

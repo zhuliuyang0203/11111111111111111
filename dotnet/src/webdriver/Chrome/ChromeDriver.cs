@@ -125,7 +125,7 @@ namespace OpenQA.Selenium.Chrome
         /// <param name="options">The <see cref="ChromeOptions"/> to be used with the Chrome driver.</param>
         /// <param name="commandTimeout">The maximum amount of time to wait for each command.</param>
         public ChromeDriver(string chromeDriverDirectory, ChromeOptions options, TimeSpan commandTimeout)
-            : this(ChromeDriverService.CreateDefaultService(chromeDriverDirectory), options, commandTimeout, disposeService: true)
+            : this(ChromeDriverService.CreateDefaultService(chromeDriverDirectory), options, commandTimeout)
         {
         }
 
@@ -136,12 +136,7 @@ namespace OpenQA.Selenium.Chrome
         /// <param name="service">The <see cref="ChromeDriverService"/> to use.</param>
         /// <param name="options">The <see cref="ChromeOptions"/> used to initialize the driver.</param>
         public ChromeDriver(ChromeDriverService service, ChromeOptions options)
-            : this(service, options, RemoteWebDriver.DefaultCommandTimeout, disposeService: true)
-        {
-        }
-
-        public ChromeDriver(ChromeDriverService service, ChromeOptions options, bool disposeService)
-            : this(service, options, RemoteWebDriver.DefaultCommandTimeout, disposeService)
+            : this(service, options, RemoteWebDriver.DefaultCommandTimeout)
         {
         }
 
@@ -152,13 +147,7 @@ namespace OpenQA.Selenium.Chrome
         /// <param name="options">The <see cref="ChromeOptions"/> to be used with the Chrome driver.</param>
         /// <param name="commandTimeout">The maximum amount of time to wait for each command.</param>
         public ChromeDriver(ChromeDriverService service, ChromeOptions options, TimeSpan commandTimeout)
-            : base(service, options, commandTimeout, disposeService: true)
-        {
-            this.AddCustomChromeCommands();
-        }
-
-        public ChromeDriver(ChromeDriverService service, ChromeOptions options, TimeSpan commandTimeout, bool disposeService)
-            : base(service, options, commandTimeout, disposeService)
+            : base(service, options, commandTimeout)
         {
             this.AddCustomChromeCommands();
         }
