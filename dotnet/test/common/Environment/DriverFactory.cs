@@ -55,19 +55,18 @@ namespace OpenQA.Selenium.Environment
 
         public event EventHandler<DriverStartingEventArgs> DriverStarting;
 
-        public IWebDriver CreateDriver(Type driverType, bool logging = false)
+        public IWebDriver CreateDriver(Type driverType)
         {
-            return CreateDriverWithOptions(driverType, null, logging);
+            return CreateDriverWithOptions(driverType, null);
         }
 
-        public IWebDriver CreateDriverWithOptions(Type driverType, DriverOptions driverOptions, bool logging = false)
+        public IWebDriver CreateDriverWithOptions(Type driverType, DriverOptions driverOptions)
         {
             Console.WriteLine($"Creating new driver of {driverType} type...");
 
             Browser browser = Browser.All;
             DriverService service = null;
             DriverOptions options = null;
-            bool enableLogging = logging;
 
             List<Type> constructorArgTypeList = new List<Type>();
             IWebDriver driver = null;
@@ -84,10 +83,6 @@ namespace OpenQA.Selenium.Environment
                 {
                     ((ChromeOptions)options).BinaryLocation = this.browserBinaryLocation;
                 }
-                if (enableLogging)
-                {
-                    ((ChromiumDriverService)service).EnableVerboseLogging = true;
-                }
             }
             else if (typeof(EdgeDriver).IsAssignableFrom(driverType))
             {
@@ -102,20 +97,12 @@ namespace OpenQA.Selenium.Environment
                 {
                     ((EdgeOptions)options).BinaryLocation = this.browserBinaryLocation;
                 }
-                if (enableLogging)
-                {
-                    ((ChromiumDriverService)service).EnableVerboseLogging = true;
-                }
             }
             else if (typeof(InternetExplorerDriver).IsAssignableFrom(driverType))
             {
                 browser = Browser.IE;
                 options = GetDriverOptions<InternetExplorerOptions>(driverType, driverOptions);
                 service = InternetExplorerDriverService.CreateDefaultService();
-                if (enableLogging)
-                {
-                    ((InternetExplorerDriverService)service).LoggingLevel = InternetExplorerDriverLogLevel.Trace;
-                }
             }
             else if (typeof(FirefoxDriver).IsAssignableFrom(driverType))
             {
@@ -125,10 +112,6 @@ namespace OpenQA.Selenium.Environment
                 if (!string.IsNullOrEmpty(this.browserBinaryLocation))
                 {
                     ((FirefoxOptions)options).BinaryLocation = this.browserBinaryLocation;
-                }
-                if (enableLogging)
-                {
-                    ((FirefoxDriverService)service).LogLevel = FirefoxDriverLogLevel.Trace;
                 }
             }
             else if (typeof(SafariDriver).IsAssignableFrom(driverType))
