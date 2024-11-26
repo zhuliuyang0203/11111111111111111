@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "selenium"
-version = "4.28.0.202411252021"
-license = "Apache 2.0"
+version = "4.28.0.202411261607"
+license = { text = "Apache 2.0" }
 description = "Official Python bindings for Selenium WebDriver."
 readme = "README.rst"
 requires-python = "~=3.8"
@@ -24,6 +24,7 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     ]
 dependencies = [
     "urllib3[socks]>=1.26,<3",
@@ -40,7 +41,7 @@ zip-safe = false
 [tool.setuptools.packages.find]
 include = ["selenium*"]
 exclude = ["test*"]
-namespace = false
+namespaces = false
 # include-package-data is `true` by default in pyproject.toml
 
 [project.urls]

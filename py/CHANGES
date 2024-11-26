@@ -1,3 +1,7 @@
+Selenium 4.27.1
+* Fix `pyproject.toml` for installable from sdist (#14806)
+* Revert the Deprecation warnings of WebElement.get_attribute() (#14808)
+
 Selenium 4.27.0
 * Add CDP for Chrome 131 and remove 128
 * Add Firefox CDP deprecation warnings (#14787)
