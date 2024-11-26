@@ -127,17 +127,17 @@ namespace OpenQA.Selenium.Environment
                 service.DriverServiceExecutableName = Path.GetFileName(this.driverPath);
             }
 
-            this.OnDriverLaunching(options);
+            this.OnDriverLaunching(service, options);
 
             driver = (IWebDriver)Activator.CreateInstance(driverType, service, options);
             return driver;
         }
 
-        protected void OnDriverLaunching(DriverOptions options)
+        protected void OnDriverLaunching(DriverService service, DriverOptions options)
         {
             if (this.DriverStarting != null)
             {
-                DriverStartingEventArgs args = new DriverStartingEventArgs(options);
+                DriverStartingEventArgs args = new DriverStartingEventArgs(service, options);
                 this.DriverStarting(this, args);
             }
         }
