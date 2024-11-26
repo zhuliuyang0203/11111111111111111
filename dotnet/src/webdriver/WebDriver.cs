@@ -980,9 +980,9 @@ namespace OpenQA.Selenium
                 {
                     returnValue = this.elementFactory.CreateElement(resultAsDictionary);
                 }
-                else if (ShadowRoot.ContainsShadowRootReference(resultAsDictionary))
+                else if (ShadowRoot.TryCreate(this, resultAsDictionary, out ShadowRoot shadowRoot))
                 {
-                    returnValue = ShadowRoot.FromDictionary(this, resultAsDictionary);
+                    returnValue = shadowRoot;
                 }
                 else
                 {
