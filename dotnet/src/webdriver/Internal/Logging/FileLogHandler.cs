@@ -20,6 +20,8 @@
 using System;
 using System.IO;
 
+#nullable enable
+
 namespace OpenQA.Selenium.Internal.Logging
 {
     /// <summary>
@@ -40,6 +42,7 @@ namespace OpenQA.Selenium.Internal.Logging
         /// Initializes a new instance of the <see cref="FileLogHandler"/> class with the specified file path.
         /// </summary>
         /// <param name="filePath">The path of the log file.</param>
+        /// <exception cref="ArgumentException">If <paramref name="filePath"/> is <see langword="null"/> or <see cref="string.Empty"/>.</exception>
         public FileLogHandler(string filePath)
             : this(filePath, overwrite: true)
         {
@@ -51,6 +54,7 @@ namespace OpenQA.Selenium.Internal.Logging
         /// </summary>
         /// <param name="filePath">The path of the log file.</param>
         /// <param name="overwrite">Specifies whether the file should be overwritten if it exists on the disk.</param>
+        /// <exception cref="ArgumentException">If <paramref name="filePath"/> is <see langword="null"/> or <see cref="string.Empty"/>.</exception>
         public FileLogHandler(string filePath, bool overwrite)
         {
             if (string.IsNullOrEmpty(filePath)) throw new ArgumentException("File log path cannot be null or empty.", nameof(filePath));
@@ -76,9 +80,14 @@ namespace OpenQA.Selenium.Internal.Logging
         /// <param name="logEvent">The log event to handle.</param>
         public void Handle(LogEvent logEvent)
         {
+            if (_streamWriter is not { } writer)
+            {
+                throw new ObjectDisposedException(nameof(FileLogHandler));
+            }
+
             lock (_lockObj)
             {
-                _streamWriter.WriteLine($"{logEvent.Timestamp:yyyy-MM-dd HH:mm:ss.fff} {_levels[(int)logEvent.Level]} {logEvent.IssuedBy.Name}: {logEvent.Message}");
+                writer.WriteLine($"{logEvent.Timestamp:yyyy-MM-dd HH:mm:ss.fff} {_levels[(int)logEvent.Level]} {logEvent.IssuedBy.Name}: {logEvent.Message}");
             }
         }
 
@@ -112,9 +121,9 @@ namespace OpenQA.Selenium.Internal.Logging
                     if (disposing)
                     {
                         _streamWriter?.Dispose();
-                        _streamWriter = null;
+                        _streamWriter = null!;
                         _fileStream?.Dispose();
-                        _fileStream = null;
+                        _fileStream = null!;
                     }
 
                     _isDisposed = true;
