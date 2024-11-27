@@ -280,9 +280,15 @@ namespace OpenQA.Selenium
         /// <param name="script">A <see cref="PinnedScript"/> object containing the JavaScript code to execute.</param>
         /// <param name="args">The arguments to the script.</param>
         /// <returns>The value returned by the script.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="script" /> is <see langword="null"/>.</exception>
         public object ExecuteScript(PinnedScript script, params object[] args)
         {
-            return this.ExecuteScript(script.ExecutionScript, args);
+            if (script == null)
+            {
+                throw new ArgumentNullException(nameof(script));
+            }
+
+            return this.ExecuteScript(script.MakeExecutionScript(), args);
         }
 
         /// <summary>
@@ -290,6 +296,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="by">By mechanism to find the object</param>
         /// <returns>IWebElement object so that you can interact with that object</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="by" /> is <see langword="null"/>.</exception>
         /// <example>
         /// <code>
         /// IWebDriver driver = new InternetExplorerDriver();
@@ -373,8 +380,14 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <param name="printOptions">A <see cref="PrintOptions"/> object describing the options of the printed document.</param>
         /// <returns>The <see cref="PrintDocument"/> object containing the PDF-formatted print representation of the page.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="printOptions"/> is <see langword="null"/>.</exception>
         public PrintDocument Print(PrintOptions printOptions)
         {
+            if (printOptions is null)
+            {
+                throw new ArgumentNullException(nameof(printOptions));
+            }
+
             Response commandResponse = this.Execute(DriverCommand.Print, printOptions.ToDictionary());
             string base64 = commandResponse.Value.ToString();
             return new PrintDocument(base64);
@@ -928,7 +941,7 @@ namespace OpenQA.Selenium
             }
             else
             {
-                throw new ArgumentException("Argument is of an illegal type" + arg.ToString(), nameof(arg));
+                throw new ArgumentException("Argument is of an illegal type: " + arg.ToString(), nameof(arg));
             }
 
             return converted;
