@@ -78,5 +78,5 @@
       "labels": [ "dependencies", "c-rust" ]
     }
   ],
-  "prConcurrentLimit": 15
+  "prConcurrentLimit": 10
 }

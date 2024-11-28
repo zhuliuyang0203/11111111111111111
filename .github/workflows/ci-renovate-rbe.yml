@@ -13,10 +13,21 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-      - name: Repin Dependencies
-        run: |
-          REPIN=1 bazel run @maven//:pin
-          CARGO_BAZEL_REPIN=true bazel sync --only=crates
+      - name: java - repin dependencies
+        if: contains(join(github.event.commits.*.message), '[java]')
+        run: REPIN=1 bazel run @maven//:pin
+      - name: rust - repin dependencies
+        if: contains(join(github.event.commits.*.message), '[rust]')
+        run: CARGO_BAZEL_REPIN=true bazel sync --only=crates
+      - name: js - repin dependencies
+        if: contains(join(github.event.commits.*.message), '[js]')
+        run: bazel run -- @pnpm//:pnpm install --dir $PWD --lockfile-only
+      - name: dotnet - repin dependencies
+        if: contains(join(github.event.commits.*.message), '[dotnet]')
+        run: ./dotnet/update-deps.sh
+      - name: py - repin dependencies
+        if: contains(join(github.event.commits.*.message), '[py]')
+        run: bazel run //py:requirements.update
       - name: Commit files
         run: |
           export CHANGES=$(git status -s)
@@ -24,7 +35,7 @@ jobs:
             git config --local user.email "selenium-ci@users.noreply.github.com"
             git config --local user.name "Selenium CI Bot"
             git add .
-            git commit -m 'Repin maven dependencies'
+            git commit -m 'Repin dependencies'
             git push
           fi
 
