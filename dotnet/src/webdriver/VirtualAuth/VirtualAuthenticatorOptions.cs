@@ -148,7 +148,6 @@ namespace OpenQA.Selenium.VirtualAuth
 
         /// <summary>
         /// If set to <see langword="true"/>, a <see href="https://w3c.github.io/webauthn/#user-consent">User Consent</see> will always be granted.
-        /// Refer 
         /// </summary>
         /// <param name="isUserConsenting">Whether a user consent will always be granted.</param>
         /// <returns>This options instance for chaining.</returns>
