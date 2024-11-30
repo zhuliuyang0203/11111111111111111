@@ -16,7 +16,6 @@
 # under the License.
 
 from distutils.command.install import INSTALL_SCHEMES
-from os.path import dirname, join, abspath
 from setuptools import setup
 from setuptools.command.install import install
 from setuptools_rust import Binding, RustExtension
