@@ -219,6 +219,7 @@ namespace OpenQA.Selenium.Interactions
         /// <param name="yOffset">The vertical offset from the origin of the move.</param>
         /// <param name="duration">The length of time the move gesture takes to complete.</param>
         /// <returns>The action representing the pointer move gesture.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="target"/> is <see langword="null"/>.</exception>
         public Interaction CreatePointerMove(IWebElement target, int xOffset, int yOffset, TimeSpan duration)
         {
             return CreatePointerMove(target, xOffset, yOffset, duration, new PointerEventProperties());
@@ -233,8 +234,14 @@ namespace OpenQA.Selenium.Interactions
         /// <param name="duration">The length of time the move gesture takes to complete.</param>
         /// <param name="properties">The specifications for the pointer event interaction</param>
         /// <returns>The action representing the pointer move gesture.</returns>
+        /// <exception cref="ArgumentNullException">If <paramref name="target"/> is <see langword="null"/>.</exception>
         public Interaction CreatePointerMove(IWebElement target, int xOffset, int yOffset, TimeSpan duration, PointerEventProperties properties)
         {
+            if (target is null)
+            {
+                throw new ArgumentNullException(nameof(target));
+            }
+
             return new PointerMoveInteraction(this, target, CoordinateOrigin.Element, xOffset, yOffset, duration, properties);
         }
 
