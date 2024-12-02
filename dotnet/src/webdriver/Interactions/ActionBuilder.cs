@@ -21,6 +21,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+#nullable enable
+
 namespace OpenQA.Selenium.Interactions
 {
     /// <summary>
@@ -29,7 +31,7 @@ namespace OpenQA.Selenium.Interactions
     /// </summary>
     public class ActionBuilder
     {
-        private Dictionary<InputDevice, ActionSequence> sequences = new Dictionary<InputDevice, ActionSequence>();
+        private readonly Dictionary<InputDevice, ActionSequence> sequences = new Dictionary<InputDevice, ActionSequence>();
 
         /// <summary>
         /// Adds an action to the built set of actions. Adding an action will
@@ -39,7 +41,7 @@ namespace OpenQA.Selenium.Interactions
         /// <returns>A self reference.</returns>
         public ActionBuilder AddAction(Interaction actionToAdd)
         {
-            this.AddActions(actionToAdd);
+            this.ProcessTick(actionToAdd);
             return this;
         }
 
@@ -71,7 +73,7 @@ namespace OpenQA.Selenium.Interactions
         /// </summary>
         public void ClearSequences()
         {
-            this.sequences = new Dictionary<InputDevice, ActionSequence>();
+            this.sequences.Clear();
         }
 
         /// <summary>
@@ -89,13 +91,26 @@ namespace OpenQA.Selenium.Interactions
             return builder.ToString();
         }
 
+        private void ProcessTick(Interaction interaction)
+        {
+            ActionSequence sequence = this.GetOrAddSequence(interaction.SourceDevice);
+            sequence.AddAction(interaction);
+
+            foreach (KeyValuePair<InputDevice, ActionSequence> pair in this.sequences)
+            {
+                if (pair.Key != interaction.SourceDevice)
+                {
+                    pair.Value.AddAction(new PauseInteraction(pair.Key, TimeSpan.Zero));
+                }
+            }
+        }
+
         private void ProcessTick(params Interaction[] interactionsToAdd)
         {
             List<InputDevice> usedDevices = new List<InputDevice>();
             foreach (Interaction interaction in interactionsToAdd)
             {
-                InputDevice actionDevice = interaction.SourceDevice;
-                if (usedDevices.Contains(actionDevice))
+                if (usedDevices.Contains(interaction.SourceDevice))
                 {
                     throw new ArgumentException("You can only add one action per device for a single tick.");
                 }
@@ -104,8 +119,9 @@ namespace OpenQA.Selenium.Interactions
             List<InputDevice> unusedDevices = new List<InputDevice>(this.sequences.Keys);
             foreach (Interaction interaction in interactionsToAdd)
             {
-                ActionSequence sequence = this.FindSequence(interaction.SourceDevice);
+                ActionSequence sequence = this.GetOrAddSequence(interaction.SourceDevice);
                 sequence.AddAction(interaction);
+
                 unusedDevices.Remove(interaction.SourceDevice);
             }
 
@@ -116,11 +132,11 @@ namespace OpenQA.Selenium.Interactions
             }
         }
 
-        private ActionSequence FindSequence(InputDevice device)
+        private ActionSequence GetOrAddSequence(InputDevice device)
         {
-            if (this.sequences.ContainsKey(device))
+            if (this.sequences.TryGetValue(device, out ActionSequence? existingSequence))
             {
-                return this.sequences[device];
+                return existingSequence;
             }
 
             int longestSequenceLength = 0;
