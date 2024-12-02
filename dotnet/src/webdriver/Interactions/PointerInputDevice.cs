@@ -448,7 +448,10 @@ namespace OpenQA.Selenium.Interactions
                 return toReturn;
             }
 
-            public override string ToString() => "Pointer down";
+            public override string ToString()
+            {
+                return "Pointer down";
+            }
         }
 
         private class PointerUpInteraction : Interaction
@@ -481,7 +484,10 @@ namespace OpenQA.Selenium.Interactions
                 return toReturn;
             }
 
-            public override string ToString() => "Pointer up";
+            public override string ToString()
+            {
+                return "Pointer up";
+            }
         }
 
         private class PointerCancelInteraction : Interaction
@@ -498,7 +504,10 @@ namespace OpenQA.Selenium.Interactions
                 return toReturn;
             }
 
-            public override string ToString() => "Pointer cancel";
+            public override string ToString()
+            {
+                return "Pointer cancel";
+            }
         }
 
         private class PointerMoveInteraction : Interaction
