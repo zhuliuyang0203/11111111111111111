@@ -412,7 +412,7 @@ namespace OpenQA.Selenium
                 driver.FindElement(By.Id("open-new-window")).Click();
                 List<String> allWindows = new List<string>(driver.WindowHandles);
                 allWindows.Remove(mainWindow);
-                Assert.That(allWindows, Has.Count.EqualTo(1));
+                Assert.That(allWindows, Has.One.Items);
                 onloadWindow = allWindows[0];
 
                 Assert.That(() =>

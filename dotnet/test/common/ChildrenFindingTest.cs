@@ -41,7 +41,7 @@ namespace OpenQA.Selenium
             IWebElement parent = driver.FindElement(By.Id("multiline"));
             ReadOnlyCollection<IWebElement> allParaElements = driver.FindElements(By.XPath("//p"));
             ReadOnlyCollection<IWebElement> children = parent.FindElements(By.XPath("//p"));
-            Assert.That(children, Has.Count.EqualTo(allParaElements.Count));
+            Assert.That(children, Has.Exactly(allParaElements.Count).Items);
         }
 
         [Test]
@@ -51,7 +51,7 @@ namespace OpenQA.Selenium
             IWebElement parent = driver.FindElement(By.Id("multiline"));
 
             ReadOnlyCollection<IWebElement> children = parent.FindElements(By.XPath("./p"));
-            Assert.That(children, Has.Count.EqualTo(1));
+            Assert.That(children, Has.One.Items);
             Assert.That(children[0].Text, Is.EqualTo("A div containing"));
         }
 
@@ -73,7 +73,7 @@ namespace OpenQA.Selenium
             IWebElement element = driver.FindElement(By.Name("form2"));
 
             ReadOnlyCollection<IWebElement> children = element.FindElements(By.XPath("select/option"));
-            Assert.That(children, Has.Count.EqualTo(8));
+            Assert.That(children, Has.Exactly(8).Items);
             Assert.Multiple(() =>
             {
                 Assert.That(children[0].Text, Is.EqualTo("One"));
@@ -106,7 +106,7 @@ namespace OpenQA.Selenium
             IWebElement element = driver.FindElement(By.Name("form2"));
 
             ReadOnlyCollection<IWebElement> children = element.FindElements(By.Name("selectomatic"));
-            Assert.That(children, Has.Count.EqualTo(2));
+            Assert.That(children, Has.Exactly(2).Items);
         }
 
         [Test]
@@ -159,7 +159,7 @@ namespace OpenQA.Selenium
             driver.Url = nestedPage;
             IWebElement element = driver.FindElement(By.Name("form2"));
             ReadOnlyCollection<IWebElement> children = element.FindElements(By.Id("2"));
-            Assert.That(children, Has.Count.EqualTo(2));
+            Assert.That(children, Has.Exactly(2).Items);
         }
 
         [Test]
@@ -168,9 +168,9 @@ namespace OpenQA.Selenium
             driver.Url = nestedPage;
             IWebElement element = driver.FindElement(By.Id("test_special_chars"));
             ReadOnlyCollection<IWebElement> children = element.FindElements(By.Id("white space"));
-            Assert.That(children, Has.Count.EqualTo(1));
+            Assert.That(children, Has.One.Items);
             ReadOnlyCollection<IWebElement> children2 = element.FindElements(By.Id("css#.chars"));
-            Assert.That(children2, Has.Count.EqualTo(1));
+            Assert.That(children2, Has.One.Items);
         }
 
         [Test]
@@ -191,7 +191,7 @@ namespace OpenQA.Selenium
             IWebElement element = driver.FindElement(By.Name("div1"));
             ReadOnlyCollection<IWebElement> elements = element.FindElements(By.LinkText("hello world"));
 
-            Assert.That(elements, Has.Count.EqualTo(2));
+            Assert.That(elements, Has.Exactly(2).Items);
             Assert.That(elements[0].GetAttribute("name"), Is.EqualTo("link1"));
             Assert.That(elements[1].GetAttribute("name"), Is.EqualTo("link2"));
         }
@@ -237,7 +237,7 @@ namespace OpenQA.Selenium
 
             ReadOnlyCollection<IWebElement> elements = parent.FindElements(By.ClassName("one"));
 
-            Assert.That(elements, Has.Count.EqualTo(2));
+            Assert.That(elements, Has.Exactly(2).Items);
         }
 
 
@@ -261,7 +261,7 @@ namespace OpenQA.Selenium
 
             ReadOnlyCollection<IWebElement> elements = parent.FindElements(By.TagName("a"));
 
-            Assert.That(elements, Has.Count.EqualTo(2));
+            Assert.That(elements, Has.Exactly(2).Items);
         }
 
         [Test]
@@ -294,7 +294,7 @@ namespace OpenQA.Selenium
 
             ReadOnlyCollection<IWebElement> elements = parent.FindElements(By.CssSelector("*[name=\"selectomatic\"]"));
 
-            Assert.That(elements, Has.Count.EqualTo(2));
+            Assert.That(elements, Has.Exactly(2).Items);
         }
 
         [Test]
@@ -305,7 +305,7 @@ namespace OpenQA.Selenium
             IWebElement head = elements[0];
 
             ReadOnlyCollection<IWebElement> importedScripts = head.FindElements(By.TagName("script"));
-            Assert.That(importedScripts, Has.Count.EqualTo(3));
+            Assert.That(importedScripts, Has.Exactly(3).Items);
         }
 
         [Test]
@@ -342,8 +342,8 @@ namespace OpenQA.Selenium
             driver.Url = xhtmlTestPage;
             IWebElement parent = driver.FindElement(By.Id("my_span"));
 
-            Assert.That(parent.FindElements(By.TagName("div")), Has.Count.EqualTo(2));
-            Assert.That(parent.FindElements(By.TagName("span")), Has.Count.EqualTo(2));
+            Assert.That(parent.FindElements(By.TagName("div")), Has.Exactly(2).Items);
+            Assert.That(parent.FindElements(By.TagName("span")), Has.Exactly(2).Items);
         }
 
         [Test]
@@ -364,7 +364,7 @@ namespace OpenQA.Selenium
 
             ReadOnlyCollection<IWebElement> elements = elem.FindElements(By.PartialLinkText("link"));
             Assert.That(elements, Is.Not.Null);
-            Assert.That(elements, Has.Count.EqualTo(6));
+            Assert.That(elements, Has.Exactly(6).Items);
         }
 
         [Test]
