@@ -74,11 +74,8 @@ namespace OpenQA.Selenium
 
             ReadOnlyCollection<IWebElement> children = element.FindElements(By.XPath("select/option"));
             Assert.That(children, Has.Exactly(8).Items);
-            Assert.Multiple(() =>
-            {
-                Assert.That(children[0].Text, Is.EqualTo("One"));
-                Assert.That(children[1].Text, Is.EqualTo("Two"));
-            });
+            Assert.That(children[0].Text, Is.EqualTo("One"));
+            Assert.That(children[1].Text, Is.EqualTo("Two"));
         }
 
         [Test]
