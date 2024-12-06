@@ -115,8 +115,8 @@ namespace OpenQA.Selenium
         public Task ShouldNotHaveProblemNavigatingWithNoPagesBrowsedAsync()
         {
             var navigation = driver.Navigate();
-            Assert.DoesNotThrowAsync(async () => await navigation.BackAsync());
-            Assert.DoesNotThrowAsync(async () => await navigation.ForwardAsync());
+            Assert.That(async () => await navigation.BackAsync(), Throws.Nothing);
+            Assert.That(async () => await navigation.ForwardAsync(), Throws.Nothing);
             return Task.CompletedTask;
         }
 

@@ -129,15 +129,9 @@ namespace OpenQA.Selenium.Support.UI
 
             var wait = new WebDriverWait(GetClock(), mockDriver.Object, ONE_SECONDS, ZERO_SECONDS);
 
-            try
-            {
-                wait.Until(condition);
-                Assert.Fail("Expected WebDriverTimeoutException to be thrown");
-            }
-            catch (WebDriverTimeoutException e)
-            {
-                Assert.That(e.InnerException, Is.InstanceOf<NoSuchElementException>());
-            }
+            Assert.That(
+                () => wait.Until(condition),
+                Throws.InstanceOf<WebDriverTimeoutException>().With.InnerException.InstanceOf<NoSuchElementException>());
         }
 
         private Func<IWebDriver, T> GetCondition<T>(Func<T> first, Func<T> second)

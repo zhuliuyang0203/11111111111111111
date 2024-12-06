@@ -184,15 +184,9 @@ FindElementCompleted from IWebDriver By.XPath: //link[@type = 'text/css']
             EventFiringWebDriver firingDriver = new EventFiringWebDriver(mockDriver.Object);
             firingDriver.ExceptionThrown += new EventHandler<WebDriverExceptionEventArgs>(firingDriver_ExceptionThrown);
 
-            try
-            {
-                firingDriver.FindElement(By.Id("foo"));
-                Assert.Fail("Expected exception to be propogated");
-            }
-            catch (NoSuchElementException)
-            {
-                // Fine
-            }
+            Assert.That(
+                () => firingDriver.FindElement(By.Id("foo")),
+                Throws.InstanceOf<NoSuchElementException>());
 
             Assert.That(log.ToString(), Does.Contain(exception.Message));
         }

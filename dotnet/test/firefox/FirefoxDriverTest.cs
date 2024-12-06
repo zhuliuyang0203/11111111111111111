@@ -34,15 +34,9 @@ namespace OpenQA.Selenium.Firefox
         {
             driver.Url = formsPage;
 
-            try
-            {
-                driver.FindElement(By.Id("notThere"));
-                Assert.Fail("Should not be able to select element by id here");
-            }
-            catch (NoSuchElementException)
-            {
-                // This is expected
-            }
+            Assert.That(
+                () => driver.FindElement(By.Id("notThere")),
+                Throws.InstanceOf<NoSuchElementException>());
 
             // Is this works, then we're golden
             driver.Url = xhtmlTestPage;

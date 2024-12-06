@@ -19,7 +19,6 @@
 
 using NUnit.Framework;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace OpenQA.Selenium.Interactions
@@ -55,8 +54,9 @@ namespace OpenQA.Selenium.Interactions
             Assert.That(dictionary, Does.ContainKey("type").WithValue("pointer"));
             Assert.That(dictionary["id"], Is.Not.Null);
             Assert.That(dictionary["parameters"], Is.Not.Null);
+
             var parameters = new Dictionary<string, object> { { "pointerType", "pen" } };
-            CollectionAssert.AreEquivalent(parameters, (IEnumerable)dictionary["parameters"]);
+            Assert.That(dictionary["parameters"], Is.EquivalentTo(parameters));
 
             var events = new Dictionary<string, object>
             {
@@ -72,8 +72,8 @@ namespace OpenQA.Selenium.Interactions
                 {"type", "pointerDown"},
                 {"button", 0}
             };
-            var actions = (IList<Object>)dictionary["actions"];
-            CollectionAssert.AreEquivalent(events, (IEnumerable)actions[0]);
+            var actions = (IList<object>)dictionary["actions"];
+            Assert.That(actions[0], Is.EquivalentTo(events));
         }
     }
 }

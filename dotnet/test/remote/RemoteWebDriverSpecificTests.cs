@@ -62,7 +62,7 @@ namespace OpenQA.Selenium.Remote
             IAllowsFileDetection fileDetectionDriver = driver as IAllowsFileDetection;
             if (fileDetectionDriver == null)
             {
-                Assert.Fail("driver does not support file detection. This should not be");
+                Assert.That(driver, Is.InstanceOf<IAllowsFileDetection>(), "driver does not support file detection. This should not be");
             }
 
             fileDetectionDriver.FileDetector = new LocalFileDetector();

@@ -111,7 +111,7 @@ namespace OpenQA.Selenium
             Assert.That(GetLocationOnPage(By.Id("box")), Is.EqualTo(new Point(10, 10)));
             // GetLocationInViewPort only works within the context of a single frame
             // for W3C-spec compliant remote ends.
-            // Assert.AreEqual(new Point(25, 25), GetLocationInViewPort(By.Id("box")));
+            // Assert.That(GetLocationInViewPort(By.Id("box")), Is.EqualTo(new Point(25, 25)));
         }
 
         [Test]
@@ -123,7 +123,7 @@ namespace OpenQA.Selenium
             Assert.That(GetLocationOnPage(By.Id("box")), Is.EqualTo(new Point(10, 10)));
             // GetLocationInViewPort only works within the context of a single frame
             // for W3C-spec compliant remote ends.
-            // Assert.AreEqual(new Point(40, 40), GetLocationInViewPort(By.Id("box")));
+            // Assert.That(GetLocationInViewPort(By.Id("box")), Is.EqualTo(new Point(40, 40)));
         }
 
         [Test]

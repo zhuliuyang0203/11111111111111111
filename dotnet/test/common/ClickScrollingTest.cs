@@ -44,7 +44,7 @@ namespace OpenQA.Selenium
 
             // Sometimes JS is returning a double
             object result = ((IJavaScriptExecutor)driver).ExecuteScript(scrollScript);
-            var yOffset = Convert.ChangeType(result, typeof(long));
+            var yOffset = Convert.ToInt64(result);
 
             //Focusing on to click, but not actually following,
             //the link will scroll it in to view, which is a few pixels further than 0

@@ -256,10 +256,12 @@ namespace OpenQA.Selenium
             string js = "function functionB() { throw Error('errormessage'); };"
                         + "function functionA() { functionB(); };"
                         + "functionA();";
-            Exception ex = Assert.Catch(() => ExecuteScript(js));
-            Assert.That(ex, Is.InstanceOf<WebDriverException>());
-            Assert.That(ex.Message, Does.Contain("errormessage"), "Exception message does not contain 'errormessage'");
-            Assert.That(ex.StackTrace, Does.Contain("functionB"), "Exception message does not contain 'functionB'");
+
+            Assert.That(
+               () => ExecuteScript(js),
+               Throws.InstanceOf<WebDriverException>()
+               .With.Message.Contains("errormessage")
+               .And.Property(nameof(WebDriverException.StackTrace)).Contains("functionB"));
         }
 
         [Test]
@@ -467,7 +469,7 @@ namespace OpenQA.Selenium
             if (fileList.Length > 0)
             {
                 string jquery = System.IO.File.ReadAllText(fileList[0]);
-                Assert.That(jquery.Length, Is.GreaterThan(50000));
+                Assert.That(jquery, Has.Length.GreaterThan(50000));
                 ExecuteScript(jquery, null);
             }
         }

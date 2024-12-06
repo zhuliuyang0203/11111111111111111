@@ -118,7 +118,7 @@ namespace OpenQA.Selenium
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Is.InstanceOf<ReadOnlyCollection<object>>());
             ReadOnlyCollection<object> resultList = result as ReadOnlyCollection<object>;
-            Assert.That(resultList.Count, Is.EqualTo(5));
+            Assert.That(resultList, Has.Count.EqualTo(5));
             Assert.That(resultList[0], Is.Null);
             Assert.That((long)resultList[1], Is.EqualTo(123));
             Assert.That(resultList[2].ToString(), Is.EqualTo("abc"));
@@ -221,10 +221,12 @@ namespace OpenQA.Selenium
             string js = "function functionB() { throw Error('errormessage'); };"
                         + "function functionA() { functionB(); };"
                         + "functionA();";
-            Exception ex = Assert.Catch(() => executor.ExecuteAsyncScript(js));
-            Assert.That(ex, Is.InstanceOf<WebDriverException>());
-            Assert.That(ex.Message.Contains("errormessage"));
-            Assert.That(ex.StackTrace.Contains("functionB"));
+
+            Assert.That(
+                () => executor.ExecuteAsyncScript(js),
+                Throws.InstanceOf<WebDriverException>()
+                .With.Message.Contains("errormessage")
+                .And.Property(nameof(WebDriverException.StackTrace)).Contains("functionB"));
         }
 
         [Test]
