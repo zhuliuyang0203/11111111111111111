@@ -203,7 +203,7 @@ namespace OpenQA.Selenium
             driver.Url = EnvironmentManager.Instance.UrlBuilder.WhereIs("inputs.html");
             IWebElement element = driver.FindElement(locator);
             Assert.That(element.GetAttribute("value"), Is.EqualTo(oldValue));
-            
+
             element.Clear();
             Assert.That(element.GetAttribute("value"), Is.EqualTo(clearedValue));
         }
