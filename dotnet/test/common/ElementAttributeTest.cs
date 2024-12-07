@@ -182,14 +182,14 @@ namespace OpenQA.Selenium
             IWebElement initiallyNotSelected = driver.FindElement(By.Id("peas"));
             IWebElement initiallySelected = driver.FindElement(By.Id("cheese_and_peas"));
 
-            Assert.That(neverSelected.GetDomProperty("checked"), Is.EqualTo("False"));
-            Assert.That(initiallyNotSelected.GetDomProperty("checked"), Is.EqualTo("False"));
-            Assert.That(initiallySelected.GetDomProperty("checked"), Is.EqualTo("True"));
+            Assert.That(neverSelected.GetAttribute("selected"), Is.Null, "false");
+            Assert.That(initiallyNotSelected.GetAttribute("selected"), Is.Null, "false");
+            Assert.That(initiallySelected.GetAttribute("selected"), Is.EqualTo("true"), "true");
 
             initiallyNotSelected.Click();
-            Assert.That(neverSelected.GetDomProperty("checked"), Is.EqualTo("False"));
-            Assert.That(initiallyNotSelected.GetDomProperty("checked"), Is.EqualTo("True"));
-            Assert.That(initiallySelected.GetDomProperty("checked"), Is.EqualTo("False"));
+            Assert.That(neverSelected.GetAttribute("selected"), Is.Null);
+            Assert.That(initiallyNotSelected.GetAttribute("selected"), Is.EqualTo("true"));
+            Assert.That(initiallySelected.GetAttribute("selected"), Is.Null);
         }
 
         [Test]
@@ -202,8 +202,8 @@ namespace OpenQA.Selenium
             IWebElement two = options[1];
             Assert.That(one.Selected, Is.True);
             Assert.That(two.Selected, Is.False);
-            Assert.That(one.GetDomProperty("checked"), Is.EqualTo("True"));
-            Assert.That(two.GetDomProperty("checked"), Is.EqualTo("False"));
+            Assert.That(one.GetAttribute("selected"), Is.EqualTo("true"));
+            Assert.That(two.GetAttribute("selected"), Is.Null);
         }
 
         [Test]
