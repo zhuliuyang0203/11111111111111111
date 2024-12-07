@@ -49,7 +49,7 @@ namespace OpenQA.Selenium
             driver.Url = xhtmlTestPage;
             IWebElement heading = driver.FindElement(By.XPath("//h1"));
             driver.Url = simpleTestPage;
-            Assert.That(() => { string className = heading.GetAttribute("class"); }, Throws.InstanceOf<StaleElementReferenceException>());
+            Assert.That(() => { string className = heading.GetDomAttribute("class"); }, Throws.InstanceOf<StaleElementReferenceException>());
         }
 
         [Test]

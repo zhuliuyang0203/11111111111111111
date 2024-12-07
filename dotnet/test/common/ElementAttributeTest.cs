@@ -212,7 +212,7 @@ namespace OpenQA.Selenium
             driver.Url = xhtmlTestPage;
 
             IWebElement heading = driver.FindElement(By.XPath("//h1"));
-            String className = heading.GetAttribute("class");
+            String className = heading.GetDomAttribute("class");
 
             Assert.That(className, Is.EqualTo("header"));
         }
@@ -439,7 +439,7 @@ namespace OpenQA.Selenium
             driver.SwitchTo().Frame("iframe1");
 
             IWebElement wallace = driver.FindElement(By.XPath("//div[@id='wallace']"));
-            String className = wallace.GetAttribute("class");
+            String className = wallace.GetDomAttribute("class");
             Assert.That(className, Is.EqualTo("gromit"));
         }
     }

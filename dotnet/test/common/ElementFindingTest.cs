@@ -360,7 +360,7 @@ namespace OpenQA.Selenium
             driver.Url = xhtmlTestPage;
             String weird = "cls-!@#$%^&*";
             IWebElement element = driver.FindElement(By.ClassName(weird));
-            Assert.That(element.GetAttribute("class"), Is.EqualTo(weird));
+            Assert.That(element.GetDomAttribute("class"), Is.EqualTo(weird));
         }
 
         [Test]
@@ -370,7 +370,7 @@ namespace OpenQA.Selenium
             String weird = "cls-!@#$%^&*";
             ReadOnlyCollection<IWebElement> elements = driver.FindElements(By.ClassName(weird));
             Assert.That(elements, Has.Count.EqualTo(1));
-            Assert.That(elements[0].GetAttribute("class"), Is.EqualTo(weird));
+            Assert.That(elements[0].GetDomAttribute("class"), Is.EqualTo(weird));
         }
 
         // By.XPath positive
@@ -559,7 +559,7 @@ namespace OpenQA.Selenium
             driver.Url = xhtmlTestPage;
             IWebElement element = driver.FindElement(By.CssSelector("div.content"));
             Assert.That(element.TagName.ToLower(), Is.EqualTo("div"));
-            Assert.That(element.GetAttribute("class"), Is.EqualTo("content"));
+            Assert.That(element.GetDomAttribute("class"), Is.EqualTo("content"));
         }
 
         [Test]
@@ -576,7 +576,7 @@ namespace OpenQA.Selenium
             driver.Url = xhtmlTestPage;
             IWebElement element = driver.FindElement(By.CssSelector("div.extraDiv, div.content"));
             Assert.That(element.TagName.ToLower(), Is.EqualTo("div"));
-            Assert.That(element.GetAttribute("class"), Is.EqualTo("content"));
+            Assert.That(element.GetDomAttribute("class"), Is.EqualTo("content"));
         }
 
         [Test]
@@ -585,8 +585,8 @@ namespace OpenQA.Selenium
             driver.Url = xhtmlTestPage;
             ReadOnlyCollection<IWebElement> elements = driver.FindElements(By.CssSelector("div.extraDiv, div.content"));
             Assert.That(elements, Has.Count.GreaterThan(1));
-            Assert.That(elements[0].GetAttribute("class"), Is.EqualTo("content"));
-            Assert.That(elements[1].GetAttribute("class"), Is.EqualTo("extraDiv"));
+            Assert.That(elements[0].GetDomAttribute("class"), Is.EqualTo("content"));
+            Assert.That(elements[1].GetDomAttribute("class"), Is.EqualTo("extraDiv"));
         }
 
         [Test]
