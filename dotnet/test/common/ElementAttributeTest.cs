@@ -169,9 +169,9 @@ namespace OpenQA.Selenium
         {
             driver.Url = formsPage;
             IWebElement checkbox = driver.FindElement(By.XPath("//input[@id='checky']"));
-            Assert.That(checkbox.GetAttribute("checked"), Is.Null);
+            Assert.That(checkbox.GetDomProperty("checked"), Is.EqualTo("False"));
             checkbox.Click();
-            Assert.That(checkbox.GetAttribute("checked"), Is.EqualTo("true"));
+            Assert.That(checkbox.GetDomProperty("checked"), Is.EqualTo("True"));
         }
 
         [Test]
