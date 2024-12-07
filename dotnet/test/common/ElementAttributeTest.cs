@@ -33,7 +33,7 @@ namespace OpenQA.Selenium
         {
             driver.Url = simpleTestPage;
             IWebElement head = driver.FindElement(By.XPath("/html"));
-            string attribute = head.GetAttribute("cheese");
+            string attribute = head.GetDomAttribute("cheese");
             Assert.That(attribute, Is.Null);
         }
 
