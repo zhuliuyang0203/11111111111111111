@@ -21,8 +21,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 
-#nullable enable
-
 namespace OpenQA.Selenium
 {
     /// <summary>
@@ -32,7 +30,7 @@ namespace OpenQA.Selenium
     {
         private LogLevel level = LogLevel.All;
         private DateTime timestamp = DateTime.MinValue;
-        private string? message = string.Empty;
+        private string message = string.Empty;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LogEntry"/> class.
@@ -60,7 +58,7 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Gets the message of the log entry.
         /// </summary>
-        public string? Message
+        public string Message
         {
             get { return this.message; }
         }
@@ -80,14 +78,8 @@ namespace OpenQA.Selenium
         /// <param name="entryDictionary">The <see cref="Dictionary{TKey, TValue}"/> from
         /// which to create the <see cref="LogEntry"/>.</param>
         /// <returns>A <see cref="LogEntry"/> with the values in the dictionary.</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="entryDictionary"/> is <see langword="null"/>.</exception>
         internal static LogEntry FromDictionary(Dictionary<string, object> entryDictionary)
         {
-            if (entryDictionary == null)
-            {
-                throw new ArgumentNullException(nameof(entryDictionary));
-            }
-
             LogEntry entry = new LogEntry();
             if (entryDictionary.ContainsKey("message"))
             {
@@ -103,13 +95,12 @@ namespace OpenQA.Selenium
 
             if (entryDictionary.ContainsKey("level"))
             {
-                string? levelValue = entryDictionary["level"].ToString();
-
-                if (Enum.TryParse(levelValue, ignoreCase: true, out LogLevel level))
+                string levelValue = entryDictionary["level"].ToString();
+                try
                 {
-                    entry.level = level;
+                    entry.level = (LogLevel)Enum.Parse(typeof(LogLevel), levelValue, true);
                 }
-                else
+                catch (ArgumentException)
                 {
                     // If the requested log level string is not a valid log level,
                     // ignore it and use LogLevel.All.
