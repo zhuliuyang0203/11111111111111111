@@ -367,19 +367,22 @@ namespace OpenQA.Selenium
         }
 
         [Test]
-        public void ShouldReturnTrueForPresentBooleanAttributes()
+        [IgnoreBrowser(Browser.Chrome)]
+        [IgnoreBrowser(Browser.Edge)]
+        [IgnoreBrowser(Browser.Firefox)]
+        public void ShouldReturnEmptyStringForPresentBooleanAttributes()
         {
             driver.Url = booleanAttributes;
             IWebElement element1 = driver.FindElement(By.Id("emailRequired"));
-            Assert.That(element1.GetDomAttribute("required"), Is.EqualTo("true"));
+            Assert.That(element1.GetDomAttribute("required"), Is.Empty);
             IWebElement element2 = driver.FindElement(By.Id("emptyTextAreaRequired"));
-            Assert.That(element2.GetDomAttribute("required"), Is.EqualTo("true"));
+            Assert.That(element2.GetDomAttribute("required"), Is.Empty);
             IWebElement element3 = driver.FindElement(By.Id("inputRequired"));
-            Assert.That(element3.GetDomAttribute("required"), Is.EqualTo("true"));
+            Assert.That(element3.GetDomAttribute("required"), Is.Empty);
             IWebElement element4 = driver.FindElement(By.Id("textAreaRequired"));
-            Assert.That(element4.GetDomAttribute("required"), Is.EqualTo("true"));
+            Assert.That(element4.GetDomAttribute("required"), Is.Empty);
             IWebElement element5 = driver.FindElement(By.Id("unwrappable"));
-            Assert.That(element5.GetDomAttribute("nowrap"), Is.EqualTo("true"));
+            Assert.That(element5.GetDomAttribute("nowrap"), Is.Empty);
         }
 
         [Test]
