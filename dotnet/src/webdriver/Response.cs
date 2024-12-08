@@ -151,10 +151,10 @@ namespace OpenQA.Selenium
         /// <returns>A <see cref="Response"/> object described by the JSON string.</returns>
         public static Response FromErrorJson(string value)
         {
-            var response = new Response();
-
             var deserializedResponse = JsonSerializer.Deserialize<Dictionary<string, object>>(value, s_jsonSerializerOptions)
                 ?? throw new WebDriverException("JSON error response returned \"null\" value");
+
+            var response = new Response();
 
             if (!deserializedResponse.TryGetValue("value", out var valueObject))
             {
@@ -166,6 +166,8 @@ namespace OpenQA.Selenium
                 throw new WebDriverException($"The 'value' property is not a dictionary of <string, object>{Environment.NewLine}{value}");
             }
 
+            response.Value = valueDictionary;
+
             if (!valueDictionary.TryGetValue("error", out var errorObject))
             {
                 throw new WebDriverException($"The 'value > error' property was not found in the response:{Environment.NewLine}{value}");
@@ -176,7 +178,6 @@ namespace OpenQA.Selenium
                 throw new WebDriverException($"The 'value > error' property is not a string{Environment.NewLine}{value}");
             }
 
-            response.Value = valueDictionary;
             response.Status = WebDriverError.ResultFromError(errorString);
 
             return response;
