@@ -55,6 +55,11 @@
   </Match>
 
   <Match>
+    <Class name="~org.openqa.selenium.firefox.AddHasExtensions.*"/>
+    <Bug pattern="NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE"/>
+  </Match>
+
+  <Match>
     <Class name="org.openqa.selenium.firefox.Executable"/>
     <Bug pattern="NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE"/>
   </Match>
@@ -152,6 +157,11 @@
 
   <Match>
     <Class name="org.openqa.selenium.safari.SafariDriverService"/>
+    <Bug pattern="DMI_HARDCODED_ABSOLUTE_FILENAME"/>
+  </Match>
+
+  <Match>
+    <Class name="org.openqa.selenium.safari.SafariTechPreviewDriverService"/>
     <Bug pattern="DMI_HARDCODED_ABSOLUTE_FILENAME"/>
   </Match>
 
