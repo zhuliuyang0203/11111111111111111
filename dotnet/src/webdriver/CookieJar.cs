@@ -64,21 +64,14 @@ namespace OpenQA.Selenium
 
         public Cookie GetCookieNamed(string name)
         {
-            Cookie cookieToReturn = null;
-            if (name != null)
+            if (name is null)
             {
-                ReadOnlyCollection<Cookie> allCookies = this.AllCookies;
-                foreach (Cookie currentCookie in allCookies)
-                {
-                    if (name.Equals(currentCookie.Name))
-                    {
-                        cookieToReturn = currentCookie;
-                        break;
-                    }
-                }
+                throw new ArgumentNullException("{nameof(name)}");
             }
 
-            return cookieToReturn;
+            var rawCookie = driver.InternalExecute($"{DriverCommand.GetCookie}/{name}", null).Value;
+
+            return Cookie.FromDictionary(rawCookie as Dictionary<string, object>);
         }
 
         private ReadOnlyCollection<Cookie> GetAllCookies()
