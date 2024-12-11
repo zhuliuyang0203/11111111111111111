@@ -29,7 +29,6 @@ import static org.openqa.selenium.testing.drivers.Browser.SAFARI;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;

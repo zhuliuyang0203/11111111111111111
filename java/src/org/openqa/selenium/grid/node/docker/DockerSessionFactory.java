@@ -455,8 +455,7 @@ public class DockerSessionFactory implements SessionFactory {
     try {
       Files.createDirectories(Paths.get(path));
       Files.writeString(
-          Paths.get(path, "sessionCapabilities.json"),
-        capsToJson, Charset.defaultCharset());
+          Paths.get(path, "sessionCapabilities.json"), capsToJson, Charset.defaultCharset());
     } catch (IOException e) {
       LOG.log(Level.WARNING, "Failed to save session capabilities", e);
     }
