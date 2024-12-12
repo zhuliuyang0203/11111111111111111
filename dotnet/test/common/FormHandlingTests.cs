@@ -291,7 +291,7 @@ namespace OpenQA.Selenium
             Assert.That(emptyTextBox.GetDomProperty("value"), Is.Empty);
 
             IWebElement emptyTextArea = driver.FindElement(By.Id("emptyTextArea"));
-            Assert.That(emptyTextBox.GetDomProperty("value"), Is.Empty);
+            Assert.That(emptyTextArea.GetDomProperty("value"), Is.Empty);
         }
 
         [Test]
