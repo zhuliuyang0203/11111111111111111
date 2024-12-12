@@ -24,6 +24,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Threading.Tasks;
 
@@ -44,7 +45,7 @@ namespace OpenQA.Selenium
         private IFileDetector fileDetector = new DefaultFileDetector();
         private NetworkManager network;
         private WebElementFactory elementFactory;
-        private SessionId sessionId;
+
         private List<string> registeredCommands = new List<string>();
 
         /// <summary>
@@ -191,10 +192,7 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Gets the <see cref="SessionId"/> for the current session of this driver.
         /// </summary>
-        public SessionId SessionId
-        {
-            get { return this.sessionId; }
-        }
+        public SessionId SessionId { get; private set; }
 
         /// <summary>
         /// Gets or sets the <see cref="IFileDetector"/> responsible for detecting
@@ -612,7 +610,7 @@ namespace OpenQA.Selenium
         /// <returns>A <see cref="Response"/> containing information about the success or failure of the command and any data returned by the command.</returns>
         protected virtual async Task<Response> ExecuteAsync(string driverCommandToExecute, Dictionary<string, object> parameters)
         {
-            Command commandToExecute = new Command(this.sessionId, driverCommandToExecute, parameters);
+            Command commandToExecute = new Command(this.SessionId, driverCommandToExecute, parameters);
 
             Response commandResponse;
 
@@ -641,6 +639,7 @@ namespace OpenQA.Selenium
         /// Starts a session with the driver
         /// </summary>
         /// <param name="capabilities">Capabilities of the browser</param>
+        [MemberNotNull(nameof(SessionId))]
         protected void StartSession(ICapabilities capabilities)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
@@ -681,7 +680,7 @@ namespace OpenQA.Selenium
             this.capabilities = returnedCapabilities;
 
             string sessionId = response.SessionId ?? throw new WebDriverException("StartSession did not return a sessionId");
-            this.sessionId = new SessionId(sessionId);
+            this.SessionId = new SessionId(sessionId);
         }
 
         /// <summary>
@@ -725,7 +724,7 @@ namespace OpenQA.Selenium
         {
             try
             {
-                if (this.sessionId is not null)
+                if (this.SessionId is not null)
                 {
                     this.Execute(DriverCommand.Quit, null);
                 }
@@ -741,7 +740,7 @@ namespace OpenQA.Selenium
             }
             finally
             {
-                this.sessionId = null;
+                this.SessionId = null;
             }
             this.executor.Dispose();
         }
