@@ -17,12 +17,12 @@
 # specific language governing permissions and limitations
 # under the License.
 
-
 require_relative 'spec_helper'
 
 module Selenium
   module WebDriver
-    describe Network do
+    describe Network, exclusive: {bidi: true, reason: 'only executed when bidi is enabled'},
+                      only: {browser: %i[chrome edge firefox]} do
       let(:username) { SpecSupport::RackServer::TestApp::BASIC_AUTH_CREDENTIALS.first }
       let(:password) { SpecSupport::RackServer::TestApp::BASIC_AUTH_CREDENTIALS.last }
 
