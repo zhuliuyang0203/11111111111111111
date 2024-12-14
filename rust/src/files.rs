@@ -17,6 +17,7 @@
 
 use crate::config::OS;
 use crate::config::OS::WINDOWS;
+use crate::lock::Lock;
 use crate::{
     format_one_arg, format_three_args, run_shell_command_by_os, Command, Logger, CP_VOLUME_COMMAND,
     HDIUTIL_ATTACH_COMMAND, HDIUTIL_DETACH_COMMAND, MACOS, MSIEXEC_INSTALL_COMMAND,
@@ -27,7 +28,6 @@ use apple_flat_package::PkgReader;
 use bzip2::read::BzDecoder;
 use directories::BaseDirs;
 use flate2::read::GzDecoder;
-use fs2::FileExt;
 use fs_extra::dir::{move_dir, CopyOptions};
 use regex::Regex;
 use std::fs;
@@ -55,7 +55,6 @@ const MSI: &str = "msi";
 const XZ: &str = "xz";
 const SEVEN_ZIP_HEADER: &[u8; 6] = b"7z\xBC\xAF\x27\x1C";
 const UNCOMPRESS_MACOS_ERR_MSG: &str = "{} files are only supported in macOS";
-const LOCK_FILE: &str = "sm.lock";
 
 #[derive(Hash, Eq, PartialEq, Debug)]
 pub struct BrowserPath {
@@ -69,39 +68,6 @@ impl BrowserPath {
             os,
             channel: channel.to_string(),
         }
-    }
-}
-
-pub struct Lock {
-    file: File,
-    path: PathBuf,
-}
-
-impl Lock {
-    fn acquire(log: &Logger, target: &Path, single_file: Option<String>) -> Result<Self, Error> {
-        let lock_folder = if single_file.is_some() {
-            create_parent_path_if_not_exists(target)?;
-            target.parent().unwrap()
-        } else {
-            create_path_if_not_exists(target)?;
-            target
-        };
-        let path = lock_folder.join(LOCK_FILE);
-        let file = File::create(&path)?;
-
-        log.trace(format!("Using lock file at {}", path.display()));
-        file.lock_exclusive().unwrap_or_default();
-
-        Ok(Self { file, path })
-    }
-
-    fn release(&mut self) {
-        self.file.unlock().unwrap_or_default();
-        fs::remove_file(&self.path).unwrap_or_default();
-    }
-
-    fn exists(&mut self) -> bool {
-        self.path.exists()
     }
 }
 
