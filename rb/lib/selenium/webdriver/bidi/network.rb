@@ -77,7 +77,7 @@ module Selenium
         end
 
         def continue_with_request(**args)
-          response = @bidi.send_cmd(
+          @bidi.send_cmd(
             'network.continueRequest',
             request: args[:request_id],
             'body' => args[:body],
@@ -86,7 +86,6 @@ module Selenium
             'method' => args[:method],
             'url' => args[:url]
           )
-          response.inspect
         end
 
         def continue_with_response(**args)

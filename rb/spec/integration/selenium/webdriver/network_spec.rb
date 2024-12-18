@@ -58,7 +58,7 @@ module Selenium
       it 'adds a request handler' do
         reset_driver!(web_socket_url: true) do |driver|
           network = described_class.new(driver)
-          network.add_request_handler
+          network.add_request_handler { |event| network.continue_with_request(request_id: network.fetch_id(event)) }
           driver.navigate.to url_for('formPage.html')
           expect(driver.find_element(name: 'login')).to be_displayed
           expect(network.callbacks.count).to be 1
@@ -87,7 +87,7 @@ module Selenium
       it 'adds a response handler' do
         reset_driver!(web_socket_url: true) do |driver|
           network = described_class.new(driver)
-          network.add_response_handler
+          network.add_response_handler { |event| network.continue_with_response(request_id: network.fetch_id(event)) }
           driver.navigate.to url_for('formPage.html')
           expect(driver.find_element(name: 'login')).to be_displayed
           expect(network.callbacks.count).to be 1
