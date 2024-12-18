@@ -30,6 +30,8 @@ module Selenium
         reset_driver!(web_socket_url: true) do |driver|
           network = described_class.new(driver)
           network.add_authentication_handler(username, password)
+          driver.navigate.to url_for('basicAuth')
+          expect(driver.find_element(tag_name: 'h1').text).to eq('authorized')
           expect(network.callbacks.count).to be 1
         end
       end

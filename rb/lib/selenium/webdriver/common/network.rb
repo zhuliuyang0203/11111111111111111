@@ -20,7 +20,7 @@
 module Selenium
   module WebDriver
     class Network
-      attr_reader :callbacks
+      attr_reader :callbacks, :network
 
       def initialize(bridge)
         @network = BiDi::Network.new(bridge.bidi)
@@ -28,46 +28,46 @@ module Selenium
       end
 
       def remove_handler(id)
-        intercept = @callbacks[id]
-        @network.remove_intercept(intercept['intercept'])
-        @callbacks.delete(id)
+        intercept = callbacks[id]
+        network.remove_intercept(intercept['intercept'])
+        callbacks.delete(id)
       end
 
       def clear_handlers
-        @callbacks.each_key { |id| remove_handler(id) }
+        callbacks.each_key { |id| remove_handler(id) }
       end
 
       def add_authentication_handler(username, password)
-        intercept = @network.add_intercept(phases: [BiDi::Network::PHASES[:auth_required]])
-        auth_id = @network.on(:auth_required) do |event|
-          request_id = event['requestId']
-          @network.continue_with_auth(request_id, username, password)
+        intercept = network.add_intercept(phases: [Selenium::WebDriver::BiDi::Network::PHASES[:auth_required]])
+        auth_id = network.on(:auth_required) do |event|
+          request_id = event['request']['request']
+          network.continue_with_auth(request_id, username, password)
         end
-        @callbacks[auth_id] = intercept
 
+        callbacks[auth_id] = intercept
         auth_id
       end
 
       def add_request_handler
-        intercept = @network.add_intercept(phases: [BiDi::Network::PHASES[:before_request]])
-        request_id = @network.on(:before_request) do |event|
-          request_id = event['requestId']
-          @network.continue_with_request(request_id: request_id)
+        intercept = network.add_intercept(phases: [BiDi::Network::PHASES[:before_request]])
+        request_id = network.on(:before_request) do |event|
+          request_id = event['request']['request']
+          network.continue_with_request(request_id: request_id)
         end
 
-        @callbacks[request_id] = intercept
+        callbacks[request_id] = intercept
 
         request_id
       end
 
       def add_response_handler
-        intercept = @network.add_intercept(phases: [BiDi::Network::PHASES[:response_started]])
-        response_id = @network.on(:response_started) do |event|
-          request_id = event['requestId']
-          @network.continue_with_response(request_id: request_id)
+        intercept = network.add_intercept(phases: [BiDi::Network::PHASES[:response_started]])
+        response_id = network.on(:response_started) do |event|
+          request_id = event['request']['request']
+          network.continue_with_response(request_id: request_id)
         end
 
-        @callbacks[response_id] = intercept
+        callbacks[response_id] = intercept
 
         response_id
       end

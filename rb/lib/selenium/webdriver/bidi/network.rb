@@ -60,33 +60,26 @@ module Selenium
           )
         end
 
-        def continue_with_request(**args)
+        def continue_with_auth_no_credentials(request_id)
           @bidi.send_cmd(
-            'network.continueWithRequest',
-            request: args[:request_id],
-            'body' => args[:body],
-            'cookies' => args[:cookies],
-            'headers' => args[:headers],
-            'method' => args[:method],
-            'url' => args[:url]
+            'network.continueWithAuth',
+            'request' => request_id,
+            'action' => 'default'
           )
         end
 
-        def continue_with_response(**args)
+        def cancel_auth(request_id)
           @bidi.send_cmd(
-            'network.continueWithResponse',
-            response: args[:response_id],
-            'body' => args[:body],
-            'cookies' => args[:cookies],
-            'credentials' => args[:credentials],
-            'headers' => args[:headers],
-            'status' => args[:status]
+            'network.continueWithAuth',
+            'request' => request_id,
+            'action' => 'cancel'
           )
         end
 
-        def on(event, &)
+        def on(event, &block)
           event = EVENTS[event] if event.is_a?(Symbol)
-          @bidi.add_callback(event, &)
+          @bidi.add_callback(event, &block)
+          @bidi.session.subscribe(event)
         end
       end # Network
     end # BiDi
