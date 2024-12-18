@@ -60,7 +60,7 @@ module Selenium
           )
         end
 
-        def continue_with_auth_no_credentials(request_id)
+        def continue_without_auth(request_id)
           @bidi.send_cmd(
             'network.continueWithAuth',
             'request' => request_id,

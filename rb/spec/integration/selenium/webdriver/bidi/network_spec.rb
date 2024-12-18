@@ -57,6 +57,33 @@ module Selenium
           end
         end
 
+        it 'continues without auth' do
+          reset_driver!(web_socket_url: true) do |driver|
+            network = described_class.new(driver.bidi)
+            network.add_intercept(phases: [described_class::PHASES[:auth_required]])
+            network.on(:auth_required) do |event|
+              request_id = event['request']['request']
+              network.continue_without_auth(request_id)
+            end
+
+            expect { driver.navigate.to url_for('basicAuth') }.to raise_error(Error::WebDriverError)
+          end
+        end
+
+        it 'cancels auth' do
+          reset_driver!(web_socket_url: true) do |driver|
+            network = described_class.new(driver.bidi)
+            network.add_intercept(phases: [described_class::PHASES[:auth_required]])
+            network.on(:auth_required) do |event|
+              request_id = event['request']['request']
+              network.cancel_auth(request_id)
+            end
+
+            driver.navigate.to url_for('basicAuth')
+            expect(driver.find_element(tag_name: 'pre').text).to eq('Login please')
+          end
+        end
+
         it 'continues with request' do
           reset_driver!(web_socket_url: true) do |driver|
             network = described_class.new(driver.bidi)
