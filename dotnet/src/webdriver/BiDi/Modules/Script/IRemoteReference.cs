@@ -1,4 +1,4 @@
-// <copyright file="Origin.cs" company="Selenium Committers">
+// <copyright file="IRemoteReference.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -17,20 +17,22 @@
 // under the License.
 // </copyright>
 
-using System.Text.Json.Serialization;
-
 #nullable enable
 
-namespace OpenQA.Selenium.BiDi.Modules.Input;
+namespace OpenQA.Selenium.BiDi.Modules.Script;
 
-public abstract record Origin
+public interface IRemoteReference;
+
+public interface ISharedReference : IRemoteReference
 {
-    public record Viewport() : Origin;
+    public string SharedId { get; }
 
-    public record Pointer() : Origin;
+    public Handle? Handle { get; set; }
+}
 
-    public record Element([property: JsonPropertyName("element")] Script.ISharedReference SharedReference) : Origin
-    {
-        public string Type { get; } = "element";
-    }
+public interface IRemoteObjectReference : IRemoteReference
+{
+    public Handle Handle { get; }
+
+    public string? SharedId { get; set; }
 }
