@@ -28,13 +28,12 @@ public interface HasDownloads {
    * Requires downloads to be enabled.
    *
    * <p>Example usage:
-   * <pre>
-   * {@code
+   *
+   * <pre>{@code
    * Capabilities capabilities = new Capabilities();
    * capabilities.setCapability("se:downloadsEnabled", true);
    * driver.requireDownloadsEnabled(capabilities);
-   * }
-   * </pre>
+   * }</pre>
    *
    * @param capabilities the capabilities object
    * @throws WebDriverException if capability to enable downloads is not set
