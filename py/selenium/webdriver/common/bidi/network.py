@@ -47,7 +47,6 @@ class Network:
     def command_iterator(self, command):
         """Generator to yield command."""
         yield command
-        return
 
     def has_callbacks(self):
         """Checks if there are any callbacks set."""
