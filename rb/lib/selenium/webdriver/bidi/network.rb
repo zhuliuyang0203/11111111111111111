@@ -76,10 +76,10 @@ module Selenium
           )
         end
 
-        def continue_with_request(**args)
+        def continue_request(**args)
           @bidi.send_cmd(
             'network.continueRequest',
-            request: args[:request_id],
+            request: args[:id],
             'body' => args[:body],
             'cookies' => args[:cookies],
             'headers' => args[:headers],
@@ -88,15 +88,22 @@ module Selenium
           )
         end
 
-        def continue_with_response(**args)
+        def fail_request(request_id)
+          @bidi.send_cmd(
+            'network.failRequest',
+            request: request_id
+          )
+        end
+
+        def continue_response(**args)
           @bidi.send_cmd(
             'network.continueResponse',
-            request: args[:response_id],
-            'body' => args[:body],
+            request: args[:id],
             'cookies' => args[:cookies],
             'credentials' => args[:credentials],
             'headers' => args[:headers],
-            'status' => args[:status]
+            'reasonPhrase' => args[:reason],
+            'statusCode' => args[:status]
           )
         end
 

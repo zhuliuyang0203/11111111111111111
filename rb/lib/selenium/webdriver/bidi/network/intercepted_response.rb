@@ -21,8 +21,18 @@ module Selenium
   module WebDriver
     class BiDi
       class InterceptedResponse < InterceptedItem
+        attr_accessor :cookies, :headers, :credentials, :reason
+
+        def new
+          super(args[:network], args[:request])
+          @cookies = args[:cookies]
+          @headers = args[:headers]
+          @credentials = args[:credentials]
+          @reason = args[:reason]
+        end
+
         def continue
-          network.continue_with_response(response_id: id)
+          network.continue_response(id:, cookies:, headers:, credentials:, reason:)
         end
       end
     end # BiDi

@@ -84,13 +84,13 @@ module Selenium
           end
         end
 
-        it 'continues with request' do
+        it 'continues request' do
           reset_driver!(web_socket_url: true) do |driver|
             network = described_class.new(driver.bidi)
             network.add_intercept(phases: [described_class::PHASES[:before_request]])
             network.on(:before_request) do |event|
               request_id = event['request']['request']
-              network.continue_with_request(request_id: request_id)
+              network.continue_request(id: request_id)
             end
 
             driver.navigate.to url_for('formPage.html')
@@ -98,13 +98,26 @@ module Selenium
           end
         end
 
-        it 'continues with response' do
+        it 'fails request' do
+          reset_driver!(web_socket_url: true) do |driver|
+            network = described_class.new(driver.bidi)
+            network.add_intercept(phases: [described_class::PHASES[:before_request]])
+            network.on(:before_request) do |event|
+              request_id = event['request']['request']
+              network.fail_request(request_id)
+            end
+
+            expect { driver.navigate.to url_for('formPage.html') }.to raise_error(Error::WebDriverError)
+          end
+        end
+
+        it 'continues response' do
           reset_driver!(web_socket_url: true) do |driver|
             network = described_class.new(driver.bidi)
             network.add_intercept(phases: [described_class::PHASES[:response_started]])
             network.on(:response_started) do |event|
               request_id = event['request']['request']
-              network.continue_with_response(request_id: request_id)
+              network.continue_response(id: request_id)
             end
 
             driver.navigate.to url_for('formPage.html')

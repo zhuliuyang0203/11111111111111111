@@ -89,6 +89,28 @@ module Selenium
         end
       end
 
+      it 'adds a request handler with attributes' do
+        reset_driver!(web_socket_url: true) do |driver|
+          network = described_class.new(driver)
+          network.add_request_handler do |request|
+            request.method = 'GET'
+            request.continue
+          end
+          driver.navigate.to url_for('formPage.html')
+          expect(driver.find_element(name: 'login')).to be_displayed
+          expect(network.callbacks.count).to be 1
+        end
+      end
+
+      it 'fails a request' do
+        reset_driver!(web_socket_url: true) do |driver|
+          network = described_class.new(driver)
+          network.add_request_handler(&:fail)
+          expect(network.callbacks.count).to be 1
+          expect { driver.navigate.to url_for('formPage.html') }.to raise_error(Error::WebDriverError)
+        end
+      end
+
       it 'removes a request handler' do
         reset_driver!(web_socket_url: true) do |driver|
           network = described_class.new(driver)

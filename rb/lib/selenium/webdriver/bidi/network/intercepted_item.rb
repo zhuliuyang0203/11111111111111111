@@ -23,21 +23,13 @@ module Selenium
       class InterceptedItem
         attr_reader :network, :request
 
-        def initialize(network, request)
-          @network = network
-          @request = request
+        def initialize(**args)
+          @network = args[:network]
+          @request = args[:request]
         end
 
         def id
           @id ||= @request['request']
-        end
-
-        def headers
-          request['headers']
-        end
-
-        def headers=(new_headers)
-          request['headers'] = new_headers
         end
       end
     end # BiDi

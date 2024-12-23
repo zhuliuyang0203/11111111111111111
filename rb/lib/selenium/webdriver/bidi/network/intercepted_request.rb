@@ -21,8 +21,23 @@ module Selenium
   module WebDriver
     class BiDi
       class InterceptedRequest < InterceptedItem
+        attr_accessor :body, :cookies, :headers, :method, :url
+
+        def new(**args)
+          super(args[:network], args[:request])
+          @body = args[:body]
+          @cookies = args[:cookies]
+          @headers = args[:headers]
+          @method = args[:method]
+          @url = args[:url]
+        end
+
         def continue
-          network.continue_with_request(request_id: id)
+          network.continue_request(id:, body:, cookies:, headers:, method:, url:)
+        end
+
+        def fail
+          network.fail_request(id)
         end
       end
     end # BiDi
