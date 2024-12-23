@@ -223,9 +223,9 @@ namespace OpenQA.Selenium
             resultMap[UnableToCaptureScreen] = WebDriverResult.UnableToCaptureScreen;
             resultMap[UnexpectedAlertOpen] = WebDriverResult.UnexpectedAlertOpen;
             resultMap[UnknownCommand] = WebDriverResult.UnknownCommand;
-            resultMap[UnknownError] = WebDriverResult.UnhandledError;
+            resultMap[UnknownError] = WebDriverResult.UnknownError;
             resultMap[UnknownMethod] = WebDriverResult.UnknownCommand;
-            resultMap[UnsupportedOperation] = WebDriverResult.UnhandledError;
+            resultMap[UnsupportedOperation] = WebDriverResult.UnsupportedOperation;
         }
 
         /// <summary>

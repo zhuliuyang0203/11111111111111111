@@ -90,9 +90,9 @@ namespace OpenQA.Selenium
         InvalidElementState = 12,
 
         /// <summary>
-        /// An unhandled error occurred.
+        /// An unknown error occurred in the remote end while processing the command.
         /// </summary>
-        UnhandledError = 13,
+        UnknownError = 13,
 
         /// <summary>
         /// An error occurred, but it was expected.
@@ -233,5 +233,10 @@ namespace OpenQA.Selenium
         /// The referenced shadow root is no longer attached to the DOM.
         /// </summary>
         DetachedShadowRoot = 66,
+
+        /// <summary>
+        /// Indicates that a command that should have executed properly cannot be supported for some reason.
+        /// </summary>
+        UnsupportedOperation = 67,
     }
 }
