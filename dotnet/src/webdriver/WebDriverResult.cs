@@ -123,6 +123,7 @@ namespace OpenQA.Selenium
         /// <summary>
         /// No document matching the criteria exists.
         /// </summary>
+        [Obsolete("This result is not returned by W3C specifications")]
         NoSuchDocument = 16,
 
         /// <summary>
