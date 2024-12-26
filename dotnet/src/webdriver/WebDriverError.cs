@@ -17,7 +17,6 @@
 // under the License.
 // </copyright>
 
-using System;
 using System.Collections.Generic;
 
 namespace OpenQA.Selenium
@@ -167,30 +166,6 @@ namespace OpenQA.Selenium
         /// Represents the unsupported operation error.
         /// </summary>
         public const string UnsupportedOperation = "unsupported operation";
-
-        /// <summary>
-        /// Represents the element not selectable error.
-        /// </summary>
-        [Obsolete("This error status is no longer returned by the WebDriver Specification https://www.w3.org/TR/webdriver2/#errors")]
-        public const string ElementNotSelectable = "element not selectable";
-
-        /// <summary>
-        /// Represents the element not visible error.
-        /// </summary>
-        [Obsolete("This error status is no longer returned by the WebDriver Specification https://www.w3.org/TR/webdriver2/#errors")]
-        public const string ElementNotVisible = "element not visible";
-
-        /// <summary>
-        /// Represents the invalid coordinates error.
-        /// </summary>
-        [Obsolete("This error status is no longer returned by the WebDriver Specification https://www.w3.org/TR/webdriver2/#errors")]
-        public const string InvalidCoordinates = "invalid coordinates";
-
-        /// <summary>
-        /// Represents the invalid element coordinates error.
-        /// </summary>
-        [Obsolete("This error status is no longer returned by the WebDriver Specification https://www.w3.org/TR/webdriver2/#errors")]
-        public const string InvalidElementCoordinates = "invalid element coordinates";
 
         private static readonly Dictionary<string, WebDriverResult> resultMap;
 
