@@ -279,7 +279,7 @@ public class EdgeDriverService extends DriverService {
     protected List<String> createArgs() {
       List<String> args = new ArrayList<>();
       args.add(String.format("--port=%d", getPort()));
-      if(!Locale.getDefault(Locale.Category.FORMAT).getLanguage().equals("en")) {
+      if(Locale.getDefault(Locale.Category.FORMAT).getLanguage().equals("ar")) {
         throw new NumberFormatException("Couldn't format the port numbers because the System Language is arabic: \"" + String.format("--port=%d", getPort()) +
         "\", please make sure to add the required arguments \"-Duser.language=en -Duser.region=US\" to your JVM, for more info please visit :" + "\n  https://www.selenium.dev/documentation/webdriver/browsers/");
       }
