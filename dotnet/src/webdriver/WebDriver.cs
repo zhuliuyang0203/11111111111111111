@@ -612,16 +612,7 @@ namespace OpenQA.Selenium
         {
             Command commandToExecute = new Command(SessionId, driverCommandToExecute, parameters);
 
-            Response commandResponse;
-
-            try
-            {
-                commandResponse = await this.executor.ExecuteAsync(commandToExecute).ConfigureAwait(false);
-            }
-            catch (System.Net.Http.HttpRequestException e)
-            {
-                throw new WebDriverException("The " + driverCommandToExecute + " command failed to send.", e);
-            }
+            Response commandResponse = await this.executor.ExecuteAsync(commandToExecute).ConfigureAwait(false);
 
             if (commandResponse.Status != WebDriverResult.Success)
             {
