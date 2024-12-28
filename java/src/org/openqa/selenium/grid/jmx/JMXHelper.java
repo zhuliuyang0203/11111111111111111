@@ -22,13 +22,12 @@ import java.util.logging.Logger;
 import javax.management.InstanceAlreadyExistsException;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
-import org.jspecify.annotations.Nullable;
 
 public class JMXHelper {
 
   private static final Logger LOG = Logger.getLogger(JMXHelper.class.getName());
 
-  @Nullable
+  @SuppressWarnings("NullAway")
   public MBean register(Object bean) {
     MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
     MBean mBean = new MBean(bean);

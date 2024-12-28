@@ -34,7 +34,6 @@ import javax.management.MBeanInfo;
 import javax.management.MBeanOperationInfo;
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
-import org.jspecify.annotations.Nullable;
 
 public class MBean implements DynamicMBean {
 
@@ -58,7 +57,7 @@ public class MBean implements DynamicMBean {
       this.setter = setter;
     }
 
-    @Nullable
+    @SuppressWarnings("NullAway")
     MBeanAttributeInfo getMBeanAttributeInfo() {
       try {
         return new MBeanAttributeInfo(name, description, getter, setter);
@@ -118,7 +117,7 @@ public class MBean implements DynamicMBean {
         .forEach(ai -> attributeMap.put(ai.name, ai));
   }
 
-  @Nullable
+  @SuppressWarnings("NullAway")
   private AttributeInfo getAttributeInfo(Method m) {
     ManagedAttribute ma = m.getAnnotation(ManagedAttribute.class);
     if (ma == null) {
@@ -126,19 +125,14 @@ public class MBean implements DynamicMBean {
     }
     try {
       String name = "".equals(ma.name()) ? m.getName() : ma.name();
-      Method getter = findGetter(m);
-      Method setter = findSetter(m);
-      if (getter == null || setter == null) {
-        return null;
-      }
-      return new AttributeInfo(name, ma.description(), getter, setter);
+      return new AttributeInfo(name, ma.description(), findGetter(m), findSetter(m));
     } catch (Throwable t) {
       LOG.severe("Error during execution: " + t.getMessage());
       return null;
     }
   }
 
-  @Nullable
+  @SuppressWarnings("NullAway")
   private Method findGetter(Method annotatedMethod) {
     ManagedAttribute ma = annotatedMethod.getAnnotation(ManagedAttribute.class);
     try {
@@ -160,7 +154,7 @@ public class MBean implements DynamicMBean {
     }
   }
 
-  @Nullable
+  @SuppressWarnings("NullAway")
   private Method findSetter(Method annotatedMethod) {
     ManagedAttribute ma = annotatedMethod.getAnnotation(ManagedAttribute.class);
     if (!"".equals(ma.setter())) {
@@ -180,7 +174,7 @@ public class MBean implements DynamicMBean {
     return null;
   }
 
-  @Nullable
+  @SuppressWarnings("NullAway")
   private Method findMethod(Class<?> cls, String name) {
     return Stream.of(cls.getMethods())
         .filter(m -> m.getName().equals(name))
@@ -195,7 +189,7 @@ public class MBean implements DynamicMBean {
         .forEach(oi -> operationMap.put(oi.name, oi));
   }
 
-  @Nullable
+  @SuppressWarnings("NullAway")
   private OperationInfo getOperationInfo(Method m) {
     ManagedOperation mo = m.getAnnotation(ManagedOperation.class);
     if (mo == null) {
@@ -225,15 +219,11 @@ public class MBean implements DynamicMBean {
     }
   }
 
-  @Nullable
+  @SuppressWarnings("NullAway")
   @Override
   public Object getAttribute(String attribute) {
-    AttributeInfo attributeInfo = attributeMap.get(attribute);
-    if (attributeInfo == null) {
-      return null;
-    }
     try {
-      Object res = attributeInfo.getter.invoke(bean);
+      Object res = attributeMap.get(attribute).getter.invoke(bean);
       if (res instanceof Map<?, ?>) {
         return ((Map<?, ?>) res)
             .entrySet().stream()
@@ -249,14 +239,11 @@ public class MBean implements DynamicMBean {
     }
   }
 
+  @SuppressWarnings("NullAway")
   @Override
   public void setAttribute(Attribute attribute) {
-    AttributeInfo attributeInfo = attributeMap.get(attribute.getName());
-    if (attributeInfo == null) {
-      return;
-    }
     try {
-      attributeInfo.setter.invoke(bean, attribute.getValue());
+      attributeMap.get(attribute.getName()).setter.invoke(bean, attribute.getValue());
     } catch (IllegalAccessException | InvocationTargetException e) {
       LOG.severe("Error during execution: " + e.getMessage());
     }
@@ -277,21 +264,17 @@ public class MBean implements DynamicMBean {
     return resultList;
   }
 
-  @Nullable
+  @SuppressWarnings("NullAway")
   @Override
   public AttributeList setAttributes(AttributeList attributes) {
     return null;
   }
 
-  @Nullable
+  @SuppressWarnings("NullAway")
   @Override
   public Object invoke(String actionName, Object[] params, String[] signature) {
-    OperationInfo operationInfo = operationMap.get(actionName);
-    if (operationInfo == null) {
-      return null;
-    }
     try {
-      return operationInfo.method.invoke(bean, params);
+      return operationMap.get(actionName).method.invoke(bean, params);
     } catch (IllegalAccessException | InvocationTargetException e) {
       LOG.severe("Error during execution: " + e.getMessage());
       return null;
