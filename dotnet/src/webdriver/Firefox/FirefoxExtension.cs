@@ -178,7 +178,7 @@ namespace OpenQA.Selenium.Firefox
 
         private static string ReadIdFromManifestJson(string root)
         {
-            string id;
+            string id = string.Empty;
             string manifestJsonPath = Path.Combine(root, JsonManifestFileName);
 
             var manifestObject = JsonNode.Parse(File.ReadAllText(manifestJsonPath));
@@ -186,7 +186,8 @@ namespace OpenQA.Selenium.Firefox
             {
                 id = idNode.ToString().Trim();
             }
-            else
+
+            if (string.IsNullOrEmpty(id))
             {
                 string addInName = manifestObject["name"]!.ToString().Replace(" ", "");
                 string addInVersion = manifestObject["version"]!.ToString();
