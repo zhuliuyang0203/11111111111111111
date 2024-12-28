@@ -118,6 +118,7 @@ public class MBean implements DynamicMBean {
         .forEach(ai -> attributeMap.put(ai.name, ai));
   }
 
+  @Nullable
   private AttributeInfo getAttributeInfo(Method m) {
     ManagedAttribute ma = m.getAnnotation(ManagedAttribute.class);
     if (ma == null) {
@@ -125,13 +126,19 @@ public class MBean implements DynamicMBean {
     }
     try {
       String name = "".equals(ma.name()) ? m.getName() : ma.name();
-      return new AttributeInfo(name, ma.description(), findGetter(m), findSetter(m));
+      Method getter = findGetter(m);
+      Method setter = findSetter(m);
+      if (getter == null || setter == null) {
+        return null;
+      }
+      return new AttributeInfo(name, ma.description(), getter, setter);
     } catch (Throwable t) {
       LOG.severe("Error during execution: " + t.getMessage());
       return null;
     }
   }
 
+  @Nullable
   private Method findGetter(Method annotatedMethod) {
     ManagedAttribute ma = annotatedMethod.getAnnotation(ManagedAttribute.class);
     try {
@@ -153,6 +160,7 @@ public class MBean implements DynamicMBean {
     }
   }
 
+  @Nullable
   private Method findSetter(Method annotatedMethod) {
     ManagedAttribute ma = annotatedMethod.getAnnotation(ManagedAttribute.class);
     if (!"".equals(ma.setter())) {
@@ -172,6 +180,7 @@ public class MBean implements DynamicMBean {
     return null;
   }
 
+  @Nullable
   private Method findMethod(Class<?> cls, String name) {
     return Stream.of(cls.getMethods())
         .filter(m -> m.getName().equals(name))
@@ -186,6 +195,7 @@ public class MBean implements DynamicMBean {
         .forEach(oi -> operationMap.put(oi.name, oi));
   }
 
+  @Nullable
   private OperationInfo getOperationInfo(Method m) {
     ManagedOperation mo = m.getAnnotation(ManagedOperation.class);
     if (mo == null) {
@@ -215,10 +225,15 @@ public class MBean implements DynamicMBean {
     }
   }
 
+  @Nullable
   @Override
   public Object getAttribute(String attribute) {
+    AttributeInfo attributeInfo = attributeMap.get(attribute);
+    if (attributeInfo == null) {
+      return null;
+    }
     try {
-      Object res = attributeMap.get(attribute).getter.invoke(bean);
+      Object res = attributeInfo.getter.invoke(bean);
       if (res instanceof Map<?, ?>) {
         return ((Map<?, ?>) res)
             .entrySet().stream()
@@ -236,8 +251,12 @@ public class MBean implements DynamicMBean {
 
   @Override
   public void setAttribute(Attribute attribute) {
+    AttributeInfo attributeInfo = attributeMap.get(attribute.getName());
+    if (attributeInfo == null) {
+      return;
+    }
     try {
-      attributeMap.get(attribute.getName()).setter.invoke(bean, attribute.getValue());
+      attributeInfo.setter.invoke(bean, attribute.getValue());
     } catch (IllegalAccessException | InvocationTargetException e) {
       LOG.severe("Error during execution: " + e.getMessage());
     }
@@ -258,15 +277,21 @@ public class MBean implements DynamicMBean {
     return resultList;
   }
 
+  @Nullable
   @Override
   public AttributeList setAttributes(AttributeList attributes) {
     return null;
   }
 
+  @Nullable
   @Override
   public Object invoke(String actionName, Object[] params, String[] signature) {
+    OperationInfo operationInfo = operationMap.get(actionName);
+    if (operationInfo == null) {
+      return null;
+    }
     try {
-      return operationMap.get(actionName).method.invoke(bean, params);
+      return operationInfo.method.invoke(bean, params);
     } catch (IllegalAccessException | InvocationTargetException e) {
       LOG.severe("Error during execution: " + e.getMessage());
       return null;
