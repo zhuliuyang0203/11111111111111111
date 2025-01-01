@@ -96,7 +96,7 @@ module Selenium
           execute_async_script: [:post, 'session/:session_id/execute/async'],
 
           #
-          # cookies.rb
+          # cookies
           #
 
           get_all_cookies: [:get, 'session/:session_id/cookie'],
