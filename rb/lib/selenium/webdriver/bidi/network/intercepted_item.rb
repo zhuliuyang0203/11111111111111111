@@ -23,9 +23,9 @@ module Selenium
       class InterceptedItem
         attr_reader :network, :request
 
-        def initialize(**args)
-          @network = args[:network]
-          @request = args[:request]
+        def initialize(network, request)
+          @network = network
+          @request = request
         end
 
         def id

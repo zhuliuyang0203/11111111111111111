@@ -23,11 +23,11 @@ module Selenium
       class InterceptedRequest < InterceptedItem
         attr_accessor :body, :cookies, :headers, :method, :url
 
-        def new(**args)
+        def initialize(**args)
           super(args[:network], args[:request])
           @body = args[:body]
           @cookies = args[:cookies]
-          @headers = args[:headers]
+          @headers = args[:headers] || []
           @method = args[:method]
           @url = args[:url]
         end
@@ -38,6 +38,16 @@ module Selenium
 
         def fail
           network.fail_request(id)
+        end
+
+        def add_header(name, value)
+          headers.push(
+            'name' => name,
+            'value' => {
+              'type' => 'string',
+              'value' => value
+            }
+          )
         end
       end
     end # BiDi

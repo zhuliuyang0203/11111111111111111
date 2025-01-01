@@ -23,7 +23,7 @@ module Selenium
       class InterceptedResponse < InterceptedItem
         attr_accessor :cookies, :headers, :credentials, :reason
 
-        def new
+        def initialize(**args)
           super(args[:network], args[:request])
           @cookies = args[:cookies]
           @headers = args[:headers]

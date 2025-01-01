@@ -94,6 +94,9 @@ module Selenium
           network = described_class.new(driver)
           network.add_request_handler do |request|
             request.method = 'GET'
+            request.url = url_for('formPage.html')
+            request.add_header('foo', 'bar')
+            request.add_header('baz', 'qux')
             request.continue
           end
           driver.navigate.to url_for('formPage.html')
