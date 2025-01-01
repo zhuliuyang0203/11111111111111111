@@ -373,7 +373,7 @@ module Selenium
         end
 
         #
-        # cookies.rb
+        # cookies
         #
 
         def manage
