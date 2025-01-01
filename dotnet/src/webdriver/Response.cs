@@ -112,7 +112,7 @@ namespace OpenQA.Selenium
                 }
             }
 
-            if (contents is Dictionary<string, object> valueDictionary)
+            if (contents is Dictionary<string, object?> valueDictionary)
             {
                 // Special case code for the new session command. If the response contains
                 // sessionId and capabilities properties, fix up the session ID and value members.
@@ -167,7 +167,7 @@ namespace OpenQA.Selenium
                 throw new WebDriverException($"The 'value' property was not found in the response:{Environment.NewLine}{value}");
             }
 
-            if (valueObject is not Dictionary<string, object> valueDictionary)
+            if (valueObject is not Dictionary<string, object?> valueDictionary)
             {
                 throw new WebDriverException($"The 'value' property is not a dictionary of <string, object>{Environment.NewLine}{value}");
             }
