@@ -145,30 +145,11 @@ namespace OpenQA.Selenium.Safari
         /// <param name="options">The <see cref="SafariOptions"/> to be used with the Safari driver.</param>
         /// <param name="commandTimeout">The maximum amount of time to wait for each command.</param>
         public SafariDriver(SafariDriverService service, SafariOptions options, TimeSpan commandTimeout)
-            : base(GenerateDriverServiceCommandExecutor(service, options, commandTimeout), ConvertOptionsToCapabilities(options))
+            : base(service.CreateCommandExecutor(options, commandTimeout, searchForBrowserPath: false), ConvertOptionsToCapabilities(options))
         {
             this.AddCustomSafariCommand(AttachDebuggerCommand, HttpCommandInfo.PostCommand, "/session/{sessionId}/apple/attach_debugger");
             this.AddCustomSafariCommand(GetPermissionsCommand, HttpCommandInfo.GetCommand, "/session/{sessionId}/apple/permissions");
             this.AddCustomSafariCommand(SetPermissionsCommand, HttpCommandInfo.PostCommand, "/session/{sessionId}/apple/permissions");
-        }
-
-        /// <summary>
-        /// Uses DriverFinder to set Service attributes if necessary when creating the command executor
-        /// </summary>
-        /// <param name="service"></param>
-        /// <param name="commandTimeout"></param>
-        /// <param name="options"></param>
-        /// <returns></returns>
-        private static ICommandExecutor GenerateDriverServiceCommandExecutor(DriverService service, DriverOptions options, TimeSpan commandTimeout)
-        {
-            if (service.DriverServicePath == null)
-            {
-                DriverFinder finder = new DriverFinder(options);
-                string fullServicePath = finder.GetDriverPath();
-                service.DriverServicePath = Path.GetDirectoryName(fullServicePath);
-                service.DriverServiceExecutableName = Path.GetFileName(fullServicePath);
-            }
-            return new DriverServiceCommandExecutor(service, commandTimeout);
         }
 
         /// <summary>

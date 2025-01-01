@@ -19,9 +19,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Text;
+
+#nullable enable
 
 namespace OpenQA.Selenium
 {
@@ -31,17 +34,18 @@ namespace OpenQA.Selenium
     /// </summary>
     public class DriverFinder
     {
-        private DriverOptions options;
-        private Dictionary<string, string> paths = new Dictionary<string, string>();
+        private readonly DriverOptions options;
+        private readonly Dictionary<string, string> paths = new Dictionary<string, string>();
         private const string BrowserPathKey = "browser_path";
         private const string DriverPathKey = "driver_path";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DriverFinder"/> class.
         /// </summary>
+        /// <exception cref="ArgumentNullException">If <paramref name="options"/> is <see langword="null"/>.</exception>
         public DriverFinder(DriverOptions options)
         {
-            this.options = options;
+            this.options = options ?? throw new ArgumentNullException(nameof(options));
         }
 
         /// <summary>
@@ -66,9 +70,31 @@ namespace OpenQA.Selenium
             return BinaryPaths()[DriverPathKey];
         }
 
+        /// <summary>
+        /// Gets a value indicating whether a browser path exists, as retrieved by the Selenium Manager.
+        /// </summary>
+        /// <returns><see langword="true"/> if a browser path exists; otherwise, <see langword="false"/>.</returns>
         public bool HasBrowserPath()
         {
             return !string.IsNullOrWhiteSpace(GetBrowserPath());
+        }
+
+        /// <summary>
+        /// Tries to get the browser path, as retrieved by Selenium Manager.
+        /// </summary>
+        /// <param name="browserPath">If the method returns <see langword="true"/>, the full browser path.</param>
+        /// <returns><see langword="true"/> if a browser path exists; otherwise, <see langword="false"/>.</returns>
+        public bool TryGetBrowserPath([NotNullWhen(true)] out string? browserPath)
+        {
+            string? path = GetBrowserPath();
+            if (!string.IsNullOrWhiteSpace(path))
+            {
+                browserPath = path;
+                return true;
+            }
+
+            browserPath = null;
+            return false;
         }
 
         /// <summary>
@@ -80,29 +106,27 @@ namespace OpenQA.Selenium
         /// <exception cref="NoSuchDriverException">If one of the paths does not exist.</exception>
         private Dictionary<string, string> BinaryPaths()
         {
-            if (paths.ContainsKey(DriverPathKey) && !string.IsNullOrWhiteSpace(paths[DriverPathKey]))
+            if (paths.TryGetValue(DriverPathKey, out string? cachedDriverPath)
+                && !string.IsNullOrWhiteSpace(cachedDriverPath))
             {
                 return paths;
             }
+
             Dictionary<string, string> binaryPaths = SeleniumManager.BinaryPaths(CreateArguments());
             string driverPath = binaryPaths[DriverPathKey];
             string browserPath = binaryPaths[BrowserPathKey];
-            if (File.Exists(driverPath))
-            {
-                paths.Add(DriverPathKey, driverPath);
-            }
-            else
+            if (!File.Exists(driverPath))
             {
                 throw new NoSuchDriverException($"The driver path is not a valid file: {driverPath}");
             }
-            if (File.Exists(browserPath))
-            {
-                paths.Add(BrowserPathKey, browserPath);
-            }
-            else
+
+            if (!File.Exists(browserPath))
             {
                 throw new NoSuchDriverException($"The browser path is not a valid file: {browserPath}");
             }
+
+            paths.Add(DriverPathKey, driverPath);
+            paths.Add(BrowserPathKey, browserPath);
             return paths;
         }
 

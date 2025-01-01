@@ -428,5 +428,29 @@ namespace OpenQA.Selenium
 
             return isInitialized;
         }
+
+        /// <summary>
+        /// Uses DriverFinder to set Service attributes if necessary when creating the command executor
+        /// </summary>
+        /// <param name="options">The <see cref="DriverOptions"/> to be used with the driver.</param>
+        /// <param name="commandTimeout">The maximum amount of time to wait for each command.</param>
+        /// <param name="searchForBrowserPath">Whether to search for browser binaries.</param>
+        /// <returns>A command executor.</returns>
+        internal DriverServiceCommandExecutor CreateCommandExecutor(DriverOptions options, TimeSpan commandTimeout, bool searchForBrowserPath)
+        {
+            if (DriverServicePath == null)
+            {
+                DriverFinder finder = new DriverFinder(options);
+                string fullServicePath = finder.GetDriverPath();
+                DriverServicePath = Path.GetDirectoryName(fullServicePath);
+                DriverServiceExecutableName = Path.GetFileName(fullServicePath);
+                if (searchForBrowserPath && finder.TryGetBrowserPath(out string browserPath))
+                {
+                    options.BinaryLocation = browserPath;
+                    options.BrowserVersion = null;
+                }
+            }
+            return new DriverServiceCommandExecutor(this, commandTimeout);
+        }
     }
 }
