@@ -62,7 +62,7 @@ module Selenium
         intercept = network.add_intercept(phases: [phase])
         callback_id = network.on(event_type) do |event|
           request = event['request']
-          intercepted_item = intercept_type.new(network: network, request: request)
+          intercepted_item = intercept_type.new(network, request)
           block.call(intercepted_item)
         end
 

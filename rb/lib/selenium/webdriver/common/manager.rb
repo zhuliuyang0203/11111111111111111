@@ -83,7 +83,7 @@ module Selenium
       end
 
       #
-      # Delete all cookies
+      # Delete all cookies.rb
       #
 
       def delete_all_cookies
@@ -91,9 +91,9 @@ module Selenium
       end
 
       #
-      # Get all cookies
+      # Get all cookies.rb
       #
-      # @return [Array<Hash>] list of cookies
+      # @return [Array<Hash>] list of cookies.rb
       #
 
       def all_cookies

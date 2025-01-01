@@ -17,41 +17,22 @@
 # specific language governing permissions and limitations
 # under the License.
 
-require_relative 'cookies'
-require_relative 'headers'
-
 module Selenium
   module WebDriver
     class BiDi
-      class InterceptedRequest < InterceptedItem
-        include Cookies
-        include Headers
-
-        attr_accessor :cookies, :headers, :method, :url
-        attr_reader :body
-
-        def initialize(network, request)
-          super
-          @body = nil
-          @cookies = []
-          @headers = []
-          @method = nil
-          @url = nil
+      module Cookies
+        def add_cookie(name, value)
+          cookies.push(
+            'name' => name,
+            'value' => {
+              'type' => 'string',
+              'value' => value
+            }
+          )
         end
 
-        def continue
-          network.continue_request(id:, body:, cookies:, headers:, method:, url:)
-        end
-
-        def fail
-          network.fail_request(id)
-        end
-
-        def body=(value)
-          @body = {
-            'type' => 'string',
-            'value' => value.to_json
-          }
+        def remove_cookie(name)
+          cookies.delete_if { |cookie| cookie['name'] == name }
         end
       end
     end # BiDi

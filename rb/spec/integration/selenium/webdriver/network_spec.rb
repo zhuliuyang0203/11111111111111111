@@ -97,11 +97,35 @@ module Selenium
             request.url = url_for('formPage.html')
             request.add_header('foo', 'bar')
             request.add_header('baz', 'qux')
+            request.add_cookie('foo', 'bar')
+            request.body = ({test: 'example'})
             request.continue
           end
           driver.navigate.to url_for('formPage.html')
           expect(driver.find_element(name: 'login')).to be_displayed
           expect(network.callbacks.count).to be 1
+        end
+      end
+
+      it 'removes a header from a request handler' do
+        reset_driver!(web_socket_url: true) do |driver|
+          network = described_class.new(driver)
+          network.add_request_handler do |request|
+            request.add_header('foo', 'bar')
+            request.remove_header('foo')
+            expect(request.headers).to be_empty
+          end
+        end
+      end
+
+      it 'removes a cookie from a request handler' do
+        reset_driver!(web_socket_url: true) do |driver|
+          network = described_class.new(driver)
+          network.add_request_handler do |request|
+            request.add_cookie('foo', 'bar')
+            request.remove_cookie('foo')
+            expect(request.cookies).to be_empty
+          end
         end
       end
 

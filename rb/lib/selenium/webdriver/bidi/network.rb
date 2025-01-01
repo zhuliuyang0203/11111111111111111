@@ -81,7 +81,7 @@ module Selenium
             'network.continueRequest',
             request: args[:id],
             'body' => args[:body],
-            'cookies' => args[:cookies],
+            'cookies.rb' => args[:cookies],
             'headers' => args[:headers],
             'method' => args[:method],
             'url' => args[:url]
@@ -99,7 +99,7 @@ module Selenium
           @bidi.send_cmd(
             'network.continueResponse',
             request: args[:id],
-            'cookies' => args[:cookies],
+            'cookies.rb' => args[:cookies],
             'credentials' => args[:credentials],
             'headers' => args[:headers],
             'reasonPhrase' => args[:reason],
