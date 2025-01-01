@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -31,7 +32,6 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.grid.commands.Hub;
@@ -52,7 +52,6 @@ class DrainTest {
 
   private final Browser browser = Objects.requireNonNull(Browser.detect());
 
-  @Disabled("will be fixed with PR 14987")
   @Test
   void nodeDoesNotTakeTooManySessions() throws Exception {
     String[] rawConfig =
@@ -105,7 +104,7 @@ class DrainTest {
           assertThat(pendingSessions.removeIf(Future::isDone)).isEqualTo(i != 0);
 
           // start a node draining after 3 sessions
-          var node = startNode(baseConfig, hub, 6, 3);
+          Server<?> node = startNode(baseConfig, hub, 6, 3);
 
           urlChecker.waitUntilAvailable(
               20, TimeUnit.SECONDS, node.getUrl().toURI().resolve("readyz").toURL());
@@ -115,7 +114,7 @@ class DrainTest {
           int stopped = 0;
 
           for (int j = 0; j < pendingSessions.size(); j++) {
-            var future = pendingSessions.get(j);
+            Future<WebDriver> future = pendingSessions.get(j);
 
             if (future.isDone()) {
               stopped++;
@@ -159,30 +158,26 @@ class DrainTest {
 
       ExecutorService executor = Executors.newFixedThreadPool(2);
 
-      Supplier<Future<WebDriver>> newDriver =
-          () ->
-              executor.submit(
-                  () ->
-                      RemoteWebDriver.builder()
-                          .oneOf(browser.getCapabilities())
-                          .address(hub.getUrl())
-                          .build());
-
       try {
-        Future<WebDriver> pendingA = newDriver.get();
-        Future<WebDriver> pendingB = newDriver.get();
+        Supplier<CompletableFuture<WebDriver>> newDriver =
+            () ->
+                CompletableFuture.supplyAsync(
+                    () ->
+                        RemoteWebDriver.builder()
+                            .oneOf(browser.getCapabilities())
+                            .address(hub.getUrl())
+                            .build(),
+                    executor);
+
+        CompletableFuture<WebDriver> pendingA = newDriver.get();
+        CompletableFuture<WebDriver> pendingB = newDriver.get();
 
         for (int i = 0; i < 16; i++) {
-          // the node should drain automatically
+          // the node should drain automatically, covered by other tests
           startNode(baseConfig, hub, 6, 1);
 
-          for (int j = 0; j < 2000; j++) {
-            Thread.sleep(10);
-
-            if (pendingA.isDone() || pendingB.isDone()) {
-              break;
-            }
-          }
+          // wait for one to start
+          CompletableFuture.anyOf(pendingA, pendingB).get(80, TimeUnit.SECONDS);
 
           if (pendingA.isDone() && pendingB.isDone()) {
             pendingA.get().quit();
@@ -195,8 +190,6 @@ class DrainTest {
           } else if (pendingB.isDone()) {
             pendingB.get().quit();
             pendingB = newDriver.get();
-          } else {
-            throw new IllegalStateException("no browser started");
           }
         }
       } finally {
