@@ -57,4 +57,3 @@ module Selenium
     end # BiDi
   end # WebDriver
 end # Selenium
-

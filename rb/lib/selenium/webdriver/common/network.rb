@@ -58,12 +58,12 @@ module Selenium
 
       private
 
-      def add_handler(event_type, phase, intercept_type, &block)
+      def add_handler(event_type, phase, intercept_type)
         intercept = network.add_intercept(phases: [phase])
         callback_id = network.on(event_type) do |event|
           request = event['request']
           intercepted_item = intercept_type.new(network, request)
-          block.call(intercepted_item)
+          yield(intercepted_item)
         end
 
         callbacks[callback_id] = intercept
