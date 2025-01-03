@@ -29,9 +29,7 @@ module Selenium
       it 'adds an auth handler' do
         reset_driver!(web_socket_url: true) do |driver|
           network = described_class.new(driver)
-          network.add_authentication_handler do |response|
-            response.authenticate(username, password)
-          end
+          network.add_authentication_handler(username, password)
           driver.navigate.to url_for('basicAuth')
           expect(driver.find_element(tag_name: 'h1').text).to eq('authorized')
           expect(network.callbacks.count).to be 1
@@ -41,9 +39,7 @@ module Selenium
       it 'removes an auth handler' do
         reset_driver!(web_socket_url: true) do |driver|
           network = described_class.new(driver)
-          id = network.add_authentication_handler do |response|
-            response.authenticate(username, password)
-          end
+          id = network.add_authentication_handler(username, password)
           network.remove_handler(id)
           expect(network.callbacks.count).to be 0
         end
@@ -52,11 +48,7 @@ module Selenium
       it 'clears all auth handlers' do
         reset_driver!(web_socket_url: true) do |driver|
           network = described_class.new(driver)
-          2.times do
-            network.add_authentication_handler do |response|
-              response.authenticate(username, password)
-            end
-          end
+          2.times { network.add_authentication_handler(username, password) }
           network.clear_handlers
           expect(network.callbacks.count).to be 0
         end

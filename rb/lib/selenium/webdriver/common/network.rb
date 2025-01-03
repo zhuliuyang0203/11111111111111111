@@ -44,8 +44,15 @@ module Selenium
         callbacks.each_key { |id| remove_handler(id) }
       end
 
-      def add_authentication_handler(&)
-        add_handler(:auth_required, BiDi::Network::PHASES[:auth_required], BiDi::InterceptedAuth, &)
+      def add_authentication_handler(username = nil, password = nil, &block)
+        selected_block =
+          if username && password
+            proc { |auth| auth.authenticate(username, password) }
+          else
+            block
+          end
+
+        add_handler(:auth_required, BiDi::Network::PHASES[:auth_required], BiDi::InterceptedAuth, &selected_block)
       end
 
       def add_request_handler(&)
