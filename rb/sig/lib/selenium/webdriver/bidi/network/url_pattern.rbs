@@ -1,0 +1,13 @@
+module Selenium
+  module WebDriver
+    class BiDi
+      module UrlPattern
+        def self?.format_pattern: (untyped url_patterns, untyped pattern_type) -> untyped
+
+        def self?.to_url_pattern: (*untyped url_patterns) -> untyped
+
+        def self?.to_url_string_pattern: (*untyped url_patterns) -> untyped
+      end
+    end
+  end
+end

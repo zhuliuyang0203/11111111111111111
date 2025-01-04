@@ -1,0 +1,13 @@
+module Selenium
+  module WebDriver
+    class BiDi
+      module Cookies
+        def add_cookie: (untyped name, untyped value) -> untyped
+
+        def remove_cookie: (untyped name) -> untyped
+
+        def set_cookie_header: (**untyped args) -> untyped
+      end
+    end
+  end
+end

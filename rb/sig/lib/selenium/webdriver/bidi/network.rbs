@@ -14,11 +14,13 @@ module Selenium
 
         def cancel_auth: -> untyped
 
-        def continue_with_request: (**untyped args) -> untyped
+        def continue_request: -> untyped
 
-        def continue_with_response: (**untyped args) -> untyped
+        def continue_response: -> untyped
 
         def continue_without_auth: -> untyped
+
+        def fail_request: -> untyped
 
         def remove_intercept: (String intercept) -> untyped
 

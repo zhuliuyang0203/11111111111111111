@@ -1,0 +1,11 @@
+module Selenium
+  module WebDriver
+    class BiDi
+      module Headers
+        def add_header: (untyped name, untyped value) -> untyped
+
+        def remove_header: (untyped name) -> untyped
+      end
+    end
+  end
+end

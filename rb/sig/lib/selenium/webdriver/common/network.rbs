@@ -21,9 +21,11 @@ module Selenium
 
       def clear_handlers: -> Hash[nil, nil]
 
-      def fetch_id: -> String
-
       def remove_handler: (Integer id) -> nil
+
+      private
+
+      def add_handler: -> untyped
     end
   end
 end

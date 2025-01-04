@@ -16,6 +16,7 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+require_relative 'network/url_pattern'
 
 module Selenium
   module WebDriver
@@ -39,8 +40,12 @@ module Selenium
           @bidi = bidi
         end
 
-        def add_intercept(phases: [], contexts: nil, url_patterns: nil)
-          @bidi.send_cmd('network.addIntercept', phases: phases, contexts: contexts, urlPatterns: url_patterns)
+        def add_intercept(phases: [], contexts: nil, url_patterns: nil, pattern_type: :string)
+          url_patterns = url_patterns && pattern_type ? UrlPattern.format_pattern(url_patterns, pattern_type) : nil
+          @bidi.send_cmd('network.addIntercept',
+                         phases: phases,
+                         contexts: contexts,
+                         urlPatterns: url_patterns)
         end
 
         def remove_intercept(intercept)

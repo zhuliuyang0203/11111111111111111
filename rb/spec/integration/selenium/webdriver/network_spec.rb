@@ -36,6 +36,36 @@ module Selenium
         end
       end
 
+      it 'adds an auth handler with a filter' do
+        reset_driver!(web_socket_url: true) do |driver|
+          network = described_class.new(driver)
+          network.add_authentication_handler(username, password, url_for('basicAuth'))
+          driver.navigate.to url_for('basicAuth')
+          expect(driver.find_element(tag_name: 'h1').text).to eq('authorized')
+          expect(network.callbacks.count).to be 1
+        end
+      end
+
+      it 'adds an auth handler with multiple filters' do
+        reset_driver!(web_socket_url: true) do |driver|
+          network = described_class.new(driver)
+          network.add_authentication_handler(username, password, url_for('basicAuth'), url_for('formPage.html'))
+          driver.navigate.to url_for('basicAuth')
+          expect(driver.find_element(tag_name: 'h1').text).to eq('authorized')
+          expect(network.callbacks.count).to be 1
+        end
+      end
+
+      it 'adds an auth handler with a pattern type' do
+        reset_driver!(web_socket_url: true) do |driver|
+          network = described_class.new(driver)
+          network.add_authentication_handler(username, password, url_for('basicAuth'), pattern_type: :url)
+          driver.navigate.to url_for('basicAuth')
+          expect(driver.find_element(tag_name: 'h1').text).to eq('authorized')
+          expect(network.callbacks.count).to be 1
+        end
+      end
+
       it 'removes an auth handler' do
         reset_driver!(web_socket_url: true) do |driver|
           network = described_class.new(driver)
@@ -75,6 +105,36 @@ module Selenium
         reset_driver!(web_socket_url: true) do |driver|
           network = described_class.new(driver)
           network.add_request_handler(&:continue)
+          driver.navigate.to url_for('formPage.html')
+          expect(driver.find_element(name: 'login')).to be_displayed
+          expect(network.callbacks.count).to be 1
+        end
+      end
+
+      it 'adds a request handler with a filter' do
+        reset_driver!(web_socket_url: true) do |driver|
+          network = described_class.new(driver)
+          network.add_request_handler(url_for('formPage.html'), &:continue)
+          driver.navigate.to url_for('formPage.html')
+          expect(driver.find_element(name: 'login')).to be_displayed
+          expect(network.callbacks.count).to be 1
+        end
+      end
+
+      it 'adds a request handler with multiple filters' do
+        reset_driver!(web_socket_url: true) do |driver|
+          network = described_class.new(driver)
+          network.add_request_handler(url_for('formPage.html'), url_for('basicAuth'), &:continue)
+          driver.navigate.to url_for('formPage.html')
+          expect(driver.find_element(name: 'login')).to be_displayed
+          expect(network.callbacks.count).to be 1
+        end
+      end
+
+      it 'adds a request handler with a pattern type' do
+        reset_driver!(web_socket_url: true) do |driver|
+          network = described_class.new(driver)
+          network.add_request_handler(url_for('formPage.html'), pattern_type: :url, &:continue)
           driver.navigate.to url_for('formPage.html')
           expect(driver.find_element(name: 'login')).to be_displayed
           expect(network.callbacks.count).to be 1
@@ -152,6 +212,36 @@ module Selenium
         reset_driver!(web_socket_url: true) do |driver|
           network = described_class.new(driver)
           network.add_response_handler(&:continue)
+          driver.navigate.to url_for('formPage.html')
+          expect(driver.find_element(name: 'login')).to be_displayed
+          expect(network.callbacks.count).to be 1
+        end
+      end
+
+      it 'adds a response handler with a filter' do
+        reset_driver!(web_socket_url: true) do |driver|
+          network = described_class.new(driver)
+          network.add_response_handler(url_for('formPage.html'), &:continue)
+          driver.navigate.to url_for('formPage.html')
+          expect(driver.find_element(name: 'login')).to be_displayed
+          expect(network.callbacks.count).to be 1
+        end
+      end
+
+      it 'adds a response handler with multiple filters' do
+        reset_driver!(web_socket_url: true) do |driver|
+          network = described_class.new(driver)
+          network.add_response_handler(url_for('formPage.html'), url_for('basicAuth'), &:continue)
+          driver.navigate.to url_for('formPage.html')
+          expect(driver.find_element(name: 'login')).to be_displayed
+          expect(network.callbacks.count).to be 1
+        end
+      end
+
+      it 'adds a response handler with a pattern type' do
+        reset_driver!(web_socket_url: true) do |driver|
+          network = described_class.new(driver)
+          network.add_response_handler(url_for('formPage.html'), pattern_type: :url, &:continue)
           driver.navigate.to url_for('formPage.html')
           expect(driver.find_element(name: 'login')).to be_displayed
           expect(network.callbacks.count).to be 1

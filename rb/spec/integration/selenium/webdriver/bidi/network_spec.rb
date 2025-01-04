@@ -32,6 +32,26 @@ module Selenium
           end
         end
 
+        it 'adds an intercept with a default pattern type' do
+          reset_driver!(web_socket_url: true) do |driver|
+            network = described_class.new(driver.bidi)
+            pattern = 'http://localhost:4444/formPage.html'
+            intercept = network.add_intercept(phases: [described_class::PHASES[:before_request]], url_patterns: pattern)
+            expect(intercept).not_to be_nil
+          end
+        end
+
+        it 'adds an intercept with a url pattern' do
+          reset_driver!(web_socket_url: true) do |driver|
+            network = described_class.new(driver.bidi)
+            pattern = 'http://localhost:4444/formPage.html'
+            intercept = network.add_intercept(phases: [described_class::PHASES[:before_request]],
+                                              url_patterns: pattern,
+                                              pattern_type: :url)
+            expect(intercept).not_to be_nil
+          end
+        end
+
         it 'removes an intercept' do
           reset_driver!(web_socket_url: true) do |driver|
             network = described_class.new(driver.bidi)
