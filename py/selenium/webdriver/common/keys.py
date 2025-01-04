@@ -91,6 +91,7 @@ class Keys:
     COMMAND = "\ue03d"
     ZENKAKU_HANKAKU = "\ue040"
 
-    def ctrl_or_command(self):
+    @staticmethod
+    def ctrl_or_command():
         """Returns the control (if Linux/Windows) or command (if Mac) key value."""
-        return self.COMMAND if sys.platform == "darwin" else self.CONTROL
+        return Keys.COMMAND if sys.platform == "darwin" else Keys.CONTROL
