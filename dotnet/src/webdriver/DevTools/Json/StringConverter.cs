@@ -19,7 +19,6 @@ internal sealed class StringConverter : JsonConverter<string>
         }
         catch (InvalidOperationException)
         {
-            // Backwards compatibility with Newtonsoft tolerating invalid UTF-16 sequences
             // CDP sometimes sends invalid surrogate pairs on file upload
 
             var bytes = reader.ValueSpan;
@@ -28,7 +27,7 @@ internal sealed class StringConverter : JsonConverter<string>
             {
                 sb.Append(Convert.ToChar(b));
             }
-            
+
             return sb.ToString();
         }
     }
