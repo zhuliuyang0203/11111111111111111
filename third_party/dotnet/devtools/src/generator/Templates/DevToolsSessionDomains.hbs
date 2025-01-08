@@ -12,6 +12,15 @@ namespace {{rootNamespace}}
         private Lazy<{{dehumanize Name}}.{{dehumanize Name}}Adapter> m_{{dehumanize Name}};
 {{/each}}
 
+        [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Never)] // Generated code use only
+        internal static global::System.Text.Json.JsonSerializerOptions DevToolsSerializerOptions { get; } = new global::System.Text.Json.JsonSerializerOptions()
+        {
+            Converters =
+            {
+                new InvalidUtf16Converter(),
+            }
+        };
+
         /// <summary>
         /// Initializes a new instance of the DevToolsSessionDomains class.
         /// </summary>
@@ -41,6 +50,30 @@ namespace {{rootNamespace}}
 {{#each commands}}
             ResponseTypeMap.AddCommandResponseType(typeof({{FullTypeName}}), typeof({{FullResponseTypeName}}));
 {{/each}}
+        }
+
+        private sealed class InvalidUtf16Converter : global::System.Text.Json.Serialization.JsonConverter<string>
+        {
+            public override bool HandleNull => true;
+
+            public override string? Read(ref global::System.Text.Json.Utf8JsonReader reader, global::System.Type typeToConvert, global::System.Text.Json.JsonSerializerOptions options)
+            {
+                try
+                {
+                    return reader.GetString();
+                }
+                catch (global::System.InvalidOperationException)
+                {
+                    var bytes = reader.ValueSpan;
+                    var sb = new global::System.Text.StringBuilder(bytes.Length);
+                    foreach (var b in bytes)
+                        sb.Append(global::System.Convert.ToChar(b));
+                    return sb.ToString();
+                }
+            }
+
+            public override void Write(global::System.Text.Json.Utf8JsonWriter writer, string value, global::System.Text.Json.JsonSerializerOptions options) =>
+                writer.WriteStringValue(value);
         }
     }
 }
