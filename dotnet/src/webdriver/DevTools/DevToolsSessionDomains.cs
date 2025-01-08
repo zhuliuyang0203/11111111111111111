@@ -17,11 +17,6 @@
 // under the License.
 // </copyright>
 
-using System.ComponentModel;
-using System.Text.Json;
-
-#nullable enable
-
 namespace OpenQA.Selenium.DevTools
 {
     /// <summary>
@@ -30,15 +25,6 @@ namespace OpenQA.Selenium.DevTools
     public abstract class DevToolsSessionDomains
     {
         private CommandResponseTypeMap responseTypeMap = new CommandResponseTypeMap();
-
-        [EditorBrowsable(EditorBrowsableState.Never)] // Generated code use only
-        internal static JsonSerializerOptions DevToolsSerializerOptions { get; } = new JsonSerializerOptions()
-        {
-            Converters =
-            {
-                new Json.StringConverter(),
-            }
-        };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DevToolsSessionDomains"/> class.
