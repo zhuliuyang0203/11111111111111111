@@ -604,19 +604,7 @@ namespace OpenQA.Selenium.DevTools
                 var methodParts = method.Split(new char[] { '.' }, 2);
                 var eventData = messageObject.GetProperty("params");
 
-                if (eventData.AsObject().TryGetPropertyValue("request", out var requestNode)
-                    && requestNode.AsObject().ContainsKey("postData"))
-                {
-                    var loggableEventData = eventData.DeepClone();
-                    var loggableRequest = loggableEventData["request"]!;
-                    loggableRequest["postData"] = "*RAW POST DATA REMOVED FROM LOGS*";
-                    loggableRequest["postDataEntries"] = new JsonArray();
-                    LogTrace("Recieved Event {0}: {1}", method, loggableEventData.ToString());
-                }
-                else
-                {
-                    LogTrace("Recieved Event {0}: {1}", method, eventData.ToString());
-                }
+                LogTrace("Recieved Event {0}: {1}", method, eventData.ToString());
 
                 // Dispatch the event on a new thread so that any event handlers
                 // responding to the event will not block this thread from processing
