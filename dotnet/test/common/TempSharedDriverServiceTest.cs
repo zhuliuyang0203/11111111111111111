@@ -5,6 +5,7 @@ using System.Diagnostics;
 namespace OpenQA.Selenium
 {
     // DELETE IT IN FINAL MERGE
+    [NonParallelizable]
     class _TempSharedDriverServiceTest
     {
         [Test]
