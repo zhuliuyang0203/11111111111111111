@@ -42,19 +42,13 @@ public class DevTools implements Closeable {
   private static final Logger LOG = Logger.getLogger(DevTools.class.getName());
 
   private final Domains protocol;
-  private Duration timeout = Duration.ofSeconds(10);
+  private final Duration timeout = Duration.ofSeconds(10);
   private final Connection connection;
   private SessionID cdpSession = null;
 
   public DevTools(Function<DevTools, Domains> protocol, Connection connection) {
-    this(protocol, connection, Duration.ofSeconds(10));
-  }
-
-  // overloaded constructor for setting timeout
-  public DevTools(Function<DevTools, Domains> protocol, Connection connection, Duration timeout) {
     this.connection = Require.nonNull("WebSocket connection", connection);
     this.protocol = Require.nonNull("CDP protocol", protocol).apply(this);
-    setTimeout(timeout);
   }
 
   public Domains getDomains() {
@@ -217,13 +211,5 @@ public class DevTools implements Closeable {
 
   public SessionID getCdpSession() {
     return cdpSession;
-  }
-
-  public void setTimeout(Duration timeout) {
-    Require.nonNull("Timeout duration", timeout);
-    if (timeout.isNegative() || timeout.isZero()) {
-      throw new IllegalArgumentException("Timeout must be positive");
-    }
-    this.timeout = timeout;
   }
 }
