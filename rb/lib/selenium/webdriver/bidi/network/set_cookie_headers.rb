@@ -20,31 +20,14 @@
 module Selenium
   module WebDriver
     class BiDi
-      class SetCookieHeaders
+      class SetCookieHeaders < Hash
         def initialize(set_cookie_headers = {})
-          @set_cookie_headers = set_cookie_headers
-        end
-
-        def all
-          @set_cookie_headers
-        end
-
-        def []=(key, value)
-          @set_cookie_headers[key] = {value: value}
-        end
-
-        def [](key)
-          @set_cookie_headers[key]
-        end
-
-        def delete(key)
-          @set_cookie_headers.delete(key)
+          super()
+          merge!(set_cookie_headers)
         end
 
         def serialize
-          return [] unless @set_cookie_headers
-
-          @set_cookie_headers.map do |name, data|
+          map do |name, data|
             data = {value: data} unless data.is_a?(Hash)
 
             {

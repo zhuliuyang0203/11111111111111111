@@ -2,17 +2,7 @@ module Selenium
   module WebDriver
     class BiDi
       class Headers
-        @headers: untyped
-
         def initialize: () -> void
-
-        def all: () -> untyped
-
-        def []=: (untyped key, untyped value) -> untyped
-
-        def []: (untyped key) -> untyped
-
-        def delete: (untyped key) -> untyped
 
         def serialize: () -> untyped
       end

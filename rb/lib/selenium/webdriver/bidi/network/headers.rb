@@ -20,29 +20,9 @@
 module Selenium
   module WebDriver
     class BiDi
-      class Headers
-        def initialize
-          @headers = {}
-        end
-
-        def all
-          @headers
-        end
-
-        def []=(key, value)
-          @headers[key] = value
-        end
-
-        def [](key)
-          @headers[key]
-        end
-
-        def delete(key)
-          @headers.delete(key)
-        end
-
+      class Headers < Hash
         def serialize
-          @headers.map do |name, val|
+          map do |name, val|
             {
               name: name.to_s,
               value: {

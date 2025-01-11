@@ -20,31 +20,14 @@
 module Selenium
   module WebDriver
     class BiDi
-      class Cookies
+      class Cookies < Hash
         def initialize(cookies = {})
-          @cookies = cookies
-        end
-
-        def all
-          @cookies
-        end
-
-        def []=(key, value)
-          @cookies[key] = value
-        end
-
-        def [](key)
-          @cookies[key]
-        end
-
-        def delete(key)
-          @cookies.delete(key)
+          super()
+          merge!(cookies)
         end
 
         def serialize
-          return [] unless @cookies
-
-          @cookies.map do |name, value|
+          map do |name, value|
             {
               name: name.to_s,
               value: {
@@ -55,8 +38,6 @@ module Selenium
           end
         end
       end
-    end
-
-    # BiDi
+    end # BiDi
   end # WebDriver
 end # Selenium

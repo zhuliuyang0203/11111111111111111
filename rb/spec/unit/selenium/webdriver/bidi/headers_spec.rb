@@ -26,94 +26,21 @@ module Selenium
       describe Headers do
         let(:headers) { described_class.new }
 
-        describe '#initialize' do
-          it 'initializes an empty headers hash' do
-            expect(headers.all).to eq({})
-          end
-        end
+        it 'returns an array of serialized array of header hashes' do
+          headers['Accept'] = 'application/json'
+          headers['User-Agent'] = 'MyAgent/1.0'
 
-        describe '#all' do
-          it 'returns the underlying headers hash' do
-            headers['Authorization'] = 'Bearer abc123'
-            expect(headers.all).to eq({'Authorization' => 'Bearer abc123'})
-          end
-        end
+          serialized = headers.serialize
+          expect(serialized).to be_an(Array)
+          expect(serialized.size).to eq(2)
 
-        describe '#add_header' do
-          it 'adds a header to the internal store' do
-            headers['Content-Type'] = 'application/json'
-            expect(headers['Content-Type']).to eq('application/json')
-          end
+          accept_item = serialized.find { |h| h[:name] == 'Accept' }
+          expect(accept_item).not_to be_nil
+          expect(accept_item[:value]).to eq({ type: 'string', value: 'application/json' })
 
-          it 'updates an existing header if the name already exists' do
-            headers['Content-Type'] = 'text/html'
-            headers['Content-Type'] = 'application/json'
-            expect(headers['Content-Type']).to eq('application/json')
-          end
-        end
-
-        describe '#remove_header' do
-          it 'removes a header by name' do
-            headers['X-Custom-Header'] = 'foo'
-            headers.delete('X-Custom-Header')
-            expect(headers['X-Custom-Header']).to be_nil
-          end
-
-          it 'does not raise an error if header does not exist' do
-            expect { headers.delete('Non-Existent') }.not_to raise_error
-          end
-        end
-
-        describe '#[]=' do
-          it 'adds or updates a header using bracket assignment' do
-            headers['Cache-Control'] = 'no-cache'
-            expect(headers['Cache-Control']).to eq('no-cache')
-
-            headers['Cache-Control'] = 'private'
-            expect(headers['Cache-Control']).to eq('private')
-          end
-        end
-
-        describe '#[]' do
-          it 'retrieves the value of a header by name' do
-            headers['Host'] = 'example.com'
-            expect(headers['Host']).to eq('example.com')
-          end
-
-          it 'returns nil for unknown headers' do
-            expect(headers['Does-Not-Exist']).to be_nil
-          end
-        end
-
-        describe '#delete' do
-          it 'removes a header via bracket-based delete' do
-            headers['Accept'] = 'text/html'
-            headers.delete('Accept')
-            expect(headers['Accept']).to be_nil
-          end
-        end
-
-        describe '#serialize' do
-          it 'returns an array of header hashes in the correct format' do
-            headers['Accept'] = 'application/json'
-            headers['User-Agent'] = 'MyAgent/1.0'
-
-            serialized = headers.serialize
-            expect(serialized).to be_an(Array)
-            expect(serialized.size).to eq(2)
-
-            accept_item = serialized.find { |h| h[:name] == 'Accept' }
-            expect(accept_item).not_to be_nil
-            expect(accept_item[:value]).to eq({type: 'string', value: 'application/json'})
-
-            ua_item = serialized.find { |h| h[:name] == 'User-Agent' }
-            expect(ua_item).not_to be_nil
-            expect(ua_item[:value]).to eq({type: 'string', value: 'MyAgent/1.0'})
-          end
-
-          it 'returns an empty array if no headers are set' do
-            expect(headers.serialize).to eq([])
-          end
+          ua_item = serialized.find { |h| h[:name] == 'User-Agent' }
+          expect(ua_item).not_to be_nil
+          expect(ua_item[:value]).to eq({ type: 'string', value: 'MyAgent/1.0' })
         end
       end
     end
