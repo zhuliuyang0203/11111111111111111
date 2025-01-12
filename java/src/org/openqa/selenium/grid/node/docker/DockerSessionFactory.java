@@ -286,16 +286,15 @@ public class DockerSessionFactory implements SessionFactory {
   }
 
   private Container createBrowserContainer(int port, Capabilities sessionCapabilities) {
-    Map<String, String> browserContainerEnvVars = getBrowserContainerEnvVars(sessionCapabilities);
+    Map<String, String> browserContainerEnvVars = new HashMap<>();
     // Enable env var to trigger video recording if session capabilities request and external video
     // container is disabled
     if (videoImage == null && recordVideoForSession(sessionCapabilities)) {
       browserContainerEnvVars.put("SE_RECORD_VIDEO", "true");
       browserContainerEnvVars.put("SE_VIDEO_FILE_NAME", "auto");
-      if (runningInDocker) {
-        browserContainerEnvVars.put("SE_VIDEO_RECORD_STANDALONE", "true");
-      }
+      browserContainerEnvVars.put("SE_VIDEO_RECORD_STANDALONE", "true");
     }
+    browserContainerEnvVars.putAll(getBrowserContainerEnvVars(sessionCapabilities));
     long browserContainerShmMemorySize = 2147483648L; // 2GB
     ContainerConfig containerConfig =
         image(browserImage)

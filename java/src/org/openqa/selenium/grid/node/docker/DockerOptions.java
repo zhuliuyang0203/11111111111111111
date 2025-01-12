@@ -61,7 +61,7 @@ public class DockerOptions {
   static final String DOCKER_SECTION = "docker";
   static final String DEFAULT_ASSETS_PATH = "/opt/selenium/assets";
   static final String DEFAULT_DOCKER_URL = "unix:/var/run/docker.sock";
-  static final String DEFAULT_VIDEO_IMAGE = "selenium/video:latest";
+  static final String DEFAULT_VIDEO_IMAGE = "false";
   static final int DEFAULT_MAX_SESSIONS = Runtime.getRuntime().availableProcessors();
   private static final String DEFAULT_DOCKER_NETWORK = "bridge";
   private static final Logger LOG = Logger.getLogger(DockerOptions.class.getName());
