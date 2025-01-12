@@ -175,7 +175,7 @@ class ActionBuilder:
         --------
         >>> action_builder = ActionBuilder(driver)
         >>> keyboard = action_builder.key_input
-        >>> el = driver.find_element(id: "some_id")
+        >>> el = driver.find_element(By.ID, "some_id")
         >>> action_builder.click(el).pause(keyboard).pause(keyboard).pause(keyboard).send_keys('keys')
         >>> action_builder.clear_actions()
         """
