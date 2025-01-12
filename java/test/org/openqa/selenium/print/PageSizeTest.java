@@ -26,8 +26,8 @@ import org.junit.jupiter.api.Test;
 class PageSizeTest {
 
   // Defaults assertion
-  private static final double HEIGHT = 27.94;
-  private static final double WIDTH = 21.59;
+  private static final double HEIGHT = 27.94; //Size in cm
+  private static final double WIDTH = 21.59; //Size in cm
 
   @Test
   void setsDefaultHeightWidth() {
@@ -35,5 +35,10 @@ class PageSizeTest {
 
     assertThat(pageSize.getHeight()).isEqualTo(HEIGHT);
     assertThat(pageSize.getWidth()).isEqualTo(WIDTH);
+    
+    PageSize pageSizeLegal = PageSize.LEGAL;
+    assertThat(pageSizeLegal.getHeight()).isEqualTo(HEIGHT);
+    assertThat(pageSizeLegal.getWidth()).isEqualTo(WIDTH);
+
   }
 }
