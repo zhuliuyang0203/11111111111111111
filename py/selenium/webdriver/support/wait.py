@@ -50,14 +50,14 @@ class WebDriverWait(Generic[D]):
 
         Parameters:
         ----------
-        driver 
+        driver
             - Instance of WebDriver (Ie, Firefox, Chrome or Remote) or a WebElement
-        timeout 
+        timeout
             - Number of seconds before timing out
-        poll_frequency 
+        poll_frequency
             - Sleep interval between calls
             - By default, it is 0.5 second.
-        ignored_exceptions 
+        ignored_exceptions
             - Iterable structure of exception classes ignored during calls.
             - By default, it contains NoSuchElementException only.
 
@@ -91,21 +91,21 @@ class WebDriverWait(Generic[D]):
     def until(self, method: Callable[[D], Union[Literal[False], T]], message: str = "") -> T:
         """Wait until the method returns a value that is not False.
 
-        Calls the method provided with the driver as an argument until the 
+        Calls the method provided with the driver as an argument until the
         return value does not evaluate to ``False``.
 
         Parameters:
         ----------
         method: callable(WebDriver)
-            - A callable object that takes a WebDriver instance as an argument. 
+            - A callable object that takes a WebDriver instance as an argument.
         message: str
             - Optional message for :exc:`TimeoutException`
-        
+
         Return:
         -------
         object: T
             - The result of the last call to `method`
-        
+
         Raises:
         -------
         TimeoutException
@@ -142,21 +142,21 @@ class WebDriverWait(Generic[D]):
     def until_not(self, method: Callable[[D], T], message: str = "") -> Union[T, Literal[True]]:
         """Wait until the method returns a value that is not False.
 
-        Calls the method provided with the driver as an argument until the 
+        Calls the method provided with the driver as an argument until the
         return value does not evaluate to ``False``.
 
         Parameters:
         ----------
         method: callable(WebDriver)
-            - A callable object that takes a WebDriver instance as an argument. 
+            - A callable object that takes a WebDriver instance as an argument.
         message: str
             - Optional message for :exc:`TimeoutException`
-        
+
         Return:
         -------
         object: T
             - The result of the last call to `method`
-        
+
         Raises:
         -------
         TimeoutException
