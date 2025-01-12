@@ -69,8 +69,7 @@ class WebDriverWait(Generic[D]):
         >>>
         >>> # Wait until the element is no longer visible
         >>> is_disappeared = WebDriverWait(driver, 30, 1, (ElementNotVisibleException)).until_not(
-        ...     lambda x: x.find_element(By.ID, "someId").is_displayed()
-        ... )
+        ...     lambda x: x.find_element(By.ID, "someId").is_displayed())
         """
         self._driver = driver
         self._timeout = float(timeout)
