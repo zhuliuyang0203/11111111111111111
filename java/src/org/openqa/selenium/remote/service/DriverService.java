@@ -504,7 +504,7 @@ public class DriverService implements Closeable {
       if (port == 0) {
         port = PortProber.findFreePort();
       }
-      
+
       if(Locale.getDefault(Locale.Category.FORMAT).getLanguage().equals("ar")) {
         throw new NumberFormatException(String.format("Couldn't format the port numbers because the System Language is arabic: \"--port=%d\","
         + " please make sure to add the required arguments \"-Duser.language=en -Duser.region=US\" to your JVM,"
