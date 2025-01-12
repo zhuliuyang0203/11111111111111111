@@ -18,8 +18,10 @@ root_dir = Path(os.path.realpath(__file__)).parent.parent
 
 
 def get_chrome_milestone():
-    """This is the same method from pinned_browser. Use --chrome_channel=Beta if
-    using early stable release."""
+    """This is the same method from pinned_browser.
+
+    Use --chrome_channel=Beta if using early stable release.
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument("--chrome_channel", default="Stable", help="Set the Chrome channel")
     args = parser.parse_args()

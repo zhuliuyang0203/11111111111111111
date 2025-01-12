@@ -21,7 +21,8 @@ from selenium.webdriver.remote.webdriver import WebElement
 
 
 def test_web_element_not_subclassed():
-    """A registered subtype of WebElement should work with isinstance checks."""
+    """A registered subtype of WebElement should work with isinstance
+    checks."""
 
     class MyWebElement:
         def __init__(self, parent, id, _w3c=True):

@@ -14,7 +14,6 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-
 """Tests for advanced user interactions."""
 import pytest
 
@@ -118,7 +117,8 @@ def test_cannot_move_to_anull_locator_with_pointer(driver, pages):
 
 @pytest.mark.xfail_safari
 def test_clicking_on_form_elements_with_pointer(driver, pages):
-    """Copied from org.openqa.selenium.interactions.CombinedInputActionsTest."""
+    """Copied from
+    org.openqa.selenium.interactions.CombinedInputActionsTest."""
     pages.load("formSelectionPage.html")
     options = driver.find_elements(By.TAG_NAME, "option")
     mouse = PointerInput(interaction.POINTER_MOUSE, "test mouse")
@@ -142,7 +142,8 @@ def test_clicking_on_form_elements_with_pointer(driver, pages):
 @pytest.mark.xfail_firefox
 @pytest.mark.xfail_safari
 def test_selecting_multiple_items_with_devices(driver, pages):
-    """Copied from org.openqa.selenium.interactions.CombinedInputActionsTest."""
+    """Copied from
+    org.openqa.selenium.interactions.CombinedInputActionsTest."""
     pages.load("selectableItems.html")
     reportingElement = driver.find_element(By.ID, "infodiv")
     assert "no info" == reportingElement.text
@@ -194,10 +195,8 @@ def test_sending_keys_to_element_with_keyboard(driver, pages):
 
 
 def test_can_send_keys_between_clicks_with_keyboard(driver, pages):
-    """
-    For W3C, ensures that the correct number of pauses are given to the other
-    input device.
-    """
+    """For W3C, ensures that the correct number of pauses are given to the
+    other input device."""
     pages.load("javascriptPage.html")
     keyup = driver.find_element(By.ID, "keyUp")
     keydown = driver.find_element(By.ID, "keyDown")
