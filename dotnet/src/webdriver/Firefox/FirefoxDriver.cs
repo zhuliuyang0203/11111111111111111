@@ -196,7 +196,7 @@ namespace OpenQA.Selenium.Firefox
         }
 
         private FirefoxDriver(FirefoxDriverService service, bool disposeService, FirefoxOptions options, TimeSpan commandTimeout)
-            : base(StartDriverServiceCommandExecutor(service, options, commandTimeout), ConvertOptionsToCapabilities(options))
+            : base(GenerateDriverServiceCommandExecutor(service, options, commandTimeout), ConvertOptionsToCapabilities(options))
         {
             this.driverService = service;
             this.disposeDriverService = disposeService;
@@ -212,7 +212,7 @@ namespace OpenQA.Selenium.Firefox
         /// <param name="commandTimeout"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        private static ICommandExecutor StartDriverServiceCommandExecutor(DriverService service, DriverOptions options, TimeSpan commandTimeout)
+        private static ICommandExecutor GenerateDriverServiceCommandExecutor(DriverService service, DriverOptions options, TimeSpan commandTimeout)
         {
             if (service.DriverServicePath == null || string.IsNullOrEmpty(options.BinaryLocation))
             {
