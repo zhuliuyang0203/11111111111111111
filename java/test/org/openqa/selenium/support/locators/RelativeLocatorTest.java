@@ -118,7 +118,7 @@ class RelativeLocatorTest extends JupiterTestBase {
 
     WebElement midpoint = driver.findElement(By.id("center"));
 
-    List<WebElement> elements = driver.findElements(with(tagName("td")).left(midpoint));
+    List<WebElement> elements = driver.findElements(with(tagName("td")).toLeftOf(midpoint));
     List<String> ids =
         elements.stream().map(e -> e.getAttribute("id")).collect(Collectors.toList());
 
