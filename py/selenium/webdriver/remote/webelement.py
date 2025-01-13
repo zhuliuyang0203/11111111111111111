@@ -156,7 +156,7 @@ class WebElement(BaseWebElement):
     def get_property(self, name) -> str | bool | WebElement | dict:
         """Gets the given property of the element.
 
-        Parameters:
+        Attributes:
         ----------
         name : str
             - Name of the property to retrieve.
@@ -180,7 +180,7 @@ class WebElement(BaseWebElement):
         :func:`~selenium.webdriver.remote.BaseWebElement.get_attribute`, this
         method only returns attributes declared in the element's HTML markup.
 
-        Parameters:
+        Attributes:
         ----------
         name : str
             - Name of the attribute to retrieve.
@@ -212,7 +212,7 @@ class WebElement(BaseWebElement):
         use :func:`~selenium.webdriver.remote.BaseWebElement.get_dom_attribute` or
         :func:`~selenium.webdriver.remote.BaseWebElement.get_property` methods respectively.
 
-        Parameters:
+        Attributes:
         ----------
         name : str
             - Name of the attribute/property to retrieve.
@@ -259,7 +259,7 @@ class WebElement(BaseWebElement):
     def send_keys(self, *value: str) -> None:
         """Simulates typing into the element.
 
-        Parameters:
+        Attributes:
         ----------
         value : str
             - A string for typing, or setting form fields.  For setting
@@ -380,7 +380,7 @@ class WebElement(BaseWebElement):
     def value_of_css_property(self, property_name) -> str:
         """The value of a CSS property.
 
-        Parameters:
+        Attributes:
         ----------
         property_name : str
             - The name of the CSS property to get the value of.
@@ -491,7 +491,7 @@ class WebElement(BaseWebElement):
         --------
         bool : True if the screenshot was saved successfully, False otherwise.
 
-        Parameters:
+        Attributes:
         ----------
         filename : str
             The full path you wish to save your screenshot to. This
@@ -552,12 +552,12 @@ class WebElement(BaseWebElement):
     def _execute(self, command, params=None):
         """Executes a command against the underlying HTML element.
 
-        Parameters:
+        Attributes:
         ----------
           command : any
             The name of the command to _execute as a string.
           params : dict
-            A dictionary of named parameters to send with the command.
+            A dictionary of named Attributes to send with the command.
 
         Returns:
         -------
@@ -571,7 +571,7 @@ class WebElement(BaseWebElement):
     def find_element(self, by=By.ID, value=None) -> WebElement:
         """Find an element given a By strategy and locator.
 
-        Parameters:
+        Attributes:
         ----------
         by : selenium.webdriver.common.by.By
             The locating strategy to use. Default is `By.ID`. Supported values include:
@@ -600,7 +600,7 @@ class WebElement(BaseWebElement):
     def find_elements(self, by=By.ID, value=None) -> List[WebElement]:
         """Find elements given a By strategy and locator.
 
-        Parameters:
+        Attributes:
         ----------
         by : selenium.webdriver.common.by.By
             The locating strategy to use. Default is `By.ID`. Supported values include:
