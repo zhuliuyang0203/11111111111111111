@@ -26,8 +26,8 @@ import org.junit.jupiter.api.Test;
 class PageSizeTest {
 
   // Defaults assertion
-  private static final double HEIGHT = 27.94; //Size in cm
-  private static final double WIDTH = 21.59; //Size in cm
+  private static final double HEIGHT = 27.94;
+  private static final double WIDTH = 21.59;
 
   @Test
   void setsDefaultHeightWidth() {
@@ -35,10 +35,34 @@ class PageSizeTest {
 
     assertThat(pageSize.getHeight()).isEqualTo(HEIGHT);
     assertThat(pageSize.getWidth()).isEqualTo(WIDTH);
-    
-    PageSize pageSizeLegal = PageSize.LEGAL;
-    assertThat(pageSizeLegal.getHeight()).isEqualTo(HEIGHT);
-    assertThat(pageSizeLegal.getWidth()).isEqualTo(WIDTH);
-
   }
+
+  @Test
+    void verifiesPageSizeA4() {
+    PageSize pageSize = PageSize.A4;
+    assertThat(pageSize.getHeight()).isEqualTo(HEIGHT);
+    assertThat(pageSize.getWidth()).isEqualTo(WIDTH);
+  }
+
+  @Test
+    void verifiesPageSizeLegal() {
+    PageSize pageSize = PageSize.LEGAL;
+    assertThat(pageSize.getHeight()).isEqualTo(HEIGHT);
+    assertThat(pageSize.getWidth()).isEqualTo(WIDTH);
+  }
+
+  @Test
+    void verifiesPageSizeLetter() {
+    PageSize pageSize = PageSize.LETTER;
+    assertThat(pageSize.getHeight()).isEqualTo(HEIGHT);
+    assertThat(pageSize.getWidth()).isEqualTo(WIDTH);
+  }
+
+    @Test
+    void verifiesPageSizeTabloid() {
+    PageSize pageSize = PageSize.TABLOID;
+    assertThat(pageSize.getHeight()).isEqualTo(HEIGHT);
+    assertThat(pageSize.getWidth()).isEqualTo(WIDTH);
+  }
+
 }

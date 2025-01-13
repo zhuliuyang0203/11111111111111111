@@ -24,41 +24,42 @@ public class PageSize {
   private final double height;
   private final double width;
 
-    // Predefined constants
-    public static final PageSize A4 = new PageSize(27.94, 21.59); // A4 size in cm
+    // Reference for predefined page size constants: https://www.agooddaytoprint.com/page/paper-size-chart-faq
+    public static final PageSize A4 = new PageSize(29.7, 21.0); // A4 size in cm
     public static final PageSize LEGAL = new PageSize(35.56, 21.59); // Legal size in cm
     public static final PageSize TABLOID = new PageSize(43.18, 27.94); // Tabloid size in cm
     public static final PageSize LETTER = new PageSize(27.94, 21.59); // Letter size in cm
-    
-    public PageSize(double height, double width) {
-        this.height = height;
-        this.width = width;
-    }
 
-    // Default constructor (e.g., default to A4)
-    public PageSize() {
-        this(A4.getHeight(), A4.getWidth());
-    }
+  public PageSize() {
+    // Initialize with defaults. A4 paper size defaults in cms.
+    this.height = 27.94;
+    this.width = 21.59;
+ }
 
-    // Getters for Height and Width
-    public double getHeight() {
-        return height;
-    }
+  public PageSize(double height, double width) {
+    this.height = height;
+    this.width = width;
+  }
 
-    public double getWidth() {
-        return width;
-    }
+  public double getHeight() {
+    return height;
+  }
 
-    public Map<String, Object> toMap() {
-    Map<String, Object> map = new HashMap<>();
-    map.put("width", width);
-    map.put("height", height);
-    return map;
-    }
+  public double getWidth() {
+    return width;
+  }
+
+  public Map<String, Object> toMap() {
+    final Map<String, Object> options = new HashMap<>(7);
+    options.put("height", getHeight());
+    options.put("width", getWidth());
+
+    return options;
+  }
 
     @Override
     public String toString() {
     return "PageSize[width=" + this.getWidth() + ", height=" + this.getHeight() + "]";
-}
+ }
 
 }
