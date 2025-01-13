@@ -4,10 +4,6 @@ namespace OpenQA.Selenium.DevToolsGenerator
 {
     public class CommandLineOptions
     {
-        public CommandLineOptions()
-        {
-        }
-
         [Option(
             'f',
             "force-download",
