@@ -639,8 +639,8 @@ class WebDriver(BaseWebDriver):
         return self.execute(Command.GET_ALL_COOKIES)["value"]
 
     def get_cookie(self, name) -> Optional[Dict]:
-        """Get a single cookie by name. Raises ValueError if the name is empty or whitespace.
-        Returns the cookie if found, None if not.
+        """Get a single cookie by name. Raises ValueError if the name is empty
+        or whitespace. Returns the cookie if found, None if not.
 
         :Usage:
             ::
@@ -659,7 +659,8 @@ class WebDriver(BaseWebDriver):
         return None
 
     def delete_cookie(self, name) -> None:
-        """Deletes a single cookie with the given name. Raises ValueError if the name is empty or whitespace.
+        """Deletes a single cookie with the given name. Raises ValueError if
+        the name is empty or whitespace.
 
         :Usage:
             ::
