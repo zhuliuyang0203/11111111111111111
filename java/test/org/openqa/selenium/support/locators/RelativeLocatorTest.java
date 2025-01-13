@@ -82,7 +82,6 @@ class RelativeLocatorTest extends JupiterTestBase {
     List<WebElement> elements = driver.findElements(with(tagName("p")).below(midpoint));
     List<String> ids =
         elements.stream().map(e -> e.getAttribute("id")).collect(Collectors.toList());
-
     assertThat(ids).containsExactly("below");
   }
 
@@ -242,6 +241,11 @@ class RelativeLocatorTest extends JupiterTestBase {
     // 5-8. Diagonally close (pythagoras sorting, with top row first
     //    because of DOM insertion order)
     List<String> ids = seen.stream().map(e -> e.getAttribute("id")).collect(Collectors.toList());
+
+    assertThat(ids)
+        .containsExactly(
+            "top", "bottom", "left", "right", "topLeft", "topRight", "bottomLeft", "bottomRight");
+
     assertThat(ids)
         .containsExactly(
             "top", "bottom", "left", "right", "topLeft", "topRight", "bottomLeft", "bottomRight");
@@ -300,6 +304,7 @@ class RelativeLocatorTest extends JupiterTestBase {
     // 5-8. Diagonally close (pythagoras sorting, with top row first
     //    because of DOM insertion order)
     List<String> ids = seen.stream().map(e -> e.getAttribute("id")).collect(Collectors.toList());
+
     assertThat(ids)
         .containsExactly(
             "top", "bottom", "left", "right", "topLeft", "topRight", "bottomLeft", "bottomRight");
