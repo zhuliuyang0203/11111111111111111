@@ -20,7 +20,10 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+
+#nullable enable
 
 namespace OpenQA.Selenium.Internal.Logging
 {
@@ -28,23 +31,23 @@ namespace OpenQA.Selenium.Internal.Logging
     /// Represents a logging context that provides methods for creating sub-contexts, retrieving loggers, emitting log messages, and configuring minimum log levels.
     /// </summary>
     /// <inheritdoc cref="ILogContext"/>
-    internal class LogContext : ILogContext
+    internal sealed class LogContext : ILogContext
     {
-        private ConcurrentDictionary<Type, ILogger> _loggers;
+        private ConcurrentDictionary<Type, ILogger>? _loggers;
 
         private LogEventLevel _level;
 
-        private readonly ILogContext _parentLogContext;
+        private readonly ILogContext? _parentLogContext;
 
         private readonly Lazy<LogHandlerList> _lazyLogHandlerList;
 
-        public LogContext(LogEventLevel level, ILogContext parentLogContext, ConcurrentDictionary<Type, ILogger> loggers, IEnumerable<ILogHandler> handlers)
+        public LogContext(LogEventLevel level, ILogContext? parentLogContext, ConcurrentDictionary<Type, ILogger>? loggers, IEnumerable<ILogHandler>? handlers)
         {
             _level = level;
 
             _parentLogContext = parentLogContext;
 
-            _loggers = loggers;
+            _loggers = CloneLoggers(loggers, level);
 
             if (handlers is not null)
             {
@@ -63,12 +66,7 @@ namespace OpenQA.Selenium.Internal.Logging
 
         public ILogContext CreateContext(LogEventLevel minimumLevel)
         {
-            ConcurrentDictionary<Type, ILogger> loggers = null;
-
-            if (_loggers != null)
-            {
-                loggers = new ConcurrentDictionary<Type, ILogger>(_loggers.Select(l => new KeyValuePair<Type, ILogger>(l.Key, new Logger(l.Value.Issuer, minimumLevel))));
-            }
+            ConcurrentDictionary<Type, ILogger>? loggers = CloneLoggers(_loggers, minimumLevel);
 
             var context = new LogContext(minimumLevel, this, loggers, Handlers);
 
@@ -89,17 +87,14 @@ namespace OpenQA.Selenium.Internal.Logging
                 throw new ArgumentNullException(nameof(type));
             }
 
-            if (_loggers is null)
-            {
-                _loggers = new ConcurrentDictionary<Type, ILogger>();
-            }
+            _loggers ??= new ConcurrentDictionary<Type, ILogger>();
 
-            return _loggers.GetOrAdd(type, _ => new Logger(type, _level));
+            return _loggers.GetOrAdd(type, type => new Logger(type, _level));
         }
 
         public bool IsEnabled(ILogger logger, LogEventLevel level)
         {
-            return Handlers != null && level >= _level && level >= logger.Level;
+            return Handlers != null && level >= _level && (_loggers?.TryGetValue(logger.Issuer, out var loggerEntry) != true || level >= loggerEntry?.Level);
         }
 
         public void EmitMessage(ILogger logger, LogEventLevel level, string message)
@@ -155,6 +150,25 @@ namespace OpenQA.Selenium.Internal.Logging
             }
 
             Log.CurrentContext = _parentLogContext;
+        }
+
+        [return: NotNullIfNotNull(nameof(loggers))]
+        private static ConcurrentDictionary<Type, ILogger>? CloneLoggers(ConcurrentDictionary<Type, ILogger>? loggers, LogEventLevel minimumLevel)
+        {
+            if (loggers is null)
+            {
+                return null;
+            }
+
+            var cloned = new Dictionary<Type, ILogger>(loggers.Count);
+
+            foreach (KeyValuePair<Type, ILogger> logger in loggers)
+            {
+                var clonedLogger = new Logger(logger.Value.Issuer, minimumLevel);
+                cloned.Add(logger.Key, clonedLogger);
+            }
+
+            return new ConcurrentDictionary<Type, ILogger>(cloned);
         }
     }
 }

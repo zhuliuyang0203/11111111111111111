@@ -62,11 +62,11 @@ compile_pip_requirements(
     ],
 )
 
-SE_VERSION = "4.27.0.202410311942"
+SE_VERSION = "4.28.0.202411261607"
 
 BROWSER_VERSIONS = [
     "v85",
-    "v128",
+    "v131",
     "v129",
     "v130",
 ]
@@ -231,7 +231,6 @@ pkg_files(
         "CHANGES",
         "README.rst",
         "pyproject.toml",
-        "setup.py",
         ":license",
         ":selenium-pkg",
         ":selenium-pkginfo",
@@ -278,17 +277,17 @@ py_wheel(
         "Topic :: Software Development :: Testing",
         "Topic :: Software Development :: Libraries",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
     ],
     description_file = "README.rst",
     distribution = "selenium",
     homepage = "https://www.selenium.dev",
     license = "Apache 2.0",
-    python_requires = ">=3.8",
+    python_requires = ">=3.9",
     python_tag = "py3",
     requires = [
         "urllib3[socks]>=1.26,<3",

@@ -1,11 +1,10 @@
+using OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition;
+using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+
 namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
 {
-    using OpenQA.Selenium.DevToolsGenerator.ProtocolDefinition;
-    using System;
-    using System.Collections.Generic;
-    using System.Text.RegularExpressions;
-    using System.Runtime.InteropServices;
-
     /// <summary>
     /// Contains various utility methods.
     /// </summary>
@@ -42,8 +41,10 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
         {
             var type = typeDefinition.Type;
 
-            if (String.IsNullOrWhiteSpace(type))
+            if (string.IsNullOrWhiteSpace(type))
+            {
                 type = typeDefinition.TypeReference;
+            }
 
             string mappedType = null;
             if (type.Contains(".") && knownTypes.ContainsKey(type))
@@ -54,16 +55,22 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
                     var primitiveType = typeInfo.TypeName;
 
                     if (typeDefinition.Optional && typeInfo.ByRef)
+                    {
                         primitiveType += "?";
+                    }
 
                     if (isArray)
+                    {
                         primitiveType += "[]";
+                    }
 
                     return primitiveType;
                 }
                 mappedType = $"{typeInfo.Namespace}.{typeInfo.TypeName}";
                 if (typeDefinition.Optional && typeInfo.ByRef)
+                {
                     mappedType += "?";
+                }
             }
 
             if (mappedType == null)
@@ -76,7 +83,9 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
 
                     mappedType = typeInfo.TypeName;
                     if (typeInfo.ByRef && typeDefinition.Optional)
+                    {
                         mappedType += "?";
+                    }
                 }
             }
 
@@ -113,20 +122,21 @@ namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
             }
 
             if (isArray)
+            {
                 mappedType += "[]";
+            }
 
             return mappedType;
         }
 
         public static string ReplaceLineEndings(string value, string replacement = null)
         {
-            if (String.IsNullOrEmpty(value))
+            if (string.IsNullOrEmpty(value))
             {
                 return value;
             }
 
-            if (replacement == null)
-                replacement = string.Empty;
+            replacement ??= string.Empty;
 
             return Regex.Replace(value, @"\r\n?|\n|\u2028|\u2029", replacement, RegexOptions.Compiled);
         }

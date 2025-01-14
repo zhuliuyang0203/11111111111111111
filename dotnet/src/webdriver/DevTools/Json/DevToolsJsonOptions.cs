@@ -1,3 +1,4 @@
+// <copyright file="DevToolsJsonOptions.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -14,16 +15,21 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
+// </copyright>
 
-package org.openqa.selenium.devtools.v128;
+using System.Text.Json;
 
-import com.google.auto.service.AutoService;
-import org.openqa.selenium.devtools.CdpInfo;
+#nullable enable
 
-@AutoService(CdpInfo.class)
-public class v128CdpInfo extends CdpInfo {
+namespace OpenQA.Selenium.DevTools.Json;
 
-  public v128CdpInfo() {
-    super(128, v128Domains::new);
-  }
+internal static class DevToolsJsonOptions
+{
+    public static JsonSerializerOptions Default { get; } = new JsonSerializerOptions()
+    {
+        Converters =
+        {
+            new StringConverter(),
+        }
+    };
 }
