@@ -80,12 +80,11 @@ public class JdkHttpClient implements HttpClient {
   private final ExecutorService executorService;
   private final Duration readTimeout;
   private final Duration connectTimeout;
-  private ClientConfig config;
+  private final ClientConfig config;
 
   JdkHttpClient(ClientConfig config) {
     Objects.requireNonNull(config, "Client config must be set");
 
-    this.config = config;
     this.messages = new JdkHttpMessages(config);
     this.readTimeout = config.readTimeout();
     this.connectTimeout = config.connectionTimeout();
@@ -110,7 +109,6 @@ public class JdkHttpClient implements HttpClient {
 
     Credentials credentials = config.credentials();
     String info = config.baseUri().getUserInfo();
-    URI baseUri = config.baseUri();
 
     if (info != null && !info.trim().isEmpty()) {
       String[] parts = info.split(":", 2);
@@ -128,17 +126,15 @@ public class JdkHttpClient implements HttpClient {
 
       // Remove credentials from URL
       try {
-        this.config =
-            ClientConfig.defaultConfig()
-                .baseUri(
-                    new URI(
-                        config.baseUri().getScheme(),
-                        null,
-                        config.baseUri().getHost(),
-                        config.baseUri().getPort(),
-                        config.baseUri().getPath(),
-                        config.baseUri().getQuery(),
-                        config.baseUri().getFragment()));
+        config = config.baseUri(
+            new URI(
+                config.baseUri().getScheme(),
+                null,
+                config.baseUri().getHost(),
+                config.baseUri().getPort(),
+                config.baseUri().getPath(),
+                config.baseUri().getQuery(),
+                config.baseUri().getFragment()));
       } catch (URISyntaxException e) {
         LOG.log(Level.WARNING, "Could not strip credentials from URI", e);
       }
@@ -174,6 +170,7 @@ public class JdkHttpClient implements HttpClient {
       builder.version(Version.valueOf(version));
     }
 
+    this.config = config;
     this.client = builder.build();
   }
 
@@ -529,7 +526,7 @@ public class JdkHttpClient implements HttpClient {
 
   // Package-private method for testing
   URI getBaseUri() {
-    return config.baseUri();
+    return this.config.baseUri();
   }
 
   @Override
