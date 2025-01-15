@@ -89,7 +89,7 @@ public class DevTools implements Closeable {
     return sendWithTimeout(command, this.timeout);
   }
 
-  public <X> X sendWithTimeout(Command<X> command, Duration timeout) {
+  public <X> X send(Command<X> command, Duration timeout) {
       Require.nonNull("Command to send", command);
       return connection.sendAndWait(cdpSession, command, timeout);
   }
