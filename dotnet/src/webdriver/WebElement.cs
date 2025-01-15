@@ -184,8 +184,8 @@ namespace OpenQA.Selenium
             {
                 Response commandResponse = null;
                 Dictionary<string, object> parameters = new Dictionary<string, object>();
-                string atom = GetAtom("is-displayed.js");
-                parameters.Add("script", atom);
+                //string atom = GetAtom("is-displayed.js");
+                parameters.Add("script", "return arguments[0].checkVisibility();");
                 parameters.Add("args", new object[] { this.ToElementReference().ToDictionary() });
                 commandResponse = this.Execute(DriverCommand.ExecuteScript, parameters);
 
