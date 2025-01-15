@@ -22,6 +22,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static java.util.logging.Level.SEVERE;
 import static org.openqa.selenium.remote.CapabilityType.PLATFORM_NAME;
 
+import com.github.javaparser.quality.NotNull;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -868,9 +869,9 @@ public class RemoteWebDriver
     }
 
     @Override
-    public void deleteCookieNamed(String name) {
+    public void deleteCookieNamed(@NotNull String name) {
       if (name.isEmpty() || name.equals(" ")) {
-          throw new IllegalArgumentException("Cookie name cannot be empty or null");
+        throw new IllegalArgumentException("Cookie name cannot be empty");
       }
       execute(DriverCommand.DELETE_COOKIE(name));
     }
@@ -929,9 +930,9 @@ public class RemoteWebDriver
     }
 
     @Override
-    public Cookie getCookieNamed(String name) {
+    public Cookie getCookieNamed(@NotNull String name) {
       if (name.isEmpty() || name.equals(" ")) {
-          throw new IllegalArgumentException("Cookie name cannot be empty or null");
+        throw new IllegalArgumentException("Cookie name cannot be empty");
       }
       Set<Cookie> allCookies = getCookies();
       for (Cookie cookie : allCookies) {
