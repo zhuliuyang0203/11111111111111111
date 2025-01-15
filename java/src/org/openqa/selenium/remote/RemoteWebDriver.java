@@ -869,6 +869,9 @@ public class RemoteWebDriver
 
     @Override
     public void deleteCookieNamed(String name) {
+      if (name.isEmpty() || name.equals(" ")) {
+          throw new IllegalArgumentException("Cookie name cannot be empty or null");
+      }
       execute(DriverCommand.DELETE_COOKIE(name));
     }
 
@@ -927,6 +930,9 @@ public class RemoteWebDriver
 
     @Override
     public Cookie getCookieNamed(String name) {
+      if (name.isEmpty() || name.equals(" ")) {
+          throw new IllegalArgumentException("Cookie name cannot be empty or null");
+      }
       Set<Cookie> allCookies = getCookies();
       for (Cookie cookie : allCookies) {
         if (cookie.getName().equals(name)) {
