@@ -174,9 +174,16 @@ GEM
     yard (0.9.37)
 
 PLATFORMS
+  java
+  ruby
+  universal-java-1.8
   arm64-darwin-23
   arm64-darwin-24
   universal-java-17
+  universal-java-18
+  universal-java-21
+  x64-mingw32
+  x86_64-darwin-22
   x64-mingw-ucrt
   x86_64-linux
 
