@@ -340,7 +340,9 @@ namespace OpenQA.Selenium.Remote
 
             if (response.Value is string valueString)
             {
+#pragma warning disable CS0618 // Response.Value setter can be used internally
                 response.Value = valueString.Replace("\r\n", "\n").Replace("\n", Environment.NewLine);
+#pragma warning restore CS0618
             }
 
             return response;

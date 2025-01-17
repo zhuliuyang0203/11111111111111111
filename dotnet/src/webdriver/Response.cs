@@ -136,18 +136,35 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Gets or sets the value from JSON.
         /// </summary>
-        public object? Value { get; set; }
+        public object? Value
+        {
+            get;
+
+            [Obsolete("The Response type will be immutable and this setter will be removed in Selenium 4.30")]
+            set;
+        }
 
         /// <summary>
         /// Gets or sets the session ID.
         /// </summary>
-        public string? SessionId { get; set; }
+        public string? SessionId
+        {
+            get;
+
+            [Obsolete("The Response type will be immutable and this setter will be removed in Selenium 4.30")]
+            set;
+        }
 
         /// <summary>
         /// Gets or sets the status value of the response.
         /// </summary>
-        public WebDriverResult Status { get; set; }
+        public WebDriverResult Status
+        {
+            get;
 
+            [Obsolete("The Response type will be immutable and this setter will be removed in Selenium 4.30")]
+            set;
+        }
 
         /// <summary>
         /// Returns a new <see cref="Response"/> from a JSON-encoded string.
