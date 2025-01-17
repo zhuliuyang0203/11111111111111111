@@ -42,6 +42,7 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Initializes a new instance of the <see cref="Response"/> class
         /// </summary>
+        [Obsolete("Set all values using the Response(string, object, WebDriverResult) constructor instead. This constructor will be removed in Selenium 4.30")]
         public Response()
         {
         }
@@ -50,6 +51,7 @@ namespace OpenQA.Selenium
         /// Initializes a new instance of the <see cref="Response"/> class
         /// </summary>
         /// <param name="sessionId">Session ID in use</param>
+        [Obsolete("Set all values using the Response(string, object, WebDriverResult) constructor instead. This constructor will be removed in Selenium 4.30")]
         public Response(SessionId? sessionId)
         {
             this.SessionId = sessionId?.ToString();
