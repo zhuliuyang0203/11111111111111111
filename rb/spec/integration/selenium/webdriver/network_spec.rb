@@ -155,9 +155,9 @@ module Selenium
                               domain: 'example.com',
                               path: '/path',
                               size: 1234,
-                              http_only: true,
+                              httpOnly: true,
                               secure: true,
-                              same_site: 'Strict',
+                              sameSite: 'Strict',
                               expiry: 1234
                             })
             request.body = ({test: 'example'})
@@ -247,11 +247,11 @@ module Selenium
             response.cookies({
                                name: 'foo',
                                domain: 'localhost',
-                               http_only: true,
+                               httpOnly: true,
                                expiry: '1_000_000',
-                               max_age: 1_000,
+                               maxAge: 1_000,
                                path: '/',
-                               same_site: 'none',
+                               sameSite: 'none',
                                secure: false
                              })
             response.continue

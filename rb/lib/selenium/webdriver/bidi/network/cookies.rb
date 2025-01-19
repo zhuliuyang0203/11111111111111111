@@ -21,34 +21,16 @@ module Selenium
   module WebDriver
     class BiDi
       class Cookies < Hash
-        KNOWN_KEYS = %i[name value domain path expiry http_only secure same_site size max_age].freeze
-
         def initialize(cookies = {})
           super()
           merge!(cookies)
         end
 
         def as_json
-          cookie_hash = {
-            name: self[:name].to_s,
-            value: {
-              type: 'string',
-              value: self[:value].to_s
-            },
-            domain: self[:domain],
-            path: self[:path],
-            size: self[:size],
-            httpOnly: self[:http_only],
-            secure: self[:secure],
-            sameSite: self[:same_site],
-            expiry: self[:expiry],
-            maxAge: self[:max_age]
-          }
+          self[:name] = self[:name].to_s
+          self[:value] = {type: 'string', value: self[:value].to_s}
 
-          extra_fields = except(KNOWN_KEYS)
-          cookie_hash.merge!(extra_fields) { |_k, old_val, _new_val| old_val }
-
-          [cookie_hash.compact]
+          [compact]
         end
       end
     end # BiDi
