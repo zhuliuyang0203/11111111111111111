@@ -21,6 +21,7 @@ selenium.common.exceptions
 
    .. autosummary::
    
+      DetachedShadowRootException
       ElementClickInterceptedException
       ElementNotInteractableException
       ElementNotSelectableException

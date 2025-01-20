@@ -5,11 +5,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>selenium.webdriver.remote.remote_connection &#8212; Selenium 4.25.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <title>selenium.webdriver.remote.remote_connection &#8212; Selenium 4.29.0.202501201850 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=89b800e6" />
     
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=b061efce"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=a4e78ea5"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
     
@@ -25,7 +25,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Selenium 4.25.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Selenium 4.29.0.202501201850 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">selenium.webdriver.remote.remote_connection</a></li> 
       </ul>
     </div>  
@@ -40,20 +40,50 @@
 <p class="rubric">Classes</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#selenium.webdriver.remote.remote_connection.RemoteConnection" title="selenium.webdriver.remote.remote_connection.RemoteConnection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RemoteConnection</span></code></a>(remote_server_addr[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#selenium.webdriver.remote.remote_connection.RemoteConnection" title="selenium.webdriver.remote.remote_connection.RemoteConnection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RemoteConnection</span></code></a>([remote_server_addr, ...])</p></td>
 <td><p>A connection with the Remote WebDriver server.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="selenium.webdriver.remote.remote_connection.RemoteConnection">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">selenium.webdriver.remote.remote_connection.</span></span><span class="sig-name descname"><span class="pre">RemoteConnection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">remote_server_addr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_alive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_proxy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/selenium/webdriver/remote/remote_connection.html#RemoteConnection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#selenium.webdriver.remote.remote_connection.RemoteConnection" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">selenium.webdriver.remote.remote_connection.</span></span><span class="sig-name descname"><span class="pre">RemoteConnection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">remote_server_addr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_alive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_proxy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_certificates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_args_for_pool_manager</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ClientConfig</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/selenium/webdriver/remote/remote_connection.html#RemoteConnection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#selenium.webdriver.remote.remote_connection.RemoteConnection" title="Permalink to this definition">¶</a></dt>
 <dd><p>A connection with the Remote WebDriver server.</p>
 <p>Communicates with the server using the WebDriver wire protocol:
 <a class="reference external" href="https://github.com/SeleniumHQ/selenium/wiki/JsonWireProtocol">https://github.com/SeleniumHQ/selenium/wiki/JsonWireProtocol</a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="selenium.webdriver.remote.remote_connection.RemoteConnection.browser_name">
 <span class="sig-name descname"><span class="pre">browser_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#selenium.webdriver.remote.remote_connection.RemoteConnection.browser_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.remote.remote_connection.RemoteConnection.os">
+<span class="sig-name descname"><span class="pre">os</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;module</span> <span class="pre">'os'</span> <span class="pre">(frozen)&gt;</span></em><a class="headerlink" href="#selenium.webdriver.remote.remote_connection.RemoteConnection.os" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.remote.remote_connection.RemoteConnection.socket">
+<span class="sig-name descname"><span class="pre">socket</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;module</span> <span class="pre">'socket'</span> <span class="pre">from</span> <span class="pre">'/opt/homebrew/Cellar/python&#64;3.11/3.11.6/Frameworks/Python.framework/Versions/3.11/lib/python3.11/socket.py'&gt;</span></em><a class="headerlink" href="#selenium.webdriver.remote.remote_connection.RemoteConnection.socket" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.remote.remote_connection.RemoteConnection.certifi">
+<span class="sig-name descname"><span class="pre">certifi</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;module</span> <span class="pre">'certifi'</span> <span class="pre">from</span> <span class="pre">'/Users/diegomolina/projects/github.com/seleniumhq/selenium/py/.tox/docs/lib/python3.11/site-packages/certifi/__init__.py'&gt;</span></em><a class="headerlink" href="#selenium.webdriver.remote.remote_connection.RemoteConnection.certifi" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.remote.remote_connection.RemoteConnection.system">
+<span class="sig-name descname"><span class="pre">system</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'mac'</span></em><a class="headerlink" href="#selenium.webdriver.remote.remote_connection.RemoteConnection.system" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.remote.remote_connection.RemoteConnection.extra_headers">
+<span class="sig-name descname"><span class="pre">extra_headers</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#selenium.webdriver.remote.remote_connection.RemoteConnection.extra_headers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.remote.remote_connection.RemoteConnection.user_agent">
+<span class="sig-name descname"><span class="pre">user_agent</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'selenium/4.29.0.202501201850</span> <span class="pre">(python</span> <span class="pre">mac)'</span></em><a class="headerlink" href="#selenium.webdriver.remote.remote_connection.RemoteConnection.user_agent" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -127,6 +157,23 @@ validation.</p>
 </dl>
 </dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.remote.remote_connection.RemoteConnection.extra_commands">
+<span class="sig-name descname"><span class="pre">extra_commands</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#selenium.webdriver.remote.remote_connection.RemoteConnection.extra_commands" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="selenium.webdriver.remote.remote_connection.RemoteConnection.add_command">
+<span class="sig-name descname"><span class="pre">add_command</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/selenium/webdriver/remote/remote_connection.html#RemoteConnection.add_command"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#selenium.webdriver.remote.remote_connection.RemoteConnection.add_command" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a new command.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="selenium.webdriver.remote.remote_connection.RemoteConnection.get_command">
+<span class="sig-name descname"><span class="pre">get_command</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/selenium/webdriver/remote/remote_connection.html#RemoteConnection.get_command"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#selenium.webdriver.remote.remote_connection.RemoteConnection.get_command" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve a command if it exists.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="selenium.webdriver.remote.remote_connection.RemoteConnection.execute">
 <span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">command</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/selenium/webdriver/remote/remote_connection.html#RemoteConnection.execute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#selenium.webdriver.remote.remote_connection.RemoteConnection.execute" title="Permalink to this definition">¶</a></dt>
@@ -167,12 +214,21 @@ its JSON payload.</p></li>
 <li><a class="reference internal" href="#">selenium.webdriver.remote.remote_connection</a><ul>
 <li><a class="reference internal" href="#selenium.webdriver.remote.remote_connection.RemoteConnection"><code class="docutils literal notranslate"><span class="pre">RemoteConnection</span></code></a><ul>
 <li><a class="reference internal" href="#selenium.webdriver.remote.remote_connection.RemoteConnection.browser_name"><code class="docutils literal notranslate"><span class="pre">RemoteConnection.browser_name</span></code></a></li>
+<li><a class="reference internal" href="#selenium.webdriver.remote.remote_connection.RemoteConnection.os"><code class="docutils literal notranslate"><span class="pre">RemoteConnection.os</span></code></a></li>
+<li><a class="reference internal" href="#selenium.webdriver.remote.remote_connection.RemoteConnection.socket"><code class="docutils literal notranslate"><span class="pre">RemoteConnection.socket</span></code></a></li>
+<li><a class="reference internal" href="#selenium.webdriver.remote.remote_connection.RemoteConnection.certifi"><code class="docutils literal notranslate"><span class="pre">RemoteConnection.certifi</span></code></a></li>
+<li><a class="reference internal" href="#selenium.webdriver.remote.remote_connection.RemoteConnection.system"><code class="docutils literal notranslate"><span class="pre">RemoteConnection.system</span></code></a></li>
+<li><a class="reference internal" href="#selenium.webdriver.remote.remote_connection.RemoteConnection.extra_headers"><code class="docutils literal notranslate"><span class="pre">RemoteConnection.extra_headers</span></code></a></li>
+<li><a class="reference internal" href="#selenium.webdriver.remote.remote_connection.RemoteConnection.user_agent"><code class="docutils literal notranslate"><span class="pre">RemoteConnection.user_agent</span></code></a></li>
 <li><a class="reference internal" href="#selenium.webdriver.remote.remote_connection.RemoteConnection.get_timeout"><code class="docutils literal notranslate"><span class="pre">RemoteConnection.get_timeout()</span></code></a></li>
 <li><a class="reference internal" href="#selenium.webdriver.remote.remote_connection.RemoteConnection.set_timeout"><code class="docutils literal notranslate"><span class="pre">RemoteConnection.set_timeout()</span></code></a></li>
 <li><a class="reference internal" href="#selenium.webdriver.remote.remote_connection.RemoteConnection.reset_timeout"><code class="docutils literal notranslate"><span class="pre">RemoteConnection.reset_timeout()</span></code></a></li>
 <li><a class="reference internal" href="#selenium.webdriver.remote.remote_connection.RemoteConnection.get_certificate_bundle_path"><code class="docutils literal notranslate"><span class="pre">RemoteConnection.get_certificate_bundle_path()</span></code></a></li>
 <li><a class="reference internal" href="#selenium.webdriver.remote.remote_connection.RemoteConnection.set_certificate_bundle_path"><code class="docutils literal notranslate"><span class="pre">RemoteConnection.set_certificate_bundle_path()</span></code></a></li>
 <li><a class="reference internal" href="#selenium.webdriver.remote.remote_connection.RemoteConnection.get_remote_connection_headers"><code class="docutils literal notranslate"><span class="pre">RemoteConnection.get_remote_connection_headers()</span></code></a></li>
+<li><a class="reference internal" href="#selenium.webdriver.remote.remote_connection.RemoteConnection.extra_commands"><code class="docutils literal notranslate"><span class="pre">RemoteConnection.extra_commands</span></code></a></li>
+<li><a class="reference internal" href="#selenium.webdriver.remote.remote_connection.RemoteConnection.add_command"><code class="docutils literal notranslate"><span class="pre">RemoteConnection.add_command()</span></code></a></li>
+<li><a class="reference internal" href="#selenium.webdriver.remote.remote_connection.RemoteConnection.get_command"><code class="docutils literal notranslate"><span class="pre">RemoteConnection.get_command()</span></code></a></li>
 <li><a class="reference internal" href="#selenium.webdriver.remote.remote_connection.RemoteConnection.execute"><code class="docutils literal notranslate"><span class="pre">RemoteConnection.execute()</span></code></a></li>
 <li><a class="reference internal" href="#selenium.webdriver.remote.remote_connection.RemoteConnection.close"><code class="docutils literal notranslate"><span class="pre">RemoteConnection.close()</span></code></a></li>
 </ul>
@@ -212,7 +268,7 @@ its JSON payload.</p></li>
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Selenium 4.25.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Selenium 4.29.0.202501201850 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">selenium.webdriver.remote.remote_connection</a></li> 
       </ul>
     </div>

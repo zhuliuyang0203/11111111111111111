@@ -4,11 +4,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>selenium.webdriver.common.by &#8212; Selenium 4.25.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+    <title>selenium.webdriver.common.by &#8212; Selenium 4.29.0.202501201850 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/classic.css?v=89b800e6" />
     
-    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=b061efce"></script>
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=a4e78ea5"></script>
     <script src="../../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
     
@@ -24,7 +24,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">Selenium 4.25.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">Selenium 4.29.0.202501201850 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">selenium.webdriver.common.by</a></li> 
       </ul>
@@ -54,11 +54,64 @@
 <span class="c1"># under the License.</span>
 <span class="sd">&quot;&quot;&quot;The By implementation.&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Literal</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
 
 
-<div class="viewcode-block" id="By"><a class="viewcode-back" href="../../../../webdriver/selenium.webdriver.common.by.html#selenium.webdriver.common.by.By">[docs]</a><span class="k">class</span> <span class="nc">By</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set of supported locator strategies.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="By"><a class="viewcode-back" href="../../../../webdriver/selenium.webdriver.common.by.html#selenium.webdriver.common.by.By">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">By</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set of supported locator strategies.</span>
+
+<span class="sd">    ID:</span>
+<span class="sd">    --</span>
+<span class="sd">    Select the element by its ID.</span>
+
+<span class="sd">    &gt;&gt;&gt; element = driver.find_element(By.ID, &#39;myElement&#39;)</span>
+
+<span class="sd">    XPATH:</span>
+<span class="sd">    ------</span>
+<span class="sd">    Select the element via XPATH.</span>
+<span class="sd">        - absolute path</span>
+<span class="sd">        - relative path</span>
+
+<span class="sd">    &gt;&gt;&gt; element = driver.find_element(By.XPATH, &#39;//html/body/div&#39;)</span>
+
+<span class="sd">    LINK_TEXT:</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Select the link element having the exact text.</span>
+
+<span class="sd">    &gt;&gt;&gt; element = driver.find_element(By.LINK_TEXT, &#39;myLink&#39;)</span>
+
+<span class="sd">    PARTIAL_LINK_TEXT:</span>
+<span class="sd">    ------------------</span>
+<span class="sd">    Select the link element having the partial text.</span>
+
+<span class="sd">    &gt;&gt;&gt; element = driver.find_element(By.PARTIAL_LINK_TEXT, &#39;my&#39;)</span>
+
+<span class="sd">    NAME:</span>
+<span class="sd">    ----</span>
+<span class="sd">    Select the element by its name attribute.</span>
+
+<span class="sd">    &gt;&gt;&gt; element = driver.find_element(By.NAME, &#39;myElement&#39;)</span>
+
+<span class="sd">    TAG_NAME:</span>
+<span class="sd">    --------</span>
+<span class="sd">    Select the element by its tag name.</span>
+
+<span class="sd">    &gt;&gt;&gt; element = driver.find_element(By.TAG_NAME, &#39;div&#39;)</span>
+
+<span class="sd">    CLASS_NAME:</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Select the element by its class name.</span>
+
+<span class="sd">    &gt;&gt;&gt; element = driver.find_element(By.CLASS_NAME, &#39;myElement&#39;)</span>
+
+<span class="sd">    CSS_SELECTOR:</span>
+<span class="sd">    -------------</span>
+<span class="sd">    Select the element by its CSS selector.</span>
+
+<span class="sd">    &gt;&gt;&gt; element = driver.find_element(By.CSS_SELECTOR, &#39;div.myElement&#39;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">ID</span> <span class="o">=</span> <span class="s2">&quot;id&quot;</span>
     <span class="n">XPATH</span> <span class="o">=</span> <span class="s2">&quot;xpath&quot;</span>
@@ -67,7 +120,21 @@
     <span class="n">NAME</span> <span class="o">=</span> <span class="s2">&quot;name&quot;</span>
     <span class="n">TAG_NAME</span> <span class="o">=</span> <span class="s2">&quot;tag name&quot;</span>
     <span class="n">CLASS_NAME</span> <span class="o">=</span> <span class="s2">&quot;class name&quot;</span>
-    <span class="n">CSS_SELECTOR</span> <span class="o">=</span> <span class="s2">&quot;css selector&quot;</span></div>
+    <span class="n">CSS_SELECTOR</span> <span class="o">=</span> <span class="s2">&quot;css selector&quot;</span>
+
+    <span class="n">_custom_finders</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+<div class="viewcode-block" id="By.register_custom_finder"><a class="viewcode-back" href="../../../../webdriver/selenium.webdriver.common.by.html#selenium.webdriver.common.by.By.register_custom_finder">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">register_custom_finder</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">strategy</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_custom_finders</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">strategy</span></div>
+
+<div class="viewcode-block" id="By.get_finder"><a class="viewcode-back" href="../../../../webdriver/selenium.webdriver.common.by.html#selenium.webdriver.common.by.By.get_finder">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_finder</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_custom_finders</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="kc">None</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="By.clear_custom_finders"><a class="viewcode-back" href="../../../../webdriver/selenium.webdriver.common.by.html#selenium.webdriver.common.by.By.clear_custom_finders">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">clear_custom_finders</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_custom_finders</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div></div>
 
 
 <span class="n">ByType</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;xpath&quot;</span><span class="p">,</span> <span class="s2">&quot;link text&quot;</span><span class="p">,</span> <span class="s2">&quot;partial link text&quot;</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;tag name&quot;</span><span class="p">,</span> <span class="s2">&quot;class name&quot;</span><span class="p">,</span> <span class="s2">&quot;css selector&quot;</span><span class="p">]</span>
@@ -102,7 +169,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">Selenium 4.25.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">Selenium 4.29.0.202501201850 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">selenium.webdriver.common.by</a></li> 
       </ul>

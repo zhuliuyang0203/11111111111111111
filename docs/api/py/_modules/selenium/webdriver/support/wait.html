@@ -4,11 +4,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>selenium.webdriver.support.wait &#8212; Selenium 4.25.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+    <title>selenium.webdriver.support.wait &#8212; Selenium 4.29.0.202501201850 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/classic.css?v=89b800e6" />
     
-    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=b061efce"></script>
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=a4e78ea5"></script>
     <script src="../../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
     
@@ -24,7 +24,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">Selenium 4.25.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">Selenium 4.29.0.202501201850 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">selenium.webdriver.support.wait</a></li> 
       </ul>
@@ -53,51 +53,65 @@
 <span class="c1"># specific language governing permissions and limitations</span>
 <span class="c1"># under the License.</span>
 
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">import</span> <span class="nn">typing</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Generic</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Literal</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Generic</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tuple</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Type</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypeVar</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span>
 
-<span class="kn">from</span> <span class="nn">selenium.common.exceptions</span> <span class="kn">import</span> <span class="n">NoSuchElementException</span>
-<span class="kn">from</span> <span class="nn">selenium.common.exceptions</span> <span class="kn">import</span> <span class="n">TimeoutException</span>
-<span class="kn">from</span> <span class="nn">selenium.types</span> <span class="kn">import</span> <span class="n">WaitExcTypes</span>
-<span class="kn">from</span> <span class="nn">selenium.webdriver.remote.webdriver</span> <span class="kn">import</span> <span class="n">WebDriver</span>
-<span class="kn">from</span> <span class="nn">selenium.webdriver.remote.webelement</span> <span class="kn">import</span> <span class="n">WebElement</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">selenium.common.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">NoSuchElementException</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">selenium.common.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">TimeoutException</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">selenium.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">WaitExcTypes</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">selenium.webdriver.remote.webdriver</span><span class="w"> </span><span class="kn">import</span> <span class="n">WebDriver</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">selenium.webdriver.remote.webelement</span><span class="w"> </span><span class="kn">import</span> <span class="n">WebElement</span>
 
 <span class="n">POLL_FREQUENCY</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span>  <span class="c1"># How long to sleep in between calls to the method</span>
-<span class="n">IGNORED_EXCEPTIONS</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Tuple</span><span class="p">[</span><span class="n">typing</span><span class="o">.</span><span class="n">Type</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span><span class="n">NoSuchElementException</span><span class="p">,)</span>  <span class="c1"># default to be ignored.</span>
+<span class="n">IGNORED_EXCEPTIONS</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span><span class="n">NoSuchElementException</span><span class="p">,)</span>  <span class="c1"># default to be ignored.</span>
 
 <span class="n">D</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">Union</span><span class="p">[</span><span class="n">WebDriver</span><span class="p">,</span> <span class="n">WebElement</span><span class="p">])</span>
 <span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="WebDriverWait"><a class="viewcode-back" href="../../../../webdriver_support/selenium.webdriver.support.wait.html#selenium.webdriver.support.ui.WebDriverWait">[docs]</a><span class="k">class</span> <span class="nc">WebDriverWait</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">D</span><span class="p">]):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<div class="viewcode-block" id="WebDriverWait"><a class="viewcode-back" href="../../../../webdriver_support/selenium.webdriver.support.wait.html#selenium.webdriver.support.ui.WebDriverWait">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">WebDriverWait</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">D</span><span class="p">]):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">driver</span><span class="p">:</span> <span class="n">D</span><span class="p">,</span>
         <span class="n">timeout</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">poll_frequency</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">POLL_FREQUENCY</span><span class="p">,</span>
-        <span class="n">ignored_exceptions</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="n">WaitExcTypes</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">ignored_exceptions</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">WaitExcTypes</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Constructor, takes a WebDriver instance and timeout in seconds.</span>
 
-<span class="sd">        :Args:</span>
-<span class="sd">         - driver - Instance of WebDriver (Ie, Firefox, Chrome or Remote) or a WebElement</span>
-<span class="sd">         - timeout - Number of seconds before timing out</span>
-<span class="sd">         - poll_frequency - sleep interval between calls</span>
-<span class="sd">           By default, it is 0.5 second.</span>
-<span class="sd">         - ignored_exceptions - iterable structure of exception classes ignored during calls.</span>
-<span class="sd">           By default, it contains NoSuchElementException only.</span>
+<span class="sd">        Attributes:</span>
+<span class="sd">        ----------</span>
+<span class="sd">        driver</span>
+<span class="sd">            - Instance of WebDriver (Ie, Firefox, Chrome or Remote) or</span>
+<span class="sd">            a WebElement</span>
 
-<span class="sd">        Example::</span>
+<span class="sd">        timeout</span>
+<span class="sd">            - Number of seconds before timing out</span>
 
-<span class="sd">         from selenium.webdriver.support.wait import WebDriverWait \n</span>
-<span class="sd">         element = WebDriverWait(driver, 10).until(lambda x: x.find_element(By.ID, &quot;someId&quot;)) \n</span>
-<span class="sd">         is_disappeared = WebDriverWait(driver, 30, 1, (ElementNotVisibleException)).\\ \n</span>
-<span class="sd">                     until_not(lambda x: x.find_element(By.ID, &quot;someId&quot;).is_displayed())</span>
+<span class="sd">        poll_frequency</span>
+<span class="sd">            - Sleep interval between calls</span>
+<span class="sd">            - By default, it is 0.5 second.</span>
+
+<span class="sd">        ignored_exceptions</span>
+<span class="sd">            - Iterable structure of exception classes ignored during calls.</span>
+<span class="sd">            - By default, it contains NoSuchElementException only.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; from selenium.webdriver.common.by import By</span>
+<span class="sd">        &gt;&gt;&gt; from selenium.webdriver.support.wait import WebDriverWait</span>
+<span class="sd">        &gt;&gt;&gt; from selenium.common.exceptions import ElementNotVisibleException</span>
+<span class="sd">        &gt;&gt;&gt;</span>
+<span class="sd">        &gt;&gt;&gt; # Wait until the element is no longer visible</span>
+<span class="sd">        &gt;&gt;&gt; is_disappeared = WebDriverWait(driver, 30, 1, (ElementNotVisibleException))</span>
+<span class="sd">        ...     .until_not(lambda x: x.find_element(By.ID, &quot;someId&quot;).is_displayed())</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span> <span class="o">=</span> <span class="n">driver</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">timeout</span><span class="p">)</span>
@@ -113,17 +127,44 @@
                 <span class="n">exceptions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ignored_exceptions</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ignored_exceptions</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">exceptions</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;&lt;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__module__</span><span class="si">}</span><span class="s1">.</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s1"> (session=&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">session_id</span><span class="si">}</span><span class="s1">&quot;)&gt;&#39;</span>
 
-<div class="viewcode-block" id="WebDriverWait.until"><a class="viewcode-back" href="../../../../webdriver_support/selenium.webdriver.support.wait.html#selenium.webdriver.support.ui.WebDriverWait.until">[docs]</a>    <span class="k">def</span> <span class="nf">until</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">D</span><span class="p">],</span> <span class="n">Union</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="kc">False</span><span class="p">],</span> <span class="n">T</span><span class="p">]],</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calls the method provided with the driver as an argument until the \</span>
+<div class="viewcode-block" id="WebDriverWait.until"><a class="viewcode-back" href="../../../../webdriver_support/selenium.webdriver.support.wait.html#selenium.webdriver.support.ui.WebDriverWait.until">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">until</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">D</span><span class="p">],</span> <span class="n">Union</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="kc">False</span><span class="p">],</span> <span class="n">T</span><span class="p">]],</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Wait until the method returns a value that is not False.</span>
+
+<span class="sd">        Calls the method provided with the driver as an argument until the</span>
 <span class="sd">        return value does not evaluate to ``False``.</span>
 
-<span class="sd">        :param method: callable(WebDriver)</span>
-<span class="sd">        :param message: optional message for :exc:`TimeoutException`</span>
-<span class="sd">        :returns: the result of the last call to `method`</span>
-<span class="sd">        :raises: :exc:`selenium.common.exceptions.TimeoutException` if timeout occurs</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">        ----------</span>
+<span class="sd">        method: callable(WebDriver)</span>
+<span class="sd">            - A callable object that takes a WebDriver instance as an argument.</span>
+
+<span class="sd">        message: str</span>
+<span class="sd">            - Optional message for :exc:`TimeoutException`</span>
+
+<span class="sd">        Return:</span>
+<span class="sd">        -------</span>
+<span class="sd">        object: T</span>
+<span class="sd">            - The result of the last call to `method`</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">        -------</span>
+<span class="sd">        TimeoutException</span>
+<span class="sd">            - If &#39;method&#39; does not return a truthy value within the WebDriverWait</span>
+<span class="sd">            object&#39;s timeout</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; from selenium.webdriver.common.by import By</span>
+<span class="sd">        &gt;&gt;&gt; from selenium.webdriver.support.ui import WebDriverWait</span>
+<span class="sd">        &gt;&gt;&gt; from selenium.webdriver.support import expected_conditions as EC</span>
+
+<span class="sd">        # Wait until an element is visible on the page</span>
+<span class="sd">        &gt;&gt;&gt; wait = WebDriverWait(driver, 10)</span>
+<span class="sd">        &gt;&gt;&gt; element = wait.until(EC.visibility_of_element_located((By.ID, &quot;exampleId&quot;)))</span>
+<span class="sd">        &gt;&gt;&gt; print(element.text)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">screen</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">stacktrace</span> <span class="o">=</span> <span class="kc">None</span>
@@ -137,20 +178,46 @@
             <span class="k">except</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ignored_exceptions</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
                 <span class="n">screen</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">exc</span><span class="p">,</span> <span class="s2">&quot;screen&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
                 <span class="n">stacktrace</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">exc</span><span class="p">,</span> <span class="s2">&quot;stacktrace&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_poll</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">end_time</span><span class="p">:</span>
                 <span class="k">break</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_poll</span><span class="p">)</span>
         <span class="k">raise</span> <span class="n">TimeoutException</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">screen</span><span class="p">,</span> <span class="n">stacktrace</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="WebDriverWait.until_not"><a class="viewcode-back" href="../../../../webdriver_support/selenium.webdriver.support.wait.html#selenium.webdriver.support.ui.WebDriverWait.until_not">[docs]</a>    <span class="k">def</span> <span class="nf">until_not</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">D</span><span class="p">],</span> <span class="n">T</span><span class="p">],</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">Literal</span><span class="p">[</span><span class="kc">True</span><span class="p">]]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calls the method provided with the driver as an argument until the \</span>
-<span class="sd">        return value evaluates to ``False``.</span>
+<div class="viewcode-block" id="WebDriverWait.until_not"><a class="viewcode-back" href="../../../../webdriver_support/selenium.webdriver.support.wait.html#selenium.webdriver.support.ui.WebDriverWait.until_not">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">until_not</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">D</span><span class="p">],</span> <span class="n">T</span><span class="p">],</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">Literal</span><span class="p">[</span><span class="kc">True</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Wait until the method returns a value that is not False.</span>
 
-<span class="sd">        :param method: callable(WebDriver)</span>
-<span class="sd">        :param message: optional message for :exc:`TimeoutException`</span>
-<span class="sd">        :returns: the result of the last call to `method`, or</span>
-<span class="sd">                  ``True`` if `method` has raised one of the ignored exceptions</span>
-<span class="sd">        :raises: :exc:`selenium.common.exceptions.TimeoutException` if timeout occurs</span>
+<span class="sd">        Calls the method provided with the driver as an argument until the</span>
+<span class="sd">        return value does not evaluate to ``False``.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        ----------</span>
+<span class="sd">        method: callable(WebDriver)</span>
+<span class="sd">            - A callable object that takes a WebDriver instance as an argument.</span>
+
+<span class="sd">        message: str</span>
+<span class="sd">            - Optional message for :exc:`TimeoutException`</span>
+
+<span class="sd">        Return:</span>
+<span class="sd">        -------</span>
+<span class="sd">        object: T</span>
+<span class="sd">            - The result of the last call to `method`</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">        -------</span>
+<span class="sd">        TimeoutException</span>
+<span class="sd">            - If &#39;method&#39; does not return False within the WebDriverWait</span>
+<span class="sd">            object&#39;s timeout</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; from selenium.webdriver.common.by import By</span>
+<span class="sd">        &gt;&gt;&gt; from selenium.webdriver.support.ui import WebDriverWait</span>
+<span class="sd">        &gt;&gt;&gt; from selenium.webdriver.support import expected_conditions as EC</span>
+
+<span class="sd">        # Wait until an element is visible on the page</span>
+<span class="sd">        &gt;&gt;&gt; wait = WebDriverWait(driver, 10)</span>
+<span class="sd">        &gt;&gt;&gt; is_disappeared = wait.until_not(EC.visibility_of_element_located(</span>
+<span class="sd">        ... (By.ID, &quot;exampleId&quot;)))</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span>
         <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
@@ -160,9 +227,9 @@
                     <span class="k">return</span> <span class="n">value</span>
             <span class="k">except</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ignored_exceptions</span><span class="p">:</span>
                 <span class="k">return</span> <span class="kc">True</span>
-            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_poll</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">end_time</span><span class="p">:</span>
                 <span class="k">break</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_poll</span><span class="p">)</span>
         <span class="k">raise</span> <span class="n">TimeoutException</span><span class="p">(</span><span class="n">message</span><span class="p">)</span></div></div>
 </pre></div>
 
@@ -195,7 +262,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">Selenium 4.25.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">Selenium 4.29.0.202501201850 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">selenium.webdriver.support.wait</a></li> 
       </ul>

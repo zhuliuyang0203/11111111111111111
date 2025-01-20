@@ -5,11 +5,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>selenium.webdriver.remote.errorhandler &#8212; Selenium 4.25.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <title>selenium.webdriver.remote.errorhandler &#8212; Selenium 4.29.0.202501201850 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=89b800e6" />
     
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=b061efce"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=a4e78ea5"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
     
@@ -25,7 +25,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Selenium 4.25.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Selenium 4.29.0.202501201850 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">selenium.webdriver.remote.errorhandler</a></li> 
       </ul>
     </div>  
@@ -248,6 +248,12 @@ Please refer to <a class="reference external" href="https://www.w3.org/TR/webdri
 <dd><p>alias of <a class="reference internal" href="../common/selenium.common.exceptions.html#selenium.common.exceptions.UnknownMethodException" title="selenium.common.exceptions.UnknownMethodException"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnknownMethodException</span></code></a></p>
 </dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.remote.errorhandler.ExceptionMapping.DETACHED_SHADOW_ROOT">
+<span class="sig-name descname"><span class="pre">DETACHED_SHADOW_ROOT</span></span><a class="headerlink" href="#selenium.webdriver.remote.errorhandler.ExceptionMapping.DETACHED_SHADOW_ROOT" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="../common/selenium.common.exceptions.html#selenium.common.exceptions.DetachedShadowRootException" title="selenium.common.exceptions.DetachedShadowRootException"><code class="xref py py-class docutils literal notranslate"><span class="pre">DetachedShadowRootException</span></code></a></p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -435,6 +441,11 @@ Please refer to <a class="reference external" href="https://www.w3.org/TR/webdri
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.remote.errorhandler.ErrorCode.DETACHED_SHADOW_ROOT">
+<span class="sig-name descname"><span class="pre">DETACHED_SHADOW_ROOT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[65,</span> <span class="pre">'detached</span> <span class="pre">shadow</span> <span class="pre">root']</span></em><a class="headerlink" href="#selenium.webdriver.remote.errorhandler.ErrorCode.DETACHED_SHADOW_ROOT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="selenium.webdriver.remote.errorhandler.ErrorCode.METHOD_NOT_ALLOWED">
 <span class="sig-name descname"><span class="pre">METHOD_NOT_ALLOWED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[405,</span> <span class="pre">'unsupported</span> <span class="pre">operation']</span></em><a class="headerlink" href="#selenium.webdriver.remote.errorhandler.ErrorCode.METHOD_NOT_ALLOWED" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -511,6 +522,7 @@ object.</p></li>
 <li><a class="reference internal" href="#selenium.webdriver.remote.errorhandler.ExceptionMapping.UNABLE_TO_CAPTURE_SCREEN"><code class="docutils literal notranslate"><span class="pre">ExceptionMapping.UNABLE_TO_CAPTURE_SCREEN</span></code></a></li>
 <li><a class="reference internal" href="#selenium.webdriver.remote.errorhandler.ExceptionMapping.ELEMENT_CLICK_INTERCEPTED"><code class="docutils literal notranslate"><span class="pre">ExceptionMapping.ELEMENT_CLICK_INTERCEPTED</span></code></a></li>
 <li><a class="reference internal" href="#selenium.webdriver.remote.errorhandler.ExceptionMapping.UNKNOWN_METHOD"><code class="docutils literal notranslate"><span class="pre">ExceptionMapping.UNKNOWN_METHOD</span></code></a></li>
+<li><a class="reference internal" href="#selenium.webdriver.remote.errorhandler.ExceptionMapping.DETACHED_SHADOW_ROOT"><code class="docutils literal notranslate"><span class="pre">ExceptionMapping.DETACHED_SHADOW_ROOT</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#selenium.webdriver.remote.errorhandler.ErrorCode"><code class="docutils literal notranslate"><span class="pre">ErrorCode</span></code></a><ul>
@@ -550,6 +562,7 @@ object.</p></li>
 <li><a class="reference internal" href="#selenium.webdriver.remote.errorhandler.ErrorCode.UNABLE_TO_CAPTURE_SCREEN"><code class="docutils literal notranslate"><span class="pre">ErrorCode.UNABLE_TO_CAPTURE_SCREEN</span></code></a></li>
 <li><a class="reference internal" href="#selenium.webdriver.remote.errorhandler.ErrorCode.ELEMENT_CLICK_INTERCEPTED"><code class="docutils literal notranslate"><span class="pre">ErrorCode.ELEMENT_CLICK_INTERCEPTED</span></code></a></li>
 <li><a class="reference internal" href="#selenium.webdriver.remote.errorhandler.ErrorCode.UNKNOWN_METHOD"><code class="docutils literal notranslate"><span class="pre">ErrorCode.UNKNOWN_METHOD</span></code></a></li>
+<li><a class="reference internal" href="#selenium.webdriver.remote.errorhandler.ErrorCode.DETACHED_SHADOW_ROOT"><code class="docutils literal notranslate"><span class="pre">ErrorCode.DETACHED_SHADOW_ROOT</span></code></a></li>
 <li><a class="reference internal" href="#selenium.webdriver.remote.errorhandler.ErrorCode.METHOD_NOT_ALLOWED"><code class="docutils literal notranslate"><span class="pre">ErrorCode.METHOD_NOT_ALLOWED</span></code></a></li>
 </ul>
 </li>
@@ -592,7 +605,7 @@ object.</p></li>
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Selenium 4.25.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Selenium 4.29.0.202501201850 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">selenium.webdriver.remote.errorhandler</a></li> 
       </ul>
     </div>

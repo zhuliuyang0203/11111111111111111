@@ -5,11 +5,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>selenium.webdriver.firefox.remote_connection &#8212; Selenium 4.25.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <title>selenium.webdriver.firefox.remote_connection &#8212; Selenium 4.29.0.202501201850 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=89b800e6" />
     
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=b061efce"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=a4e78ea5"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
     
@@ -25,7 +25,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Selenium 4.25.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Selenium 4.29.0.202501201850 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">selenium.webdriver.firefox.remote_connection</a></li> 
       </ul>
     </div>  
@@ -47,10 +47,21 @@
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">selenium.webdriver.firefox.remote_connection.</span></span><span class="sig-name descname"><span class="pre">FirefoxRemoteConnection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">remote_server_addr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_alive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_proxy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/selenium/webdriver/firefox/remote_connection.html#FirefoxRemoteConnection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">selenium.webdriver.firefox.remote_connection.</span></span><span class="sig-name descname"><span class="pre">FirefoxRemoteConnection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">remote_server_addr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_alive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_proxy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ClientConfig</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/selenium/webdriver/firefox/remote_connection.html#FirefoxRemoteConnection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="py attribute">
 <dt class="sig sig-object py" id="selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.browser_name">
 <span class="sig-name descname"><span class="pre">browser_name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'firefox'</span></em><a class="headerlink" href="#selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.browser_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.add_command">
+<span class="sig-name descname"><span class="pre">add_command</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.add_command" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a new command.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.certifi">
+<span class="sig-name descname"><span class="pre">certifi</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;module</span> <span class="pre">'certifi'</span> <span class="pre">from</span> <span class="pre">'/Users/diegomolina/projects/github.com/seleniumhq/selenium/py/.tox/docs/lib/python3.11/site-packages/certifi/__init__.py'&gt;</span></em><a class="headerlink" href="#selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.certifi" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -76,6 +87,16 @@ its JSON payload.</p></li>
 </dl>
 </dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.extra_commands">
+<span class="sig-name descname"><span class="pre">extra_commands</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.extra_commands" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.extra_headers">
+<span class="sig-name descname"><span class="pre">extra_headers</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.extra_headers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.get_certificate_bundle_path">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_certificate_bundle_path</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.get_certificate_bundle_path" title="Permalink to this definition">¶</a></dt>
@@ -86,6 +107,12 @@ its JSON payload.</p></li>
 <p>Paths of the .pem encoded certificate to verify connection to
 command executor. Defaults to certifi.where() or
 REQUESTS_CA_BUNDLE env variable if set.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.get_command">
+<span class="sig-name descname"><span class="pre">get_command</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.get_command" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve a command if it exists.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -112,6 +139,11 @@ REQUESTS_CA_BUNDLE env variable if set.</p>
 <p>Timeout value in seconds for all http requests made to the
 Remote Connection</p>
 </dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.os">
+<span class="sig-name descname"><span class="pre">os</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;module</span> <span class="pre">'os'</span> <span class="pre">(frozen)&gt;</span></em><a class="headerlink" href="#selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.os" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.reset_timeout">
@@ -147,6 +179,21 @@ validation.</p>
 </dl>
 </dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.socket">
+<span class="sig-name descname"><span class="pre">socket</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;module</span> <span class="pre">'socket'</span> <span class="pre">from</span> <span class="pre">'/opt/homebrew/Cellar/python&#64;3.11/3.11.6/Frameworks/Python.framework/Versions/3.11/lib/python3.11/socket.py'&gt;</span></em><a class="headerlink" href="#selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.socket" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.system">
+<span class="sig-name descname"><span class="pre">system</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'mac'</span></em><a class="headerlink" href="#selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.system" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.user_agent">
+<span class="sig-name descname"><span class="pre">user_agent</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'selenium/4.29.0.202501201850</span> <span class="pre">(python</span> <span class="pre">mac)'</span></em><a class="headerlink" href="#selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.user_agent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 </section>
@@ -164,14 +211,23 @@ validation.</p>
 <li><a class="reference internal" href="#">selenium.webdriver.firefox.remote_connection</a><ul>
 <li><a class="reference internal" href="#selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection"><code class="docutils literal notranslate"><span class="pre">FirefoxRemoteConnection</span></code></a><ul>
 <li><a class="reference internal" href="#selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.browser_name"><code class="docutils literal notranslate"><span class="pre">FirefoxRemoteConnection.browser_name</span></code></a></li>
+<li><a class="reference internal" href="#selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.add_command"><code class="docutils literal notranslate"><span class="pre">FirefoxRemoteConnection.add_command()</span></code></a></li>
+<li><a class="reference internal" href="#selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.certifi"><code class="docutils literal notranslate"><span class="pre">FirefoxRemoteConnection.certifi</span></code></a></li>
 <li><a class="reference internal" href="#selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.close"><code class="docutils literal notranslate"><span class="pre">FirefoxRemoteConnection.close()</span></code></a></li>
 <li><a class="reference internal" href="#selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.execute"><code class="docutils literal notranslate"><span class="pre">FirefoxRemoteConnection.execute()</span></code></a></li>
+<li><a class="reference internal" href="#selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.extra_commands"><code class="docutils literal notranslate"><span class="pre">FirefoxRemoteConnection.extra_commands</span></code></a></li>
+<li><a class="reference internal" href="#selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.extra_headers"><code class="docutils literal notranslate"><span class="pre">FirefoxRemoteConnection.extra_headers</span></code></a></li>
 <li><a class="reference internal" href="#selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.get_certificate_bundle_path"><code class="docutils literal notranslate"><span class="pre">FirefoxRemoteConnection.get_certificate_bundle_path()</span></code></a></li>
+<li><a class="reference internal" href="#selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.get_command"><code class="docutils literal notranslate"><span class="pre">FirefoxRemoteConnection.get_command()</span></code></a></li>
 <li><a class="reference internal" href="#selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.get_remote_connection_headers"><code class="docutils literal notranslate"><span class="pre">FirefoxRemoteConnection.get_remote_connection_headers()</span></code></a></li>
 <li><a class="reference internal" href="#selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.get_timeout"><code class="docutils literal notranslate"><span class="pre">FirefoxRemoteConnection.get_timeout()</span></code></a></li>
+<li><a class="reference internal" href="#selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.os"><code class="docutils literal notranslate"><span class="pre">FirefoxRemoteConnection.os</span></code></a></li>
 <li><a class="reference internal" href="#selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.reset_timeout"><code class="docutils literal notranslate"><span class="pre">FirefoxRemoteConnection.reset_timeout()</span></code></a></li>
 <li><a class="reference internal" href="#selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.set_certificate_bundle_path"><code class="docutils literal notranslate"><span class="pre">FirefoxRemoteConnection.set_certificate_bundle_path()</span></code></a></li>
 <li><a class="reference internal" href="#selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.set_timeout"><code class="docutils literal notranslate"><span class="pre">FirefoxRemoteConnection.set_timeout()</span></code></a></li>
+<li><a class="reference internal" href="#selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.socket"><code class="docutils literal notranslate"><span class="pre">FirefoxRemoteConnection.socket</span></code></a></li>
+<li><a class="reference internal" href="#selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.system"><code class="docutils literal notranslate"><span class="pre">FirefoxRemoteConnection.system</span></code></a></li>
+<li><a class="reference internal" href="#selenium.webdriver.firefox.remote_connection.FirefoxRemoteConnection.user_agent"><code class="docutils literal notranslate"><span class="pre">FirefoxRemoteConnection.user_agent</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -209,7 +265,7 @@ validation.</p>
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Selenium 4.25.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Selenium 4.29.0.202501201850 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">selenium.webdriver.firefox.remote_connection</a></li> 
       </ul>
     </div>

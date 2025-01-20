@@ -4,11 +4,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>selenium.webdriver.remote.file_detector &#8212; Selenium 4.25.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+    <title>selenium.webdriver.remote.file_detector &#8212; Selenium 4.29.0.202501201850 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/classic.css?v=89b800e6" />
     
-    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=b061efce"></script>
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=a4e78ea5"></script>
     <script src="../../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
     
@@ -24,7 +24,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">Selenium 4.25.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">Selenium 4.29.0.202501201850 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">selenium.webdriver.remote.file_detector</a></li> 
       </ul>
@@ -53,36 +53,36 @@
 <span class="c1"># specific language governing permissions and limitations</span>
 <span class="c1"># under the License.</span>
 
-<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABCMeta</span>
-<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractmethod</span>
-<span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">suppress</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABCMeta</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">contextlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">suppress</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
 
-<span class="kn">from</span> <span class="nn">selenium.types</span> <span class="kn">import</span> <span class="n">AnyKey</span>
-<span class="kn">from</span> <span class="nn">selenium.webdriver.common.utils</span> <span class="kn">import</span> <span class="n">keys_to_typing</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">selenium.types</span><span class="w"> </span><span class="kn">import</span> <span class="n">AnyKey</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">selenium.webdriver.common.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">keys_to_typing</span>
 
 
-<div class="viewcode-block" id="FileDetector"><a class="viewcode-back" href="../../../../webdriver_remote/selenium.webdriver.remote.file_detector.html#selenium.webdriver.remote.file_detector.FileDetector">[docs]</a><span class="k">class</span> <span class="nc">FileDetector</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
+<div class="viewcode-block" id="FileDetector"><a class="viewcode-back" href="../../../../webdriver_remote/selenium.webdriver.remote.file_detector.html#selenium.webdriver.remote.file_detector.FileDetector">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">FileDetector</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ABCMeta</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Used for identifying whether a sequence of chars represents the path to</span>
 <span class="sd">    a file.&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="FileDetector.is_local_file"><a class="viewcode-back" href="../../../../webdriver_remote/selenium.webdriver.remote.file_detector.html#selenium.webdriver.remote.file_detector.FileDetector.is_local_file">[docs]</a>    <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">is_local_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">keys</span><span class="p">:</span> <span class="n">AnyKey</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_local_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">keys</span><span class="p">:</span> <span class="n">AnyKey</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div></div>
 
 
-<div class="viewcode-block" id="UselessFileDetector"><a class="viewcode-back" href="../../../../webdriver_remote/selenium.webdriver.remote.file_detector.html#selenium.webdriver.remote.file_detector.UselessFileDetector">[docs]</a><span class="k">class</span> <span class="nc">UselessFileDetector</span><span class="p">(</span><span class="n">FileDetector</span><span class="p">):</span>
+<div class="viewcode-block" id="UselessFileDetector"><a class="viewcode-back" href="../../../../webdriver_remote/selenium.webdriver.remote.file_detector.html#selenium.webdriver.remote.file_detector.UselessFileDetector">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">UselessFileDetector</span><span class="p">(</span><span class="n">FileDetector</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A file detector that never finds anything.&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="UselessFileDetector.is_local_file"><a class="viewcode-back" href="../../../../webdriver_remote/selenium.webdriver.remote.file_detector.html#selenium.webdriver.remote.file_detector.UselessFileDetector.is_local_file">[docs]</a>    <span class="k">def</span> <span class="nf">is_local_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">keys</span><span class="p">:</span> <span class="n">AnyKey</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<div class="viewcode-block" id="UselessFileDetector.is_local_file"><a class="viewcode-back" href="../../../../webdriver_remote/selenium.webdriver.remote.file_detector.html#selenium.webdriver.remote.file_detector.UselessFileDetector.is_local_file">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">is_local_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">keys</span><span class="p">:</span> <span class="n">AnyKey</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
         <span class="k">return</span> <span class="kc">None</span></div></div>
 
 
-<div class="viewcode-block" id="LocalFileDetector"><a class="viewcode-back" href="../../../../webdriver_remote/selenium.webdriver.remote.file_detector.html#selenium.webdriver.remote.file_detector.LocalFileDetector">[docs]</a><span class="k">class</span> <span class="nc">LocalFileDetector</span><span class="p">(</span><span class="n">FileDetector</span><span class="p">):</span>
+<div class="viewcode-block" id="LocalFileDetector"><a class="viewcode-back" href="../../../../webdriver_remote/selenium.webdriver.remote.file_detector.html#selenium.webdriver.remote.file_detector.LocalFileDetector">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">LocalFileDetector</span><span class="p">(</span><span class="n">FileDetector</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Detects files on the local disk.&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="LocalFileDetector.is_local_file"><a class="viewcode-back" href="../../../../webdriver_remote/selenium.webdriver.remote.file_detector.html#selenium.webdriver.remote.file_detector.LocalFileDetector.is_local_file">[docs]</a>    <span class="k">def</span> <span class="nf">is_local_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">keys</span><span class="p">:</span> <span class="n">AnyKey</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<div class="viewcode-block" id="LocalFileDetector.is_local_file"><a class="viewcode-back" href="../../../../webdriver_remote/selenium.webdriver.remote.file_detector.html#selenium.webdriver.remote.file_detector.LocalFileDetector.is_local_file">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">is_local_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">keys</span><span class="p">:</span> <span class="n">AnyKey</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
         <span class="n">file_path</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">keys_to_typing</span><span class="p">(</span><span class="n">keys</span><span class="p">))</span>
 
         <span class="k">with</span> <span class="n">suppress</span><span class="p">(</span><span class="ne">OSError</span><span class="p">):</span>
@@ -120,7 +120,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">Selenium 4.25.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">Selenium 4.29.0.202501201850 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">selenium.webdriver.remote.file_detector</a></li> 
       </ul>

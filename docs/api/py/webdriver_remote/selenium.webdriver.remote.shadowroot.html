@@ -5,11 +5,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>selenium.webdriver.remote.shadowroot &#8212; Selenium 4.25.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <title>selenium.webdriver.remote.shadowroot &#8212; Selenium 4.29.0.202501201850 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=89b800e6" />
     
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=b061efce"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=a4e78ea5"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
     
@@ -25,7 +25,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Selenium 4.25.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Selenium 4.29.0.202501201850 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">selenium.webdriver.remote.shadowroot</a></li> 
       </ul>
     </div>  
@@ -50,13 +50,70 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">selenium.webdriver.remote.shadowroot.</span></span><span class="sig-name descname"><span class="pre">ShadowRoot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/selenium/webdriver/remote/shadowroot.html#ShadowRoot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#selenium.webdriver.remote.shadowroot.ShadowRoot" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="py method">
 <dt class="sig sig-object py" id="selenium.webdriver.remote.shadowroot.ShadowRoot.find_element">
-<span class="sig-name descname"><span class="pre">find_element</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">by</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'id'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/selenium/webdriver/remote/shadowroot.html#ShadowRoot.find_element"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#selenium.webdriver.remote.shadowroot.ShadowRoot.find_element" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">find_element</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">by</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'id'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/selenium/webdriver/remote/shadowroot.html#ShadowRoot.find_element"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#selenium.webdriver.remote.shadowroot.ShadowRoot.find_element" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find an element inside a shadow root given a By strategy and
+locator.</p>
+<section id="parameters">
+<h2>Parameters:<a class="headerlink" href="#parameters" title="Permalink to this heading">¶</a></h2>
+<dl class="simple">
+<dt>by<span class="classifier">selenium.webdriver.common.by.By</span></dt><dd><p>The locating strategy to use. Default is <cite>By.ID</cite>. Supported values include:
+- By.ID: Locate by element ID.
+- By.NAME: Locate by the <cite>name</cite> attribute.
+- By.XPATH: Locate by an XPath expression.
+- By.CSS_SELECTOR: Locate by a CSS selector.
+- By.CLASS_NAME: Locate by the <cite>class</cite> attribute.
+- By.TAG_NAME: Locate by the tag name (e.g., “input”, “button”).
+- By.LINK_TEXT: Locate a link element by its exact text.
+- By.PARTIAL_LINK_TEXT: Locate a link element by partial text match.
+- RelativeBy: Locate elements relative to a specified root element.</p>
+</dd>
+</dl>
+</section>
+<section id="example">
+<h2>Example:<a class="headerlink" href="#example" title="Permalink to this heading">¶</a></h2>
+<p>element = driver.find_element(By.ID, ‘foo’)</p>
+</section>
+<section id="returns">
+<h2>Returns:<a class="headerlink" href="#returns" title="Permalink to this heading">¶</a></h2>
+<dl class="simple">
+<dt>WebElement</dt><dd><p>The first matching <cite>WebElement</cite> found on the page.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="selenium.webdriver.remote.shadowroot.ShadowRoot.find_elements">
-<span class="sig-name descname"><span class="pre">find_elements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">by</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'id'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/selenium/webdriver/remote/shadowroot.html#ShadowRoot.find_elements"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#selenium.webdriver.remote.shadowroot.ShadowRoot.find_elements" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">find_elements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">by</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'id'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/selenium/webdriver/remote/shadowroot.html#ShadowRoot.find_elements"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#selenium.webdriver.remote.shadowroot.ShadowRoot.find_elements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find elements inside a shadow root given a By strategy and locator.</p>
+<section id="id1">
+<h2>Parameters:<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h2>
+<dl class="simple">
+<dt>by<span class="classifier">selenium.webdriver.common.by.By</span></dt><dd><p>The locating strategy to use. Default is <cite>By.ID</cite>. Supported values include:
+- By.ID: Locate by element ID.
+- By.NAME: Locate by the <cite>name</cite> attribute.
+- By.XPATH: Locate by an XPath expression.
+- By.CSS_SELECTOR: Locate by a CSS selector.
+- By.CLASS_NAME: Locate by the <cite>class</cite> attribute.
+- By.TAG_NAME: Locate by the tag name (e.g., “input”, “button”).
+- By.LINK_TEXT: Locate a link element by its exact text.
+- By.PARTIAL_LINK_TEXT: Locate a link element by partial text match.
+- RelativeBy: Locate elements relative to a specified root element.</p>
+</dd>
+</dl>
+</section>
+<section id="id2">
+<h2>Example:<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h2>
+<p>element = driver.find_element(By.ID, ‘foo’)</p>
+</section>
+<section id="id3">
+<h2>Returns:<a class="headerlink" href="#id3" title="Permalink to this heading">¶</a></h2>
+<dl class="simple">
+<dt>WebElement</dt><dd><p>list of <cite>WebElements</cite> matching locator strategy found on the page.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
 
 </dd></dl>
 
@@ -113,7 +170,7 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Selenium 4.25.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Selenium 4.29.0.202501201850 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">selenium.webdriver.remote.shadowroot</a></li> 
       </ul>
     </div>

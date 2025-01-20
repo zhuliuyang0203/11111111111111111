@@ -4,11 +4,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>selenium.webdriver.support.relative_locator &#8212; Selenium 4.25.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+    <title>selenium.webdriver.support.relative_locator &#8212; Selenium 4.29.0.202501201850 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/classic.css?v=89b800e6" />
     
-    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=b061efce"></script>
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=a4e78ea5"></script>
     <script src="../../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
     
@@ -24,7 +24,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">Selenium 4.25.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">Selenium 4.29.0.202501201850 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">selenium.webdriver.support.relative_locator</a></li> 
       </ul>
@@ -52,90 +52,136 @@
 <span class="c1"># KIND, either express or implied.  See the License for the</span>
 <span class="c1"># specific language governing permissions and limitations</span>
 <span class="c1"># under the License.</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">NoReturn</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">overload</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">NoReturn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">overload</span>
 
-<span class="kn">from</span> <span class="nn">selenium.common.exceptions</span> <span class="kn">import</span> <span class="n">WebDriverException</span>
-<span class="kn">from</span> <span class="nn">selenium.webdriver.common.by</span> <span class="kn">import</span> <span class="n">By</span>
-<span class="kn">from</span> <span class="nn">selenium.webdriver.common.by</span> <span class="kn">import</span> <span class="n">ByType</span>
-<span class="kn">from</span> <span class="nn">selenium.webdriver.remote.webelement</span> <span class="kn">import</span> <span class="n">WebElement</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">selenium.common.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">WebDriverException</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">selenium.webdriver.common.by</span><span class="w"> </span><span class="kn">import</span> <span class="n">By</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">selenium.webdriver.common.by</span><span class="w"> </span><span class="kn">import</span> <span class="n">ByType</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">selenium.webdriver.remote.webelement</span><span class="w"> </span><span class="kn">import</span> <span class="n">WebElement</span>
 
 
-<div class="viewcode-block" id="with_tag_name"><a class="viewcode-back" href="../../../../webdriver_support/selenium.webdriver.support.relative_locator.html#selenium.webdriver.support.relative_locator.with_tag_name">[docs]</a><span class="k">def</span> <span class="nf">with_tag_name</span><span class="p">(</span><span class="n">tag_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;RelativeBy&quot;</span><span class="p">:</span>
+<div class="viewcode-block" id="with_tag_name"><a class="viewcode-back" href="../../../../webdriver_support/selenium.webdriver.support.relative_locator.html#selenium.webdriver.support.relative_locator.with_tag_name">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">with_tag_name</span><span class="p">(</span><span class="n">tag_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;RelativeBy&quot;</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Start searching for relative objects using a tag name.</span>
 
-<span class="sd">    Note: This method may be removed in future versions, please use</span>
-<span class="sd">    `locate_with` instead.</span>
-<span class="sd">    :Args:</span>
-<span class="sd">        - tag_name: the DOM tag of element to start searching.</span>
-<span class="sd">    :Returns:</span>
-<span class="sd">        - RelativeBy - use this object to create filters within a</span>
-<span class="sd">            `find_elements` call.</span>
+<span class="sd">    Parameters:</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tag_name : str</span>
+<span class="sd">        The DOM tag of element to start searching.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">    RelativeBy</span>
+<span class="sd">        Use this object to create filters within a `find_elements` call.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">    -------</span>
+<span class="sd">    WebDriverException</span>
+<span class="sd">        If `tag_name` is None.</span>
+
+<span class="sd">    Notes:</span>
+<span class="sd">    ------</span>
+<span class="sd">    - This method is deprecated and may be removed in future versions.</span>
+<span class="sd">    - Please use `locate_with` instead.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+        <span class="s2">&quot;This method is deprecated and may be removed in future versions. &quot;</span> <span class="s2">&quot;Please use `locate_with` instead.&quot;</span>
+    <span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">tag_name</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">WebDriverException</span><span class="p">(</span><span class="s2">&quot;tag_name can not be null&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">RelativeBy</span><span class="p">({</span><span class="n">By</span><span class="o">.</span><span class="n">CSS_SELECTOR</span><span class="p">:</span> <span class="n">tag_name</span><span class="p">})</span></div>
 
 
-<div class="viewcode-block" id="locate_with"><a class="viewcode-back" href="../../../../webdriver_support/selenium.webdriver.support.relative_locator.html#selenium.webdriver.support.relative_locator.locate_with">[docs]</a><span class="k">def</span> <span class="nf">locate_with</span><span class="p">(</span><span class="n">by</span><span class="p">:</span> <span class="n">ByType</span><span class="p">,</span> <span class="n">using</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;RelativeBy&quot;</span><span class="p">:</span>
+<div class="viewcode-block" id="locate_with"><a class="viewcode-back" href="../../../../webdriver_support/selenium.webdriver.support.relative_locator.html#selenium.webdriver.support.relative_locator.locate_with">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">locate_with</span><span class="p">(</span><span class="n">by</span><span class="p">:</span> <span class="n">ByType</span><span class="p">,</span> <span class="n">using</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;RelativeBy&quot;</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Start searching for relative objects your search criteria with By.</span>
 
-<span class="sd">    :Args:</span>
-<span class="sd">        - by: The value from `By` passed in.</span>
-<span class="sd">        - using: search term to find the element with.</span>
-<span class="sd">    :Returns:</span>
-<span class="sd">        - RelativeBy - use this object to create filters within a</span>
-<span class="sd">            `find_elements` call.</span>
+<span class="sd">    Parameters:</span>
+<span class="sd">    ----------</span>
+<span class="sd">    by : ByType</span>
+<span class="sd">        The method to find the element.</span>
+
+<span class="sd">    using : str</span>
+<span class="sd">        The value from `By` passed in.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    --------</span>
+<span class="sd">    RelativeBy</span>
+<span class="sd">        Use this object to create filters within a `find_elements` call.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; lowest = driver.find_element(By.ID, &quot;below&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; elements = driver.find_elements(locate_with(By.CSS_SELECTOR, &quot;p&quot;).above(lowest))</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">assert</span> <span class="n">by</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;Please pass in a by argument&quot;</span>
     <span class="k">assert</span> <span class="n">using</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;Please pass in a using argument&quot;</span>
     <span class="k">return</span> <span class="n">RelativeBy</span><span class="p">({</span><span class="n">by</span><span class="p">:</span> <span class="n">using</span><span class="p">})</span></div>
 
 
-<div class="viewcode-block" id="RelativeBy"><a class="viewcode-back" href="../../../../webdriver_support/selenium.webdriver.support.relative_locator.html#selenium.webdriver.support.relative_locator.RelativeBy">[docs]</a><span class="k">class</span> <span class="nc">RelativeBy</span><span class="p">:</span>
+<div class="viewcode-block" id="RelativeBy"><a class="viewcode-back" href="../../../../webdriver_support/selenium.webdriver.support.relative_locator.html#selenium.webdriver.support.relative_locator.RelativeBy">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">RelativeBy</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Gives the opportunity to find elements based on their relative location</span>
-<span class="sd">    on the page from a root elelemt. It is recommended that you use the helper</span>
+<span class="sd">    on the page from a root element. It is recommended that you use the helper</span>
 <span class="sd">    function to create it.</span>
 
 <span class="sd">    Example:</span>
-<span class="sd">        lowest = driver.find_element(By.ID, &quot;below&quot;)</span>
-
-<span class="sd">        elements = driver.find_elements(locate_with(By.CSS_SELECTOR, &quot;p&quot;).above(lowest))</span>
-
-<span class="sd">        ids = [el.get_attribute(&#39;id&#39;) for el in elements]</span>
-<span class="sd">        assert &quot;above&quot; in ids</span>
-<span class="sd">        assert &quot;mid&quot; in ids</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; lowest = driver.find_element(By.ID, &quot;below&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; elements = driver.find_elements(locate_with(By.CSS_SELECTOR, &quot;p&quot;).above(lowest))</span>
+<span class="sd">    &gt;&gt;&gt; ids = [el.get_attribute(&#39;id&#39;) for el in elements]</span>
+<span class="sd">    &gt;&gt;&gt; assert &quot;above&quot; in ids</span>
+<span class="sd">    &gt;&gt;&gt; assert &quot;mid&quot; in ids</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">LocatorType</span> <span class="o">=</span> <span class="n">Dict</span><span class="p">[</span><span class="n">ByType</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">ByType</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">filters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="n">ByType</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">filters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates a new RelativeBy object. It is preferred if you use the</span>
 <span class="sd">        `locate_with` method as this signature could change.</span>
 
-<span class="sd">        :Args:</span>
-<span class="sd">            root - A dict with `By` enum as the key and the search query as the value</span>
-<span class="sd">            filters - A list of the filters that will be searched. If none are passed</span>
+<span class="sd">        Attributes:</span>
+<span class="sd">        ----------</span>
+<span class="sd">        root : Dict[By, str]</span>
+<span class="sd">            - A dict with `By` enum as the key and the search query as the value</span>
+
+<span class="sd">        filters : List</span>
+<span class="sd">            - A list of the filters that will be searched. If none are passed</span>
 <span class="sd">                in please use the fluent API on the object to create the filters</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">root</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filters</span> <span class="o">=</span> <span class="n">filters</span> <span class="ow">or</span> <span class="p">[]</span>
 
     <span class="nd">@overload</span>
-    <span class="k">def</span> <span class="nf">above</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">WebElement</span><span class="p">,</span> <span class="n">LocatorType</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;RelativeBy&quot;</span><span class="p">:</span> <span class="o">...</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">above</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">WebElement</span><span class="p">,</span> <span class="n">LocatorType</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;RelativeBy&quot;</span><span class="p">:</span> <span class="o">...</span>
 
     <span class="nd">@overload</span>
-    <span class="k">def</span> <span class="nf">above</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;NoReturn&quot;</span><span class="p">:</span> <span class="o">...</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">above</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;NoReturn&quot;</span><span class="p">:</span> <span class="o">...</span>
 
-<div class="viewcode-block" id="RelativeBy.above"><a class="viewcode-back" href="../../../../webdriver_support/selenium.webdriver.support.relative_locator.html#selenium.webdriver.support.relative_locator.RelativeBy.above">[docs]</a>    <span class="k">def</span> <span class="nf">above</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">WebElement</span><span class="p">,</span> <span class="n">LocatorType</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;RelativeBy&quot;</span><span class="p">:</span>
+<div class="viewcode-block" id="RelativeBy.above"><a class="viewcode-back" href="../../../../webdriver_support/selenium.webdriver.support.relative_locator.html#selenium.webdriver.support.relative_locator.RelativeBy.above">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">above</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">WebElement</span><span class="p">,</span> <span class="n">LocatorType</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;RelativeBy&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a filter to look for elements above.</span>
 
-<span class="sd">        :Args:</span>
-<span class="sd">            - element_or_locator: Element to look above</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">        ----------</span>
+<span class="sd">        element_or_locator : Union[WebElement, Dict, None]</span>
+<span class="sd">            Element to look above</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        RelativeBy</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">        -------</span>
+<span class="sd">        WebDriverException</span>
+<span class="sd">            If `element_or_locator` is None.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; lowest = driver.find_element(By.ID, &quot;below&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; elements = driver.find_elements(locate_with(By.CSS_SELECTOR, &quot;p&quot;).above(lowest))</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">element_or_locator</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">WebDriverException</span><span class="p">(</span><span class="s2">&quot;Element or locator must be given when calling above method&quot;</span><span class="p">)</span>
@@ -144,16 +190,32 @@
         <span class="k">return</span> <span class="bp">self</span></div>
 
     <span class="nd">@overload</span>
-    <span class="k">def</span> <span class="nf">below</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">WebElement</span><span class="p">,</span> <span class="n">LocatorType</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;RelativeBy&quot;</span><span class="p">:</span> <span class="o">...</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">below</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">WebElement</span><span class="p">,</span> <span class="n">LocatorType</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;RelativeBy&quot;</span><span class="p">:</span> <span class="o">...</span>
 
     <span class="nd">@overload</span>
-    <span class="k">def</span> <span class="nf">below</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;NoReturn&quot;</span><span class="p">:</span> <span class="o">...</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">below</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;NoReturn&quot;</span><span class="p">:</span> <span class="o">...</span>
 
-<div class="viewcode-block" id="RelativeBy.below"><a class="viewcode-back" href="../../../../webdriver_support/selenium.webdriver.support.relative_locator.html#selenium.webdriver.support.relative_locator.RelativeBy.below">[docs]</a>    <span class="k">def</span> <span class="nf">below</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">WebElement</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;RelativeBy&quot;</span><span class="p">:</span>
+<div class="viewcode-block" id="RelativeBy.below"><a class="viewcode-back" href="../../../../webdriver_support/selenium.webdriver.support.relative_locator.html#selenium.webdriver.support.relative_locator.RelativeBy.below">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">below</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">WebElement</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;RelativeBy&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a filter to look for elements below.</span>
 
-<span class="sd">        :Args:</span>
-<span class="sd">            - element_or_locator: Element to look below</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">        ----------</span>
+<span class="sd">        element_or_locator : Union[WebElement, Dict, None]</span>
+<span class="sd">            Element to look below</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        RelativeBy</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">        -------</span>
+<span class="sd">        WebDriverException</span>
+<span class="sd">            If `element_or_locator` is None.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; highest = driver.find_element(By.ID, &quot;high&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; elements = driver.find_elements(locate_with(By.CSS_SELECTOR, &quot;p&quot;).below(highest))</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">element_or_locator</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">WebDriverException</span><span class="p">(</span><span class="s2">&quot;Element or locator must be given when calling below method&quot;</span><span class="p">)</span>
@@ -162,16 +224,32 @@
         <span class="k">return</span> <span class="bp">self</span></div>
 
     <span class="nd">@overload</span>
-    <span class="k">def</span> <span class="nf">to_left_of</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">WebElement</span><span class="p">,</span> <span class="n">LocatorType</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;RelativeBy&quot;</span><span class="p">:</span> <span class="o">...</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_left_of</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">WebElement</span><span class="p">,</span> <span class="n">LocatorType</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;RelativeBy&quot;</span><span class="p">:</span> <span class="o">...</span>
 
     <span class="nd">@overload</span>
-    <span class="k">def</span> <span class="nf">to_left_of</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;NoReturn&quot;</span><span class="p">:</span> <span class="o">...</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_left_of</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;NoReturn&quot;</span><span class="p">:</span> <span class="o">...</span>
 
-<div class="viewcode-block" id="RelativeBy.to_left_of"><a class="viewcode-back" href="../../../../webdriver_support/selenium.webdriver.support.relative_locator.html#selenium.webdriver.support.relative_locator.RelativeBy.to_left_of">[docs]</a>    <span class="k">def</span> <span class="nf">to_left_of</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">WebElement</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;RelativeBy&quot;</span><span class="p">:</span>
+<div class="viewcode-block" id="RelativeBy.to_left_of"><a class="viewcode-back" href="../../../../webdriver_support/selenium.webdriver.support.relative_locator.html#selenium.webdriver.support.relative_locator.RelativeBy.to_left_of">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">to_left_of</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">WebElement</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;RelativeBy&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a filter to look for elements to the left of.</span>
 
-<span class="sd">        :Args:</span>
-<span class="sd">            - element_or_locator: Element to look to the left of</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">        ----------</span>
+<span class="sd">        element_or_locator : Union[WebElement, Dict, None]</span>
+<span class="sd">            Element to look to the left of</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        RelativeBy</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">        -------</span>
+<span class="sd">        WebDriverException</span>
+<span class="sd">            If `element_or_locator` is None.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; right = driver.find_element(By.ID, &quot;right&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; elements = driver.find_elements(locate_with(By.CSS_SELECTOR, &quot;p&quot;).to_left_of(right))</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">element_or_locator</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">WebDriverException</span><span class="p">(</span><span class="s2">&quot;Element or locator must be given when calling to_left_of method&quot;</span><span class="p">)</span>
@@ -180,16 +258,32 @@
         <span class="k">return</span> <span class="bp">self</span></div>
 
     <span class="nd">@overload</span>
-    <span class="k">def</span> <span class="nf">to_right_of</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">WebElement</span><span class="p">,</span> <span class="n">LocatorType</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;RelativeBy&quot;</span><span class="p">:</span> <span class="o">...</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_right_of</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">WebElement</span><span class="p">,</span> <span class="n">LocatorType</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;RelativeBy&quot;</span><span class="p">:</span> <span class="o">...</span>
 
     <span class="nd">@overload</span>
-    <span class="k">def</span> <span class="nf">to_right_of</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;NoReturn&quot;</span><span class="p">:</span> <span class="o">...</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_right_of</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;NoReturn&quot;</span><span class="p">:</span> <span class="o">...</span>
 
-<div class="viewcode-block" id="RelativeBy.to_right_of"><a class="viewcode-back" href="../../../../webdriver_support/selenium.webdriver.support.relative_locator.html#selenium.webdriver.support.relative_locator.RelativeBy.to_right_of">[docs]</a>    <span class="k">def</span> <span class="nf">to_right_of</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">WebElement</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;RelativeBy&quot;</span><span class="p">:</span>
+<div class="viewcode-block" id="RelativeBy.to_right_of"><a class="viewcode-back" href="../../../../webdriver_support/selenium.webdriver.support.relative_locator.html#selenium.webdriver.support.relative_locator.RelativeBy.to_right_of">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">to_right_of</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">WebElement</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;RelativeBy&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a filter to look for elements right of.</span>
 
-<span class="sd">        :Args:</span>
-<span class="sd">            - element_or_locator: Element to look right of</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">        ----------</span>
+<span class="sd">        element_or_locator : Union[WebElement, Dict, None]</span>
+<span class="sd">            Element to look right of</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        RelativeBy</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">        -------</span>
+<span class="sd">        WebDriverException</span>
+<span class="sd">            If `element_or_locator` is None.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; left = driver.find_element(By.ID, &quot;left&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; elements = driver.find_elements(locate_with(By.CSS_SELECTOR, &quot;p&quot;).to_right_of(left))</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">element_or_locator</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">WebDriverException</span><span class="p">(</span><span class="s2">&quot;Element or locator must be given when calling to_right_of method&quot;</span><span class="p">)</span>
@@ -198,17 +292,108 @@
         <span class="k">return</span> <span class="bp">self</span></div>
 
     <span class="nd">@overload</span>
-    <span class="k">def</span> <span class="nf">near</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">WebElement</span><span class="p">,</span> <span class="n">LocatorType</span><span class="p">],</span> <span class="n">distance</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;RelativeBy&quot;</span><span class="p">:</span> <span class="o">...</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">straight_above</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">WebElement</span><span class="p">,</span> <span class="n">LocatorType</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;RelativeBy&quot;</span><span class="p">:</span> <span class="o">...</span>
 
     <span class="nd">@overload</span>
-    <span class="k">def</span> <span class="nf">near</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">distance</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;NoReturn&quot;</span><span class="p">:</span> <span class="o">...</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">straight_above</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;NoReturn&quot;</span><span class="p">:</span> <span class="o">...</span>
 
-<div class="viewcode-block" id="RelativeBy.near"><a class="viewcode-back" href="../../../../webdriver_support/selenium.webdriver.support.relative_locator.html#selenium.webdriver.support.relative_locator.RelativeBy.near">[docs]</a>    <span class="k">def</span> <span class="nf">near</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">WebElement</span><span class="p">,</span> <span class="n">LocatorType</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">distance</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;RelativeBy&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a filter to look for elements near.</span>
+<div class="viewcode-block" id="RelativeBy.straight_above"><a class="viewcode-back" href="../../../../webdriver_support/selenium.webdriver.support.relative_locator.html#selenium.webdriver.support.relative_locator.RelativeBy.straight_above">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">straight_above</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">WebElement</span><span class="p">,</span> <span class="n">LocatorType</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;RelativeBy&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a filter to look for elements above.</span>
 
 <span class="sd">        :Args:</span>
-<span class="sd">            - element_or_locator: Element to look near by the element or within a distance</span>
-<span class="sd">            - distance: distance in pixel</span>
+<span class="sd">            - element_or_locator: Element to look above</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">element_or_locator</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">WebDriverException</span><span class="p">(</span><span class="s2">&quot;Element or locator must be given when calling above method&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;straightAbove&quot;</span><span class="p">,</span> <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">element_or_locator</span><span class="p">]})</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">straight_below</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">WebElement</span><span class="p">,</span> <span class="n">LocatorType</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;RelativeBy&quot;</span><span class="p">:</span> <span class="o">...</span>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">straight_below</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;NoReturn&quot;</span><span class="p">:</span> <span class="o">...</span>
+
+<div class="viewcode-block" id="RelativeBy.straight_below"><a class="viewcode-back" href="../../../../webdriver_support/selenium.webdriver.support.relative_locator.html#selenium.webdriver.support.relative_locator.RelativeBy.straight_below">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">straight_below</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">WebElement</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;RelativeBy&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a filter to look for elements below.</span>
+
+<span class="sd">        :Args:</span>
+<span class="sd">            - element_or_locator: Element to look below</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">element_or_locator</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">WebDriverException</span><span class="p">(</span><span class="s2">&quot;Element or locator must be given when calling below method&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;straightBelow&quot;</span><span class="p">,</span> <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">element_or_locator</span><span class="p">]})</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">straight_left_of</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">WebElement</span><span class="p">,</span> <span class="n">LocatorType</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;RelativeBy&quot;</span><span class="p">:</span> <span class="o">...</span>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">straight_left_of</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;NoReturn&quot;</span><span class="p">:</span> <span class="o">...</span>
+
+<div class="viewcode-block" id="RelativeBy.straight_left_of"><a class="viewcode-back" href="../../../../webdriver_support/selenium.webdriver.support.relative_locator.html#selenium.webdriver.support.relative_locator.RelativeBy.straight_left_of">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">straight_left_of</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">WebElement</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;RelativeBy&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a filter to look for elements to the left of.</span>
+
+<span class="sd">        :Args:</span>
+<span class="sd">            - element_or_locator: Element to look to the left of</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">element_or_locator</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">WebDriverException</span><span class="p">(</span><span class="s2">&quot;Element or locator must be given when calling to_left_of method&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;straightLeft&quot;</span><span class="p">,</span> <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">element_or_locator</span><span class="p">]})</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">straight_right_of</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">WebElement</span><span class="p">,</span> <span class="n">LocatorType</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;RelativeBy&quot;</span><span class="p">:</span> <span class="o">...</span>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">straight_right_of</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;NoReturn&quot;</span><span class="p">:</span> <span class="o">...</span>
+
+<div class="viewcode-block" id="RelativeBy.straight_right_of"><a class="viewcode-back" href="../../../../webdriver_support/selenium.webdriver.support.relative_locator.html#selenium.webdriver.support.relative_locator.RelativeBy.straight_right_of">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">straight_right_of</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">WebElement</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;RelativeBy&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a filter to look for elements right of.</span>
+
+<span class="sd">        :Args:</span>
+<span class="sd">            - element_or_locator: Element to look right of</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">element_or_locator</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">WebDriverException</span><span class="p">(</span><span class="s2">&quot;Element or locator must be given when calling to_right_of method&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;straightRight&quot;</span><span class="p">,</span> <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">element_or_locator</span><span class="p">]})</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">near</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">WebElement</span><span class="p">,</span> <span class="n">LocatorType</span><span class="p">],</span> <span class="n">distance</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;RelativeBy&quot;</span><span class="p">:</span> <span class="o">...</span>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">near</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">distance</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;NoReturn&quot;</span><span class="p">:</span> <span class="o">...</span>
+
+<div class="viewcode-block" id="RelativeBy.near"><a class="viewcode-back" href="../../../../webdriver_support/selenium.webdriver.support.relative_locator.html#selenium.webdriver.support.relative_locator.RelativeBy.near">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">near</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element_or_locator</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">WebElement</span><span class="p">,</span> <span class="n">LocatorType</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">distance</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;RelativeBy&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a filter to look for elements near.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        ----------</span>
+<span class="sd">        element_or_locator : Union[WebElement, Dict, None]</span>
+<span class="sd">            Element to look near by the element or within a distance</span>
+
+<span class="sd">        distance : int</span>
+<span class="sd">            Distance in pixel</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        RelativeBy</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">        -------</span>
+<span class="sd">        WebDriverException</span>
+<span class="sd">            - If `element_or_locator` is None</span>
+<span class="sd">            - If `distance` is less than or equal to 0.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; near = driver.find_element(By.ID, &quot;near&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; elements = driver.find_elements(locate_with(By.CSS_SELECTOR, &quot;p&quot;).near(near, 50))</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">element_or_locator</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">WebDriverException</span><span class="p">(</span><span class="s2">&quot;Element or locator must be given when calling near method&quot;</span><span class="p">)</span>
@@ -218,7 +403,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;near&quot;</span><span class="p">,</span> <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">element_or_locator</span><span class="p">,</span> <span class="n">distance</span><span class="p">]})</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="RelativeBy.to_dict"><a class="viewcode-back" href="../../../../webdriver_support/selenium.webdriver.support.relative_locator.html#selenium.webdriver.support.relative_locator.RelativeBy.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<div class="viewcode-block" id="RelativeBy.to_dict"><a class="viewcode-back" href="../../../../webdriver_support/selenium.webdriver.support.relative_locator.html#selenium.webdriver.support.relative_locator.RelativeBy.to_dict">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a dict that will be passed to the driver to start searching</span>
 <span class="sd">        for the element.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">{</span>
@@ -258,7 +443,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">Selenium 4.25.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">Selenium 4.29.0.202501201850 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">selenium.webdriver.support.relative_locator</a></li> 
       </ul>

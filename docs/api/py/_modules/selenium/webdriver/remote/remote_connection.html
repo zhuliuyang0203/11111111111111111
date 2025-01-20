@@ -4,11 +4,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>selenium.webdriver.remote.remote_connection &#8212; Selenium 4.25.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+    <title>selenium.webdriver.remote.remote_connection &#8212; Selenium 4.29.0.202501201850 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/classic.css?v=89b800e6" />
     
-    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=b061efce"></script>
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=a4e78ea5"></script>
     <script src="../../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
     
@@ -24,7 +24,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">Selenium 4.25.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">Selenium 4.29.0.202501201850 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">selenium.webdriver.remote.remote_connection</a></li> 
       </ul>
@@ -53,22 +53,23 @@
 <span class="c1"># specific language governing permissions and limitations</span>
 <span class="c1"># under the License.</span>
 
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">platform</span>
-<span class="kn">import</span> <span class="nn">socket</span>
-<span class="kn">import</span> <span class="nn">string</span>
-<span class="kn">from</span> <span class="nn">base64</span> <span class="kn">import</span> <span class="n">b64encode</span>
-<span class="kn">from</span> <span class="nn">urllib</span> <span class="kn">import</span> <span class="n">parse</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">platform</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">string</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">base64</span><span class="w"> </span><span class="kn">import</span> <span class="n">b64encode</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">urllib</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">urllib.parse</span><span class="w"> </span><span class="kn">import</span> <span class="n">urlparse</span>
 
-<span class="kn">import</span> <span class="nn">certifi</span>
-<span class="kn">import</span> <span class="nn">urllib3</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">urllib3</span>
 
-<span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">__version__</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">selenium</span><span class="w"> </span><span class="kn">import</span> <span class="n">__version__</span>
 
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">utils</span>
-<span class="kn">from</span> <span class="nn">.command</span> <span class="kn">import</span> <span class="n">Command</span>
-<span class="kn">from</span> <span class="nn">.errorhandler</span> <span class="kn">import</span> <span class="n">ErrorCode</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">utils</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.client_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">ClientConfig</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.command</span><span class="w"> </span><span class="kn">import</span> <span class="n">Command</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.errorhandler</span><span class="w"> </span><span class="kn">import</span> <span class="n">ErrorCode</span>
 
 <span class="n">LOGGER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -163,10 +164,19 @@
     <span class="n">Command</span><span class="o">.</span><span class="n">GET_DOWNLOADABLE_FILES</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;/session/$sessionId/se/files&quot;</span><span class="p">),</span>
     <span class="n">Command</span><span class="o">.</span><span class="n">DOWNLOAD_FILE</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;/session/$sessionId/se/files&quot;</span><span class="p">),</span>
     <span class="n">Command</span><span class="o">.</span><span class="n">DELETE_DOWNLOADABLE_FILES</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;DELETE&quot;</span><span class="p">,</span> <span class="s2">&quot;/session/$sessionId/se/files&quot;</span><span class="p">),</span>
+    <span class="c1"># Federated Credential Management (FedCM)</span>
+    <span class="n">Command</span><span class="o">.</span><span class="n">GET_FEDCM_TITLE</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;/session/$sessionId/fedcm/gettitle&quot;</span><span class="p">),</span>
+    <span class="n">Command</span><span class="o">.</span><span class="n">GET_FEDCM_DIALOG_TYPE</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;/session/$sessionId/fedcm/getdialogtype&quot;</span><span class="p">),</span>
+    <span class="n">Command</span><span class="o">.</span><span class="n">GET_FEDCM_ACCOUNT_LIST</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;/session/$sessionId/fedcm/accountlist&quot;</span><span class="p">),</span>
+    <span class="n">Command</span><span class="o">.</span><span class="n">CLICK_FEDCM_DIALOG_BUTTON</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;/session/$sessionId/fedcm/clickdialogbutton&quot;</span><span class="p">),</span>
+    <span class="n">Command</span><span class="o">.</span><span class="n">CANCEL_FEDCM_DIALOG</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;/session/$sessionId/fedcm/canceldialog&quot;</span><span class="p">),</span>
+    <span class="n">Command</span><span class="o">.</span><span class="n">SELECT_FEDCM_ACCOUNT</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;/session/$sessionId/fedcm/selectaccount&quot;</span><span class="p">),</span>
+    <span class="n">Command</span><span class="o">.</span><span class="n">SET_FEDCM_DELAY</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;/session/$sessionId/fedcm/setdelayenabled&quot;</span><span class="p">),</span>
+    <span class="n">Command</span><span class="o">.</span><span class="n">RESET_FEDCM_COOLDOWN</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;/session/$sessionId/fedcm/resetcooldown&quot;</span><span class="p">),</span>
 <span class="p">}</span>
 
 
-<div class="viewcode-block" id="RemoteConnection"><a class="viewcode-back" href="../../../../webdriver_remote/selenium.webdriver.remote.remote_connection.html#selenium.webdriver.remote.remote_connection.RemoteConnection">[docs]</a><span class="k">class</span> <span class="nc">RemoteConnection</span><span class="p">:</span>
+<div class="viewcode-block" id="RemoteConnection"><a class="viewcode-back" href="../../../../webdriver_remote/selenium.webdriver.remote.remote_connection.html#selenium.webdriver.remote.remote_connection.RemoteConnection">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">RemoteConnection</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A connection with the Remote WebDriver server.</span>
 
 <span class="sd">    Communicates with the server using the WebDriver wire protocol:</span>
@@ -174,48 +184,83 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">browser_name</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="c1"># Keep backward compatibility for AppiumConnection - https://github.com/SeleniumHQ/selenium/issues/14694</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">socket</span>
+
+    <span class="kn">import</span><span class="w"> </span><span class="nn">certifi</span>
+
     <span class="n">_timeout</span> <span class="o">=</span> <span class="p">(</span>
         <span class="nb">float</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;GLOBAL_DEFAULT_TIMEOUT&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">getdefaulttimeout</span><span class="p">())))</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;GLOBAL_DEFAULT_TIMEOUT&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
         <span class="k">else</span> <span class="n">socket</span><span class="o">.</span><span class="n">getdefaulttimeout</span><span class="p">()</span>
     <span class="p">)</span>
     <span class="n">_ca_certs</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;REQUESTS_CA_BUNDLE&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="s2">&quot;REQUESTS_CA_BUNDLE&quot;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span> <span class="k">else</span> <span class="n">certifi</span><span class="o">.</span><span class="n">where</span><span class="p">()</span>
+    <span class="n">_client_config</span><span class="p">:</span> <span class="n">ClientConfig</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">system</span> <span class="o">=</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">system</span> <span class="o">==</span> <span class="s2">&quot;darwin&quot;</span><span class="p">:</span>
+        <span class="n">system</span> <span class="o">=</span> <span class="s2">&quot;mac&quot;</span>
+
+    <span class="c1"># Class variables for headers</span>
+    <span class="n">extra_headers</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">user_agent</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;selenium/</span><span class="si">{</span><span class="n">__version__</span><span class="si">}</span><span class="s2"> (python </span><span class="si">{</span><span class="n">system</span><span class="si">}</span><span class="s2">)&quot;</span>
 
 <div class="viewcode-block" id="RemoteConnection.get_timeout"><a class="viewcode-back" href="../../../../webdriver_remote/selenium.webdriver.remote.remote_connection.html#selenium.webdriver.remote.remote_connection.RemoteConnection.get_timeout">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">get_timeout</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_timeout</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;:Returns:</span>
 
 <span class="sd">        Timeout value in seconds for all http requests made to the</span>
 <span class="sd">        Remote Connection</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="kc">None</span> <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_timeout</span> <span class="o">==</span> <span class="n">socket</span><span class="o">.</span><span class="n">_GLOBAL_DEFAULT_TIMEOUT</span> <span class="k">else</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_timeout</span></div>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;get_timeout() in RemoteConnection is deprecated, get timeout from ClientConfig instance instead&quot;</span><span class="p">,</span>
+            <span class="ne">DeprecationWarning</span><span class="p">,</span>
+            <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_client_config</span><span class="o">.</span><span class="n">timeout</span></div>
 
 <div class="viewcode-block" id="RemoteConnection.set_timeout"><a class="viewcode-back" href="../../../../webdriver_remote/selenium.webdriver.remote.remote_connection.html#selenium.webdriver.remote.remote_connection.RemoteConnection.set_timeout">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">set_timeout</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">timeout</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_timeout</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">timeout</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Override the default timeout.</span>
 
 <span class="sd">        :Args:</span>
 <span class="sd">            - timeout - timeout value for http requests in seconds</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">_timeout</span> <span class="o">=</span> <span class="n">timeout</span></div>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;set_timeout() in RemoteConnection is deprecated, set timeout to ClientConfig instance in constructor instead&quot;</span><span class="p">,</span>
+            <span class="ne">DeprecationWarning</span><span class="p">,</span>
+            <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_client_config</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="n">timeout</span></div>
 
 <div class="viewcode-block" id="RemoteConnection.reset_timeout"><a class="viewcode-back" href="../../../../webdriver_remote/selenium.webdriver.remote.remote_connection.html#selenium.webdriver.remote.remote_connection.RemoteConnection.reset_timeout">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">reset_timeout</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset_timeout</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Reset the http request timeout to socket._GLOBAL_DEFAULT_TIMEOUT.&quot;&quot;&quot;</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">_timeout</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">_GLOBAL_DEFAULT_TIMEOUT</span></div>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;reset_timeout() in RemoteConnection is deprecated, use reset_timeout() in ClientConfig instance instead&quot;</span><span class="p">,</span>
+            <span class="ne">DeprecationWarning</span><span class="p">,</span>
+            <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_client_config</span><span class="o">.</span><span class="n">reset_timeout</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="RemoteConnection.get_certificate_bundle_path"><a class="viewcode-back" href="../../../../webdriver_remote/selenium.webdriver.remote.remote_connection.html#selenium.webdriver.remote.remote_connection.RemoteConnection.get_certificate_bundle_path">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">get_certificate_bundle_path</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_certificate_bundle_path</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;:Returns:</span>
 
 <span class="sd">        Paths of the .pem encoded certificate to verify connection to</span>
 <span class="sd">        command executor. Defaults to certifi.where() or</span>
 <span class="sd">        REQUESTS_CA_BUNDLE env variable if set.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_ca_certs</span></div>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;get_certificate_bundle_path() in RemoteConnection is deprecated, get ca_certs from ClientConfig instance instead&quot;</span><span class="p">,</span>
+            <span class="ne">DeprecationWarning</span><span class="p">,</span>
+            <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_client_config</span><span class="o">.</span><span class="n">ca_certs</span></div>
 
 <div class="viewcode-block" id="RemoteConnection.set_certificate_bundle_path"><a class="viewcode-back" href="../../../../webdriver_remote/selenium.webdriver.remote.remote_connection.html#selenium.webdriver.remote.remote_connection.RemoteConnection.set_certificate_bundle_path">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">set_certificate_bundle_path</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_certificate_bundle_path</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the path to the certificate bundle to verify connection to</span>
 <span class="sd">        command executor. Can also be set to None to disable certificate</span>
 <span class="sd">        validation.</span>
@@ -223,10 +268,15 @@
 <span class="sd">        :Args:</span>
 <span class="sd">            - path - path of a .pem encoded certificate chain.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">_ca_certs</span> <span class="o">=</span> <span class="n">path</span></div>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;set_certificate_bundle_path() in RemoteConnection is deprecated, set ca_certs to ClientConfig instance in constructor instead&quot;</span><span class="p">,</span>
+            <span class="ne">DeprecationWarning</span><span class="p">,</span>
+            <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_client_config</span><span class="o">.</span><span class="n">ca_certs</span> <span class="o">=</span> <span class="n">path</span></div>
 
 <div class="viewcode-block" id="RemoteConnection.get_remote_connection_headers"><a class="viewcode-back" href="../../../../webdriver_remote/selenium.webdriver.remote.remote_connection.html#selenium.webdriver.remote.remote_connection.RemoteConnection.get_remote_connection_headers">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">get_remote_connection_headers</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">parsed_url</span><span class="p">,</span> <span class="n">keep_alive</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_remote_connection_headers</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">parsed_url</span><span class="p">,</span> <span class="n">keep_alive</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get headers for remote request.</span>
 
 <span class="sd">        :Args:</span>
@@ -234,53 +284,54 @@
 <span class="sd">         - keep_alive (Boolean) - Is this a keep-alive connection (default: False)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">system</span> <span class="o">=</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">system</span> <span class="o">==</span> <span class="s2">&quot;darwin&quot;</span><span class="p">:</span>
-            <span class="n">system</span> <span class="o">=</span> <span class="s2">&quot;mac&quot;</span>
-
         <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;Accept&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json;charset=UTF-8&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;User-Agent&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;selenium/</span><span class="si">{</span><span class="n">__version__</span><span class="si">}</span><span class="s2"> (python </span><span class="si">{</span><span class="n">system</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;User-Agent&quot;</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">user_agent</span><span class="p">,</span>
         <span class="p">}</span>
 
         <span class="k">if</span> <span class="n">parsed_url</span><span class="o">.</span><span class="n">username</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Embedding username and password in URL could be insecure, use ClientConfig instead&quot;</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span>
+            <span class="p">)</span>
             <span class="n">base64string</span> <span class="o">=</span> <span class="n">b64encode</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">parsed_url</span><span class="o">.</span><span class="n">username</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">parsed_url</span><span class="o">.</span><span class="n">password</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
             <span class="n">headers</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Basic </span><span class="si">{</span><span class="n">base64string</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">})</span>
 
         <span class="k">if</span> <span class="n">keep_alive</span><span class="p">:</span>
             <span class="n">headers</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;Connection&quot;</span><span class="p">:</span> <span class="s2">&quot;keep-alive&quot;</span><span class="p">})</span>
 
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">extra_headers</span><span class="p">:</span>
+            <span class="n">headers</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">extra_headers</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="n">headers</span></div>
 
-    <span class="k">def</span> <span class="nf">_get_proxy_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;https://&quot;</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;https_proxy&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;HTTPS_PROXY&quot;</span><span class="p">))</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;http://&quot;</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;http_proxy&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;HTTP_PROXY&quot;</span><span class="p">))</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_identify_http_proxy_auth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">parsed_url</span> <span class="o">=</span> <span class="n">urlparse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_proxy_url</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">parsed_url</span><span class="o">.</span><span class="n">username</span> <span class="ow">and</span> <span class="n">parsed_url</span><span class="o">.</span><span class="n">password</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
 
-    <span class="k">def</span> <span class="nf">_identify_http_proxy_auth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proxy_url</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="n">url</span><span class="p">[</span><span class="n">url</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">3</span> <span class="p">:]</span>
-        <span class="k">return</span> <span class="s2">&quot;@&quot;</span> <span class="ow">in</span> <span class="n">url</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">url</span><span class="p">[:</span> <span class="n">url</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;@&quot;</span><span class="p">)])</span> <span class="o">&gt;</span> <span class="mi">0</span>
-
-    <span class="k">def</span> <span class="nf">_separate_http_proxy_auth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proxy_url</span>
-        <span class="n">protocol</span> <span class="o">=</span> <span class="n">url</span><span class="p">[:</span> <span class="n">url</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">3</span><span class="p">]</span>
-        <span class="n">no_protocol</span> <span class="o">=</span> <span class="n">url</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">protocol</span><span class="p">)</span> <span class="p">:]</span>
-        <span class="n">auth</span> <span class="o">=</span> <span class="n">no_protocol</span><span class="p">[:</span> <span class="n">no_protocol</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;@&quot;</span><span class="p">)]</span>
-        <span class="n">proxy_without_auth</span> <span class="o">=</span> <span class="n">protocol</span> <span class="o">+</span> <span class="n">no_protocol</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">auth</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:]</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_separate_http_proxy_auth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">parsed_url</span> <span class="o">=</span> <span class="n">urlparse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_proxy_url</span><span class="p">)</span>
+        <span class="n">proxy_without_auth</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">parsed_url</span><span class="o">.</span><span class="n">scheme</span><span class="si">}</span><span class="s2">://</span><span class="si">{</span><span class="n">parsed_url</span><span class="o">.</span><span class="n">hostname</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">parsed_url</span><span class="o">.</span><span class="n">port</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">auth</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">parsed_url</span><span class="o">.</span><span class="n">username</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">parsed_url</span><span class="o">.</span><span class="n">password</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="k">return</span> <span class="n">proxy_without_auth</span><span class="p">,</span> <span class="n">auth</span>
 
-    <span class="k">def</span> <span class="nf">_get_connection_manager</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">pool_manager_init_args</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;timeout&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_timeout</span><span class="p">()}</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ca_certs</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_connection_manager</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">pool_manager_init_args</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;timeout&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client_config</span><span class="o">.</span><span class="n">timeout</span><span class="p">}</span>
+        <span class="n">pool_manager_init_args</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_client_config</span><span class="o">.</span><span class="n">init_args_for_pool_manager</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;init_args_for_pool_manager&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client_config</span><span class="o">.</span><span class="n">ignore_certificates</span><span class="p">:</span>
+            <span class="n">pool_manager_init_args</span><span class="p">[</span><span class="s2">&quot;cert_reqs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;CERT_NONE&quot;</span>
+            <span class="n">urllib3</span><span class="o">.</span><span class="n">disable_warnings</span><span class="p">(</span><span class="n">urllib3</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">InsecureRequestWarning</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client_config</span><span class="o">.</span><span class="n">ca_certs</span><span class="p">:</span>
             <span class="n">pool_manager_init_args</span><span class="p">[</span><span class="s2">&quot;cert_reqs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;CERT_REQUIRED&quot;</span>
-            <span class="n">pool_manager_init_args</span><span class="p">[</span><span class="s2">&quot;ca_certs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ca_certs</span>
+            <span class="n">pool_manager_init_args</span><span class="p">[</span><span class="s2">&quot;ca_certs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client_config</span><span class="o">.</span><span class="n">ca_certs</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proxy_url</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proxy_url</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;sock&quot;</span><span class="p">):</span>
-                <span class="kn">from</span> <span class="nn">urllib3.contrib.socks</span> <span class="kn">import</span> <span class="n">SOCKSProxyManager</span>
+                <span class="kn">from</span><span class="w"> </span><span class="nn">urllib3.contrib.socks</span><span class="w"> </span><span class="kn">import</span> <span class="n">SOCKSProxyManager</span>
 
                 <span class="k">return</span> <span class="n">SOCKSProxyManager</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_proxy_url</span><span class="p">,</span> <span class="o">**</span><span class="n">pool_manager_init_args</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_identify_http_proxy_auth</span><span class="p">():</span>
@@ -290,35 +341,82 @@
 
         <span class="k">return</span> <span class="n">urllib3</span><span class="o">.</span><span class="n">PoolManager</span><span class="p">(</span><span class="o">**</span><span class="n">pool_manager_init_args</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">remote_server_addr</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">keep_alive</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">ignore_proxy</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">keep_alive</span> <span class="o">=</span> <span class="n">keep_alive</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_url</span> <span class="o">=</span> <span class="n">remote_server_addr</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">remote_server_addr</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">keep_alive</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">ignore_proxy</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">ignore_certificates</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">init_args_for_pool_manager</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">client_config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ClientConfig</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_client_config</span> <span class="o">=</span> <span class="n">client_config</span> <span class="ow">or</span> <span class="n">ClientConfig</span><span class="p">(</span>
+            <span class="n">remote_server_addr</span><span class="o">=</span><span class="n">remote_server_addr</span><span class="p">,</span>
+            <span class="n">keep_alive</span><span class="o">=</span><span class="n">keep_alive</span><span class="p">,</span>
+            <span class="n">ignore_certificates</span><span class="o">=</span><span class="n">ignore_certificates</span><span class="p">,</span>
+            <span class="n">init_args_for_pool_manager</span><span class="o">=</span><span class="n">init_args_for_pool_manager</span><span class="p">,</span>
+        <span class="p">)</span>
 
-        <span class="c1"># Env var NO_PROXY will override this part of the code</span>
-        <span class="n">_no_proxy</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;no_proxy&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;NO_PROXY&quot;</span><span class="p">))</span>
-        <span class="k">if</span> <span class="n">_no_proxy</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">npu</span> <span class="ow">in</span> <span class="n">_no_proxy</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">):</span>
-                <span class="n">npu</span> <span class="o">=</span> <span class="n">npu</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-                <span class="k">if</span> <span class="n">npu</span> <span class="o">==</span> <span class="s2">&quot;*&quot;</span><span class="p">:</span>
-                    <span class="n">ignore_proxy</span> <span class="o">=</span> <span class="kc">True</span>
-                    <span class="k">break</span>
-                <span class="n">n_url</span> <span class="o">=</span> <span class="n">parse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="n">npu</span><span class="p">)</span>
-                <span class="n">remote_add</span> <span class="o">=</span> <span class="n">parse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">n_url</span><span class="o">.</span><span class="n">netloc</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">remote_add</span><span class="o">.</span><span class="n">netloc</span> <span class="o">==</span> <span class="n">n_url</span><span class="o">.</span><span class="n">netloc</span><span class="p">:</span>
-                        <span class="n">ignore_proxy</span> <span class="o">=</span> <span class="kc">True</span>
-                        <span class="k">break</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">n_url</span><span class="o">.</span><span class="n">path</span> <span class="ow">in</span> <span class="n">remote_add</span><span class="o">.</span><span class="n">netloc</span><span class="p">:</span>
-                        <span class="n">ignore_proxy</span> <span class="o">=</span> <span class="kc">True</span>
-                        <span class="k">break</span>
+        <span class="c1"># Keep backward compatibility for AppiumConnection - https://github.com/SeleniumHQ/selenium/issues/14694</span>
+        <span class="n">RemoteConnection</span><span class="o">.</span><span class="n">_timeout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client_config</span><span class="o">.</span><span class="n">timeout</span>
+        <span class="n">RemoteConnection</span><span class="o">.</span><span class="n">_ca_certs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client_config</span><span class="o">.</span><span class="n">ca_certs</span>
+        <span class="n">RemoteConnection</span><span class="o">.</span><span class="n">_client_config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client_config</span>
+        <span class="n">RemoteConnection</span><span class="o">.</span><span class="n">extra_headers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client_config</span><span class="o">.</span><span class="n">extra_headers</span> <span class="ow">or</span> <span class="n">RemoteConnection</span><span class="o">.</span><span class="n">extra_headers</span>
+        <span class="n">RemoteConnection</span><span class="o">.</span><span class="n">user_agent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client_config</span><span class="o">.</span><span class="n">user_agent</span> <span class="ow">or</span> <span class="n">RemoteConnection</span><span class="o">.</span><span class="n">user_agent</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_proxy_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_proxy_url</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">ignore_proxy</span> <span class="k">else</span> <span class="kc">None</span>
-        <span class="k">if</span> <span class="n">keep_alive</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">remote_server_addr</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;setting remote_server_addr in RemoteConnection() is deprecated, set in ClientConfig instance instead&quot;</span><span class="p">,</span>
+                <span class="ne">DeprecationWarning</span><span class="p">,</span>
+                <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">keep_alive</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;setting keep_alive in RemoteConnection() is deprecated, set in ClientConfig instance instead&quot;</span><span class="p">,</span>
+                <span class="ne">DeprecationWarning</span><span class="p">,</span>
+                <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">ignore_certificates</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;setting ignore_certificates in RemoteConnection() is deprecated, set in ClientConfig instance instead&quot;</span><span class="p">,</span>
+                <span class="ne">DeprecationWarning</span><span class="p">,</span>
+                <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">init_args_for_pool_manager</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;setting init_args_for_pool_manager in RemoteConnection() is deprecated, set in ClientConfig instance instead&quot;</span><span class="p">,</span>
+                <span class="ne">DeprecationWarning</span><span class="p">,</span>
+                <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">ignore_proxy</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;setting ignore_proxy in RemoteConnection() is deprecated, set in ClientConfig instance instead&quot;</span><span class="p">,</span>
+                <span class="ne">DeprecationWarning</span><span class="p">,</span>
+                <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_proxy_url</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_proxy_url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client_config</span><span class="o">.</span><span class="n">get_proxy_url</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client_config</span><span class="o">.</span><span class="n">keep_alive</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_connection_manager</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_commands</span> <span class="o">=</span> <span class="n">remote_commands</span>
 
-<div class="viewcode-block" id="RemoteConnection.execute"><a class="viewcode-back" href="../../../../webdriver_remote/selenium.webdriver.remote.remote_connection.html#selenium.webdriver.remote.remote_connection.RemoteConnection.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+    <span class="n">extra_commands</span> <span class="o">=</span> <span class="p">{}</span>
+
+<div class="viewcode-block" id="RemoteConnection.add_command"><a class="viewcode-back" href="../../../../webdriver_remote/selenium.webdriver.remote.remote_connection.html#selenium.webdriver.remote.remote_connection.RemoteConnection.add_command">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">add_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Register a new command.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_commands</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RemoteConnection.get_command"><a class="viewcode-back" href="../../../../webdriver_remote/selenium.webdriver.remote.remote_connection.html#selenium.webdriver.remote.remote_connection.RemoteConnection.get_command">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve a command if it exists.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_commands</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RemoteConnection.execute"><a class="viewcode-back" href="../../../../webdriver_remote/selenium.webdriver.remote.remote_connection.html#selenium.webdriver.remote.remote_connection.RemoteConnection.execute">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Send a command to the remote server.</span>
 
 <span class="sd">        Any path substitutions required for the URL mapped to the command should be</span>
@@ -329,7 +427,7 @@
 <span class="sd">         - params - A dictionary of named parameters to send with the command as</span>
 <span class="sd">           its JSON payload.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">command_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_commands</span><span class="p">[</span><span class="n">command</span><span class="p">]</span>
+        <span class="n">command_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_commands</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">command</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">extra_commands</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
         <span class="k">assert</span> <span class="n">command_info</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Unrecognised command </span><span class="si">{</span><span class="n">command</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="n">path_string</span> <span class="o">=</span> <span class="n">command_info</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">path</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">Template</span><span class="p">(</span><span class="n">path_string</span><span class="p">)</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
@@ -338,12 +436,12 @@
             <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">substitute_params</span><span class="p">:</span>
                 <span class="k">del</span> <span class="n">params</span><span class="p">[</span><span class="n">word</span><span class="p">]</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">dump_json</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="si">}{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_client_config</span><span class="o">.</span><span class="n">remote_server_addr</span><span class="si">}{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="n">trimmed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_trim_large_entries</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
         <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">command_info</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">url</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">trimmed</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request</span><span class="p">(</span><span class="n">command_info</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">url</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">data</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Send an HTTP request to the remote server.</span>
 
 <span class="sd">        :Args:</span>
@@ -355,18 +453,22 @@
 <span class="sd">          A dictionary with the server&#39;s parsed JSON response.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">parsed_url</span> <span class="o">=</span> <span class="n">parse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-        <span class="n">headers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_remote_connection_headers</span><span class="p">(</span><span class="n">parsed_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">keep_alive</span><span class="p">)</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_remote_connection_headers</span><span class="p">(</span><span class="n">parsed_url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client_config</span><span class="o">.</span><span class="n">keep_alive</span><span class="p">)</span>
+        <span class="n">auth_header</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client_config</span><span class="o">.</span><span class="n">get_auth_header</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">auth_header</span><span class="p">:</span>
+            <span class="n">headers</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">auth_header</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="n">body</span> <span class="ow">and</span> <span class="n">method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;PUT&quot;</span><span class="p">):</span>
             <span class="n">body</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">keep_alive</span><span class="p">:</span>
-            <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_conn</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">body</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client_config</span><span class="o">.</span><span class="n">keep_alive</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_conn</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">body</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_client_config</span><span class="o">.</span><span class="n">timeout</span><span class="p">)</span>
             <span class="n">statuscode</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">status</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_connection_manager</span><span class="p">()</span>
             <span class="k">with</span> <span class="n">conn</span> <span class="k">as</span> <span class="n">http</span><span class="p">:</span>
-                <span class="n">response</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">body</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+                <span class="n">response</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">body</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_client_config</span><span class="o">.</span><span class="n">timeout</span><span class="p">)</span>
             <span class="n">statuscode</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">status</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;UTF-8&quot;</span><span class="p">)</span>
         <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Remote response: status=</span><span class="si">%s</span><span class="s2"> | data=</span><span class="si">%s</span><span class="s2"> | headers=</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">status</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">)</span>
@@ -374,7 +476,9 @@
             <span class="k">if</span> <span class="mi">300</span> <span class="o">&lt;=</span> <span class="n">statuscode</span> <span class="o">&lt;</span> <span class="mi">304</span><span class="p">:</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request</span><span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;location&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
             <span class="k">if</span> <span class="mi">399</span> <span class="o">&lt;</span> <span class="n">statuscode</span> <span class="o">&lt;=</span> <span class="mi">500</span><span class="p">:</span>
-                <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="n">statuscode</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">}</span>
+                <span class="k">if</span> <span class="n">statuscode</span> <span class="o">==</span> <span class="mi">401</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="n">statuscode</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;Authorization Required&quot;</span><span class="p">}</span>
+                <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="n">statuscode</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">statuscode</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span> <span class="k">else</span> <span class="n">data</span><span class="o">.</span><span class="n">strip</span><span class="p">()}</span>
             <span class="n">content_type</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
                 <span class="n">content_type</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
@@ -399,12 +503,12 @@
             <span class="n">LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Finished Request&quot;</span><span class="p">)</span>
             <span class="n">response</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-<div class="viewcode-block" id="RemoteConnection.close"><a class="viewcode-back" href="../../../../webdriver_remote/selenium.webdriver.remote.remote_connection.html#selenium.webdriver.remote.remote_connection.RemoteConnection.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="RemoteConnection.close"><a class="viewcode-back" href="../../../../webdriver_remote/selenium.webdriver.remote.remote_connection.html#selenium.webdriver.remote.remote_connection.RemoteConnection.close">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Clean up resources when finished with the remote_connection.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_conn&quot;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_conn</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
 
-    <span class="k">def</span> <span class="nf">_trim_large_entries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_dict</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_trim_large_entries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_dict</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Truncate string values in a dictionary if they exceed max_length.</span>
 
 <span class="sd">        :param dict: Dictionary with potentially large values</span>
@@ -452,7 +556,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">Selenium 4.25.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">Selenium 4.29.0.202501201850 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">selenium.webdriver.remote.remote_connection</a></li> 
       </ul>

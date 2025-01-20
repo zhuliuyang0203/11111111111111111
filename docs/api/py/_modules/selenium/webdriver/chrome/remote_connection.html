@@ -4,11 +4,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>selenium.webdriver.chrome.remote_connection &#8212; Selenium 4.25.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+    <title>selenium.webdriver.chrome.remote_connection &#8212; Selenium 4.29.0.202501201850 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/classic.css?v=89b800e6" />
     
-    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=b061efce"></script>
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=a4e78ea5"></script>
     <script src="../../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
     
@@ -24,7 +24,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">Selenium 4.25.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">Selenium 4.29.0.202501201850 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">selenium.webdriver.chrome.remote_connection</a></li> 
       </ul>
@@ -52,20 +52,23 @@
 <span class="c1"># KIND, either express or implied.  See the License for the</span>
 <span class="c1"># specific language governing permissions and limitations</span>
 <span class="c1"># under the License.</span>
-<span class="kn">import</span> <span class="nn">typing</span>
 
-<span class="kn">from</span> <span class="nn">selenium.webdriver</span> <span class="kn">import</span> <span class="n">DesiredCapabilities</span>
-<span class="kn">from</span> <span class="nn">selenium.webdriver.chromium.remote_connection</span> <span class="kn">import</span> <span class="n">ChromiumRemoteConnection</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">selenium.webdriver</span><span class="w"> </span><span class="kn">import</span> <span class="n">DesiredCapabilities</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">selenium.webdriver.chromium.remote_connection</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChromiumRemoteConnection</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">selenium.webdriver.remote.client_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">ClientConfig</span>
 
 
-<div class="viewcode-block" id="ChromeRemoteConnection"><a class="viewcode-back" href="../../../../webdriver_chrome/selenium.webdriver.chrome.remote_connection.html#selenium.webdriver.chrome.remote_connection.ChromeRemoteConnection">[docs]</a><span class="k">class</span> <span class="nc">ChromeRemoteConnection</span><span class="p">(</span><span class="n">ChromiumRemoteConnection</span><span class="p">):</span>
+<div class="viewcode-block" id="ChromeRemoteConnection"><a class="viewcode-back" href="../../../../webdriver_chrome/selenium.webdriver.chrome.remote_connection.html#selenium.webdriver.chrome.remote_connection.ChromeRemoteConnection">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">ChromeRemoteConnection</span><span class="p">(</span><span class="n">ChromiumRemoteConnection</span><span class="p">):</span>
     <span class="n">browser_name</span> <span class="o">=</span> <span class="n">DesiredCapabilities</span><span class="o">.</span><span class="n">CHROME</span><span class="p">[</span><span class="s2">&quot;browserName&quot;</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">remote_server_addr</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">keep_alive</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="n">ignore_proxy</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">ignore_proxy</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">client_config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ClientConfig</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">remote_server_addr</span><span class="o">=</span><span class="n">remote_server_addr</span><span class="p">,</span>
@@ -73,6 +76,7 @@
             <span class="n">browser_name</span><span class="o">=</span><span class="n">ChromeRemoteConnection</span><span class="o">.</span><span class="n">browser_name</span><span class="p">,</span>
             <span class="n">keep_alive</span><span class="o">=</span><span class="n">keep_alive</span><span class="p">,</span>
             <span class="n">ignore_proxy</span><span class="o">=</span><span class="n">ignore_proxy</span><span class="p">,</span>
+            <span class="n">client_config</span><span class="o">=</span><span class="n">client_config</span><span class="p">,</span>
         <span class="p">)</span></div>
 </pre></div>
 
@@ -105,7 +109,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">Selenium 4.25.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">Selenium 4.29.0.202501201850 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">selenium.webdriver.chrome.remote_connection</a></li> 
       </ul>

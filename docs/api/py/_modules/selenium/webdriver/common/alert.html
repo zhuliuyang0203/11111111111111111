@@ -4,11 +4,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>selenium.webdriver.common.alert &#8212; Selenium 4.25.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=fa44fd50" />
+    <title>selenium.webdriver.common.alert &#8212; Selenium 4.29.0.202501201850 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/classic.css?v=89b800e6" />
     
-    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=b061efce"></script>
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=a4e78ea5"></script>
     <script src="../../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
     
@@ -24,7 +24,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">Selenium 4.25.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">Selenium 4.29.0.202501201850 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">selenium.webdriver.common.alert</a></li> 
       </ul>
@@ -54,11 +54,11 @@
 <span class="c1"># under the License.</span>
 <span class="sd">&quot;&quot;&quot;The Alert implementation.&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">selenium.webdriver.common.utils</span> <span class="kn">import</span> <span class="n">keys_to_typing</span>
-<span class="kn">from</span> <span class="nn">selenium.webdriver.remote.command</span> <span class="kn">import</span> <span class="n">Command</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">selenium.webdriver.common.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">keys_to_typing</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">selenium.webdriver.remote.command</span><span class="w"> </span><span class="kn">import</span> <span class="n">Command</span>
 
 
-<div class="viewcode-block" id="Alert"><a class="viewcode-back" href="../../../../webdriver/selenium.webdriver.common.alert.html#selenium.webdriver.common.alert.Alert">[docs]</a><span class="k">class</span> <span class="nc">Alert</span><span class="p">:</span>
+<div class="viewcode-block" id="Alert"><a class="viewcode-back" href="../../../../webdriver/selenium.webdriver.common.alert.html#selenium.webdriver.common.alert.Alert">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">Alert</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Allows to work with alerts.</span>
 
 <span class="sd">    Use this class to interact with alert prompts.  It contains methods for dismissing,</span>
@@ -82,7 +82,7 @@
 <span class="sd">        self.assertEqual(&quot;Do you wish to quit?&quot;, alert_text)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">driver</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">driver</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates a new Alert.</span>
 
 <span class="sd">        :Args:</span>
@@ -91,15 +91,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">driver</span> <span class="o">=</span> <span class="n">driver</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets the text of the Alert.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">Command</span><span class="o">.</span><span class="n">W3C_GET_ALERT_TEXT</span><span class="p">)[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span>
 
-<div class="viewcode-block" id="Alert.dismiss"><a class="viewcode-back" href="../../../../webdriver/selenium.webdriver.common.alert.html#selenium.webdriver.common.alert.Alert.dismiss">[docs]</a>    <span class="k">def</span> <span class="nf">dismiss</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="Alert.dismiss"><a class="viewcode-back" href="../../../../webdriver/selenium.webdriver.common.alert.html#selenium.webdriver.common.alert.Alert.dismiss">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">dismiss</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dismisses the alert available.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">Command</span><span class="o">.</span><span class="n">W3C_DISMISS_ALERT</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Alert.accept"><a class="viewcode-back" href="../../../../webdriver/selenium.webdriver.common.alert.html#selenium.webdriver.common.alert.Alert.accept">[docs]</a>    <span class="k">def</span> <span class="nf">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="Alert.accept"><a class="viewcode-back" href="../../../../webdriver/selenium.webdriver.common.alert.html#selenium.webdriver.common.alert.Alert.accept">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Accepts the alert available.</span>
 
 <span class="sd">        :Usage:</span>
@@ -109,7 +109,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">Command</span><span class="o">.</span><span class="n">W3C_ACCEPT_ALERT</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Alert.send_keys"><a class="viewcode-back" href="../../../../webdriver/selenium.webdriver.common.alert.html#selenium.webdriver.common.alert.Alert.send_keys">[docs]</a>    <span class="k">def</span> <span class="nf">send_keys</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keysToSend</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="Alert.send_keys"><a class="viewcode-back" href="../../../../webdriver/selenium.webdriver.common.alert.html#selenium.webdriver.common.alert.Alert.send_keys">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">send_keys</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keysToSend</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Send Keys to the Alert.</span>
 
 <span class="sd">        :Args:</span>
@@ -147,7 +147,7 @@
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../../index.html">Selenium 4.25.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">Selenium 4.29.0.202501201850 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">selenium.webdriver.common.alert</a></li> 
       </ul>
