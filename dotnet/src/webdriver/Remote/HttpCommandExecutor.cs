@@ -247,9 +247,11 @@ namespace OpenQA.Selenium.Remote
             {
                 client.DefaultRequestHeaders.Connection.ParseAdd("close");
             }
-            return client;
 
+            client.Timeout = this.serverResponseTimeout;
+            return client;
         }
+
         private async Task<HttpResponseInfo> MakeHttpRequest(HttpRequestInfo requestInfo)
         {
             SendingRemoteHttpRequestEventArgs eventArgs = new SendingRemoteHttpRequestEventArgs(requestInfo.HttpMethod, requestInfo.FullUri.ToString(), requestInfo.RequestBody);
