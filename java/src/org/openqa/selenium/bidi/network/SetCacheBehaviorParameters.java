@@ -17,6 +17,7 @@
 
 package org.openqa.selenium.bidi.network;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.openqa.selenium.internal.Require;
@@ -35,10 +36,11 @@ public class SetCacheBehaviorParameters {
   }
 
   public Map<String, Object> toMap() {
-    Map<String, Object> map = Map.of("cacheBehavior", cacheBehavior.toString());
+    Map<String, Object> map = new HashMap<>();
+    map.put("cacheBehavior", cacheBehavior.toString());
 
     if (contexts != null && !contexts.isEmpty()) {
-      return Map.of("cacheBehavior", cacheBehavior.toString(), "contexts", contexts);
+      map.put("contexts", contexts);
     }
 
     return map;
