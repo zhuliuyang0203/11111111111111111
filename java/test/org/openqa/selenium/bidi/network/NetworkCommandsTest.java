@@ -278,9 +278,7 @@ class NetworkCommandsTest extends JupiterTestBase {
       BrowsingContext context = new BrowsingContext(driver, WindowType.TAB);
       String contextId = context.getId();
 
-      network.setCacheBehavior(
-          new SetCacheBehaviorParameters(
-              CacheBehavior.BYPASS, Collections.singletonList(contextId)));
+      network.setCacheBehavior(CacheBehavior.BYPASS, Collections.singletonList(contextId));
     }
   }
 
@@ -293,9 +291,7 @@ class NetworkCommandsTest extends JupiterTestBase {
       BrowsingContext context = new BrowsingContext(driver, WindowType.TAB);
       String contextId = context.getId();
 
-      network.setCacheBehavior(
-          new SetCacheBehaviorParameters(
-              CacheBehavior.DEFAULT, Collections.singletonList(contextId)));
+      network.setCacheBehavior(CacheBehavior.DEFAULT, Collections.singletonList(contextId));
     }
   }
 
@@ -305,8 +301,8 @@ class NetworkCommandsTest extends JupiterTestBase {
     try (Network network = new Network(driver)) {
       page = appServer.whereIs("basicAuth");
 
-      network.setCacheBehavior(new SetCacheBehaviorParameters(CacheBehavior.BYPASS));
-      network.setCacheBehavior(new SetCacheBehaviorParameters(CacheBehavior.DEFAULT));
+      network.setCacheBehavior(CacheBehavior.BYPASS);
+      network.setCacheBehavior(CacheBehavior.DEFAULT);
     }
   }
 
@@ -319,8 +315,7 @@ class NetworkCommandsTest extends JupiterTestBase {
       assertThatThrownBy(
               () ->
                   network.setCacheBehavior(
-                      new SetCacheBehaviorParameters(
-                          CacheBehavior.DEFAULT, Collections.singletonList("invalid-context"))))
+                      CacheBehavior.DEFAULT, Collections.singletonList("invalid-context")))
           .isInstanceOf(BiDiException.class)
           .hasMessageContaining("no such frame");
     }

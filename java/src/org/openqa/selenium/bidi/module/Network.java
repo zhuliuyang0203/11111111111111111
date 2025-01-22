@@ -19,6 +19,7 @@ package org.openqa.selenium.bidi.module;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -30,12 +31,12 @@ import org.openqa.selenium.bidi.Event;
 import org.openqa.selenium.bidi.HasBiDi;
 import org.openqa.selenium.bidi.network.AddInterceptParameters;
 import org.openqa.selenium.bidi.network.BeforeRequestSent;
+import org.openqa.selenium.bidi.network.CacheBehavior;
 import org.openqa.selenium.bidi.network.ContinueRequestParameters;
 import org.openqa.selenium.bidi.network.ContinueResponseParameters;
 import org.openqa.selenium.bidi.network.FetchError;
 import org.openqa.selenium.bidi.network.ProvideResponseParameters;
 import org.openqa.selenium.bidi.network.ResponseDetails;
-import org.openqa.selenium.bidi.network.SetCacheBehaviorParameters;
 import org.openqa.selenium.internal.Require;
 
 public class Network implements AutoCloseable {
@@ -138,8 +139,20 @@ public class Network implements AutoCloseable {
     this.bidi.send(new Command<>("network.provideResponse", parameters.toMap()));
   }
 
-  public void setCacheBehavior(SetCacheBehaviorParameters parameters) {
-    this.bidi.send(new Command<>("network.setCacheBehavior", parameters.toMap()));
+  public void setCacheBehavior(CacheBehavior cacheBehavior) {
+    Require.nonNull("Cache behavior", cacheBehavior);
+    this.bidi.send(
+        new Command<>(
+            "network.setCacheBehavior", Map.of("cacheBehavior", cacheBehavior.toString())));
+  }
+
+  public void setCacheBehavior(CacheBehavior cacheBehavior, List<String> contexts) {
+    Require.nonNull("Cache behavior", cacheBehavior);
+    Require.nonNull("Contexts", contexts);
+    this.bidi.send(
+        new Command<>(
+            "network.setCacheBehavior",
+            Map.of("cacheBehavior", cacheBehavior.toString(), "contexts", contexts)));
   }
 
   public void onBeforeRequestSent(Consumer<BeforeRequestSent> consumer) {
