@@ -21,6 +21,8 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
+#nullable enable
+
 namespace OpenQA.Selenium.DevTools
 {
     /// <summary>
@@ -30,7 +32,7 @@ namespace OpenQA.Selenium.DevTools
     {
         // By default, we will look for a supported version within this
         // number of versions, as that will most likely still work.
-        private static readonly int DefaultVersionRange = 5;
+        private const int DefaultVersionRange = 5;
 
         // This is the list of known supported DevTools version implementation.
         // When new versions are implemented for support, new types must be
@@ -93,23 +95,18 @@ namespace OpenQA.Selenium.DevTools
                 throw new ArgumentException("Version range must be positive", nameof(versionRange));
             }
 
-            DevToolsDomains domains = null;
             Type domainType = MatchDomainsVersion(protocolVersion, versionRange);
-            ConstructorInfo constructor = domainType.GetConstructor(new Type[] { typeof(DevToolsSession) });
-            if (constructor != null)
-            {
-                domains = constructor.Invoke(new object[] { session }) as DevToolsDomains;
-            }
 
-            return domains;
+            ConstructorInfo constructor = domainType.GetConstructor(new Type[] { typeof(DevToolsSession) })!;
+            return (DevToolsDomains)constructor.Invoke(new object[] { session });
         }
 
         private static Type MatchDomainsVersion(int desiredVersion, int versionRange)
         {
             // Return fast on an exact match
-            if (SupportedDevToolsVersions.ContainsKey(desiredVersion))
+            if (SupportedDevToolsVersions.TryGetValue(desiredVersion, out Type? exactMatch))
             {
-                return SupportedDevToolsVersions[desiredVersion];
+                return exactMatch;
             }
 
             // Get the list of supported versions and sort descending
