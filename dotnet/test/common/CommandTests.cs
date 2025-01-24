@@ -26,6 +26,22 @@ namespace OpenQA.Selenium
     public class CommandTests
     {
         [Test]
+        public void CommandSerializesNullParameters()
+        {
+            var command = new Command(new SessionId("session"), "test command", parameters: null);
+
+            Assert.That(command.GetParametersAsUtf8Bytes(), Is.EqualTo("{}"u8.ToArray()));
+        }
+
+        [Test]
+        public void CommandSerializesEmptyParameters()
+        {
+            var command = new Command(new SessionId("session"), "test command", parameters: new Dictionary<string, object>());
+
+            Assert.That(command.GetParametersAsUtf8Bytes(), Is.EqualTo("{}"u8.ToArray()));
+        }
+
+        [Test]
         public void CommandSerializesAnonymousType()
         {
             var parameters = new Dictionary<string, object>
@@ -35,7 +51,7 @@ namespace OpenQA.Selenium
 
             var command = new Command(new SessionId("session"), "test command", parameters);
 
-            Assert.That(command.ParametersAsJsonString, Is.EqualTo("""{"arg":{"param1":true,"param2":false}}"""));
+            Assert.That(command.GetParametersAsUtf8Bytes(), Is.EqualTo("""{"arg":{"param1":true,"param2":false}}"""u8.ToArray()));
         }
     }
 }

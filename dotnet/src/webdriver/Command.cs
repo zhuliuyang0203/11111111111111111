@@ -102,12 +102,28 @@ namespace OpenQA.Selenium
         }
 
         /// <summary>
+        /// Serializes the parameters of the comand to JSON as UTF-8 bytes.
+        /// </summary>
+        /// <returns></returns>
+        public byte[] GetParametersAsUtf8Bytes()
+        {
+            if (this.Parameters != null && this.Parameters.Count > 0)
+            {
+                return JsonSerializer.SerializeToUtf8Bytes(this.Parameters, s_jsonSerializerOptions);
+            }
+            else
+            {
+                return "{}"u8.ToArray();
+            }
+        }
+
+        /// <summary>
         /// Returns a string of the Command object
         /// </summary>
         /// <returns>A string representation of the Command Object</returns>
         public override string ToString()
         {
-            return string.Concat("[", this.SessionId, "]: ", this.Name, " ", this.ParametersAsJsonString);
+            return $"[{this.SessionId}]: {this.Name} Parameters: {this.ParametersAsJsonString}";
         }
 
         /// <summary>

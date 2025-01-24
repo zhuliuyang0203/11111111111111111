@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 #nullable enable
 
@@ -29,6 +30,8 @@ namespace OpenQA.Selenium.Remote
     /// </summary>
     public class SendingRemoteHttpRequestEventArgs : EventArgs
     {
+        private string? _requestBody;
+        private readonly byte[]? _utf8RequestBody;
         private readonly Dictionary<string, string> headers = new Dictionary<string, string>();
 
         /// <summary>
@@ -42,7 +45,21 @@ namespace OpenQA.Selenium.Remote
         {
             this.Method = method ?? throw new ArgumentNullException(nameof(method));
             this.FullUrl = fullUrl ?? throw new ArgumentNullException(nameof(fullUrl));
-            this.RequestBody = requestBody;
+            _utf8RequestBody = requestBody is null ? null : Encoding.UTF8.GetBytes(requestBody);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SendingRemoteHttpRequestEventArgs"/> class.
+        /// </summary>
+        /// <param name="method">The HTTP method of the request being sent.</param>
+        /// <param name="fullUrl">The full URL of the request being sent.</param>
+        /// <param name="requestBody">The body of the request.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="method"/>, <paramref name="fullUrl"/> are null.</exception>
+        public SendingRemoteHttpRequestEventArgs(string method, string fullUrl, byte[]? requestBody)
+        {
+            this.Method = method ?? throw new ArgumentNullException(nameof(method));
+            this.FullUrl = fullUrl ?? throw new ArgumentNullException(nameof(fullUrl));
+            _utf8RequestBody = requestBody;
         }
 
         /// <summary>
@@ -58,7 +75,18 @@ namespace OpenQA.Selenium.Remote
         /// <summary>
         /// Gets the body of the HTTP request as a string.
         /// </summary>
-        public string? RequestBody { get; }
+        public string? RequestBody
+        {
+            get
+            {
+                if (_requestBody is not null)
+                {
+                    return _requestBody;
+                }
+
+                return _requestBody = _utf8RequestBody is null ? null : Encoding.UTF8.GetString(_utf8RequestBody);
+            }
+        }
 
         /// <summary>
         /// Gets a read-only dictionary of the headers of the HTTP request.

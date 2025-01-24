@@ -280,7 +280,7 @@ namespace OpenQA.Selenium.Remote
                     acceptHeader.CharSet = Utf8CharsetType;
                     requestMessage.Headers.Accept.Add(acceptHeader);
 
-                    byte[] bytes = Encoding.UTF8.GetBytes(requestInfo.RequestBody);
+                    byte[] bytes = requestInfo.RequestBody;
                     requestMessage.Content = new ByteArrayContent(bytes, 0, bytes.Length);
 
                     MediaTypeHeaderValue contentTypeHeader = new MediaTypeHeaderValue(JsonMimeType);
@@ -370,12 +370,12 @@ namespace OpenQA.Selenium.Remote
 
                 this.FullUri = commandInfo.CreateCommandUri(serverUri, commandToExecute);
                 this.HttpMethod = commandInfo.Method;
-                this.RequestBody = commandToExecute.ParametersAsJsonString;
+                this.RequestBody = commandToExecute.GetParametersAsUtf8Bytes();
             }
 
             public Uri FullUri { get; set; }
             public string HttpMethod { get; set; }
-            public string RequestBody { get; set; }
+            public byte[] RequestBody { get; set; }
         }
 
         private class HttpResponseInfo
