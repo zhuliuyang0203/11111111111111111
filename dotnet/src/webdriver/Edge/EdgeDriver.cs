@@ -54,7 +54,7 @@ namespace OpenQA.Selenium.Edge
         /// </summary>
         /// <param name="options">The <see cref="EdgeOptions"/> to be used with the Edge driver.</param>
         public EdgeDriver(EdgeOptions options)
-            : this(EdgeDriverService.CreateDefaultService(), options)
+            : this(EdgeDriverService.CreateDefaultService(), disposeService: true, options, RemoteWebDriver.DefaultCommandTimeout)
         {
         }
 
@@ -96,7 +96,7 @@ namespace OpenQA.Selenium.Edge
         /// <param name="options">The <see cref="EdgeOptions"/> to be used with the Edge driver.</param>
         /// <param name="commandTimeout">The maximum amount of time to wait for each command.</param>
         public EdgeDriver(string edgeDriverDirectory, EdgeOptions options, TimeSpan commandTimeout)
-            : this(EdgeDriverService.CreateDefaultService(edgeDriverDirectory), options, commandTimeout)
+            : this(EdgeDriverService.CreateDefaultService(edgeDriverDirectory), disposeService: true, options, commandTimeout)
         {
         }
 
@@ -118,7 +118,12 @@ namespace OpenQA.Selenium.Edge
         /// <param name="options">The <see cref="EdgeOptions"/> to be used with the Edge driver.</param>
         /// <param name="commandTimeout">The maximum amount of time to wait for each command.</param>
         public EdgeDriver(EdgeDriverService service, EdgeOptions options, TimeSpan commandTimeout)
-            : base(service, options, commandTimeout)
+            : this(service, disposeService: false, options, commandTimeout)
+        {
+        }
+
+        private EdgeDriver(EdgeDriverService service, bool disposeService, EdgeOptions options, TimeSpan commandTimeout)
+            : base(service, disposeService, options, commandTimeout)
         {
             this.AddCustomEdgeCommands();
         }

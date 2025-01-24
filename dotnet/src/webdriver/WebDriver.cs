@@ -192,7 +192,7 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Gets the <see cref="SessionId"/> for the current session of this driver.
         /// </summary>
-        public SessionId SessionId { get; private set; }
+        public SessionId SessionId { get; protected set; }
 
         /// <summary>
         /// Gets or sets the <see cref="IFileDetector"/> responsible for detecting
@@ -709,6 +709,7 @@ namespace OpenQA.Selenium
         /// <param name="disposing">if its in the process of disposing</param>
         protected virtual void Dispose(bool disposing)
         {
+            // DO NOT SEND QUIT COMMAND IN BASE, CHILDS SHOULD IMPLEMENT IT. REMOVE IN FINAL MERGE.
             try
             {
                 if (this.SessionId is not null)
@@ -729,6 +730,7 @@ namespace OpenQA.Selenium
             {
                 this.SessionId = null;
             }
+
             this.executor.Dispose();
         }
 

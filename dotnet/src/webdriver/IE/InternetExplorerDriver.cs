@@ -63,6 +63,9 @@ namespace OpenQA.Selenium.IE
     /// </example>
     public class InternetExplorerDriver : WebDriver
     {
+        private InternetExplorerDriverService driverService;
+        private bool disposeDriverService;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="InternetExplorerDriver"/> class.
         /// </summary>
@@ -77,7 +80,7 @@ namespace OpenQA.Selenium.IE
         /// </summary>
         /// <param name="options">The <see cref="InternetExplorerOptions"/> used to initialize the driver.</param>
         public InternetExplorerDriver(InternetExplorerOptions options)
-            : this(InternetExplorerDriverService.CreateDefaultService(), options)
+            : this(InternetExplorerDriverService.CreateDefaultService(), disposeService: true, options, RemoteWebDriver.DefaultCommandTimeout)
         {
         }
 
@@ -119,7 +122,7 @@ namespace OpenQA.Selenium.IE
         /// <param name="options">The <see cref="InternetExplorerOptions"/> used to initialize the driver.</param>
         /// <param name="commandTimeout">The maximum amount of time to wait for each command.</param>
         public InternetExplorerDriver(string internetExplorerDriverServerDirectory, InternetExplorerOptions options, TimeSpan commandTimeout)
-            : this(InternetExplorerDriverService.CreateDefaultService(internetExplorerDriverServerDirectory), options, commandTimeout)
+            : this(InternetExplorerDriverService.CreateDefaultService(internetExplorerDriverServerDirectory), disposeService: true, options, commandTimeout)
         {
         }
 
@@ -142,8 +145,15 @@ namespace OpenQA.Selenium.IE
         /// <param name="options">The <see cref="InternetExplorerOptions"/> used to initialize the driver.</param>
         /// <param name="commandTimeout">The maximum amount of time to wait for each command.</param>
         public InternetExplorerDriver(InternetExplorerDriverService service, InternetExplorerOptions options, TimeSpan commandTimeout)
+            : this(service, disposeService: false, options, commandTimeout)
+        {
+        }
+
+        private InternetExplorerDriver(InternetExplorerDriverService service, bool disposeService, InternetExplorerOptions options, TimeSpan commandTimeout)
             : base(GenerateDriverServiceCommandExecutor(service, options, commandTimeout), ConvertOptionsToCapabilities(options))
         {
+            this.driverService = service;
+            this.disposeDriverService = disposeService;
         }
 
         /// <summary>
@@ -162,7 +172,10 @@ namespace OpenQA.Selenium.IE
                 service.DriverServicePath = Path.GetDirectoryName(fullServicePath);
                 service.DriverServiceExecutableName = Path.GetFileName(fullServicePath);
             }
-            return new DriverServiceCommandExecutor(service, commandTimeout);
+
+            service.Start();
+
+            return new HttpCommandExecutor(service.ServiceUrl, commandTimeout);
         }
 
         /// <summary>
@@ -179,6 +192,46 @@ namespace OpenQA.Selenium.IE
         {
             get { return base.FileDetector; }
             set { }
+        }
+
+        /// <summary>
+        /// Disposes of the FirefoxDriver and frees all resources.
+        /// </summary>
+        /// <param name="disposing">A value indicating whether the user initiated the
+        /// disposal of the object. Pass <see langword="true"/> if the user is actively
+        /// disposing the object; otherwise <see langword="false"/>.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (this.SessionId is not null)
+                {
+                    try
+                    {
+                        this.Execute(DriverCommand.Quit, null);
+                    }
+                    catch (NotImplementedException)
+                    {
+                    }
+                    catch (InvalidOperationException)
+                    {
+                    }
+                    catch (WebDriverException)
+                    {
+                    }
+                    finally
+                    {
+                        this.SessionId = null;
+                    }
+                }
+
+                if (this.disposeDriverService)
+                {
+                    this.driverService.Dispose();
+                }
+            }
+
+            base.Dispose(disposing);
         }
 
         private static ICapabilities ConvertOptionsToCapabilities(InternetExplorerOptions options)

@@ -23,8 +23,9 @@ using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi;
 
-[Parallelizable(ParallelScope.All)]
-[FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
+// https://github.com/mozilla/geckodriver/issues/2209 Support multiple concurrent sessions
+//[Parallelizable(ParallelScope.Fixtures)]
+//[FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
 public class BiDiTestFixture
 {
     protected IWebDriver driver;

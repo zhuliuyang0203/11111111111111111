@@ -84,7 +84,7 @@ namespace OpenQA.Selenium.Chrome
         /// </summary>
         /// <param name="options">The <see cref="ChromeOptions"/> to be used with the Chrome driver.</param>
         public ChromeDriver(ChromeOptions options)
-            : this(ChromeDriverService.CreateDefaultService(), options, RemoteWebDriver.DefaultCommandTimeout)
+            : this(ChromeDriverService.CreateDefaultService(), disposeService: true, options, RemoteWebDriver.DefaultCommandTimeout)
         {
         }
 
@@ -126,7 +126,7 @@ namespace OpenQA.Selenium.Chrome
         /// <param name="options">The <see cref="ChromeOptions"/> to be used with the Chrome driver.</param>
         /// <param name="commandTimeout">The maximum amount of time to wait for each command.</param>
         public ChromeDriver(string chromeDriverDirectory, ChromeOptions options, TimeSpan commandTimeout)
-            : this(ChromeDriverService.CreateDefaultService(chromeDriverDirectory), options, commandTimeout)
+            : this(ChromeDriverService.CreateDefaultService(chromeDriverDirectory), disposeService: true, options, commandTimeout)
         {
         }
 
@@ -148,7 +148,12 @@ namespace OpenQA.Selenium.Chrome
         /// <param name="options">The <see cref="ChromeOptions"/> to be used with the Chrome driver.</param>
         /// <param name="commandTimeout">The maximum amount of time to wait for each command.</param>
         public ChromeDriver(ChromeDriverService service, ChromeOptions options, TimeSpan commandTimeout)
-            : base(service, options, commandTimeout)
+            : this(service, disposeService: false, options, commandTimeout)
+        {
+        }
+
+        private ChromeDriver(ChromeDriverService service, bool disposeService, ChromeOptions options, TimeSpan commandTimeout)
+            : base(service, disposeService, options, commandTimeout)
         {
             this.AddCustomChromeCommands();
         }

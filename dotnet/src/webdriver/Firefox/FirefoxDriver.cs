@@ -110,6 +110,8 @@ namespace OpenQA.Selenium.Firefox
             { GetFullPageScreenshotCommand, new HttpCommandInfo(HttpCommandInfo.GetCommand, "/session/{sessionId}/moz/screenshot/full") }
         };
 
+        private FirefoxDriverService driverService;
+        private bool disposeDriverService;
         private DevToolsSession devToolsSession;
 
         /// <summary>
@@ -125,7 +127,7 @@ namespace OpenQA.Selenium.Firefox
         /// </summary>
         /// <param name="options">The <see cref="FirefoxOptions"/> to be used with the Firefox driver.</param>
         public FirefoxDriver(FirefoxOptions options)
-            : this(FirefoxDriverService.CreateDefaultService(), options, RemoteWebDriver.DefaultCommandTimeout)
+            : this(FirefoxDriverService.CreateDefaultService(), disposeService: true, options, RemoteWebDriver.DefaultCommandTimeout)
         {
         }
 
@@ -167,7 +169,7 @@ namespace OpenQA.Selenium.Firefox
         /// <param name="options">The <see cref="FirefoxOptions"/> to be used with the Firefox driver.</param>
         /// <param name="commandTimeout">The maximum amount of time to wait for each command.</param>
         public FirefoxDriver(string geckoDriverDirectory, FirefoxOptions options, TimeSpan commandTimeout)
-            : this(FirefoxDriverService.CreateDefaultService(geckoDriverDirectory), options, commandTimeout)
+            : this(FirefoxDriverService.CreateDefaultService(geckoDriverDirectory), disposeService: true, options, commandTimeout)
         {
         }
 
@@ -188,8 +190,17 @@ namespace OpenQA.Selenium.Firefox
         /// <param name="options">The <see cref="FirefoxOptions"/> to be used with the Firefox driver.</param>
         /// <param name="commandTimeout">The maximum amount of time to wait for each command.</param>
         public FirefoxDriver(FirefoxDriverService service, FirefoxOptions options, TimeSpan commandTimeout)
+            : this(service, disposeService: false, options, commandTimeout)
+        {
+
+        }
+
+        private FirefoxDriver(FirefoxDriverService service, bool disposeService, FirefoxOptions options, TimeSpan commandTimeout)
             : base(GenerateDriverServiceCommandExecutor(service, options, commandTimeout), ConvertOptionsToCapabilities(options))
         {
+            this.driverService = service;
+            this.disposeDriverService = disposeService;
+
             // Add the custom commands unique to Firefox
             this.AddCustomFirefoxCommands();
         }
@@ -203,19 +214,23 @@ namespace OpenQA.Selenium.Firefox
         /// <returns></returns>
         private static ICommandExecutor GenerateDriverServiceCommandExecutor(DriverService service, DriverOptions options, TimeSpan commandTimeout)
         {
-            if (service.DriverServicePath == null)
+            if (service.DriverServicePath == null || string.IsNullOrEmpty(options.BinaryLocation))
             {
                 DriverFinder finder = new DriverFinder(options);
                 string fullServicePath = finder.GetDriverPath();
                 service.DriverServicePath = Path.GetDirectoryName(fullServicePath);
                 service.DriverServiceExecutableName = Path.GetFileName(fullServicePath);
+
                 if (finder.HasBrowserPath())
                 {
                     options.BinaryLocation = finder.GetBrowserPath();
                     options.BrowserVersion = null;
                 }
             }
-            return new DriverServiceCommandExecutor(service, commandTimeout);
+
+            service.Start();
+
+            return new HttpCommandExecutor(service.ServiceUrl, commandTimeout);
         }
 
         /// <summary>
@@ -473,6 +488,32 @@ namespace OpenQA.Selenium.Firefox
                 {
                     this.devToolsSession.Dispose();
                     this.devToolsSession = null;
+                }
+
+                if (this.SessionId is not null)
+                {
+                    try
+                    {
+                        this.Execute(DriverCommand.Quit, null);
+                    }
+                    catch (NotImplementedException)
+                    {
+                    }
+                    catch (InvalidOperationException)
+                    {
+                    }
+                    catch (WebDriverException)
+                    {
+                    }
+                    finally
+                    {
+                        this.SessionId = null;
+                    }
+                }
+
+                if (this.disposeDriverService)
+                {
+                    this.driverService.Dispose();
                 }
             }
 

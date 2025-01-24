@@ -35,6 +35,11 @@ namespace OpenQA.Selenium.Safari
         {
         }
 
+        public SafariTechnologyPreviewDriver(SafariDriverService service)
+            : base(service)
+        {
+        }
+
         public SafariTechnologyPreviewDriver(SafariDriverService service, SafariOptions options)
             : base(service, options)
         {
