@@ -255,4 +255,3 @@ class Select:
             if css_value in css_value_candidates:
                 return False
         return True
-

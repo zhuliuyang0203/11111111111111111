@@ -161,12 +161,14 @@ def test_raises_exception_select_by_text_multiple_disabled(driver, pages):
     with pytest.raises(NotImplementedError):
         sel.select_by_visible_text(disabledMultiSelect["values"][1])
 
+
 def test_raises_exception_select_by_text_multiple_hidden(driver, pages):
     pages.load("formPage.html")
 
     sel = Select(driver.find_element(By.ID, invisibleMultiSelect["id"]))
     with pytest.raises(NoSuchElementException):
         sel.select_by_visible_text(invisibleMultiSelect["values"][0])
+
 
 def test_deselect_all_single(driver, pages):
     pages.load("formPage.html")
