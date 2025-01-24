@@ -58,11 +58,7 @@ namespace OpenQA.Selenium
         public Command(SessionId? sessionId, string name, Dictionary<string, object>? parameters)
         {
             this.SessionId = sessionId;
-            if (parameters != null)
-            {
-                this.Parameters = parameters;
-            }
-
+            this.Parameters = parameters ?? new Dictionary<string, object>();
             this.Name = name;
         }
 
@@ -82,7 +78,7 @@ namespace OpenQA.Selenium
         /// Gets the parameters of the command
         /// </summary>
         [JsonPropertyName("parameters")]
-        public Dictionary<string, object> Parameters { get; } = new Dictionary<string, object>();
+        public Dictionary<string, object> Parameters { get; }
 
         /// <summary>
         /// Gets the parameters of the command as a JSON-encoded string.
