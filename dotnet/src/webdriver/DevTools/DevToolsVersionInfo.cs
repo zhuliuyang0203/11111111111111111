@@ -66,11 +66,7 @@ namespace OpenQA.Selenium.DevTools
         /// </summary>
         [JsonPropertyName("V8-Version")]
         [JsonInclude]
-        public string V8Version
-        {
-            get;
-            internal set;
-        }
+        public string V8Version { get; internal set; }
 
         /// <summary>
         /// Gets the URL for the WebSocket connection used for communicating via the DevTools Protocol.

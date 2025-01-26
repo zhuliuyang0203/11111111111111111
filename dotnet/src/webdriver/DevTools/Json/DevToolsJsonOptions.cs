@@ -18,12 +18,13 @@
 // </copyright>
 
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 #nullable enable
 
 namespace OpenQA.Selenium.DevTools.Json;
 
-internal static class DevToolsJsonOptions
+internal static partial class DevToolsJsonOptions
 {
     public static JsonSerializerOptions Default { get; } = new JsonSerializerOptions()
     {
@@ -32,4 +33,9 @@ internal static class DevToolsJsonOptions
             new StringConverter(),
         }
     };
+
+    [JsonSerializable(typeof(DevToolsCommandData))]
+    [JsonSerializable(typeof(DevToolsVersionInfo))]
+    [JsonSerializable(typeof(DomMutationData))]
+    internal sealed partial class DevToolsSerializerContext : JsonSerializerContext;
 }

@@ -18,6 +18,7 @@
 // </copyright>
 
 using OpenQA.Selenium.DevTools;
+using OpenQA.Selenium.DevTools.Json;
 using OpenQA.Selenium.Internal;
 using System;
 using System.Collections.Generic;
@@ -398,7 +399,7 @@ namespace OpenQA.Selenium
         {
             if (e.Name == MonitorBindingName)
             {
-                DomMutationData valueChangeData = JsonSerializer.Deserialize<DomMutationData>(e.Payload);
+                DomMutationData valueChangeData = JsonSerializer.Deserialize<DomMutationData>(e.Payload, DevToolsJsonOptions.DevToolsSerializerContext.Default.DomMutationData);
                 var locator = By.CssSelector($"*[data-__webdriver_id='{valueChangeData.TargetId}']");
                 valueChangeData.Element = driver.FindElements(locator).FirstOrDefault();
 
