@@ -84,6 +84,7 @@ namespace OpenQA.Selenium.BiDi.Communication.Json;
 [JsonSerializable(typeof(Modules.Network.ResponseStartedEventArgs))]
 [JsonSerializable(typeof(Modules.Network.ResponseCompletedEventArgs))]
 [JsonSerializable(typeof(Modules.Network.FetchErrorEventArgs))]
+[JsonSerializable(typeof(Modules.Network.AuthRequiredEventArgs))]
 
 [JsonSerializable(typeof(Modules.Script.Channel), TypeInfoPropertyName = "Script_Channel")]
 [JsonSerializable(typeof(Modules.Script.AddPreloadScriptResult))]
