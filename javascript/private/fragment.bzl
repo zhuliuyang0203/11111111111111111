@@ -1,11 +1,13 @@
 load("@io_bazel_rules_closure//closure:defs.bzl", "closure_js_binary", "closure_js_library")
 
+EXPORT_FUNCTION_NAME = '___exportedFunc___'
+
 def _internal_closure_fragment_export_impl(ctx):
     ctx.actions.write(
         output = ctx.outputs.out,
         content = """
 goog.require('%s');
-goog.exportSymbol('_', %s);
+goog.exportSymbol(EXPORT_FUNCTION_NAME, %s);
 """ % (ctx.attr.module, ctx.attr.function),
     )
 
@@ -59,10 +61,7 @@ def closure_fragment(
     #     See http://code.google.com/p/selenium/issues/detail?id=1333
     wrapper = (
         "function(){" +
-        "return (function(){%output%; return this._.apply(null,arguments);}).apply({" +
-        "navigator:typeof window!='undefined'?window.navigator:null," +
-        "document:typeof window!='undefined'?window.document:null" +
-        "}, arguments);}"
+        "return (function(){%output%; return this.%EXPORT_FUNCTION_NAME%.apply(null,arguments);}).apply(window, arguments);}"
     )
 
     browser_defs = {
