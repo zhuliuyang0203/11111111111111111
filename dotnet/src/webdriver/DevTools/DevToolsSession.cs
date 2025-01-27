@@ -18,6 +18,7 @@
 // </copyright>
 
 using OpenQA.Selenium.Internal.Logging;
+using OpenQA.Selenium.DevTools.Json;
 using System;
 using System.Collections.Concurrent;
 using System.Globalization;
@@ -189,7 +190,7 @@ namespace OpenQA.Selenium.DevTools
                 throw new ArgumentNullException(nameof(command));
             }
 
-            var result = await SendCommand(command.CommandName, sessionId, JsonSerializer.SerializeToNode(command), cancellationToken, millisecondsTimeout, throwExceptionIfResponseNotReceived).ConfigureAwait(false);
+            var result = await SendCommand(command.CommandName, sessionId, JsonSerializer.SerializeToNode(command, CdpSerializationContext.Default.GetTypeInfo(typeof(TCommand))), cancellationToken, millisecondsTimeout, throwExceptionIfResponseNotReceived).ConfigureAwait(false);
 
             if (result == null)
             {
@@ -201,7 +202,8 @@ namespace OpenQA.Selenium.DevTools
                 throw new InvalidOperationException($"Type {typeof(TCommand)} does not correspond to a known command response type.");
             }
 
-            return result.Value.Deserialize(commandResponseType) as ICommandResponse<TCommand>;
+            var commandResponseSerialization = CdpSerializationContext.Default.GetTypeInfo(commandResponseType);
+            return (ICommandResponse<TCommand>)result.Value.Deserialize(commandResponseType, commandResponseSerialization);
         }
 
         /// <summary>

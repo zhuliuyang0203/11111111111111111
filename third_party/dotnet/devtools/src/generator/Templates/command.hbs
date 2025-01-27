@@ -55,3 +55,10 @@ namespace {{rootNamespace}}.{{domain.Name}}
     {{/each}}
     }
 }
+
+namespace OpenQA.Selenium.DevTools.Json
+{
+    [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::{{rootNamespace}}.{{domain.Name}}.{{className}}CommandSettings))]
+    [global::System.Text.Json.Serialization.JsonSerializable(typeof(global::{{rootNamespace}}.{{domain.Name}}.{{className}}CommandResponse))]
+    internal sealed partial class CdpSerializationContext;
+}
