@@ -18,7 +18,6 @@
 // </copyright>
 
 using OpenQA.Selenium.Internal.Logging;
-using OpenQA.Selenium.DevTools.Json;
 using System;
 using System.Collections.Concurrent;
 using System.Globalization;
