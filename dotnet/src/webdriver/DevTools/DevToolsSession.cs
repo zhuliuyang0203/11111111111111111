@@ -157,16 +157,19 @@ namespace OpenQA.Selenium.DevTools
                 throw new ArgumentNullException(nameof(command));
             }
 
-            JsonNode serializedCommand = this.domains.SerializeToNode(command);
-
-            var result = await SendCommand(command.CommandName, serializedCommand, cancellationToken, millisecondsTimeout, throwExceptionIfResponseNotReceived).ConfigureAwait(false);
+            var result = await SendCommand(command.CommandName, JsonSerializer.SerializeToNode(command), cancellationToken, millisecondsTimeout, throwExceptionIfResponseNotReceived).ConfigureAwait(false);
 
             if (result == null)
             {
                 return null;
             }
 
-            return this.domains.DeserializeCommandResponse<TCommand>(result.Value);
+            if (!this.domains.VersionSpecificDomains.ResponseTypeMap.TryGetCommandResponseType<TCommand>(out Type commandResponseType))
+            {
+                throw new InvalidOperationException($"Type {command.GetType()} does not correspond to a known command response type.");
+            }
+
+            return result.Value.Deserialize(commandResponseType) as ICommandResponse<TCommand>;
         }
 
         /// <summary>
@@ -187,16 +190,19 @@ namespace OpenQA.Selenium.DevTools
                 throw new ArgumentNullException(nameof(command));
             }
 
-            JsonNode serializedCommand = this.domains.SerializeToNode(command);
-
-            var result = await SendCommand(command.CommandName, sessionId, serializedCommand, cancellationToken, millisecondsTimeout, throwExceptionIfResponseNotReceived).ConfigureAwait(false);
+            var result = await SendCommand(command.CommandName, sessionId, JsonSerializer.SerializeToNode(command), cancellationToken, millisecondsTimeout, throwExceptionIfResponseNotReceived).ConfigureAwait(false);
 
             if (result == null)
             {
                 return null;
             }
 
-            return this.domains.DeserializeCommandResponse<TCommand>(result.Value);
+            if (!this.domains.VersionSpecificDomains.ResponseTypeMap.TryGetCommandResponseType(command, out Type commandResponseType))
+            {
+                throw new InvalidOperationException($"Type {typeof(TCommand)} does not correspond to a known command response type.");
+            }
+
+            return result.Value.Deserialize(commandResponseType) as ICommandResponse<TCommand>;
         }
 
         /// <summary>
@@ -218,16 +224,14 @@ namespace OpenQA.Selenium.DevTools
                 throw new ArgumentNullException(nameof(command));
             }
 
-            JsonNode serializedCommand = this.domains.SerializeToNode(command);
-
-            var result = await SendCommand(command.CommandName, serializedCommand, cancellationToken, millisecondsTimeout, throwExceptionIfResponseNotReceived).ConfigureAwait(false);
+            var result = await SendCommand(command.CommandName, JsonSerializer.SerializeToNode(command), cancellationToken, millisecondsTimeout, throwExceptionIfResponseNotReceived).ConfigureAwait(false);
 
             if (result == null)
             {
                 return default(TCommandResponse);
             }
 
-            return this.domains.Deserialize<TCommandResponse>(result.Value);
+            return result.Value.Deserialize<TCommandResponse>();
         }
 
         /// <summary>

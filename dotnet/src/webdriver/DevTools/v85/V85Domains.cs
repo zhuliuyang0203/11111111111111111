@@ -17,10 +17,6 @@
 // under the License.
 // </copyright>
 
-using System;
-using System.Text.Json;
-using System.Text.Json.Nodes;
-
 namespace OpenQA.Selenium.DevTools.V85
 {
     /// <summary>
@@ -28,16 +24,6 @@ namespace OpenQA.Selenium.DevTools.V85
     /// </summary>
     public class V85Domains : DevToolsDomains
     {
-        private static readonly JsonSerializerOptions jsonRequestSerializerOptions = new()
-        {
-            TypeInfoResolver = V85RequestSerializationContext.Default
-        };
-
-        private static readonly JsonSerializerOptions jsonResponseSerializerOptions = new()
-        {
-            TypeInfoResolver = V85ResponseSerializationContext.Default
-        };
-
         private DevToolsSessionDomains domains;
 
         /// <summary>
@@ -78,25 +64,5 @@ namespace OpenQA.Selenium.DevTools.V85
         /// Gets the object used for manipulating the browser's logs.
         /// </summary>
         public override DevTools.Log Log => new V85Log(domains.Log);
-
-        internal override JsonNode SerializeToNode<TCommand>(TCommand command)
-        {
-            return JsonSerializer.SerializeToNode(command, jsonRequestSerializerOptions);
-        }
-
-        internal override ICommandResponse<TCommand> DeserializeCommandResponse<TCommand>(JsonElement responseJson)
-        {
-            if (!this.VersionSpecificDomains.ResponseTypeMap.TryGetCommandResponseType<TCommand>(out Type commandResponseType))
-            {
-                throw new InvalidOperationException($"Type {typeof(TCommand)} does not correspond to a known command response type.");
-            }
-
-            return (ICommandResponse<TCommand>)responseJson.Deserialize(commandResponseType, jsonResponseSerializerOptions);
-        }
-
-        internal override TCommandResponse Deserialize<TCommandResponse>(JsonElement responseJson)
-        {
-            return responseJson.Deserialize<TCommandResponse>(jsonResponseSerializerOptions);
-        }
     }
 }

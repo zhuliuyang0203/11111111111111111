@@ -70,15 +70,6 @@ namespace OpenQA.Selenium.DevTools
         /// </summary>
         public abstract Log Log { get; }
 
-        internal abstract JsonNode SerializeToNode<TCommand>(TCommand command)
-            where TCommand : ICommand;
-
-        internal abstract ICommandResponse<TCommand> DeserializeCommandResponse<TCommand>(JsonElement responseJson)
-            where TCommand : ICommand;
-
-        internal abstract TCommandResponse Deserialize<TCommandResponse>(JsonElement responseJson)
-            where TCommandResponse : ICommandResponse;
-
         /// <summary>
         /// Initializes the supplied DevTools session's domains for the specified browser version.
         /// </summary>
