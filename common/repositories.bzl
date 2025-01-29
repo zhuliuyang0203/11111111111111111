@@ -199,8 +199,8 @@ js_library(
 
     http_archive(
         name = "linux_chrome",
-        url = "https://storage.googleapis.com/chrome-for-testing-public/132.0.6834.110/linux64/chrome-linux64.zip",
-        sha256 = "26dd8ed1b29cc74ab2fc79b55c65bac94734116caf5de9dcf39811288a9a8cc3",
+        url = "https://storage.googleapis.com/chrome-for-testing-public/132.0.6834.159/linux64/chrome-linux64.zip",
+        sha256 = "955bbbe5bfc2c210eced0c8faf5bc4aca4640af63b33f7480a4c2fc0b449e6e6",
         build_file_content = """
 load("@aspect_rules_js//js:defs.bzl", "js_library")
 package(default_visibility = ["//visibility:public"])
@@ -221,8 +221,8 @@ js_library(
 
     http_archive(
         name = "mac_chrome",
-        url = "https://storage.googleapis.com/chrome-for-testing-public/132.0.6834.110/mac-x64/chrome-mac-x64.zip",
-        sha256 = "daf7c01d494e6bef5171cd1fb30d5c826b9bdd582ce87386e7989ffc4aa5237e",
+        url = "https://storage.googleapis.com/chrome-for-testing-public/132.0.6834.159/mac-x64/chrome-mac-x64.zip",
+        sha256 = "f7ce763afa87bf90bbc834f9abd82a975519fc3e5b78d4caae88183fbd85736d",
         strip_prefix = "chrome-mac-x64",
         patch_cmds = [
             "mv 'Google Chrome for Testing.app' Chrome.app",
@@ -243,8 +243,8 @@ js_library(
 
     http_archive(
         name = "linux_chromedriver",
-        url = "https://storage.googleapis.com/chrome-for-testing-public/132.0.6834.110/linux64/chromedriver-linux64.zip",
-        sha256 = "5ff7a0c21c9117eb2b4f813908106ab5b478c2a172a86bbc8fccc4b37aa0a644",
+        url = "https://storage.googleapis.com/chrome-for-testing-public/132.0.6834.159/linux64/chromedriver-linux64.zip",
+        sha256 = "13930d2b5e5f69d15c206556bd66e623aa325d03edde091b169b7cc5f7880e3e",
         strip_prefix = "chromedriver-linux64",
         build_file_content = """
 load("@aspect_rules_js//js:defs.bzl", "js_library")
@@ -261,8 +261,8 @@ js_library(
 
     http_archive(
         name = "mac_chromedriver",
-        url = "https://storage.googleapis.com/chrome-for-testing-public/132.0.6834.110/mac-x64/chromedriver-mac-x64.zip",
-        sha256 = "6355b126c81e8de595f52d7bb472b945c701efcac9bcbdbe360ad4a967bd54c7",
+        url = "https://storage.googleapis.com/chrome-for-testing-public/132.0.6834.159/mac-x64/chromedriver-mac-x64.zip",
+        sha256 = "50639151eaff168e7a55325120e11ceaa4b0cdedb5bb6df65511319f064dac2f",
         strip_prefix = "chromedriver-mac-x64",
         build_file_content = """
 load("@aspect_rules_js//js:defs.bzl", "js_library")
