@@ -51,7 +51,7 @@ namespace {{rootNamespace}}.{{domain.Name}}
             {{#if NoParameters}}
             command ??= new {{dehumanize Name}}CommandSettings();
             {{/if}}
-            global::System.Text.Json.Nodes.JsonNode serializedCommand = global::System.Text.Json.JsonSerializer.SerializeToNode(command, {{rootNamespace}}.{{protocolVersion}}JsonSerializerContext.Default);
+            global::System.Text.Json.Nodes.JsonNode serializedCommand = global::System.Text.Json.JsonSerializer.SerializeToNode(command, {{../rootNamespace}}.{{../protocolVersion}}JsonSerializerContext.Default);
             global::System.Text.Json.JsonElement? response = await Session.SendCommand(command.CommandName, serializedCommand, cancellationToken, millisecondsTimeout, throwExceptionIfResponseNotReceived).ConfigureAwait(false);
 
             if (response == null)
@@ -59,7 +59,7 @@ namespace {{rootNamespace}}.{{domain.Name}}
                 return default({{dehumanize Name}}CommandResponse);
             }
 
-            return global::System.Text.Json.JsonSerializer.Deserialize<{{dehumanize Name}}CommandResponse>(response.Value, {{rootNamespace}}.{{protocolVersion}}JsonSerializerContext.Default);
+            return global::System.Text.Json.JsonSerializer.Deserialize<{{dehumanize Name}}CommandResponse>(response.Value, {{../rootNamespace}}.{{../protocolVersion}}JsonSerializerContext.Default);
         }
 
     {{/each}}
