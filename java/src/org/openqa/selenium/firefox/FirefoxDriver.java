@@ -165,7 +165,7 @@ public class FirefoxDriver extends RemoteWebDriver
     Optional<URI> reportedUri =
         CdpEndpointFinder.getReportedUri("moz:debuggerAddress", capabilities);
 
-    if (reportedUri.isPresent() && !(Boolean) capabilities.getCapability("webSocketUrl")) {
+    if (reportedUri.isPresent() && !capabilities.is("webSocketUrl")) {
       LOG.warning(
           "CDP support for Firefox is deprecated and will be removed in future versions. "
               + "Please switch to WebDriver BiDi.");

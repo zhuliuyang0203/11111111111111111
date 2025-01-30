@@ -91,7 +91,7 @@ public class CdpEndpointFinder {
         break;
       case "firefox":
         key = "moz:debuggerAddress";
-        if (!(Boolean) caps.getCapability("webSocketUrl")) {
+        if (!caps.is("webSocketUrl")) {
           LOG.warning(
               "CDP support for Firefox is deprecated and will be removed in future versions. "
                   + "Please switch to WebDriver BiDi.");
