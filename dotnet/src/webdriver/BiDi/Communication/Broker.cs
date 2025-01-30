@@ -17,6 +17,7 @@
 // under the License.
 // </copyright>
 
+using OpenQA.Selenium.BiDi.Communication.Json;
 using OpenQA.Selenium.BiDi.Communication.Json.Converters;
 using OpenQA.Selenium.BiDi.Communication.Transport;
 using OpenQA.Selenium.Internal.Logging;
@@ -53,14 +54,14 @@ public class Broker : IAsyncDisposable
     private Task? _eventEmitterTask;
     private CancellationTokenSource? _receiveMessagesCancellationTokenSource;
 
-    private readonly JsonSerializerOptions _jsonSerializerOptions;
+    private readonly BiDiJsonSerializerContext _jsonSerializerContext;
 
     internal Broker(BiDi bidi, ITransport transport)
     {
         _bidi = bidi;
         _transport = transport;
 
-        _jsonSerializerOptions = new JsonSerializerOptions
+        var jsonSerializerOptions = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -99,6 +100,8 @@ public class Broker : IAsyncDisposable
                 new Json.Converters.Enumerable.GetRealmsResultConverter(),
             }
         };
+
+        _jsonSerializerContext = new BiDiJsonSerializerContext(jsonSerializerOptions);
     }
 
     public async Task ConnectAsync(CancellationToken cancellationToken)
@@ -114,7 +117,7 @@ public class Broker : IAsyncDisposable
     {
         while (!cancellationToken.IsCancellationRequested)
         {
-            var message = await _transport.ReceiveAsJsonAsync<Message>(_jsonSerializerOptions, cancellationToken);
+            var message = await _transport.ReceiveAsJsonAsync<Message>(_jsonSerializerContext, cancellationToken);
 
             switch (message)
             {
@@ -145,7 +148,7 @@ public class Broker : IAsyncDisposable
                     {
                         foreach (var handler in eventHandlers.ToArray()) // copy handlers avoiding modified collection while iterating
                         {
-                            var args = (EventArgs)result.Params.Deserialize(handler.EventArgsType, _jsonSerializerOptions)!;
+                            var args = (EventArgs)result.Params.Deserialize(handler.EventArgsType, _jsonSerializerContext)!;
 
                             args.BiDi = _bidi;
 
@@ -177,7 +180,7 @@ public class Broker : IAsyncDisposable
     {
         var result = await ExecuteCommandCoreAsync(command, options).ConfigureAwait(false);
 
-        return (TResult)((JsonElement)result).Deserialize(typeof(TResult), _jsonSerializerOptions)!;
+        return (TResult)((JsonElement)result).Deserialize(typeof(TResult), _jsonSerializerContext)!;
     }
 
     public async Task ExecuteCommandAsync(Command command, CommandOptions? options)
@@ -199,7 +202,7 @@ public class Broker : IAsyncDisposable
 
         _pendingCommands[command.Id] = tcs;
 
-        await _transport.SendAsJsonAsync(command, _jsonSerializerOptions, cts.Token).ConfigureAwait(false);
+        await _transport.SendAsJsonAsync(command, _jsonSerializerContext, cts.Token).ConfigureAwait(false);
 
         return await tcs.Task.ConfigureAwait(false);
     }
