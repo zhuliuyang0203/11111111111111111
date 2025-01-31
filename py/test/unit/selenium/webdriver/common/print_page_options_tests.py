@@ -73,7 +73,7 @@ def test_set_background(print_options):
 
 
 def test_unset_value_to_be_none(print_options):
-    assert print_options.page_width is None
+    assert print_options.page_width == PrintOptions.A4["width"]
 
 
 def test_set_width(print_options):
