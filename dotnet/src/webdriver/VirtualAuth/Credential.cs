@@ -130,7 +130,10 @@ namespace OpenQA.Selenium.VirtualAuth
 
             toReturn["credentialId"] = Base64UrlEncoder.Encode(this.id);
             toReturn["isResidentCredential"] = this.IsResidentCredential;
-            toReturn["rpId"] = this.RpId;
+            if (this.RpId is not null)
+            {
+                toReturn["rpId"] = this.RpId;
+            }
             toReturn["privateKey"] = this.PrivateKey;
             toReturn["signCount"] = this.SignCount;
             if (this.userHandle is not null)
