@@ -117,9 +117,8 @@ suite(
     })
 
     describe('Network Interception', function () {
-      ignore(browsers(Browser.SAFARI).it(
-        'Allows network requests to be captured and mocked',
-        async function () {
+      ignore(
+        browsers(Browser.SAFARI).it('Allows network requests to be captured and mocked', async function () {
           const connection = await driver.createCDPConnection('page')
           let url = fileServer.whereIs('/cheese')
           let httpResponse = new HttpResponse(url)
@@ -130,8 +129,8 @@ suite(
             assert.strictEqual(body.includes('sausages'), true, `Body contains: ${body}`)
           })
           await driver.get(url)
-        },
-      ))
+        }),
+      )
     })
   },
   { browsers: ['chrome'] },

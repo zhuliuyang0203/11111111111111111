@@ -24,7 +24,6 @@ import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.util.Map;
 import java.util.Optional;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -33,20 +32,11 @@ import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.ImmutableCapabilities;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.OutputType;
-import org.openqa.selenium.PersistentCapabilities;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.bidi.BiDi;
 import org.openqa.selenium.bidi.BiDiException;
 import org.openqa.selenium.bidi.HasBiDi;
-import org.openqa.selenium.devtools.CdpEndpointFinder;
-import org.openqa.selenium.devtools.CdpInfo;
-import org.openqa.selenium.devtools.CdpVersionFinder;
-import org.openqa.selenium.devtools.Connection;
-import org.openqa.selenium.devtools.DevTools;
-import org.openqa.selenium.devtools.DevToolsException;
-import org.openqa.selenium.devtools.HasDevTools;
-import org.openqa.selenium.devtools.noop.NoOpCdpInfo;
 import org.openqa.selenium.html5.LocalStorage;
 import org.openqa.selenium.html5.SessionStorage;
 import org.openqa.selenium.html5.WebStorage;
@@ -157,7 +147,7 @@ public class FirefoxDriver extends RemoteWebDriver
     context = new AddHasContext().getImplementation(getCapabilities(), getExecuteMethod());
 
     Capabilities capabilities = super.getCapabilities();
-    
+
     Optional<String> webSocketUrl =
         Optional.ofNullable((String) capabilities.getCapability("webSocketUrl"));
 
@@ -267,7 +257,7 @@ public class FirefoxDriver extends RemoteWebDriver
     Require.nonNull("Firefox Command Context", commandContext);
     context.setContext(commandContext);
   }
-  
+
   private Optional<BiDi> createBiDi(Optional<URI> biDiUri) {
     if (biDiUri.isEmpty()) {
       return Optional.empty();
