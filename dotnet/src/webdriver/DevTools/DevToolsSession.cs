@@ -25,6 +25,7 @@ using System.Globalization;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -284,7 +285,7 @@ namespace OpenQA.Selenium.DevTools
 
                 LogTrace("Sending {0} {1}: {2}", message.CommandId, message.CommandName, commandParameters.ToString());
 
-                string contents = JsonSerializer.Serialize(message, DevToolsSerializerContext.Default.DevToolsCommandData);
+                string contents = JsonSerializer.Serialize(message, DevToolsSessionSerializerContext.Default.DevToolsCommandData);
                 this.pendingCommands.TryAdd(message.CommandId, message);
                 await this.connection.SendData(contents).ConfigureAwait(false);
 
@@ -411,7 +412,7 @@ namespace OpenQA.Selenium.DevTools
                     rawVersionInfo = await client.GetStringAsync("/json/version").ConfigureAwait(false);
                 }
 
-                var versionInfo = JsonSerializer.Deserialize(rawVersionInfo, DevToolsSerializerContext.Default.DevToolsVersionInfo);
+                var versionInfo = JsonSerializer.Deserialize(rawVersionInfo, DevToolsSessionSerializerContext.Default.DevToolsVersionInfo);
                 this.websocketAddress = versionInfo.WebSocketDebuggerUrl;
 
                 if (requestedProtocolVersion == AutoDetectDevToolsProtocolVersion)
@@ -664,4 +665,8 @@ namespace OpenQA.Selenium.DevTools
             }
         }
     }
+
+    [JsonSerializable(typeof(DevToolsCommandData))]
+    [JsonSerializable(typeof(DevToolsVersionInfo))]
+    internal sealed partial class DevToolsSessionSerializerContext : JsonSerializerContext;
 }

@@ -26,6 +26,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace OpenQA.Selenium
@@ -399,7 +400,7 @@ namespace OpenQA.Selenium
         {
             if (e.Name == MonitorBindingName)
             {
-                DomMutationData valueChangeData = JsonSerializer.Deserialize(e.Payload, DevToolsSerializerContext.Default.DomMutationData);
+                DomMutationData valueChangeData = JsonSerializer.Deserialize(e.Payload, JsonEngineSerializerContext.Default.DomMutationData);
                 var locator = By.CssSelector($"*[data-__webdriver_id='{valueChangeData.TargetId}']");
                 valueChangeData.Element = driver.FindElements(locator).FirstOrDefault();
 
@@ -450,4 +451,7 @@ namespace OpenQA.Selenium
             }
         }
     }
+
+    [JsonSerializable(typeof(DomMutationData))]
+    internal sealed partial class JsonEngineSerializerContext : JsonSerializerContext;
 }
