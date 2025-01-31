@@ -71,9 +71,9 @@ class WebSocketTransport(Uri _uri) : ITransport, IDisposable
         return (T)res!;
     }
 
-    public async Task SendAsJsonAsync<TCCommand>(TCCommand command, JsonSerializerContext jsonSerializerContext, CancellationToken cancellationToken)
+    public async Task SendAsJsonAsync<TCommand>(TCommand command, JsonSerializerContext jsonSerializerContext, CancellationToken cancellationToken)
     {
-        var buffer = JsonSerializer.SerializeToUtf8Bytes(command, typeof(TCCommand), jsonSerializerContext);
+        var buffer = JsonSerializer.SerializeToUtf8Bytes(command, typeof(TCommand), jsonSerializerContext);
 
         await _socketSendSemaphoreSlim.WaitAsync(cancellationToken);
 
