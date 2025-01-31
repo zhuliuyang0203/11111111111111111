@@ -53,7 +53,7 @@ namespace OpenQA.Selenium.VirtualAuth
         /// <param name="signCount">The signature counter for the credentials.</param>
         /// <returns>The created instance of the Credential class.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="id"/> or <paramref name="privateKey"/> are <see langword="null"/>.</exception>
-        public static Credential CreateNonResidentCredential(byte[] id, string? rpId, string privateKey, int signCount)
+        public static Credential CreateNonResidentCredential(byte[] id, string rpId, string privateKey, int signCount)
         {
             return new Credential(id, false, rpId, privateKey, null, signCount);
         }
@@ -68,7 +68,7 @@ namespace OpenQA.Selenium.VirtualAuth
         /// <param name="signCount">The signature counter for the credentials.</param>
         /// <returns>The created instance of the Credential class.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="id"/> or <paramref name="privateKey"/> are <see langword="null"/>.</exception>
-        public static Credential CreateResidentCredential(byte[] id, string? rpId, string privateKey, byte[] userHandle, int signCount)
+        public static Credential CreateResidentCredential(byte[] id, string rpId, string privateKey, byte[] userHandle, int signCount)
         {
             return new Credential(id, true, rpId, privateKey, userHandle, signCount);
         }
