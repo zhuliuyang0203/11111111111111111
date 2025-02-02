@@ -76,7 +76,6 @@ namespace OpenQA.Selenium
             }
 
             this.elementFactory = new WebElementFactory(this);
-            this.network = new NetworkManager(this);
             this.registeredCommands.AddRange(DriverCommand.KnownCommands);
 
             if ((this as ISupportsLogs) != null)
@@ -216,10 +215,7 @@ namespace OpenQA.Selenium
             }
         }
 
-        internal INetwork Network
-        {
-            get { return this.network; }
-        }
+        internal INetwork Network => this.network ??= new NetworkManager(this);
 
         /// <summary>
         /// Gets or sets the factory object used to create instances of <see cref="WebElement"/>
