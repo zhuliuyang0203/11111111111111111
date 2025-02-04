@@ -29,6 +29,11 @@ const NetworkEvent = {
   FETCH_ERROR: 'network.fetchError',
 }
 
+const CacheBehavior = Object.freeze({
+  DEFAULT: 'default',
+  BYPASS: 'bypass',
+})
+
 /**
  * Represents all commands and events of Network module.
  * Described in https://w3c.github.io/webdriver-bidi/#module-network.
@@ -364,8 +369,8 @@ class Network {
    * @throws {Error} If behavior is invalid or context IDs are invalid
    */
   async setCacheBehavior(behavior, contexts = null) {
-    if (!['default', 'bypass'].includes(behavior)) {
-      throw new Error('Cache behavior must be either "default" or "bypass"')
+    if (!Object.values(CacheBehavior).includes(behavior)) {
+      throw new Error(`Cache behavior must be either "${CacheBehavior.DEFAULT}" or "${CacheBehavior.BYPASS}"`)
     }
 
     const command = {
@@ -423,4 +428,4 @@ async function getNetworkInstance(driver, browsingContextIds = null) {
   return instance
 }
 
-module.exports = getNetworkInstance
+module.exports = { Network: getNetworkInstance, CacheBehavior }

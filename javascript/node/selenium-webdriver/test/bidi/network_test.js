@@ -20,7 +20,7 @@
 const assert = require('node:assert')
 const { Browser } = require('selenium-webdriver')
 const { Pages, suite, ignore } = require('../../lib/test')
-const Network = require('selenium-webdriver/bidi/network')
+const { Network, CacheBehavior } = require('selenium-webdriver/bidi/network')
 const BrowsingContext = require('selenium-webdriver/bidi/browsingContext')
 const until = require('selenium-webdriver/lib/until')
 
@@ -221,7 +221,7 @@ suite(
           type: 'tab',
         })
         const contextId = browsingContext.id
-        await network.setCacheBehavior('bypass', [contextId])
+        await network.setCacheBehavior(CacheBehavior.BYPASS, [contextId])
       })
 
       it('can set cache behavior to default for a context', async function () {
@@ -230,13 +230,13 @@ suite(
           type: 'tab',
         })
         const contextId = browsingContext.id
-        await network.setCacheBehavior('default', [contextId])
+        await network.setCacheBehavior(CacheBehavior.DEFAULT, [contextId])
       })
 
       it('can set cache behavior to default/bypass with no context id', async function () {
         await driver.get(Pages.emptyPage)
-        await network.setCacheBehavior('default')
-        await network.setCacheBehavior('bypass')
+        await network.setCacheBehavior(CacheBehavior.DEFAULT)
+        await network.setCacheBehavior(CacheBehavior.BYPASS)
       })
 
       it('throws error for invalid cache behavior', async function () {
@@ -250,11 +250,11 @@ suite(
       it('throws error for invalid context id types', async function () {
         await driver.get(Pages.emptyPage)
         await assert.rejects(
-          async () => await network.setCacheBehavior('default', ''),
+          async () => await network.setCacheBehavior(CacheBehavior.BYPASS, ''),
           /Contexts must be an array of non-empty strings/,
         )
         await assert.rejects(
-          async () => await network.setCacheBehavior('default', ['', ' ']),
+          async () => await network.setCacheBehavior(CacheBehavior.BYPASS, ['', ' ']),
           /Contexts must be an array of non-empty strings/,
         )
       })
