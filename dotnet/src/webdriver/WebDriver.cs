@@ -740,124 +740,124 @@ namespace OpenQA.Selenium
             // Check the status code of the error, and only handle if not success.
             if (errorResponse.Status != WebDriverResult.Success)
             {
-                if (errorResponse.Value is not Dictionary<string, object?> errorAsDictionary)
+                if (errorResponse.Value is Dictionary<string, object?> errorAsDictionary)
                 {
-                    throw new WebDriverException($"The {commandToExecute} command returned an unexpected error. {errorResponse.Value}");
+                    ErrorResponse errorResponseObject = new ErrorResponse(errorAsDictionary);
+                    string errorMessage = errorResponseObject.Message;
+                    switch (errorResponse.Status)
+                    {
+                        case WebDriverResult.NoSuchElement:
+                            throw new NoSuchElementException(errorMessage);
+
+                        case WebDriverResult.NoSuchFrame:
+                            throw new NoSuchFrameException(errorMessage);
+
+                        case WebDriverResult.UnknownCommand:
+                            throw new NotImplementedException(errorMessage);
+
+                        case WebDriverResult.ObsoleteElement:
+                            throw new StaleElementReferenceException(errorMessage);
+
+                        case WebDriverResult.ElementClickIntercepted:
+                            throw new ElementClickInterceptedException(errorMessage);
+
+                        case WebDriverResult.ElementNotInteractable:
+                            throw new ElementNotInteractableException(errorMessage);
+
+                        case WebDriverResult.ElementNotDisplayed:
+                            throw new ElementNotVisibleException(errorMessage);
+
+                        case WebDriverResult.InvalidElementState:
+                        case WebDriverResult.ElementNotSelectable:
+                            throw new InvalidElementStateException(errorMessage);
+
+                        case WebDriverResult.NoSuchDocument:
+                            throw new NoSuchElementException(errorMessage);
+
+                        case WebDriverResult.Timeout:
+                            throw new WebDriverTimeoutException(errorMessage);
+
+                        case WebDriverResult.NoSuchWindow:
+                            throw new NoSuchWindowException(errorMessage);
+
+                        case WebDriverResult.InvalidCookieDomain:
+                            throw new InvalidCookieDomainException(errorMessage);
+
+                        case WebDriverResult.UnableToSetCookie:
+                            throw new UnableToSetCookieException(errorMessage);
+
+                        case WebDriverResult.AsyncScriptTimeout:
+                            throw new WebDriverTimeoutException(errorMessage);
+
+                        case WebDriverResult.UnexpectedAlertOpen:
+                            // TODO(JimEvans): Handle the case where the unexpected alert setting
+                            // has been set to "ignore", so there is still a valid alert to be
+                            // handled.
+                            string? alertText = null;
+                            if (errorAsDictionary.TryGetValue("alert", out object? alert))
+                            {
+                                if (alert is Dictionary<string, object?> alertDescription
+                                    && alertDescription.TryGetValue("text", out object? text))
+                                {
+                                    alertText = text?.ToString();
+                                }
+                            }
+                            else if (errorAsDictionary.TryGetValue("data", out object? data))
+                            {
+                                if (data is Dictionary<string, object?> alertData
+                                    && alertData.TryGetValue("text", out object? dataText))
+                                {
+                                    alertText = dataText?.ToString();
+                                }
+                            }
+
+                            throw new UnhandledAlertException(errorMessage, alertText ?? string.Empty);
+
+                        case WebDriverResult.NoAlertPresent:
+                            throw new NoAlertPresentException(errorMessage);
+
+                        case WebDriverResult.InvalidSelector:
+                            throw new InvalidSelectorException(errorMessage);
+
+                        case WebDriverResult.NoSuchDriver:
+                            throw new WebDriverException(errorMessage);
+
+                        case WebDriverResult.InvalidArgument:
+                            throw new WebDriverArgumentException(errorMessage);
+
+                        case WebDriverResult.UnexpectedJavaScriptError:
+                            throw new JavaScriptException(errorMessage);
+
+                        case WebDriverResult.MoveTargetOutOfBounds:
+                            throw new MoveTargetOutOfBoundsException(errorMessage);
+
+                        case WebDriverResult.NoSuchShadowRoot:
+                            throw new NoSuchShadowRootException(errorMessage);
+
+                        case WebDriverResult.DetachedShadowRoot:
+                            throw new DetachedShadowRootException(errorMessage);
+
+                        case WebDriverResult.InsecureCertificate:
+                            throw new InsecureCertificateException(errorMessage);
+
+                        case WebDriverResult.UnknownError:
+                            throw new UnknownErrorException(errorMessage);
+
+                        case WebDriverResult.UnknownMethod:
+                            throw new UnknownMethodException(errorMessage);
+
+                        case WebDriverResult.UnsupportedOperation:
+                            throw new UnsupportedOperationException(errorMessage);
+
+                        case WebDriverResult.NoSuchCookie:
+                            throw new NoSuchCookieException(errorMessage);
+
+                        default:
+                            throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "{0} ({1})", errorMessage, errorResponse.Status));
+                    }
                 }
 
-                ErrorResponse errorResponseObject = new ErrorResponse(errorAsDictionary);
-                string errorMessage = errorResponseObject.Message;
-                switch (errorResponse.Status)
-                {
-                    case WebDriverResult.NoSuchElement:
-                        throw new NoSuchElementException(errorMessage);
-
-                    case WebDriverResult.NoSuchFrame:
-                        throw new NoSuchFrameException(errorMessage);
-
-                    case WebDriverResult.UnknownCommand:
-                        throw new NotImplementedException(errorMessage);
-
-                    case WebDriverResult.ObsoleteElement:
-                        throw new StaleElementReferenceException(errorMessage);
-
-                    case WebDriverResult.ElementClickIntercepted:
-                        throw new ElementClickInterceptedException(errorMessage);
-
-                    case WebDriverResult.ElementNotInteractable:
-                        throw new ElementNotInteractableException(errorMessage);
-
-                    case WebDriverResult.ElementNotDisplayed:
-                        throw new ElementNotVisibleException(errorMessage);
-
-                    case WebDriverResult.InvalidElementState:
-                    case WebDriverResult.ElementNotSelectable:
-                        throw new InvalidElementStateException(errorMessage);
-
-                    case WebDriverResult.NoSuchDocument:
-                        throw new NoSuchElementException(errorMessage);
-
-                    case WebDriverResult.Timeout:
-                        throw new WebDriverTimeoutException(errorMessage);
-
-                    case WebDriverResult.NoSuchWindow:
-                        throw new NoSuchWindowException(errorMessage);
-
-                    case WebDriverResult.InvalidCookieDomain:
-                        throw new InvalidCookieDomainException(errorMessage);
-
-                    case WebDriverResult.UnableToSetCookie:
-                        throw new UnableToSetCookieException(errorMessage);
-
-                    case WebDriverResult.AsyncScriptTimeout:
-                        throw new WebDriverTimeoutException(errorMessage);
-
-                    case WebDriverResult.UnexpectedAlertOpen:
-                        // TODO(JimEvans): Handle the case where the unexpected alert setting
-                        // has been set to "ignore", so there is still a valid alert to be
-                        // handled.
-                        string? alertText = null;
-                        if (errorAsDictionary.TryGetValue("alert", out object? alert))
-                        {
-                            if (alert is Dictionary<string, object?> alertDescription
-                                && alertDescription.TryGetValue("text", out object? text))
-                            {
-                                alertText = text?.ToString();
-                            }
-                        }
-                        else if (errorAsDictionary.TryGetValue("data", out object? data))
-                        {
-                            if (data is Dictionary<string, object?> alertData
-                                && alertData.TryGetValue("text", out object? dataText))
-                            {
-                                alertText = dataText?.ToString();
-                            }
-                        }
-
-                        throw new UnhandledAlertException(errorMessage, alertText ?? string.Empty);
-
-                    case WebDriverResult.NoAlertPresent:
-                        throw new NoAlertPresentException(errorMessage);
-
-                    case WebDriverResult.InvalidSelector:
-                        throw new InvalidSelectorException(errorMessage);
-
-                    case WebDriverResult.NoSuchDriver:
-                        throw new WebDriverException(errorMessage);
-
-                    case WebDriverResult.InvalidArgument:
-                        throw new WebDriverArgumentException(errorMessage);
-
-                    case WebDriverResult.UnexpectedJavaScriptError:
-                        throw new JavaScriptException(errorMessage);
-
-                    case WebDriverResult.MoveTargetOutOfBounds:
-                        throw new MoveTargetOutOfBoundsException(errorMessage);
-
-                    case WebDriverResult.NoSuchShadowRoot:
-                        throw new NoSuchShadowRootException(errorMessage);
-
-                    case WebDriverResult.DetachedShadowRoot:
-                        throw new DetachedShadowRootException(errorMessage);
-
-                    case WebDriverResult.InsecureCertificate:
-                        throw new InsecureCertificateException(errorMessage);
-
-                    case WebDriverResult.UnknownError:
-                        throw new UnknownErrorException(errorMessage);
-
-                    case WebDriverResult.UnknownMethod:
-                        throw new UnknownMethodException(errorMessage);
-
-                    case WebDriverResult.UnsupportedOperation:
-                        throw new UnsupportedOperationException(errorMessage);
-
-                    case WebDriverResult.NoSuchCookie:
-                        throw new NoSuchCookieException(errorMessage);
-
-                    default:
-                        throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "{0} ({1})", errorMessage, errorResponse.Status));
-                }
+                throw new WebDriverException($"The {commandToExecute} command returned an unexpected error. {errorResponse.Value}");
             }
         }
 
