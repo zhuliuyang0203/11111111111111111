@@ -221,7 +221,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <exception cref="WebDriverException">If <see cref="Value"/> is <see langword="null"/>.</exception>
         [MemberNotNull(nameof(Value))]
-        internal void ThrowIfValueNull()
+        internal void EnsureHasValue()
         {
             if (Value is null)
             {
