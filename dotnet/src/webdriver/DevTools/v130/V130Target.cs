@@ -64,16 +64,16 @@ namespace OpenQA.Selenium.DevTools.V130
             for (int i = 0; i < response.TargetInfos.Length; i++)
             {
                 var targetInfo = response.TargetInfos[i];
-                var mapped = new TargetInfo()
-                {
-                    TargetId = targetInfo.TargetId,
-                    Title = targetInfo.Title,
-                    Type = targetInfo.Type,
-                    Url = targetInfo.Url,
-                    OpenerId = targetInfo.OpenerId,
-                    BrowserContextId = targetInfo.BrowserContextId,
-                    IsAttached = targetInfo.Attached
-                };
+                var mapped = new TargetInfo
+                (
+                    targetId: targetInfo.TargetId,
+                    title: targetInfo.Title,
+                    type: targetInfo.Type,
+                    url: targetInfo.Url,
+                    openerId: targetInfo.OpenerId,
+                    browserContextId: targetInfo.BrowserContextId,
+                    isAttached: targetInfo.Attached
+                );
                 targets.Add(mapped);
             }
 
@@ -126,15 +126,15 @@ namespace OpenQA.Selenium.DevTools.V130
         private void OnAttachedToTarget(object? sender, AttachedToTargetEventArgs e)
         {
             var targetInfo = e.TargetInfo == null ? null : new TargetInfo
-            {
-                BrowserContextId = e.TargetInfo.BrowserContextId,
-                IsAttached = e.TargetInfo.Attached,
-                OpenerId = e.TargetInfo.OpenerId,
-                TargetId = e.TargetInfo.TargetId,
-                Title = e.TargetInfo.Title,
-                Type = e.TargetInfo.Type,
-                Url = e.TargetInfo.Url
-            };
+            (
+                browserContextId: e.TargetInfo.BrowserContextId,
+                isAttached: e.TargetInfo.Attached,
+                openerId: e.TargetInfo.OpenerId,
+                targetId: e.TargetInfo.TargetId,
+                title: e.TargetInfo.Title,
+                type: e.TargetInfo.Type,
+                url: e.TargetInfo.Url
+            );
 
             this.OnTargetAttached(new TargetAttachedEventArgs
             (
