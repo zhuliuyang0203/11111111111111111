@@ -53,7 +53,7 @@ namespace OpenQA.Selenium
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("id", frameIndex);
-            this.driver.InternalExecute(DriverCommand.SwitchToFrame, parameters);
+            this.driver.Execute(DriverCommand.SwitchToFrame, parameters);
             return this.driver;
         }
 
@@ -116,7 +116,7 @@ namespace OpenQA.Selenium
 
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("id", elementDictionary);
-            this.driver.InternalExecute(DriverCommand.SwitchToFrame, parameters);
+            this.driver.Execute(DriverCommand.SwitchToFrame, parameters);
             return this.driver;
         }
 
@@ -127,7 +127,7 @@ namespace OpenQA.Selenium
         public IWebDriver ParentFrame()
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
-            this.driver.InternalExecute(DriverCommand.SwitchToParentFrame, parameters);
+            this.driver.Execute(DriverCommand.SwitchToParentFrame, parameters);
             return this.driver;
         }
 
@@ -148,7 +148,7 @@ namespace OpenQA.Selenium
             parameters.Add("handle", windowHandleOrName);
             try
             {
-                this.driver.InternalExecute(DriverCommand.SwitchToWindow, parameters);
+                this.driver.Execute(DriverCommand.SwitchToWindow, parameters);
                 return this.driver;
             }
             catch (NoSuchWindowException)
@@ -195,7 +195,7 @@ namespace OpenQA.Selenium
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("type", typeHint.ToString().ToLowerInvariant());
 
-            Response response = this.driver.InternalExecute(DriverCommand.NewWindow, parameters);
+            Response response = this.driver.Execute(DriverCommand.NewWindow, parameters);
 
             Dictionary<string, object> result = (Dictionary<string, object>)response.Value!;
             string newWindowHandle = result["handle"].ToString()!;
@@ -212,7 +212,7 @@ namespace OpenQA.Selenium
         {
             Dictionary<string, object?> parameters = new Dictionary<string, object?>();
             parameters.Add("id", null);
-            this.driver.InternalExecute(DriverCommand.SwitchToFrame, parameters);
+            this.driver.Execute(DriverCommand.SwitchToFrame, parameters);
             return this.driver;
         }
 
@@ -222,7 +222,7 @@ namespace OpenQA.Selenium
         /// <returns>Element that is active</returns>
         public IWebElement ActiveElement()
         {
-            Response response = this.driver.InternalExecute(DriverCommand.GetActiveElement, null);
+            Response response = this.driver.Execute(DriverCommand.GetActiveElement, null);
             return this.driver.GetElementFromResponse(response);
         }
 
@@ -234,7 +234,7 @@ namespace OpenQA.Selenium
         {
             // N.B. We only execute the GetAlertText command to be able to throw
             // a NoAlertPresentException if there is no alert found.
-            this.driver.InternalExecute(DriverCommand.GetAlertText, null);
+            this.driver.Execute(DriverCommand.GetAlertText, null);
             return new Alert(this.driver);
         }
     }

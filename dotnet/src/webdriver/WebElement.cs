@@ -684,7 +684,7 @@ namespace OpenQA.Selenium
         /// <returns>The <see cref="Response"/> object containing the result of the command execution.</returns>
         protected virtual Response Execute(string commandToExecute, Dictionary<string, object> parameters)
         {
-            return this.driver.InternalExecute(commandToExecute, parameters);
+            return this.driver.Execute(commandToExecute, parameters);
         }
 
         private static string GetAtom(string atomResourceName)

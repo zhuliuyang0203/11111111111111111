@@ -98,7 +98,7 @@ namespace OpenQA.Selenium
             parameters.Add("using", by.Mechanism);
             parameters.Add("value", by.Criteria);
 
-            Response commandResponse = this.driver.InternalExecute(DriverCommand.FindShadowChildElement, parameters);
+            Response commandResponse = this.driver.Execute(DriverCommand.FindShadowChildElement, parameters);
             return this.driver.GetElementFromResponse(commandResponse);
         }
 
@@ -122,7 +122,7 @@ namespace OpenQA.Selenium
             parameters.Add("using", by.Mechanism);
             parameters.Add("value", by.Criteria);
 
-            Response commandResponse = this.driver.InternalExecute(DriverCommand.FindShadowChildElements, parameters);
+            Response commandResponse = this.driver.Execute(DriverCommand.FindShadowChildElements, parameters);
             return this.driver.GetElementsFromResponse(commandResponse);
         }
 

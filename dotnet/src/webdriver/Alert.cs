@@ -47,7 +47,7 @@ namespace OpenQA.Selenium
         {
             get
             {
-                Response commandResponse = this.driver.InternalExecute(DriverCommand.GetAlertText, null);
+                Response commandResponse = this.driver.Execute(DriverCommand.GetAlertText, null);
                 return (string?)commandResponse.Value;
             }
         }
@@ -57,7 +57,7 @@ namespace OpenQA.Selenium
         /// </summary>
         public void Dismiss()
         {
-            this.driver.InternalExecute(DriverCommand.DismissAlert, null);
+            this.driver.Execute(DriverCommand.DismissAlert, null);
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace OpenQA.Selenium
         /// </summary>
         public void Accept()
         {
-            this.driver.InternalExecute(DriverCommand.AcceptAlert, null);
+            this.driver.Execute(DriverCommand.AcceptAlert, null);
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace OpenQA.Selenium
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("text", keysToSend);
 
-            this.driver.InternalExecute(DriverCommand.SetAlertValue, parameters);
+            this.driver.Execute(DriverCommand.SetAlertValue, parameters);
         }
     }
 }
