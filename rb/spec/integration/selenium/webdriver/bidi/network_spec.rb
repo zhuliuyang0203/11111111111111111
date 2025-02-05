@@ -171,7 +171,9 @@ module Selenium
             end
 
             driver.navigate.to url_for('formPage.html')
-            expect(driver.page_source).to include('Hello World!')
+            source = driver.page_source
+            expect(source).not_to include('There should be a form here:')
+            expect(source).to include('Hello World!')
           end
         end
       end
