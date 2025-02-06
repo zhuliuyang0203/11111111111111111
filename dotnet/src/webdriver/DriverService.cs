@@ -237,52 +237,54 @@ namespace OpenQA.Selenium
         /// <returns>A task that represents the asynchronous start operation.</returns>
         public async Task StartAsync()
         {
-            if (this.driverServiceProcess is null)
+            if (this.driverServiceProcess != null)
             {
-                var driverServiceProcess = new Process();
-
-                try
-                {
-                    if (this.DriverServicePath != null)
-                    {
-                        if (this.DriverServiceExecutableName is null)
-                        {
-                            throw new InvalidOperationException("If the driver service path is specified, the driver service executable name must be as well");
-                        }
-
-                        driverServiceProcess.StartInfo.FileName = Path.Combine(this.DriverServicePath, this.DriverServiceExecutableName);
-                    }
-                    else
-                    {
-                        driverServiceProcess.StartInfo.FileName = new DriverFinder(this.GetDefaultDriverOptions()).GetDriverPath();
-                    }
-
-                    driverServiceProcess.StartInfo.Arguments = this.CommandLineArguments;
-                    driverServiceProcess.StartInfo.UseShellExecute = false;
-                    driverServiceProcess.StartInfo.CreateNoWindow = this.HideCommandPromptWindow;
-
-                    DriverProcessStartingEventArgs eventArgs = new DriverProcessStartingEventArgs(driverServiceProcess.StartInfo);
-                    this.OnDriverProcessStarting(eventArgs);
-
-                    driverServiceProcess.Start();
-                    bool serviceAvailable = await this.WaitForServiceInitializationAsync().ConfigureAwait(false);
-
-                    DriverProcessStartedEventArgs processStartedEventArgs = new DriverProcessStartedEventArgs(driverServiceProcess);
-                    this.OnDriverProcessStarted(processStartedEventArgs);
-
-                    if (!serviceAvailable)
-                    {
-                        throw new WebDriverException($"Cannot start the driver service on {this.ServiceUrl}");
-                    }
-                }
-                catch
-                {
-                    driverServiceProcess.Dispose();
-                    throw;
-                }
-
-                this.driverServiceProcess = driverServiceProcess;
+                return;
             }
+
+            var driverServiceProcess = new Process();
+
+            try
+            {
+                if (this.DriverServicePath != null)
+                {
+                    if (this.DriverServiceExecutableName is null)
+                    {
+                        throw new InvalidOperationException("If the driver service path is specified, the driver service executable name must be as well");
+                    }
+
+                    driverServiceProcess.StartInfo.FileName = Path.Combine(this.DriverServicePath, this.DriverServiceExecutableName);
+                }
+                else
+                {
+                    driverServiceProcess.StartInfo.FileName = new DriverFinder(this.GetDefaultDriverOptions()).GetDriverPath();
+                }
+
+                driverServiceProcess.StartInfo.Arguments = this.CommandLineArguments;
+                driverServiceProcess.StartInfo.UseShellExecute = false;
+                driverServiceProcess.StartInfo.CreateNoWindow = this.HideCommandPromptWindow;
+
+                DriverProcessStartingEventArgs eventArgs = new DriverProcessStartingEventArgs(driverServiceProcess.StartInfo);
+                this.OnDriverProcessStarting(eventArgs);
+
+                driverServiceProcess.Start();
+                bool serviceAvailable = await this.WaitForServiceInitializationAsync().ConfigureAwait(false);
+
+                DriverProcessStartedEventArgs processStartedEventArgs = new DriverProcessStartedEventArgs(driverServiceProcess);
+                this.OnDriverProcessStarted(processStartedEventArgs);
+
+                if (!serviceAvailable)
+                {
+                    throw new WebDriverException($"Cannot start the driver service on {this.ServiceUrl}");
+                }
+            }
+            catch
+            {
+                driverServiceProcess.Dispose();
+                throw;
+            }
+
+            this.driverServiceProcess = driverServiceProcess;
         }
 
         /// <summary>
