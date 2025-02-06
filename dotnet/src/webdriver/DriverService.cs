@@ -269,7 +269,6 @@ namespace OpenQA.Selenium
 
                 driverServiceProcess.Start();
                 bool serviceAvailable = await this.WaitForServiceInitializationAsync().ConfigureAwait(false);
-
                 DriverProcessStartedEventArgs processStartedEventArgs = new DriverProcessStartedEventArgs(driverServiceProcess);
                 this.OnDriverProcessStarted(processStartedEventArgs);
 
@@ -322,9 +321,9 @@ namespace OpenQA.Selenium
         }
 
         /// <summary>
-        /// 
+        /// Releases all resources associated with this type in the instance's type chain. Override to dispose more resources.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A task that represents the asynchronous dispose operation.</returns>
         protected virtual async ValueTask DisposeAsyncCore()
         {
             await this.StopAsync().ConfigureAwait(false);
