@@ -177,32 +177,27 @@ namespace OpenQA.Selenium
         {
             get
             {
-                bool isInitialized = false;
-
                 try
                 {
-                    using (var httpClient = new HttpClient())
-                    {
-                        httpClient.DefaultRequestHeaders.ConnectionClose = true;
-                        httpClient.Timeout = TimeSpan.FromSeconds(5);
+                    using var httpClient = new HttpClient();
+                    httpClient.DefaultRequestHeaders.ConnectionClose = true;
+                    httpClient.Timeout = TimeSpan.FromSeconds(5);
 
-                        Uri serviceHealthUri = new Uri(this.ServiceUrl, new Uri(DriverCommand.Status, UriKind.Relative));
-                        using (var response = Task.Run(async () => await httpClient.GetAsync(serviceHealthUri)).GetAwaiter().GetResult())
-                        {
-                            // Checking the response from the 'status' end point. Note that we are simply checking
-                            // that the HTTP status returned is a 200 status, and that the resposne has the correct
-                            // Content-Type header. A more sophisticated check would parse the JSON response and
-                            // validate its values. At the moment we do not do this more sophisticated check.
-                            isInitialized = response.StatusCode == HttpStatusCode.OK && response.Content.Headers.ContentType is { MediaType: string mediaType } && mediaType.StartsWith("application/json", StringComparison.OrdinalIgnoreCase);
-                        }
-                    }
+                    Uri serviceHealthUri = new Uri(this.ServiceUrl, new Uri(DriverCommand.Status, UriKind.Relative));
+                    using var response = Task.Run(async () => await httpClient.GetAsync(serviceHealthUri)).GetAwaiter().GetResult();
+
+                    // Checking the response from the 'status' end point. Note that we are simply checking
+                    // that the HTTP status returned is a 200 status, and that the response has the correct
+                    // Content-Type header. A more sophisticated check would parse the JSON response and
+                    // validate its values. At the moment we do not do this more sophisticated check.
+                    bool isInitialized = response.StatusCode == HttpStatusCode.OK && response.Content.Headers.ContentType is { MediaType: string mediaType } && mediaType.StartsWith("application/json", StringComparison.OrdinalIgnoreCase);
+
+                    return isInitialized;
                 }
                 catch (Exception ex) when (ex is HttpRequestException || ex is TaskCanceledException)
                 {
-                    // Do nothing. The exception is expected, meaning driver service is not initialized.
+                    return false;
                 }
-
-                return isInitialized;
             }
         }
 
