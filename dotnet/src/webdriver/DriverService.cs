@@ -258,12 +258,14 @@ namespace OpenQA.Selenium
                     driverServiceProcess.StartInfo.UseShellExecute = false;
                     driverServiceProcess.StartInfo.CreateNoWindow = this.HideCommandPromptWindow;
 
-                    this.OnDriverProcessStarting(new DriverProcessStartingEventArgs(driverServiceProcess.StartInfo));
+                    DriverProcessStartingEventArgs eventArgs = new DriverProcessStartingEventArgs(driverServiceProcess.StartInfo);
+                    this.OnDriverProcessStarting(eventArgs);
 
                     driverServiceProcess.Start();
                     bool serviceAvailable = await this.WaitForServiceInitializationAsync().ConfigureAwait(false);
 
-                    this.OnDriverProcessStarted(new DriverProcessStartedEventArgs(driverServiceProcess));
+                    DriverProcessStartedEventArgs processStartedEventArgs = new DriverProcessStartedEventArgs(driverServiceProcess);
+                    this.OnDriverProcessStarted(processStartedEventArgs);
 
                     if (!serviceAvailable)
                     {
