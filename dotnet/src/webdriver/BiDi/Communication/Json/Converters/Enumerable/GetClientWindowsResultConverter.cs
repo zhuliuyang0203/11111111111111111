@@ -21,7 +21,6 @@ using OpenQA.Selenium.BiDi.Modules.Browser;
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
-using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 
 #nullable enable
@@ -32,9 +31,8 @@ internal class GetClientWindowsResultConverter : JsonConverter<GetClientWindowsR
 {
     public override GetClientWindowsResult Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        var jsonNode = JsonNode.Parse(ref reader);
-
-        var clientWindows = jsonNode?["clientWindows"].Deserialize<IReadOnlyList<ClientWindowInfo>>(options);
+        using var doc = JsonDocument.ParseValue(ref reader);
+        var clientWindows = doc.RootElement.GetProperty("clientWindows").Deserialize<IReadOnlyList<ClientWindowInfo>>(options);
 
         return new GetClientWindowsResult(clientWindows!);
     }

@@ -22,7 +22,6 @@ using OpenQA.Selenium.BiDi.Modules.Script;
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
-using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 
 #nullable enable
@@ -33,9 +32,8 @@ internal class LocateNodesResultConverter : JsonConverter<LocateNodesResult>
 {
     public override LocateNodesResult Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        var jsonNode = JsonNode.Parse(ref reader);
-
-        var nodes = jsonNode?["qwe"].Deserialize<IReadOnlyList<RemoteValue.Node>>(options);
+        using var doc = JsonDocument.ParseValue(ref reader);
+        var nodes = doc.RootElement.GetProperty("nodes").Deserialize<IReadOnlyList<RemoteValue.Node>>(options);
 
         return new LocateNodesResult(nodes!);
     }
