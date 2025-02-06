@@ -17,6 +17,7 @@
 // under the License.
 // </copyright>
 
+using System;
 using System.Globalization;
 
 #nullable enable
@@ -53,9 +54,9 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Indicates whether the current <see cref="InitializationScript"/> is equal to another <see cref="InitializationScript"/> of the same type.
         /// </summary>
-        /// <param name="other">An <see cref="InitializationScript"/> to compare with this <see cref="InitializationScript"/>.</param>
+        /// <param name="obj">An <see cref="InitializationScript"/> to compare with this <see cref="InitializationScript"/>.</param>
         /// <returns><see langword="true"/> if the current <see cref="InitializationScript"/> is equal to the other parameter; otherwise, <see langword="false"/>.</returns>
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return obj is InitializationScript other && this.ScriptId == other.ScriptId && this.ScriptName == other.ScriptName && this.ScriptSource == other.ScriptSource;
         }
