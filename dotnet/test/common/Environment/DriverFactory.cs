@@ -32,10 +32,10 @@ namespace OpenQA.Selenium.Environment
 {
     public class DriverFactory
     {
-        string driverPath;
-        string browserBinaryLocation;
-        private Dictionary<Browser, Type> serviceTypes = new Dictionary<Browser, Type>();
-        private Dictionary<Browser, Type> optionsTypes = new Dictionary<Browser, Type>();
+        private readonly string driverPath;
+        private readonly string browserBinaryLocation;
+        private readonly Dictionary<Browser, Type> serviceTypes = new Dictionary<Browser, Type>();
+        private readonly Dictionary<Browser, Type> optionsTypes = new Dictionary<Browser, Type>();
 
         public DriverFactory(string driverPath, string browserBinaryLocation)
         {
@@ -71,17 +71,15 @@ namespace OpenQA.Selenium.Environment
             return CreateDriverWithOptions(driverType, null, logging);
         }
 
-        public IWebDriver CreateDriverWithOptions(Type driverType, DriverOptions driverOptions, bool logging = false)
+        public IWebDriver CreateDriverWithOptions(Type driverType, DriverOptions driverOptions, bool enableLogging = false)
         {
             Console.WriteLine($"Creating new driver of {driverType} type...");
 
             Browser browser = Browser.All;
             DriverService service = null;
             DriverOptions options = null;
-            bool enableLogging = logging;
 
-            List<Type> constructorArgTypeList = new List<Type>();
-            IWebDriver driver = null;
+            IWebDriver driver;
             if (typeof(ChromeDriver).IsAssignableFrom(driverType))
             {
                 browser = Browser.Chrome;
@@ -149,7 +147,7 @@ namespace OpenQA.Selenium.Environment
                 service = CreateService<SafariDriverService>();
             }
 
-            if (!String.IsNullOrEmpty(this.driverPath) && service != null)
+            if (!string.IsNullOrEmpty(this.driverPath) && service != null)
             {
                 service.DriverServicePath = Path.GetDirectoryName(this.driverPath);
                 service.DriverServiceExecutableName = Path.GetFileName(this.driverPath);
@@ -159,12 +157,10 @@ namespace OpenQA.Selenium.Environment
 
             if (browser != Browser.All)
             {
-                constructorArgTypeList.Add(this.serviceTypes[browser]);
-                constructorArgTypeList.Add(this.optionsTypes[browser]);
-                ConstructorInfo ctorInfo = driverType.GetConstructor(constructorArgTypeList.ToArray());
+                ConstructorInfo ctorInfo = driverType.GetConstructor([this.serviceTypes[browser], this.optionsTypes[browser]]);
                 if (ctorInfo != null)
                 {
-                    return (IWebDriver)ctorInfo.Invoke(new object[] { service, options });
+                    return (IWebDriver)ctorInfo.Invoke([service, options]);
                 }
             }
 
@@ -176,20 +172,23 @@ namespace OpenQA.Selenium.Environment
         {
             if (this.DriverStarting != null)
             {
-                DriverStartingEventArgs args = new DriverStartingEventArgs(service, options);
-                this.DriverStarting(this, args);
+                this.DriverStarting(this, new DriverStartingEventArgs(service, options));
             }
         }
 
-        private T GetDriverOptions<T>(Type driverType, DriverOptions overriddenOptions) where T : DriverOptions, new()
+        private TOptions GetDriverOptions<TOptions>(Type driverType, DriverOptions overriddenOptions)
+            where TOptions : DriverOptions, new()
         {
-            T options = new T();
-            Type optionsType = typeof(T);
+            TOptions options;
 
             PropertyInfo defaultOptionsProperty = driverType.GetProperty("DefaultOptions", BindingFlags.Public | BindingFlags.Static);
-            if (defaultOptionsProperty != null && defaultOptionsProperty.PropertyType == optionsType)
+            if (defaultOptionsProperty != null && defaultOptionsProperty.PropertyType == typeof(TOptions))
             {
-                options = (T)defaultOptionsProperty.GetValue(null, null);
+                options = (TOptions)defaultOptionsProperty.GetValue(null, null);
+            }
+            else
+            {
+                options = new TOptions();
             }
 
             if (overriddenOptions != null)
@@ -208,41 +207,16 @@ namespace OpenQA.Selenium.Environment
             return options;
         }
 
-
-        private T MergeOptions<T>(object baseOptions, DriverOptions overriddenOptions) where T : DriverOptions, new()
+        private TService CreateService<TService>()
+            where TService : DriverService
         {
-            // If the driver type has a static DefaultOptions property,
-            // get the value of that property, which should be a valid
-            // options of the generic type (T). Otherwise, create a new
-            // instance of the browser-specific options class.
-            T mergedOptions = new T();
-            if (baseOptions != null && baseOptions is T)
+            MethodInfo createDefaultServiceMethod = typeof(TService).GetMethod("CreateDefaultService", BindingFlags.Public | BindingFlags.Static, null, [], null);
+            if (createDefaultServiceMethod != null && createDefaultServiceMethod.ReturnType == typeof(TService))
             {
-                mergedOptions = (T)baseOptions;
+                return (TService)createDefaultServiceMethod.Invoke(null, []);
             }
 
-            if (overriddenOptions != null)
-            {
-                mergedOptions.PageLoadStrategy = overriddenOptions.PageLoadStrategy;
-                mergedOptions.UnhandledPromptBehavior = overriddenOptions.UnhandledPromptBehavior;
-                mergedOptions.Proxy = overriddenOptions.Proxy;
-            }
-
-            return mergedOptions;
-        }
-
-        private T CreateService<T>() where T : DriverService
-        {
-            T service = default(T);
-            Type serviceType = typeof(T);
-
-            MethodInfo createDefaultServiceMethod = serviceType.GetMethod("CreateDefaultService", BindingFlags.Public | BindingFlags.Static, null, new Type[] { }, null);
-            if (createDefaultServiceMethod != null && createDefaultServiceMethod.ReturnType == serviceType)
-            {
-                service = (T)createDefaultServiceMethod.Invoke(null, new object[] { });
-            }
-
-            return service;
+            return default;
         }
     }
 }
