@@ -86,6 +86,9 @@ class BrowserCommandsTest extends JupiterTestBase {
 
     ClientWindowInfo windowInfo = clientWindows.get(0);
     assertThat(windowInfo.getClientWindow()).isNotNull();
-    assertThat(windowInfo.getState()).isNotNull();
+    assertThat(windowInfo.getState()).isInstanceOf(ClientWindowState.class);
+    assertThat(windowInfo.getWidth()).isGreaterThan(0);
+    assertThat(windowInfo.getHeight()).isGreaterThan(0);
+    assertThat(windowInfo.isActive()).isIn(true, false);
   }
 }

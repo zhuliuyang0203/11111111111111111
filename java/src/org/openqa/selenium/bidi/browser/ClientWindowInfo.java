@@ -21,37 +21,46 @@ import java.util.Map;
 
 public class ClientWindowInfo {
   private final String clientWindow;
-  private final String state;
+  private final ClientWindowState state;
   private final Integer width;
   private final Integer height;
   private final Integer x;
   private final Integer y;
+  private final boolean active;
 
   public ClientWindowInfo(
-      String clientWindow, String state, Integer width, Integer height, Integer x, Integer y) {
+      String clientWindow,
+      ClientWindowState state,
+      Integer width,
+      Integer height,
+      Integer x,
+      Integer y,
+      boolean active) {
     this.clientWindow = clientWindow;
     this.state = state;
     this.width = width;
     this.height = height;
     this.x = x;
     this.y = y;
+    this.active = active;
   }
 
   public static ClientWindowInfo fromJson(Map<String, Object> map) {
     return new ClientWindowInfo(
         (String) map.get("clientWindow"),
-        (String) map.get("state"),
+        ClientWindowState.fromString((String) map.get("state")),
         ((Number) map.get("width")).intValue(),
         ((Number) map.get("height")).intValue(),
         ((Number) map.get("x")).intValue(),
-        ((Number) map.get("y")).intValue());
+        ((Number) map.get("y")).intValue(),
+        (Boolean) map.get("active"));
   }
 
   public String getClientWindow() {
     return clientWindow;
   }
 
-  public String getState() {
+  public ClientWindowState getState() {
     return state;
   }
 
@@ -69,5 +78,9 @@ public class ClientWindowInfo {
 
   public Integer getY() {
     return y;
+  }
+
+  public boolean isActive() {
+    return active;
   }
 }
