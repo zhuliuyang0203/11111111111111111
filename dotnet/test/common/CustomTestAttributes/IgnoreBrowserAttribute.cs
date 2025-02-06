@@ -93,21 +93,3 @@ namespace OpenQA.Selenium
         }
     }
 }
-
-class C
-{
-    public static bool AreDefault(int i, string j)
-    {
-        switch (i, j)
-        {
-            case (0, _):
-                return true;
-
-            case (_, null):
-                return true;
-
-            default:
-                return false;
-        }
-    }
-}
