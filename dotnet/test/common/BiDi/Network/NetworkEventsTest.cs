@@ -34,9 +34,6 @@ class NetworkEventsTest : BiDiTestFixture
 
         await using var subscription = await context.Network.OnBeforeRequestSentAsync(tcs.SetResult);
 
-        await using var subscription2 = await context.Network.OnBeforeRequestSentAsync(e => { });
-        await using var subscription3 = await context.Network.OnBeforeRequestSentAsync(e => { });
-
         await context.NavigateAsync(UrlBuilder.WhereIs("bidi/logEntryAdded.html"), new() { Wait = ReadinessState.Complete });
 
         var req = await tcs.Task.WaitAsync(TimeSpan.FromSeconds(5));
