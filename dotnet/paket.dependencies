@@ -1,5 +1,6 @@
 group nuget
 framework: net8.0,netstandard2.0
+strategy: min
 source https://api.nuget.org/v3/index.json
 
 nuget BenderProxy 1.0.0
