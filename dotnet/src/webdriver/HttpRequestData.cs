@@ -35,7 +35,7 @@ namespace OpenQA.Selenium
         {
         }
 
-        internal HttpRequestData(string method, string url, string? postData, Dictionary<string, string> headers, string requestId)
+        internal HttpRequestData(string? method, string? url, string? postData, Dictionary<string, string>? headers, string? requestId)
         {
             this.Method = method;
             this.Url = url;
