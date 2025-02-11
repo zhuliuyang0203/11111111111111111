@@ -174,7 +174,7 @@ public abstract class AbstractHttpCommandCodec implements CommandCodec<HttpReque
         GET_LOCATION, get(sessionId + "/location")); // Not w3c; used in RemoteLocationContext
     defineCommand(
         SET_LOCATION, post(sessionId + "/location")); // Not w3c; used in RemoteLocationContext
-    
+
     // Virtual Authenticator API
     String webauthn = sessionId + "/webauthn/authenticator";
     String webauthnId = webauthn + "/:authenticatorId";
