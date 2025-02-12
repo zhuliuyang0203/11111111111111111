@@ -108,8 +108,8 @@ class Network:
 
     def __on(self, event, callback):
         """Set a callback function to subscribe to a network event."""
-        self.conn.execute(session_subscribe(event))
         event = self.EVENTS.get(event, event)
+        self.conn.execute(session_subscribe(event))
         self.callbacks[event] = callback
         if len(self.subscriptions[event]) == 0:
             # session_subscribe(self.conn, event, self.__handle_event)
