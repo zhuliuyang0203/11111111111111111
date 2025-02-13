@@ -221,7 +221,7 @@ namespace OpenQA.Selenium.Remote
             this.SendingRemoteHttpRequest?.Invoke(this, eventArgs);
         }
 
-        private HttpClient CreateHttpClient()
+        protected virtual HttpClientHandler CreateHttpClientHandler()
         {
             HttpClientHandler httpClientHandler = new HttpClientHandler();
             string userInfo = this.remoteServerUri.UserInfo;
@@ -233,6 +233,13 @@ namespace OpenQA.Selenium.Remote
             }
 
             httpClientHandler.Proxy = this.Proxy;
+
+            return httpClientHandler;
+        }
+
+        protected virtual HttpClient CreateHttpClient()
+        {
+            var httpClientHandler = CreateHttpClientHandler();
 
             HttpMessageHandler handler = httpClientHandler;
 
