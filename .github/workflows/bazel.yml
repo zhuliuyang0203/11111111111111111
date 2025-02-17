@@ -199,12 +199,12 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: recordings-linux
-          path: ~/.cache/selenium/recordings/*.avi
+          path: /home/runner/.cache/selenium/recordings/*.avi
           retention-days: 6
       - name: Save recordings (macOS)
         if: inputs.save-recordings && inputs.os == 'macos'
         uses: actions/upload-artifact@v4
         with:
           name: recordings-macos
-          path: ~/.cache/selenium/recordings/*.avi
+          path: /home/runner/.cache/selenium/recordings/*.avi
           retention-days: 6
