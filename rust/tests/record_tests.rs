@@ -15,7 +15,7 @@
 // specific language governing permissions and limitations
 // under the License.
 
-use crate::common::get_sm_binary;
+use crate::common::{get_selenium_manager, get_sm_binary};
 
 use kill_tree::blocking::kill_tree;
 use std::process::Command;
@@ -26,6 +26,12 @@ mod common;
 
 #[test]
 fn test_record() {
+    let mut cmd = get_selenium_manager();
+    cmd.args(["--browser", "chrome", "--ffmpeg", "--debug"])
+        .assert()
+        .success()
+        .code(0);
+
     let mut child = Command::new(get_sm_binary())
         .args(["--record", "--debug"])
         .spawn()
