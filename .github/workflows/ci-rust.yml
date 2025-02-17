@@ -41,6 +41,7 @@ jobs:
       cache-key: rust-test
       os: ${{ matrix.os }}
       run: bazel test --test_env=RUST_BACKTRACE=full --test_env=RUST_TEST_NOCAPTURE=1 --flaky_test_attempts=3 //rust/...
+      save-recordings: true
 
   windows-stable:
     name: "Windows Stable"

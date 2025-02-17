@@ -66,6 +66,11 @@ on:
         required: false
         type: string
         default: 'ignore-artifacts'
+      save-recordings:
+        description: Save desktop recordings
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   bazel:
@@ -181,4 +186,28 @@ jobs:
         with:
           name: ${{ inputs.artifact-name }}
           path: changes.patch
+          retention-days: 6
+      - name: Save recordings (Windows)
+        if: inputs.save-recordings && inputs.os == 'windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: win-recordings
+          path: |
+            C:\Users\runneradmin\.cache\selenium\recordings\*.avi
+          retention-days: 6
+      - name: Save recordings (Linux)
+        if: inputs.save-recordings && inputs.os == 'ubuntu'
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-recordings
+          path: |
+            $HOME/.cache/selenium/recordings/*.avi
+          retention-days: 6
+      - name: Save recordings (macOS)
+        if: inputs.save-recordings && inputs.os == 'macos'
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-recordings
+          path: |
+            $HOME/.cache/selenium/recordings/*.avi
           retention-days: 6
