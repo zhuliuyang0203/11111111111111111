@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    selenium-devtools (0.132.0)
+    selenium-devtools (0.133.0)
       selenium-webdriver (~> 4.2)
     selenium-webdriver (4.29.0.nightly)
       base64 (~> 0.2)
@@ -40,6 +40,7 @@ GEM
     csv (3.3.2)
     curb (1.0.6)
     date (3.4.1)
+    date (3.4.1-java)
     debug (1.10.0)
       irb (~> 1.10)
       reline (>= 0.3.8)
