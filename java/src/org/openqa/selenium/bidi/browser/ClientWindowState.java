@@ -15,15 +15,30 @@
 // specific language governing permissions and limitations
 // under the License.
 
-package org.openqa.selenium.devtools.v130;
+package org.openqa.selenium.bidi.browser;
 
-import com.google.auto.service.AutoService;
-import org.openqa.selenium.devtools.CdpInfo;
+public enum ClientWindowState {
+  FULLSCREEN("fullscreen"),
+  MAXIMIZED("maximized"),
+  MINIMIZED("minimized"),
+  NORMAL("normal");
 
-@AutoService(CdpInfo.class)
-public class v130CdpInfo extends CdpInfo {
+  private final String state;
 
-  public v130CdpInfo() {
-    super(130, v130Domains::new);
+  ClientWindowState(String state) {
+    this.state = state;
+  }
+
+  public String toString() {
+    return state;
+  }
+
+  public static ClientWindowState fromString(String state) {
+    for (ClientWindowState windowState : values()) {
+      if (windowState.state.equals(state)) {
+        return windowState;
+      }
+    }
+    throw new IllegalArgumentException("Invalid window state: " + state);
   }
 }
