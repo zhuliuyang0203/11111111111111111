@@ -231,5 +231,5 @@ pub fn record_desktop_with_ffmpeg(
     };
     run_shell_command_with_stderr(log, os, command, true).unwrap();
 
-    return Err(anyhow!("Command for recording desktop terminated")); // This line should be executed
+    return Err(anyhow!("Command for recording desktop terminated"));
 }
