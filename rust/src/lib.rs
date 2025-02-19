@@ -902,13 +902,14 @@ pub trait SeleniumManager {
         Ok(())
     }
 
-    fn record_desktop(&self, ffmpeg: bool, record: bool) -> Result<(), Error> {
+    fn record_desktop(&mut self, ffmpeg: bool, record: bool) -> Result<(), Error> {
         let mut ffmpeg_path: Option<PathBuf> = None;
         if ffmpeg {
             ffmpeg_path = Some(self.get_or_download_ffmpeg()?);
         }
         if record {
             let cache_path = self.get_cache_path()?.unwrap_or_default();
+            self.set_fallback_driver_from_cache(false);
             record_desktop_with_ffmpeg(
                 ffmpeg_path.unwrap_or(self.get_or_download_ffmpeg()?),
                 self.get_os(),
@@ -1707,6 +1708,22 @@ pub fn format_four_args(string: &str, arg1: &str, arg2: &str, arg3: &str, arg4: 
         .replacen("{}", arg2, 1)
         .replacen("{}", arg3, 1)
         .replacen("{}", arg4, 1)
+}
+
+pub fn format_five_args(
+    string: &str,
+    arg1: &str,
+    arg2: &str,
+    arg3: &str,
+    arg4: &str,
+    arg5: &str,
+) -> String {
+    string
+        .replacen("{}", arg1, 1)
+        .replacen("{}", arg2, 1)
+        .replacen("{}", arg3, 1)
+        .replacen("{}", arg4, 1)
+        .replacen("{}", arg5, 1)
 }
 
 // ----------------------------------------------------------

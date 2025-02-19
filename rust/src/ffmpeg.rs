@@ -24,7 +24,7 @@ use crate::files::{
 use crate::lock::Lock;
 use crate::logger::Logger;
 use crate::shell::{run_shell_command_with_stderr, Command};
-use crate::{format_four_args, format_one_arg, format_three_args, format_two_args, ENV_DISPLAY};
+use crate::{format_five_args, format_four_args, format_one_arg, format_two_args, ENV_DISPLAY};
 use anyhow::{anyhow, Error};
 use reqwest::Client;
 use std::fs::File;
@@ -38,10 +38,11 @@ const FFMPEG_WINDOWS_RELEASE_URL: &str =
     "https://www.gyan.dev/ffmpeg/builds/packages/ffmpeg-{}-essentials_build.7z";
 const FFMPEG_LINUX_RELEASE_URL: &str = "https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-n{}-latest-linux64-gpl-{}.tar.xz";
 const FFMPEG_MACOS_RELEASE_URL: &str = "https://evermeet.cx/ffmpeg/ffmpeg-{}.zip";
+const FFMPEG_RECORD_DESKTOP_WINDOWS_COMMAND: &str = "{} -f gdigrab -i desktop -r {} -c:v {} -y {}";
+const FFMPEG_RECORD_DESKTOP_LINUX_COMMAND: &str = "{} -f x11grab -i {} -r {} -c:v {} -y {}";
+const FFMPEG_RECORD_DESKTOP_MACOS_COMMAND: &str = "{} -f avfoundation -i 0 -r {} -c:v {} -y {}";
 const FFMPEG_RECORD_FRAME_RATE: &str = "30";
-const FFMPEG_RECORD_DESKTOP_WINDOWS_COMMAND: &str = "{} -f gdigrab -i desktop -r {} -y {}";
-const FFMPEG_RECORD_DESKTOP_LINUX_COMMAND: &str = "{} -f x11grab -i {} -r {} -y {}";
-const FFMPEG_RECORD_DESKTOP_MACOS_COMMAND: &str = "{} -f avfoundation -i 0 -r {} -y {}";
+const FFMPEG_RECORD_VIDEO_CODEC: &str = "mpeg4";
 const FFMPEG_RECORDING_EXTENSION: &str = "avi";
 const FFMPEG_RECORDING_FOLDER: &str = "recordings";
 const FFMPEG_DEFAULT_DISPLAY: &str = ":0";
@@ -211,18 +212,20 @@ pub fn record_desktop_with_ffmpeg(
             ));
             env_display = FFMPEG_DEFAULT_DISPLAY.to_string();
         }
-        Command::new_single(format_four_args(
+        Command::new_single(format_five_args(
             get_recording_command(os),
             &path_to_string(&ffmpeg_path),
             &env_display,
             FFMPEG_RECORD_FRAME_RATE,
+            FFMPEG_RECORD_VIDEO_CODEC,
             &recording_name,
         ))
     } else {
-        Command::new_single(format_three_args(
+        Command::new_single(format_four_args(
             get_recording_command(os),
             &path_to_string(&ffmpeg_path),
             FFMPEG_RECORD_FRAME_RATE,
+            FFMPEG_RECORD_VIDEO_CODEC,
             &recording_name,
         ))
     };
