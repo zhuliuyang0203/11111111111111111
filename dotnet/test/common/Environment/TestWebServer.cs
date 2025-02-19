@@ -23,7 +23,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.Environment
@@ -55,12 +54,10 @@ namespace OpenQA.Selenium.Environment
                     var runfiles = Runfiles.Create();
                     standaloneAppserverPath = runfiles.Rlocation(@"_main/java/test/org/openqa/selenium/environment/appserver");
                 }
-                // means we are NOT running under bazel runtime
-                // most likely in IDE
                 catch (FileNotFoundException)
                 {
-                    //var baseDirectory = AppContext.BaseDirectory;
-                    //standaloneAppserverPath = Path.Combine(baseDirectory, "../../../../../../bazel-bin/java/test/org/openqa/selenium/environment/appserver");
+                    // means we are NOT running under bazel runtime
+                    // most likely in IDE
                 }
 
                 var processFileName = standaloneAppserverPath ?? "bazel";
@@ -70,6 +67,8 @@ namespace OpenQA.Selenium.Environment
                 if (standaloneAppserverPath is null)
                 {
                     processArguments = $"run //java/test/org/openqa/selenium/environment:appserver {processArguments}";
+
+                    // Override project root path to be exact selenium repo path, not 'bazel-bin'
                     projectRootPath = Path.Combine(AppContext.BaseDirectory, "../../../../../..");
                 }
 
