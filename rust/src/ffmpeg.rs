@@ -23,12 +23,9 @@ use crate::files::{
 };
 use crate::lock::Lock;
 use crate::logger::Logger;
-use crate::shell::Command;
-use crate::{
-    format_four_args, format_one_arg, format_three_args, format_two_args,
-    run_shell_command_with_log, ENV_DISPLAY,
-};
-use anyhow::Error;
+use crate::shell::{run_shell_command_with_stderr, Command};
+use crate::{format_four_args, format_one_arg, format_three_args, format_two_args, ENV_DISPLAY};
+use anyhow::{anyhow, Error};
 use reqwest::Client;
 use std::fs::File;
 use std::path::{Path, PathBuf};
@@ -241,6 +238,7 @@ pub fn record_desktop_with_ffmpeg(
             &recording_name,
         ))
     };
-    run_shell_command_with_log(log, os, command).unwrap();
-    Ok(())
+    run_shell_command_with_stderr(log, os, command, true).unwrap();
+
+    return Err(anyhow!("Command for recording desktop terminated")); // This line should be executed
 }

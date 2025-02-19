@@ -69,22 +69,48 @@ pub fn run_shell_command_with_log(
     os: &str,
     command: Command,
 ) -> Result<String, Error> {
+    run_shell_command_with_stderr(log, os, command, false)
+}
+
+pub fn run_shell_command_with_stderr(
+    log: &Logger,
+    os: &str,
+    command: Command,
+    stderr: bool,
+) -> Result<String, Error> {
     log.debug(format!("Running command: {}", command.display()));
-    let output = run_shell_command_by_os(os, command)?;
+    let output = run_shell_command_by_os_stderr(os, command, stderr)?;
     log.debug(format!("Output: {:?}", output));
     Ok(output)
 }
 
 pub fn run_shell_command_by_os(os: &str, command: Command) -> Result<String, Error> {
+    run_shell_command_by_os_stderr(os, command, false)
+}
+
+pub fn run_shell_command_by_os_stderr(
+    os: &str,
+    command: Command,
+    stderr: bool,
+) -> Result<String, Error> {
     let (shell, flag) = if WINDOWS.is(os) {
         ("cmd", "/c")
     } else {
         ("sh", "-c")
     };
-    run_shell_command(shell, flag, command)
+    run_shell_command_stderr(shell, flag, command, stderr)
 }
 
 pub fn run_shell_command(shell: &str, flag: &str, command: Command) -> Result<String, Error> {
+    run_shell_command_stderr(shell, flag, command, false)
+}
+
+pub fn run_shell_command_stderr(
+    shell: &str,
+    flag: &str,
+    command: Command,
+    stderr: bool,
+) -> Result<String, Error> {
     let mut process = std::process::Command::new(shell);
     process.arg(flag);
 
@@ -96,9 +122,11 @@ pub fn run_shell_command(shell: &str, flag: &str, command: Command) -> Result<St
         }
     }
     let output = process.output()?;
-    let stdout = String::from_utf8_lossy(&output.stdout);
-    let stderr = String::from_utf8_lossy(&output.stderr);
-    Ok(strip_trailing_newline(&(stdout + " " + stderr)).to_string())
+    let mut stdout = String::from_utf8_lossy(&output.stdout);
+    if stderr {
+        stdout = stdout + " " + String::from_utf8_lossy(&output.stderr);
+    }
+    Ok(strip_trailing_newline(&stdout).to_string())
 }
 
 pub fn strip_trailing_newline(input: &str) -> &str {
