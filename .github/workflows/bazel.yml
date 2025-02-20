@@ -126,7 +126,7 @@ jobs:
         with:
           bazelisk-cache: true
           bazelrc: common --color=yes
-          cache-version: 2
+          cache-version: ${{ inputs.os == 'windows' && '1' || '2' }}
           disk-cache: ${{ inputs.cache-key }}
           external-cache: |
             name: ${{ inputs.cache-key }}
