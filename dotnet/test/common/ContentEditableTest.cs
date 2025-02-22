@@ -106,8 +106,6 @@ namespace OpenQA.Selenium
         }
 
         [Test]
-        [IgnoreBrowser(Browser.Chrome, "Driver prepends text in contentEditable areas")]
-        [IgnoreBrowser(Browser.Edge, "Driver prepends text in contentEditable areas")]
         [IgnoreBrowser(Browser.Firefox, "Driver prepends text in contentEditable areas")]
         [IgnoreBrowser(Browser.IE, "Prepends text")]
         [IgnoreBrowser(Browser.Safari, "Driver prepends text to contentEditable areas")]
