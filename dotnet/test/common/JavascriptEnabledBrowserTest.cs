@@ -62,6 +62,7 @@ namespace OpenQA.Selenium
         }
 
         [Test]
+        [NeedsFreshDriver(IsCreatedAfterTest = true, IsCreatedBeforeTest = true)]
         public void ShouldBeAbleToFindElementAfterJavascriptCausesANewPageToLoad()
         {
             driver.Url = formsPage;
