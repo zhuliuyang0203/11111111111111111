@@ -3,6 +3,7 @@ FROM shs96c/selenium-remote-build:latest
 
 USER root
 
+RUN rm -f /etc/apt/sources.list.d/google-chrome.list
 RUN apt-get update -qqy && apt-get install -y wget curl gnupg2
 
 # So we can install browsers later
