@@ -111,21 +111,23 @@ namespace OpenQA.Selenium
             }
 
             SeleniumManagerPaths binaryPaths = SeleniumManager.BinaryPaths(CreateArguments());
+            string driverPath = binaryPaths.DriverPath;
+            string browserPath = binaryPaths.BrowserPath;
 
-            if (File.Exists(binaryPaths.DriverPath))
+            if (File.Exists(driverPath))
             {
             }
             else
             {
-                throw new NoSuchDriverException($"The driver path is not a valid file: {binaryPaths.DriverPath}");
+                throw new NoSuchDriverException($"The driver path is not a valid file: {driverPath}");
             }
 
-            if (File.Exists(binaryPaths.BrowserPath))
+            if (File.Exists(browserPath))
             {
             }
             else
             {
-                throw new NoSuchDriverException($"The browser path is not a valid file: {binaryPaths.BrowserPath}");
+                throw new NoSuchDriverException($"The browser path is not a valid file: {browserPath}");
             }
 
             return paths = binaryPaths;
