@@ -90,15 +90,15 @@ namespace OpenQA.Selenium
                 argsBuilder.Append(" --debug");
             }
 
-            var smCommandResult = RunCommand(_lazyBinaryFullPath.Value, argsBuilder.ToString());
+            var binaryPaths = RunCommand(_lazyBinaryFullPath.Value, argsBuilder.ToString());
 
             if (_logger.IsEnabled(LogEventLevel.Trace))
             {
-                _logger.Trace($"Driver path: {smCommandResult.DriverPath}");
-                _logger.Trace($"Browser path: {smCommandResult.BrowserPath}");
+                _logger.Trace($"Driver path: {binaryPaths.DriverPath}");
+                _logger.Trace($"Browser path: {binaryPaths.BrowserPath}");
             }
 
-            return smCommandResult;
+            return binaryPaths;
         }
 
         /// <summary>
