@@ -334,7 +334,7 @@ namespace OpenQA.Selenium.Chromium
 
                 try
                 {
-                    DevToolsSession session = new DevToolsSession(debuggerAddress?.ToString(), options);
+                    DevToolsSession session = new DevToolsSession(debuggerAddress?.ToString()!, options);
                     Task.Run(async () => await session.StartSession()).GetAwaiter().GetResult();
                     this.devToolsSession = session;
                 }
