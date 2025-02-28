@@ -34,6 +34,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Ticker;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.RemovalCause;
 import com.google.common.cache.RemovalListener;
 import com.google.common.cache.RemovalNotification;
 import com.google.common.collect.ImmutableList;
@@ -340,30 +341,55 @@ public class LocalNode extends Node implements Closeable {
   }
 
   private void stopTimedOutSession(RemovalNotification<SessionId, SessionSlot> notification) {
-    if (notification.getKey() != null && notification.getValue() != null) {
-      SessionSlot slot = notification.getValue();
-      SessionId id = notification.getKey();
-      if (notification.wasEvicted()) {
-        // Session is timing out, stopping it by sending a DELETE
-        LOG.log(Level.INFO, () -> String.format("Session id %s timed out, stopping...", id));
-        try {
-          slot.execute(new HttpRequest(DELETE, "/session/" + id));
-        } catch (Exception e) {
-          LOG.log(Level.WARNING, String.format("Exception while trying to stop session %s", id), e);
+    try (Span span = tracer.getCurrentContext().createSpan("node.stop_session")) {
+      AttributeMap attributeMap = tracer.createAttributeMap();
+      attributeMap.put(AttributeKey.LOGGER_CLASS.getKey(), getClass().getName());
+      if (notification.getKey() != null && notification.getValue() != null) {
+        SessionSlot slot = notification.getValue();
+        SessionId id = notification.getKey();
+        attributeMap.put("node.id", getId().toString());
+        attributeMap.put("session.slotId", slot.getId().toString());
+        attributeMap.put("session.id", id.toString());
+        attributeMap.put("session.timeout_in_seconds", getSessionTimeout().toSeconds());
+        attributeMap.put("session.remove.cause", notification.getCause().name());
+        if (notification.wasEvicted() && notification.getCause() == RemovalCause.EXPIRED) {
+          // Session is timing out, stopping it by sending a DELETE
+          LOG.log(Level.INFO, () -> String.format("Session id %s timed out, stopping...", id));
+          span.setStatus(Status.ABORTED);
+          span.addEvent(String.format("Stopping the the timed session %s", id), attributeMap);
+        } else {
+          LOG.log(Level.INFO, () -> String.format("Session id %s is stopping on demand...", id));
+          span.addEvent(String.format("Stopping the session %s on demand", id), attributeMap);
         }
-      }
-      // Attempt to stop the session
-      slot.stop();
-      // Decrement pending sessions if Node is draining
-      if (this.isDraining()) {
-        int done = pendingSessions.decrementAndGet();
-        if (done <= 0) {
-          LOG.info("Node draining complete!");
-          bus.fire(new NodeDrainComplete(this.getId()));
+        if (notification.wasEvicted()) {
+          try {
+            slot.execute(new HttpRequest(DELETE, "/session/" + id));
+          } catch (Exception e) {
+            LOG.log(
+                Level.WARNING, String.format("Exception while trying to stop session %s", id), e);
+            span.setStatus(Status.INTERNAL);
+            span.addEvent(
+                String.format("Exception while trying to stop session %s", id), attributeMap);
+          }
         }
+        // Attempt to stop the session
+        slot.stop();
+        // Decrement pending sessions if Node is draining
+        if (this.isDraining()) {
+          int done = pendingSessions.decrementAndGet();
+          attributeMap.put("current.session.count", done);
+          attributeMap.put("node.drain_after_session_count", this.configuredSessionCount);
+          if (done <= 0) {
+            LOG.info("Node draining complete!");
+            bus.fire(new NodeDrainComplete(this.getId()));
+            span.addEvent("Node draining complete!", attributeMap);
+          }
+        }
+      } else {
+        LOG.log(Debug.getDebugLogLevel(), "Received stop session notification with null values");
+        span.setStatus(Status.INVALID_ARGUMENT);
+        span.addEvent("Received stop session notification with null values", attributeMap);
       }
-    } else {
-      LOG.log(Debug.getDebugLogLevel(), "Received stop session notification with null values");
     }
   }
 
@@ -1022,17 +1048,28 @@ public class LocalNode extends Node implements Closeable {
 
   @Override
   public void drain() {
-    bus.fire(new NodeDrainStarted(getId()));
-    draining = true;
-    // Ensure the pendingSessions counter will not be decremented by timed out sessions not included
-    // in the currentSessionCount and the NodeDrainComplete will be raised to early.
-    currentSessions.cleanUp();
-    int currentSessionCount = getCurrentSessionCount();
-    if (currentSessionCount == 0) {
-      LOG.info("Firing node drain complete message");
-      bus.fire(new NodeDrainComplete(getId()));
-    } else {
-      pendingSessions.set(currentSessionCount);
+    try (Span span = tracer.getCurrentContext().createSpan("node.drain")) {
+      AttributeMap attributeMap = tracer.createAttributeMap();
+      attributeMap.put(AttributeKey.LOGGER_CLASS.getKey(), getClass().getName());
+      bus.fire(new NodeDrainStarted(getId()));
+      draining = true;
+      // Ensure the pendingSessions counter will not be decremented by timed out sessions not
+      // included
+      // in the currentSessionCount and the NodeDrainComplete will be raised to early.
+      currentSessions.cleanUp();
+      int currentSessionCount = getCurrentSessionCount();
+      attributeMap.put("current.session.count", currentSessionCount);
+      attributeMap.put("node.id", getId().toString());
+      attributeMap.put("node.drain_after_session_count", this.configuredSessionCount);
+      if (currentSessionCount == 0) {
+        LOG.info("Firing node drain complete message");
+        bus.fire(new NodeDrainComplete(getId()));
+        span.addEvent("Node drain complete", attributeMap);
+      } else {
+        pendingSessions.set(currentSessionCount);
+        span.addEvent(
+            String.format("%s session(s) pending before draining Node", currentSessionCount));
+      }
     }
   }
 
