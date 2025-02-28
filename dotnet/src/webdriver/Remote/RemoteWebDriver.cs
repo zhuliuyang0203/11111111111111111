@@ -427,8 +427,8 @@ namespace OpenQA.Selenium.Remote
         /// Creates a session to communicate with a browser using a Developer Tools debugging protocol.
         /// </summary>
         /// <returns>The active session to use to communicate with the Developer Tools debugging protocol.</returns>
-        [RequiresUnreferencedCode("CDP is not compatible with trimming or AOT.")]
-        [RequiresDynamicCode("CDP is not compatible with trimming or AOT.")]
+        [RequiresUnreferencedCode(DevToolsSession.CDP_AOTIncompatibilityMessage)]
+        [RequiresDynamicCode(DevToolsSession.CDP_AOTIncompatibilityMessage)]
         public DevToolsSession GetDevToolsSession()
         {
             if (this.Capabilities.GetCapability(CapabilityType.BrowserName) is "firefox")
@@ -446,8 +446,8 @@ namespace OpenQA.Selenium.Remote
         /// Creates a session to communicate with a browser using a Developer Tools debugging protocol.
         /// </summary>
         /// <returns>The active session to use to communicate with the Developer Tools debugging protocol.</returns>
-        [RequiresUnreferencedCode("CDP is not compatible with trimming or AOT.")]
-        [RequiresDynamicCode("CDP is not compatible with trimming or AOT.")]
+        [RequiresUnreferencedCode(DevToolsSession.CDP_AOTIncompatibilityMessage)]
+        [RequiresDynamicCode(DevToolsSession.CDP_AOTIncompatibilityMessage)]
         public DevToolsSession GetDevToolsSession(DevToolsOptions options)
         {
             if (options is null)
@@ -504,8 +504,8 @@ namespace OpenQA.Selenium.Remote
         /// <param name="protocolVersion">The specific version of the Developer Tools debugging protocol to use.</param>
         /// <returns>The active session to use to communicate with the Developer Tools debugging protocol.</returns>
         [Obsolete("Use GetDevToolsSession(DevToolsOptions options)")]
-        [RequiresUnreferencedCode("CDP is not compatible with trimming or AOT.")]
-        [RequiresDynamicCode("CDP is not compatible with trimming or AOT.")]
+        [RequiresUnreferencedCode(DevToolsSession.CDP_AOTIncompatibilityMessage)]
+        [RequiresDynamicCode(DevToolsSession.CDP_AOTIncompatibilityMessage)]
         public DevToolsSession GetDevToolsSession(int protocolVersion)
         {
             return GetDevToolsSession(new DevToolsOptions() { ProtocolVersion = protocolVersion });
@@ -594,8 +594,8 @@ namespace OpenQA.Selenium.Remote
         /// <summary>
         /// Closes a DevTools session.
         /// </summary>
-        [RequiresUnreferencedCode("CDP is not compatible with trimming or AOT.")]
-        [RequiresDynamicCode("CDP is not compatible with trimming or AOT.")]
+        [RequiresUnreferencedCode(DevToolsSession.CDP_AOTIncompatibilityMessage)]
+        [RequiresDynamicCode(DevToolsSession.CDP_AOTIncompatibilityMessage)]
         public void CloseDevToolsSession()
         {
             if (this.devToolsSession != null)

@@ -173,8 +173,8 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <returns>A JSON-encoded string representing this <see cref="Response"/> object.</returns>
 
-        [RequiresUnreferencedCode("Free-form JSON serialization.")]
-        [RequiresDynamicCode("Free-form JSON serialization.")]
+        [RequiresUnreferencedCode("Untyped JSON serialization is not trim- or AOT- safe.")]
+        [RequiresDynamicCode("Untyped JSON serialization is not trim- or AOT- safe.")]
         public string ToJson()
         {
             return JsonSerializer.Serialize(this);
