@@ -1,4 +1,4 @@
-// <copyright file="InternetExplorerDriverLogLevel.cs" company="Selenium Committers">
+// <copyright file="TextWriterHandler.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -17,43 +17,27 @@
 // under the License.
 // </copyright>
 
+using System.IO;
+
 #nullable enable
 
-namespace OpenQA.Selenium.IE
+namespace OpenQA.Selenium.Internal.Logging
 {
     /// <summary>
-    /// Represents the valid values of logging levels available with the IEDriverServer.exe.
+    /// Represents a log handler that writes log events to the given text writer.
     /// </summary>
-    public enum InternetExplorerDriverLogLevel
+    public class TextWriterHandler(TextWriter writer) : ILogHandler
     {
-        /// <summary>
-        /// Represents the Trace value, the most detailed logging level available.
-        /// </summary>
-        Trace,
+        // performance trick to avoid expensive Enum.ToString() with fixed length
+        private static readonly string[] _levels = { "TRACE", "DEBUG", " INFO", " WARN", "ERROR" };
 
         /// <summary>
-        /// Represents the Debug value
+        /// Handles a log event by writing it to the text writer.
         /// </summary>
-        Debug,
-
-        /// <summary>
-        /// Represents the Info value
-        /// </summary>
-        Info,
-
-        /// <summary>
-        /// Represents the Warn value
-        /// </summary>
-        Warn,
-
-        /// <summary>
-        /// Represents the Error value
-        /// </summary>
-        Error,
-
-        /// <summary>
-        /// Represents the Fatal value, the least detailed logging level available.
-        /// </summary>
-        Fatal
+        /// <param name="logEvent">The log event to handle.</param>
+        public void Handle(LogEvent logEvent)
+        {
+            writer.WriteLine($"{logEvent.Timestamp:HH:mm:ss.fff} {_levels[(int)logEvent.Level]} {logEvent.IssuedBy.Name}: {logEvent.Message}");
+        }
     }
 }
