@@ -75,8 +75,10 @@ pub const DEV: &str = "dev";
 pub const CANARY: &str = "canary";
 pub const NIGHTLY: &str = "nightly";
 pub const ESR: &str = "esr";
-pub const WMIC_COMMAND: &str = "wmic datafile where name='{}' get Version /value";
-pub const WMIC_COMMAND_OS: &str = "wmic os get osarchitecture";
+pub const PS_GET_VERSION_COMMAND: &str = r#"(Get-Item "{}").VersionInfo.ProductVersion"#;
+pub const PS_GET_OS_COMMAND: &str = "(Get-WmiObject Win32_OperatingSystem).OSArchitecture";
+pub const PS_MSIEXEC_INSTALL_COMMAND: &str =
+    r#"Start-Process -FilePath msiexec -ArgumentList "/i {} /qn ALLOWDOWNGRADE=1" -Wait"#;
 pub const REG_VERSION_ARG: &str = "version";
 pub const REG_CURRENT_VERSION_ARG: &str = "CurrentVersion";
 pub const REG_PV_ARG: &str = "pv";
@@ -85,7 +87,6 @@ pub const PLIST_COMMAND: &str =
 pub const HDIUTIL_ATTACH_COMMAND: &str = "hdiutil attach {}";
 pub const HDIUTIL_DETACH_COMMAND: &str = "hdiutil detach /Volumes/{}";
 pub const CP_VOLUME_COMMAND: &str = "cp -R /Volumes/{}/{}.app {}";
-pub const MSIEXEC_INSTALL_COMMAND: &str = "start /wait msiexec /i {} /qn ALLOWDOWNGRADE=1";
 pub const WINDOWS_CHECK_ADMIN_COMMAND: &str = "net session";
 pub const DASH_VERSION: &str = "{}{}{} -v";
 pub const DASH_DASH_VERSION: &str = "{}{}{} --version";
@@ -1158,9 +1159,11 @@ pub trait SeleniumManager {
         let mut commands = Vec::new();
         if WINDOWS.is(self.get_os()) {
             if !escaped_browser_path.is_empty() {
-                let wmic_command =
-                    Command::new_single(format_one_arg(WMIC_COMMAND, &escaped_browser_path));
-                commands.push(wmic_command);
+                let get_version_command = Command::new_single(format_one_arg(
+                    PS_GET_VERSION_COMMAND,
+                    &escaped_browser_path,
+                ));
+                commands.push(get_version_command);
             }
             if !self.is_browser_version_unstable() {
                 let reg_command =

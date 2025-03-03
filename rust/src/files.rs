@@ -19,7 +19,7 @@ use crate::config::OS;
 use crate::config::OS::WINDOWS;
 use crate::{
     format_one_arg, format_three_args, run_shell_command_by_os, Command, Logger, CP_VOLUME_COMMAND,
-    HDIUTIL_ATTACH_COMMAND, HDIUTIL_DETACH_COMMAND, MACOS, MSIEXEC_INSTALL_COMMAND,
+    HDIUTIL_ATTACH_COMMAND, HDIUTIL_DETACH_COMMAND, MACOS, PS_MSIEXEC_INSTALL_COMMAND,
 };
 use anyhow::anyhow;
 use anyhow::Error;
@@ -309,7 +309,7 @@ pub fn install_msi(msi_file: &str, log: &Logger, os: &str) -> Result<(), Error> 
         msi_file_name.to_str().unwrap_or_default()
     ));
 
-    let command = Command::new_single(format_one_arg(MSIEXEC_INSTALL_COMMAND, msi_file));
+    let command = Command::new_single(format_one_arg(PS_MSIEXEC_INSTALL_COMMAND, msi_file));
     log.trace(format!("Running command: {}", command.display()));
     run_shell_command_by_os(os, command)?;
 

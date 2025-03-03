@@ -77,7 +77,7 @@ pub fn run_shell_command_with_log(
 
 pub fn run_shell_command_by_os(os: &str, command: Command) -> Result<String, Error> {
     let (shell, flag) = if WINDOWS.is(os) {
-        ("cmd", "/c")
+        ("powershell", "-c")
     } else {
         ("sh", "-c")
     };
