@@ -37,7 +37,8 @@ use crate::metadata::{
 use crate::safari::{SafariManager, SAFARIDRIVER_NAME, SAFARI_NAME};
 use crate::safaritp::{SafariTPManager, SAFARITP_NAMES};
 use crate::shell::{
-    run_shell_command, run_shell_command_by_os, run_shell_command_with_log, Command,
+    run_powershell_command_with_log, run_shell_command, run_shell_command_by_os,
+    run_shell_command_with_log, Command,
 };
 use crate::stats::{send_stats_to_plausible, Props};
 use anyhow::anyhow;
@@ -77,8 +78,6 @@ pub const NIGHTLY: &str = "nightly";
 pub const ESR: &str = "esr";
 pub const PS_GET_VERSION_COMMAND: &str = r#"(Get-Item "{}").VersionInfo.ProductVersion"#;
 pub const PS_GET_OS_COMMAND: &str = "(Get-WmiObject Win32_OperatingSystem).OSArchitecture";
-pub const PS_MSIEXEC_INSTALL_COMMAND: &str =
-    r#"Start-Process -FilePath msiexec -ArgumentList "/i {} /qn ALLOWDOWNGRADE=1" -Wait"#;
 pub const REG_VERSION_ARG: &str = "version";
 pub const REG_CURRENT_VERSION_ARG: &str = "CurrentVersion";
 pub const REG_PV_ARG: &str = "pv";
@@ -87,6 +86,7 @@ pub const PLIST_COMMAND: &str =
 pub const HDIUTIL_ATTACH_COMMAND: &str = "hdiutil attach {}";
 pub const HDIUTIL_DETACH_COMMAND: &str = "hdiutil detach /Volumes/{}";
 pub const CP_VOLUME_COMMAND: &str = "cp -R /Volumes/{}/{}.app {}";
+pub const MSIEXEC_INSTALL_COMMAND: &str = "start /wait msiexec /i {} /qn ALLOWDOWNGRADE=1";
 pub const WINDOWS_CHECK_ADMIN_COMMAND: &str = "net session";
 pub const DASH_VERSION: &str = "{}{}{} -v";
 pub const DASH_DASH_VERSION: &str = "{}{}{} --version";
@@ -448,14 +448,22 @@ pub trait SeleniumManager {
         ));
         let mut browser_version: Option<String> = None;
         for driver_version_command in commands.into_iter() {
-            let output = match run_shell_command_with_log(
-                self.get_logger(),
-                self.get_os(),
-                driver_version_command,
-            ) {
-                Ok(out) => out,
-                Err(_e) => continue,
+            let output = if driver_version_command.display().starts_with("(Get-") {
+                match run_powershell_command_with_log(self.get_logger(), driver_version_command) {
+                    Ok(out) => out,
+                    Err(_e) => continue,
+                }
+            } else {
+                match run_shell_command_with_log(
+                    self.get_logger(),
+                    self.get_os(),
+                    driver_version_command,
+                ) {
+                    Ok(out) => out,
+                    Err(_e) => continue,
+                }
             };
+
             let full_browser_version = parse_version(output, self.get_logger()).unwrap_or_default();
             if full_browser_version.is_empty() {
                 continue;
