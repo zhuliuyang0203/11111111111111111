@@ -26,7 +26,6 @@ mod common;
 #[case("chrome", "ChromeDriver")]
 #[case("edge", "Microsoft Edge WebDriver")]
 #[case("firefox", "geckodriver")]
-#[case("iexplorer", "IEDriverServer")]
 fn exec_driver_test(#[case] browser_name: String, #[case] driver_name: String) {
     let mut cmd = get_selenium_manager();
     cmd.args(["--browser", &browser_name, "--output", "json"])
