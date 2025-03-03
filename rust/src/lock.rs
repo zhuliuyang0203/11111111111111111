@@ -17,12 +17,15 @@
 
 use crate::logger::Logger;
 use anyhow::Error;
+use std::cell::RefCell;
 use std::fs::File;
 use std::path::{Path, PathBuf};
 
 use crate::files::{create_parent_path_if_not_exists, create_path_if_not_exists};
 use fs2::FileExt;
 use std::fs;
+
+thread_local!(static LOCK_PATH: RefCell<Option<PathBuf>> = RefCell::new(None));
 
 const LOCK_FILE: &str = "sm.lock";
 
@@ -51,15 +54,36 @@ impl Lock {
         log.debug(format!("Acquiring lock: {}", path.display()));
         file.lock_exclusive().unwrap_or_default();
 
+        LOCK_PATH.with(|option| {
+            *option.borrow_mut() = Some(lock_folder.to_path_buf());
+        });
+
         Ok(Self { file, path })
     }
 
     pub fn release(&mut self) {
         fs::remove_file(&self.path).unwrap_or_default();
         self.file.unlock().unwrap_or_default();
+
+        LOCK_PATH.with(|option| {
+            *option.borrow_mut() = None;
+        });
     }
 
     pub fn exists(&mut self) -> bool {
         self.path.exists()
+    }
+}
+
+pub fn clear_lock_if_required() {
+    let mut lock_path: Option<PathBuf> = None;
+    LOCK_PATH.with(|option| {
+        let optional_path = &*option.borrow();
+        if optional_path.is_some() {
+            lock_path = Some(optional_path.as_ref().unwrap().to_path_buf());
+        }
+    });
+    if lock_path.is_some() {
+        fs::remove_dir_all(lock_path.unwrap()).unwrap_or_default();
     }
 }
