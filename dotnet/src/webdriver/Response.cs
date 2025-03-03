@@ -172,6 +172,9 @@ namespace OpenQA.Selenium
         /// Returns this object as a JSON-encoded string.
         /// </summary>
         /// <returns>A JSON-encoded string representing this <see cref="Response"/> object.</returns>
+
+        [RequiresUnreferencedCode("Untyped JSON serialization is not trim- or AOT- safe.")]
+        [RequiresDynamicCode("Untyped JSON serialization is not trim- or AOT- safe.")]
         public string ToJson()
         {
             return JsonSerializer.Serialize(this);
