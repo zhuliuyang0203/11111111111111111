@@ -42,6 +42,12 @@ use crate::shell::{
 use crate::stats::{send_stats_to_plausible, Props};
 use anyhow::anyhow;
 use anyhow::Error;
+// Re-export FFI functionality
+pub use ffi::{
+    WebDriverPathResult,
+    get_dummy_webdriver_path,
+    free_webdriver_path_result
+};
 use reqwest::{Client, Proxy};
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
@@ -57,6 +63,7 @@ pub mod downloads;
 pub mod edge;
 pub mod files;
 pub mod firefox;
+pub mod ffi;
 pub mod grid;
 pub mod iexplorer;
 pub mod lock;
@@ -1673,81 +1680,4 @@ fn get_index_version(full_version: &str, index: usize) -> Result<String, Error> 
         .get(index)
         .ok_or(anyhow!(format!("Wrong version: {}", full_version)))?
         .to_string())
-}
-
-// ----------------------------------------------------------
-// Exported functions
-// ----------------------------------------------------------
-
-// this is callback function to be called each time when rust wants to send log data
-type LogCallback = extern "C" fn(level: std::ffi::c_int, message: *const std::os::raw::c_char);
-
-#[repr(C)]
-pub struct WebDriverPathResult {
-    success: bool,
-    driver_path: *mut std::ffi::c_char,
-    error: *mut std::ffi::c_char,
-}
-
-// this is just an example how to expose function for external usage
-#[no_mangle]
-pub extern "C" fn get_dummy_webdriver_path(driver_name: *const std::ffi::c_char, log: LogCallback) -> WebDriverPathResult {
-    let result = std::panic::catch_unwind(|| {
-        
-        for i in 1..6 {
-            let message = std::ffi::CString::new("Hello, I am logging message").unwrap();
-            //let message = std::ffi::CString::new(String::from("A").repeat(10_000_000)).unwrap();
-            log(i, message.as_ptr());
-        }
-
-        //panic!("Intentional panic for testing");
-
-        let driver = unsafe { std::ffi::CStr::from_ptr(driver_name).to_str().unwrap() };
-
-        return std::ffi::CString::new("This is dummy driver path for ".to_owned() + driver).unwrap().into_raw();
-        //return std::ffi::CString::new(String::from("A").repeat(10_000_000)).unwrap().into_raw();
-    });
-    
-    match result {
-        Ok(driver_path) => WebDriverPathResult {
-            success: true,
-            driver_path,
-            error: std::ptr::null_mut(),
-        },
-        Err(panic) => WebDriverPathResult {
-            success: false,
-            driver_path: std::ptr::null_mut(),
-            error: std::ffi::CString::new(extract_panic_message(panic)).unwrap().into_raw(),
-        }
-    }
-}
-
-#[no_mangle]
-pub extern "C" fn free_webdriver_path_result(result: *mut WebDriverPathResult) {
-    if result.is_null() {
-        return;
-    }
-    unsafe {
-        let ffi_result = &mut *result;
-        if !ffi_result.driver_path.is_null() {
-            // Reconstruct CString to drop it and free memory
-            let _ = std::ffi::CString::from_raw(ffi_result.driver_path);
-        }
-        if !ffi_result.error.is_null() {
-            // Reconstruct CString to drop it and free memory
-            let _ = std::ffi::CString::from_raw(ffi_result.error);
-        }
-    }
-}
-
-/// Extract panic message from `Box<dyn Any>`
-fn extract_panic_message(panic: Box<dyn std::any::Any + Send>) -> String {
-    // Try to downcast to common panic types
-    if let Some(s) = panic.downcast_ref::<String>() {
-        s.clone()
-    } else if let Some(s) = panic.downcast_ref::<&str>() {
-        s.to_string()
-    } else {
-        "Unknown panic (non-string payload)".to_string()
-    }
 }
