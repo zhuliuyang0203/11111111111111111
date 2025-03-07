@@ -1692,19 +1692,31 @@ pub struct WebDriverPathResult {
 // this is just an example how to expose function for external usage
 #[no_mangle]
 pub extern "C" fn get_dummy_webdriver_path(driver_name: *const std::ffi::c_char, log: LogCallback) -> WebDriverPathResult {
-    for i in 1..6 {
-        let message = std::ffi::CString::new("Hello, I am logging message").unwrap();
-        //let message = std::ffi::CString::new(String::from("A").repeat(10_000_000)).unwrap();
-        log(i, message.as_ptr());
-    }
+    let result = std::panic::catch_unwind(|| {
+        
+        for i in 1..6 {
+            let message = std::ffi::CString::new("Hello, I am logging message").unwrap();
+            //let message = std::ffi::CString::new(String::from("A").repeat(10_000_000)).unwrap();
+            log(i, message.as_ptr());
+        }
 
-    let driver = unsafe { std::ffi::CStr::from_ptr(driver_name).to_str().unwrap() };
+        let driver = unsafe { std::ffi::CStr::from_ptr(driver_name).to_str().unwrap() };
 
-    return WebDriverPathResult {
-        success: true,
-        driver_path: std::ffi::CString::new("This is dummy driver path for ".to_owned() + driver).unwrap().into_raw(),
-        //driver_path: std::ffi::CString::new(String::from("A").repeat(10_000_000)).unwrap().into_raw(),
-        error: std::ptr::null_mut(),
+        return std::ffi::CString::new("This is dummy driver path for ".to_owned() + driver).unwrap().into_raw();
+        //return std::ffi::CString::new(String::from("A").repeat(10_000_000)).unwrap().into_raw();
+    });
+    
+    match result {
+        Ok(driver_path) => WebDriverPathResult {
+            success: true,
+            driver_path,
+            error: std::ptr::null_mut(),
+        },
+        Err(panic) => WebDriverPathResult {
+            success: false,
+            driver_path: std::ptr::null_mut(),
+            error: std::ffi::CString::new(extract_panic_message(panic)).unwrap().into_raw(),
+        }
     }
 }
 
@@ -1723,5 +1735,17 @@ pub extern "C" fn free_webdriver_path_result(result: *mut WebDriverPathResult) {
             // Reconstruct CString to drop it and free memory
             let _ = std::ffi::CString::from_raw(ffi_result.error);
         }
+    }
+}
+
+/// Extract panic message from `Box<dyn Any>`
+fn extract_panic_message(panic: Box<dyn std::any::Any + Send>) -> String {
+    // Try to downcast to common panic types
+    if let Some(s) = panic.downcast_ref::<String>() {
+        s.clone()
+    } else if let Some(s) = panic.downcast_ref::<&str>() {
+        s.to_string()
+    } else {
+        "Unknown panic (non-string payload)".to_string()
     }
 }
