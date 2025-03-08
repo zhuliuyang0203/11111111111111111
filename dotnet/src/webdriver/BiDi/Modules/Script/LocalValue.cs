@@ -17,7 +17,12 @@
 // under the License.
 // </copyright>
 
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.Script;
@@ -70,10 +75,59 @@ public abstract record LocalValue
         }
     }
 
+    public static LocalValue ConvertFrom(JsonNode? node)
+    {
+        if (node is null)
+        {
+            return new Null();
+        }
+
+        switch (node.GetValueKind())
+        {
+            case JsonValueKind.True:
+                return new Boolean(true);
+
+            case JsonValueKind.False:
+                return new Boolean(false);
+
+            case JsonValueKind.Number:
+                {
+                    JsonValue value = node.AsValue();
+                    if (value.TryGetValue(out int intValue))
+                    {
+                        return new Number(intValue);
+                    }
+
+                    if (value.TryGetValue(out double doubleValue) && !double.IsInfinity(doubleValue))
+                    {
+                        return new Number(doubleValue);
+                    }
+
+                    return new BigInt(BigInteger.Parse(value.ToJsonString()));
+                }
+
+            case JsonValueKind.String:
+                return new String(node.GetValue<string>());
+
+            case JsonValueKind.Array:
+                return new Array(node.AsArray().Select(ConvertFrom));
+
+            case JsonValueKind.Object:
+                return new Map(node.AsObject().ToDictionary(m => m.Key, m => ConvertFrom(m.Value)));
+
+            default:
+                throw new InvalidCastException($"Could not convert node {node}");
+        }
+    }
+
     public abstract record PrimitiveProtocolLocalValue : LocalValue
     {
 
     }
+
+    public record BigInt(BigInteger Value) : PrimitiveProtocolLocalValue;
+
+    public record Boolean(bool Value) : PrimitiveProtocolLocalValue;
 
     public record Number(double Value) : PrimitiveProtocolLocalValue
     {
