@@ -1,4 +1,4 @@
-// <copyright file="UserPromptOpenedEventArgs.cs" company="Selenium Committers">
+// <copyright file="CamelCaseJsonEnumStringConverter.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -17,23 +17,13 @@
 // under the License.
 // </copyright>
 
-using OpenQA.Selenium.BiDi.Communication.Json.Converters;
+using System;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
-
-public record UserPromptOpenedEventArgs(BiDi BiDi, BrowsingContext Context, UserPromptType Type, string Message)
-    : BrowsingContextEventArgs(BiDi, Context)
+namespace OpenQA.Selenium.BiDi.Communication.Json.Converters
 {
-    [JsonInclude]
-    public string? DefaultValue { get; internal set; }
-}
-
-[JsonConverter(typeof(CamelCaseJsonEnumStringConverter<UserPromptType>))]
-public enum UserPromptType
-{
-    Alert,
-    Confirm,
-    Prompt,
-    BeforeUnload
+    internal sealed class CamelCaseJsonEnumStringConverter<TEnum>()
+        : JsonStringEnumConverter<TEnum>(JsonNamingPolicy.CamelCase)
+        where TEnum : struct, Enum;
 }

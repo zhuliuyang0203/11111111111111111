@@ -18,6 +18,7 @@
 // </copyright>
 
 using OpenQA.Selenium.BiDi.Communication;
+using OpenQA.Selenium.BiDi.Communication.Json.Converters;
 using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
@@ -36,7 +37,7 @@ public record CaptureScreenshotOptions : CommandOptions
     public ClipRectangle? Clip { get; set; }
 }
 
-[JsonConverter(typeof(JsonStringEnumConverter<Origin>))]
+[JsonConverter(typeof(CamelCaseJsonEnumStringConverter<Origin>))]
 public enum Origin
 {
     Viewport,

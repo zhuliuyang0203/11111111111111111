@@ -18,6 +18,7 @@
 // </copyright>
 
 using OpenQA.Selenium.BiDi.Communication;
+using OpenQA.Selenium.BiDi.Communication.Json.Converters;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
@@ -48,7 +49,7 @@ public record BrowsingContextSetCacheBehaviorOptions
 
 }
 
-[JsonConverter(typeof(JsonStringEnumConverter<CacheBehavior>))]
+[JsonConverter(typeof(CamelCaseJsonEnumStringConverter<CacheBehavior>))]
 public enum CacheBehavior
 {
     Default,
