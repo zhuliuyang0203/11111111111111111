@@ -28,6 +28,7 @@ public record UserPromptOpenedEventArgs(BiDi BiDi, BrowsingContext Context, User
     public string? DefaultValue { get; internal set; }
 }
 
+[JsonConverter(typeof(JsonStringEnumConverter<UserPromptType>))]
 public enum UserPromptType
 {
     Alert,

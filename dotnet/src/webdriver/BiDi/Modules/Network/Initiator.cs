@@ -17,6 +17,8 @@
 // under the License.
 // </copyright>
 
+using System.Text.Json.Serialization;
+
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
 public record Initiator(InitiatorType Type)
@@ -30,6 +32,7 @@ public record Initiator(InitiatorType Type)
     public Request? Request { get; set; }
 }
 
+[JsonConverter(typeof(JsonStringEnumConverter<InitiatorType>))]
 public enum InitiatorType
 {
     Parser,

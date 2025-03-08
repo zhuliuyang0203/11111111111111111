@@ -20,6 +20,7 @@
 using OpenQA.Selenium.BiDi.Communication;
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
@@ -56,6 +57,7 @@ public struct PrintMargin
     public double? Top { get; set; }
 }
 
+[JsonConverter(typeof(JsonStringEnumConverter<PrintOrientation>))]
 public enum PrintOrientation
 {
     Portrait,

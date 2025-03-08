@@ -19,12 +19,15 @@
 
 using OpenQA.Selenium.BiDi.Modules.Input;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Communication.Json.Converters.Enumerable;
 
+[UnconditionalSuppressMessage("Trimming", "IL2026", Justification = "Json serializer options should have AOT-safe type resolution")]
+[UnconditionalSuppressMessage("AOT", "IL3050", Justification = "Json serializer options should have AOT-safe type resolution")]
 internal class InputSourceActionsConverter : JsonConverter<SourceActions>
 {
     public override SourceActions Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)

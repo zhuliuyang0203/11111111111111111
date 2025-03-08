@@ -269,6 +269,7 @@ public abstract record RemoteValue
 
 public abstract record PrimitiveProtocolRemoteValue : RemoteValue;
 
+[JsonConverter(typeof(JsonStringEnumConverter<Mode>))]
 public enum Mode
 {
     Open,

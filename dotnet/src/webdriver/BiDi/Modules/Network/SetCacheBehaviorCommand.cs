@@ -17,8 +17,9 @@
 // under the License.
 // </copyright>
 
-using System.Collections.Generic;
 using OpenQA.Selenium.BiDi.Communication;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
@@ -47,6 +48,7 @@ public record BrowsingContextSetCacheBehaviorOptions
 
 }
 
+[JsonConverter(typeof(JsonStringEnumConverter<CacheBehavior>))]
 public enum CacheBehavior
 {
     Default,

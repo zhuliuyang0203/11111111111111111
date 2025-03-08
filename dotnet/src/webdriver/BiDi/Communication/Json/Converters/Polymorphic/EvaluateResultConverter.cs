@@ -19,11 +19,14 @@
 
 using OpenQA.Selenium.BiDi.Modules.Script;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Communication.Json.Converters.Polymorphic;
 
+[UnconditionalSuppressMessage("Trimming", "IL2026", Justification = "Json serializer options should have AOT-safe type resolution")]
+[UnconditionalSuppressMessage("AOT", "IL3050", Justification = "Json serializer options should have AOT-safe type resolution")]
 // https://github.com/dotnet/runtime/issues/72604
 internal class EvaluateResultConverter : JsonConverter<EvaluateResult>
 {

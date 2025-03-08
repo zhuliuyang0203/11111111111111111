@@ -36,6 +36,7 @@ public record CaptureScreenshotOptions : CommandOptions
     public ClipRectangle? Clip { get; set; }
 }
 
+[JsonConverter(typeof(JsonStringEnumConverter<Origin>))]
 public enum Origin
 {
     Viewport,

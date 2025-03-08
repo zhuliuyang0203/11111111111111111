@@ -51,6 +51,7 @@ public abstract record Locator
     public record XPath(string Value) : Locator;
 }
 
+[JsonConverter(typeof(JsonStringEnumConverter<MatchType>))]
 public enum MatchType
 {
     Full,

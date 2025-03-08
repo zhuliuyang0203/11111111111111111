@@ -82,7 +82,6 @@ public class Broker : IAsyncDisposable
                 new PrintPageRangeConverter(),
                 new InputOriginConverter(),
                 new SubscriptionConverter(),
-                new JsonStringEnumConverter(JsonNamingPolicy.CamelCase),
 
                 // https://github.com/dotnet/runtime/issues/72604
                 new Json.Converters.Polymorphic.MessageConverter(),

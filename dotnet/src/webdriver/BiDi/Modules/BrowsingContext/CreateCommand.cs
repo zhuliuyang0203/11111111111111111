@@ -18,6 +18,7 @@
 // </copyright>
 
 using OpenQA.Selenium.BiDi.Communication;
+using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
@@ -35,6 +36,7 @@ public record CreateOptions : CommandOptions
     public Browser.UserContext? UserContext { get; set; }
 }
 
+[JsonConverter(typeof(JsonStringEnumConverter<ContextType>))]
 public enum ContextType
 {
     Tab,

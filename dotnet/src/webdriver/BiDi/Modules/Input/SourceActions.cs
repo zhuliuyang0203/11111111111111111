@@ -147,6 +147,7 @@ public record PointerParameters
     public PointerType? PointerType { get; set; }
 }
 
+[JsonConverter(typeof(JsonStringEnumConverter<PointerType>))]
 public enum PointerType
 {
     Mouse,

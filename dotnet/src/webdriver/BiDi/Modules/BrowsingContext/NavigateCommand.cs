@@ -18,6 +18,7 @@
 // </copyright>
 
 using OpenQA.Selenium.BiDi.Communication;
+using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
@@ -31,6 +32,7 @@ public record NavigateOptions : CommandOptions
     public ReadinessState? Wait { get; set; }
 }
 
+[JsonConverter(typeof(JsonStringEnumConverter<ReadinessState>))]
 public enum ReadinessState
 {
     None,

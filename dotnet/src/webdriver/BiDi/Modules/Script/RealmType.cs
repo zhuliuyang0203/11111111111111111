@@ -17,8 +17,11 @@
 // under the License.
 // </copyright>
 
+using System.Text.Json.Serialization;
+
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
+[JsonConverter(typeof(JsonStringEnumConverter<RealmType>))]
 public enum RealmType
 {
     Window,

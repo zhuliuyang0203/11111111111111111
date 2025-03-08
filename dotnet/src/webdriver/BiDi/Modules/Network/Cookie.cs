@@ -28,6 +28,7 @@ public record Cookie(string Name, BytesValue Value, string Domain, string Path, 
     public DateTimeOffset? Expiry { get; internal set; }
 }
 
+[JsonConverter(typeof(JsonStringEnumConverter<SameSite>))]
 public enum SameSite
 {
     Strict,

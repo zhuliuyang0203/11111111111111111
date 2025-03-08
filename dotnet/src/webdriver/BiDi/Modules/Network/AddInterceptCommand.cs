@@ -17,8 +17,9 @@
 // under the License.
 // </copyright>
 
-using System.Collections.Generic;
 using OpenQA.Selenium.BiDi.Communication;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
@@ -48,6 +49,7 @@ public record BrowsingContextAddInterceptOptions
 
 public record AddInterceptResult(Intercept Intercept);
 
+[JsonConverter(typeof(JsonStringEnumConverter<InterceptPhase>))]
 public enum InterceptPhase
 {
     BeforeRequestSent,
