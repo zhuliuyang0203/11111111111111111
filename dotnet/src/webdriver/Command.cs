@@ -86,17 +86,12 @@ namespace OpenQA.Selenium
         {
             get
             {
-                string parametersString;
-                if (this.Parameters != null && this.Parameters.Count > 0)
+                if (this.Parameters == null || this.Parameters.Count <= 0)
                 {
-                    parametersString = JsonSerializer.Serialize(this.Parameters, s_jsonSerializerOptions);
-                }
-                else
-                {
-                    parametersString = "{}";
+                    return "{}";
                 }
 
-                return parametersString;
+                return JsonSerializer.Serialize(this.Parameters, s_jsonSerializerOptions);
             }
         }
 
