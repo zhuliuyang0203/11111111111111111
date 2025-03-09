@@ -22,8 +22,12 @@ import org.openqa.selenium.internal.Require;
 /** A combination of username and password to use when authenticating a browser with a website. */
 public record UsernameAndPassword(String username, String password) implements Credentials {
 
-  public UsernameAndPassword(String username, String password) {
-    this.username = Require.nonNull("User name", username);
-    this.password = Require.nonNull("Password", password);
+  public UsernameAndPassword {
+    username = Require.nonNull("User name", username);
+    password = Require.nonNull("Password", password);
+  }
+
+  public static UsernameAndPassword of(String username, String password) {
+    return new UsernameAndPassword(username, password);
   }
 }
