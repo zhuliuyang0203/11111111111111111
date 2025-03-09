@@ -29,7 +29,7 @@ module Selenium
           @bidi.send_cmd('browser.createUserContext')
         end
 
-        def get_user_contexts
+        def user_contexts
           @bidi.send_cmd('browser.getUserContexts')
         end
 

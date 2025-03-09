@@ -37,7 +37,7 @@ module Selenium
           reset_driver!(web_socket_url: true) do |driver|
             browser = described_class.new(driver.bidi)
             2.times { browser.create_user_context }
-            expect(browser.get_user_contexts['userContexts'].count).to eq 3
+            expect(browser.user_contexts['userContexts'].count).to eq 3
           end
         end
 
@@ -45,9 +45,9 @@ module Selenium
           reset_driver!(web_socket_url: true) do |driver|
             browser = described_class.new(driver.bidi)
             user_context = browser.create_user_context
-            expect(browser.get_user_contexts['userContexts'].count).to eq 2
+            expect(browser.user_contexts['userContexts'].count).to eq 2
             browser.remove_user_context(user_context['userContext'])
-            expect(browser.get_user_contexts['userContexts'].count).to eq 1
+            expect(browser.user_contexts['userContexts'].count).to eq 1
           end
         end
 
