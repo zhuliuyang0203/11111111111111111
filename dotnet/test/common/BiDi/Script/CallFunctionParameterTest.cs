@@ -224,152 +224,329 @@ class CallFunctionParameterTest : BiDiTestFixture
     }
 
     [Test]
-    [TestCaseSource(nameof(RoundtripOptions))]
-    public async Task CanCallFunctionAndRoundtripArguments(LocalValue local, RemoteValue expected, string javaScriptAssert)
+    public async Task CanCallFunctionAndRoundtripArguments_Undefined()
     {
         var response = await context.Script.CallFunctionAsync($$"""
             (arg) => {
-              if ({{javaScriptAssert}}) {
+              if (typeof arg === 'undefined') {
                 return arg;
               }
 
               throw new Error("Assert failed: " + arg);
             }
-            """, false, new() { Arguments = [local] });
+            """, false, new() { Arguments = [new LocalValue.Undefined()] });
 
-        if (response.Result is RemoteValue.Array actualArray && expected is RemoteValue.Array expectedArray)
-        {
-            Assert.That(actualArray.Value, Is.EqualTo(expectedArray.Value));
-        }
-        else if (response.Result is RemoteValue.Object actualObject && expected is RemoteValue.Object expectedObject)
-        {
-            Assert.That(actualObject.Value, Is.EqualTo(expectedObject.Value));
-        }
-        else if (response.Result is RemoteValue.Map actualMap && expected is RemoteValue.Map expectedMap)
-        {
-            Assert.That(actualMap.Value, Is.EqualTo(expectedMap.Value));
-        }
-        else if (response.Result is RemoteValue.Set actualSet && expected is RemoteValue.Set expectedSet)
-        {
-            Assert.That(actualSet.Value, Is.EqualTo(expectedSet.Value));
-        }
-        else if (response.Result is RemoteValue.Date actualDate && expected is RemoteValue.Date expectedDate)
-        {
-            var actualDateParsed = DateTime.SpecifyKind(DateTime.Parse(actualDate.Value, CultureInfo.InvariantCulture), DateTimeKind.Utc);
-            Assert.That(actualDateParsed, Is.EqualTo(DateTime.Parse(expectedDate.Value)).Within(TimeSpan.FromMilliseconds(1)));
-        }
-        else
-        {
-            Assert.That(response.Result, Is.EqualTo(expected));
-        }
+        Assert.That(response.Result, Is.AssignableTo<RemoteValue.Undefined>());
+        Assert.That(response.Result, Is.EqualTo(new RemoteValue.Undefined()));
     }
-    private const string PinnedDateTimeString = "2025-03-09T00:30:33.083Z";
-    private static IEnumerable<TestCaseData> RoundtripOptions()
+
+    [Test]
+    public async Task CanCallFunctionAndRoundtripArguments_Null()
     {
+        var response = await context.Script.CallFunctionAsync($$"""
+            (arg) => {
+              if (arg === null) {
+                return arg;
+              }
 
-        yield return new TestCaseData(new LocalValue.Null(), new RemoteValue.Null(), "arg === null")
-        {
-            TestName = nameof(CanCallFunctionAndRoundtripArguments) + "(Null)"
-        };
-        yield return new TestCaseData(new LocalValue.Undefined(), new RemoteValue.Undefined(), "typeof arg === 'undefined'")
-        {
-            TestName = nameof(CanCallFunctionAndRoundtripArguments) + "(Undefined)",
-        };
-        //yield return new TestCaseData(new LocalValue.Boolean(true), new RemoteValue.Boolean(true), "typeof arg === true")
-        //{
-        //    TestName = nameof(CanCallFunctionAndRoundtrip_Five) + "(true)",
-        //};
-        //yield return new TestCaseData(new LocalValue.Boolean(false), new RemoteValue.Boolean(false), "typeof arg === false")
-        //{
-        //    TestName = nameof(CanCallFunctionAndRoundtrip_Five) + "(false)",
-        //};
-        yield return new TestCaseData(new LocalValue.String("whoa"), new RemoteValue.String("whoa"), "arg === 'whoa'")
-        {
-            TestName = nameof(CanCallFunctionAndRoundtripArguments) + "(String('whoa'))",
-        };
-        yield return new TestCaseData(new LocalValue.String(string.Empty), new RemoteValue.String(string.Empty), "arg === ''")
-        {
-            TestName = nameof(CanCallFunctionAndRoundtripArguments) + "(String(''))",
-        };
-        yield return new TestCaseData(new LocalValue.Date(PinnedDateTimeString), new RemoteValue.Date(PinnedDateTimeString), $"arg.toISOString() === '{PinnedDateTimeString}'")
-        {
-            TestName = nameof(CanCallFunctionAndRoundtripArguments) + "(Date)",
-        };
-        yield return new TestCaseData(new LocalValue.Number(5), new RemoteValue.Number(5), "arg === 5")
-        {
-            TestName = nameof(CanCallFunctionAndRoundtripArguments) + "(Number(5))",
-        };
-        yield return new TestCaseData(new LocalValue.Number(0), new RemoteValue.Number(0), "arg === 0")
-        {
-            TestName = nameof(CanCallFunctionAndRoundtripArguments) + "(Number(0))",
-        };
-        yield return new TestCaseData(new LocalValue.Number(-5), new RemoteValue.Number(-5), "arg === -5")
-        {
-            TestName = nameof(CanCallFunctionAndRoundtripArguments) + "(Number(-5))",
-        };
-        yield return new TestCaseData(new LocalValue.Number(double.PositiveInfinity), new RemoteValue.Number(double.PositiveInfinity), "arg === Number.POSITIVE_INFINITY")
-        {
-            TestName = nameof(CanCallFunctionAndRoundtripArguments) + "(Number(Infinity))",
-        };
-        yield return new TestCaseData(new LocalValue.Number(double.NegativeInfinity), new RemoteValue.Number(double.NegativeInfinity), "arg === Number.NEGATIVE_INFINITY")
-        {
-            TestName = nameof(CanCallFunctionAndRoundtripArguments) + "(Number(-Infinity))",
-        };
-        yield return new TestCaseData(new LocalValue.Number(double.NegativeZero), new RemoteValue.Number(double.NegativeZero), "arg === -0")
-        {
-            TestName = nameof(CanCallFunctionAndRoundtripArguments) + "(Number(-0))",
-        };
-        yield return new TestCaseData(
-            new LocalValue.RegExp(new LocalValue.RegExp.RegExpValue("foo*") { Flags = "g" }),
-            new RemoteValue.RegExp(new RemoteValue.RegExp.RegExpValue("foo*") { Flags = "g" }),
-            "arg.test('foo') && arg.source === 'foo*' && arg.global"
-        )
-        {
-            TestName = nameof(CanCallFunctionAndRoundtripArguments) + "(RegExp(/foo/g))",
-        };
-        yield return new TestCaseData(
+              throw new Error("Assert failed: " + arg);
+            }
+            """, false, new() { Arguments = [new LocalValue.Null()] });
 
-                new LocalValue.Array([new LocalValue.String("hi")]),
-                new RemoteValue.Array { Value = [new RemoteValue.String("hi")] },
-                "arg.length === 1 && arg[0] === 'hi'"
-            )
+        Assert.That(response.Result, Is.AssignableTo<RemoteValue.Null>());
+        Assert.That(response.Result, Is.EqualTo(new RemoteValue.Null()));
+    }
+
+    [Test]
+    public async Task CanCallFunctionAndRoundtripArguments_EmptyString()
+    {
+        var response = await context.Script.CallFunctionAsync($$"""
+            (arg) => {
+              if (arg === '') {
+                return arg;
+              }
+
+              throw new Error("Assert failed: " + arg);
+            }
+            """, false, new() { Arguments = [new LocalValue.String(string.Empty)] });
+
+        Assert.That(response.Result, Is.AssignableTo<RemoteValue.String>());
+        Assert.That(response.Result, Is.EqualTo(new RemoteValue.String(string.Empty)));
+    }
+
+    [Test]
+    public async Task CanCallFunctionAndRoundtripArguments_NonEmptyString()
+    {
+        var response = await context.Script.CallFunctionAsync($$"""
+            (arg) => {
+              if (arg === 'whoa') {
+                return arg;
+              }
+
+              throw new Error("Assert failed: " + arg);
+            }
+            """, false, new() { Arguments = [new LocalValue.String("whoa")] });
+
+        Assert.That(response.Result, Is.AssignableTo<RemoteValue.String>());
+        Assert.That(response.Result, Is.EqualTo(new RemoteValue.String("whoa")));
+    }
+
+    [Test]
+    public async Task CanCallFunctionAndRoundtripArguments_RecentDate()
+    {
+        const string PinnedDateTimeString = "2025-03-09T00:30:33.083Z";
+
+        var response = await context.Script.CallFunctionAsync($$"""
+            (arg) => {
+              if (arg.toISOString() === '{{PinnedDateTimeString}}') {
+                return arg;
+              }
+
+              throw new Error("Assert failed: " + arg);
+            }
+            """, false, new() { Arguments = [new LocalValue.Date(PinnedDateTimeString)] });
+
+        Assert.That(response.Result, Is.AssignableTo<RemoteValue.Date>());
+        Assert.That(response.Result, Is.EqualTo(new RemoteValue.Date(PinnedDateTimeString)));
+    }
+
+    [Test]
+    public async Task CanCallFunctionAndRoundtripArguments_UnixEpoch()
+    {
+        const string EpochString = "1970-01-01T00:00:00.000Z";
+
+        var response = await context.Script.CallFunctionAsync($$"""
+            (arg) => {
+              if (arg.toISOString() === '{{EpochString}}') {
+                return arg;
+              }
+
+              throw new Error("Assert failed: " + arg.toISOString());
+            }
+            """, false, new() { Arguments = [new LocalValue.Date(EpochString)] });
+
+        Assert.That(response.Result, Is.AssignableTo<RemoteValue.Date>());
+        Assert.That(response.Result, Is.EqualTo(new RemoteValue.Date(EpochString)));
+    }
+
+    [Test]
+    public async Task CanCallFunctionAndRoundtripArguments_Number5()
+    {
+        var response = await context.Script.CallFunctionAsync($$"""
+            (arg) => {
+              if (arg === 5) {
+                return arg;
+              }
+
+              throw new Error("Assert failed: " + arg);
+            }
+            """, false, new() { Arguments = [new LocalValue.Number(5)] });
+
+        Assert.That(response.Result, Is.AssignableTo<RemoteValue.Number>());
+        Assert.That(response.Result, Is.EqualTo(new RemoteValue.Number(5)));
+    }
+
+    [Test]
+    public async Task CanCallFunctionAndRoundtripArguments_NumberNegative5()
+    {
+        var response = await context.Script.CallFunctionAsync($$"""
+            (arg) => {
+              if (arg === -5) {
+                return arg;
+              }
+
+              throw new Error("Assert failed: " + arg);
+            }
+            """, false, new() { Arguments = [new LocalValue.Number(-5)] });
+
+        Assert.That(response.Result, Is.AssignableTo<RemoteValue.Number>());
+        Assert.That(response.Result, Is.EqualTo(new RemoteValue.Number(-5)));
+    }
+
+    [Test]
+    public async Task CanCallFunctionAndRoundtripArguments_Number0()
+    {
+        var response = await context.Script.CallFunctionAsync($$"""
+            (arg) => {
+              if (arg === 0) {
+                return arg;
+              }
+
+              throw new Error("Assert failed: " + arg);
+            }
+            """, false, new() { Arguments = [new LocalValue.Number(0)] });
+
+        Assert.That(response.Result, Is.AssignableTo<RemoteValue.Number>());
+        Assert.That(response.Result, Is.EqualTo(new RemoteValue.Number(0)));
+    }
+
+    [Test]
+    public async Task CanCallFunctionAndRoundtripArguments_NumberNegative0()
+    {
+        var response = await context.Script.CallFunctionAsync($$"""
+            (arg) => {
+              if (arg === -0) {
+                return arg;
+              }
+
+              throw new Error("Assert failed: " + arg);
+            }
+            """, false, new() { Arguments = [new LocalValue.Number(double.NegativeZero)] });
+
+        Assert.That(response.Result, Is.AssignableTo<RemoteValue.Number>());
+        Assert.That(response.Result, Is.EqualTo(new RemoteValue.Number(double.NegativeZero)));
+    }
+
+    [Test]
+    public async Task CanCallFunctionAndRoundtripArguments_NumberPositiveInfinity()
+    {
+        var response = await context.Script.CallFunctionAsync($$"""
+            (arg) => {
+              if (arg === Number.POSITIVE_INFINITY) {
+                return arg;
+              }
+
+              throw new Error("Assert failed: " + arg);
+            }
+            """, false, new() { Arguments = [new LocalValue.Number(double.PositiveInfinity)] });
+
+        Assert.That(response.Result, Is.AssignableTo<RemoteValue.Number>());
+        Assert.That(response.Result, Is.EqualTo(new RemoteValue.Number(double.PositiveInfinity)));
+    }
+
+    [Test]
+    public async Task CanCallFunctionAndRoundtripArguments_NumberNegativeInfinity()
+    {
+        var response = await context.Script.CallFunctionAsync($$"""
+            (arg) => {
+              if (arg === Number.NEGATIVE_INFINITY) {
+                return arg;
+              }
+
+              throw new Error("Assert failed: " + arg);
+            }
+            """, false, new() { Arguments = [new LocalValue.Number(double.NegativeInfinity)] });
+
+        Assert.That(response.Result, Is.AssignableTo<RemoteValue.Number>());
+        Assert.That(response.Result, Is.EqualTo(new RemoteValue.Number(double.NegativeInfinity)));
+    }
+
+    [Test]
+    public async Task CanCallFunctionAndRoundtripArguments_NumberNaN()
+    {
+        var response = await context.Script.CallFunctionAsync($$"""
+            (arg) => {
+              if (isNaN(arg)) {
+                return arg;
+              }
+
+              throw new Error("Assert failed: " + arg);
+            }
+            """, false, new() { Arguments = [new LocalValue.Number(double.NaN)] });
+
+        Assert.That(response.Result, Is.AssignableTo<RemoteValue.Number>());
+        Assert.That(response.Result, Is.EqualTo(new RemoteValue.Number(double.NaN)));
+    }
+
+    [Test]
+    public async Task CanCallFunctionAndRoundtripArguments_RegExp()
+    {
+        var response = await context.Script.CallFunctionAsync($$"""
+            (arg) => {
+              if (arg.test('foo') && arg.source === 'foo*' && arg.global) {
+                return arg;
+              }
+
+              throw new Error("Assert failed: " + arg);
+            }
+            """, false, new() { Arguments = [new LocalValue.RegExp(new LocalValue.RegExp.RegExpValue("foo*") { Flags = "g" })] });
+
+        Assert.That(response.Result, Is.AssignableTo<RemoteValue.RegExp>());
+        Assert.That(response.Result, Is.EqualTo(new RemoteValue.RegExp(new RemoteValue.RegExp.RegExpValue("foo*") { Flags = "g" })));
+    }
+
+    [Test]
+    public async Task CanCallFunctionAndRoundtripArguments_Array()
+    {
+        var response = await context.Script.CallFunctionAsync($$"""
+            (arg) => {
+              if (arg.length === 1 && arg[0] === 'hi') {
+                return arg;
+              }
+
+              throw new Error("Assert failed: " + arg);
+            }
+            """, false, new() { Arguments = [new LocalValue.Array([new LocalValue.String("hi")])] });
+
+        var expectedArray = new RemoteValue.Array { Value = [new RemoteValue.String("hi")] };
+        Assert.That(response.Result, Is.AssignableTo<RemoteValue.Array>());
+        Assert.That(((RemoteValue.Array)response.Result).Value, Is.EqualTo(expectedArray.Value));
+    }
+
+    [Test]
+    public async Task CanCallFunctionAndRoundtripArguments_Object()
+    {
+        var argument = new LocalValue.Object([[new LocalValue.String("key"), new LocalValue.String("value")]]);
+        var expected = new RemoteValue.Object
         {
-            TestName = nameof(CanCallFunctionAndRoundtripArguments) + "(Array(['hi']))",
-        };
-        yield return new TestCaseData
-        (
-            new LocalValue.Object([[new LocalValue.String("key"), new LocalValue.String("value")]]),
-            new RemoteValue.Object
-            {
-                Value = [[new RemoteValue.String("key"), new RemoteValue.String("value")]]
-            },
-            "arg.key === 'value' && Object.keys(arg).length === 1"
-        )
-        {
-            TestName = nameof(CanCallFunctionAndRoundtripArguments) + "(Object({key: 'value'}))",
-        };
-        yield return new TestCaseData
-        (
-            new LocalValue.Map([[new LocalValue.String("key"), new LocalValue.String("value")]]),
-            new RemoteValue.Map
-            {
-                Value = [[new RemoteValue.String("key"), new RemoteValue.String("value")]]
-            },
-            "arg.get('key') === 'value' && arg.size === 1"
-        )
-        {
-            TestName = nameof(CanCallFunctionAndRoundtripArguments) + "(Map({'key': 'value'}))",
+            Value = [[new RemoteValue.String("key"), new RemoteValue.String("value")]]
         };
 
-        yield return new TestCaseData
-        (
-            new LocalValue.Set([new LocalValue.String("key")]),
-            new RemoteValue.Set { Value = [new RemoteValue.String("key")] },
-            "arg.has('key') && arg.size === 1"
-        )
-        {
-            TestName = nameof(CanCallFunctionAndRoundtripArguments) + "(Set({'key'}))",
+        var response = await context.Script.CallFunctionAsync($$"""
+            (arg) => {
+              if (arg.key === 'value' && Object.keys(arg).length === 1) {
+                return arg;
+              }
 
-        };
+              throw new Error("Assert failed: " + arg);
+            }
+            """, false, new() { Arguments = [argument] });
+
+        Assert.That(response.Result, Is.AssignableTo<RemoteValue.Object>());
+        Assert.That(((RemoteValue.Object)response.Result).Value, Is.EqualTo(expected.Value));
+    }
+
+    [Test]
+    public async Task CanCallFunctionAndRoundtripArguments_Map()
+    {
+        var argument = new LocalValue.Map([[new LocalValue.String("key"), new LocalValue.String("value")]]);
+        var expected = new RemoteValue.Map
+        {
+            Value = [[new RemoteValue.String("key"), new RemoteValue.String("value")]]
+        }
+        ;
+
+        var response = await context.Script.CallFunctionAsync($$"""
+            (arg) => {
+              if (arg.get('key') === 'value' && arg.size === 1) {
+                return arg;
+              }
+
+              throw new Error("Assert failed: " + arg);
+            }
+            """, false, new() { Arguments = [argument] });
+
+        Assert.That(response.Result, Is.AssignableTo<RemoteValue.Map>());
+        Assert.That(((RemoteValue.Map)response.Result).Value, Is.EqualTo(expected.Value));
+    }
+
+    [Test]
+    public async Task CanCallFunctionAndRoundtripArguments_Set()
+    {
+        var argument = new LocalValue.Set([new LocalValue.String("key")]);
+        var expected = new RemoteValue.Set { Value = [new RemoteValue.String("key")] };
+
+        var response = await context.Script.CallFunctionAsync($$"""
+            (arg) => {
+              if (arg.has('key') && arg.size === 1) {
+                return arg;
+              }
+
+              throw new Error("Assert failed: " + arg);
+            }
+            """, false, new() { Arguments = [argument] });
+
+        Assert.That(response.Result, Is.AssignableTo<RemoteValue.Set>());
+        Assert.That(((RemoteValue.Set)response.Result).Value, Is.EqualTo(expected.Value));
     }
 }
