@@ -22,8 +22,7 @@ require_relative '../spec_helper'
 module Selenium
   module WebDriver
     class BiDi
-      describe Browser, exclusive: {bidi: true, reason: 'only executed when bidi is enabled'},
-                        only: {browser: %i[chrome edge firefox]} do
+      describe Browser do
         it 'creates an user context' do
           reset_driver!(web_socket_url: true) do |driver|
             browser = described_class.new(driver.bidi)
@@ -66,6 +65,14 @@ module Selenium
             expect {
               browser.remove_user_context('fake_context')
             }.to raise_error(Error::WebDriverError, /Failed to find context with id/)
+          end
+        end
+
+        it 'closes the browser' do
+          reset_driver!(web_socket_url: true) do |driver|
+            browser = described_class.new(driver.bidi)
+            browser.close
+            expect(browser).to be_nil
           end
         end
       end

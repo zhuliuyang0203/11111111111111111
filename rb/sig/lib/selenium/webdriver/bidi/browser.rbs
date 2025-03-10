@@ -6,6 +6,8 @@ module Selenium
 
         def initialize: (BiDi bidi) -> void
 
+        def close: -> Hash[nil, nil]
+
         def create_user_context: () -> Hash[String, String]
 
         def user_contexts: () -> Array[Hash[String, String]]

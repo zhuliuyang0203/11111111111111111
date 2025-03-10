@@ -36,6 +36,10 @@ module Selenium
         def remove_user_context(user_context)
           @bidi.send_cmd('browser.removeUserContext', userContext: user_context)
         end
+
+        def close
+          @bidi.send_cmd('browser.close')
+        end
       end
     end # BiDi
   end # WebDriver
