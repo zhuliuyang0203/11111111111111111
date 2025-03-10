@@ -17,6 +17,7 @@
 // under the License.
 // </copyright>
 
+using OpenQA.Selenium.BiDi.Communication.Json.Converters;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
@@ -75,7 +76,7 @@ public abstract record LocalValue
 
     }
 
-    public record Number(double Value) : PrimitiveProtocolLocalValue
+    public record Number([property: JsonConverter(typeof(DoubleConverter))] double Value) : PrimitiveProtocolLocalValue
     {
         public static explicit operator Number(double n) => new Number(n);
     }

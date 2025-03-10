@@ -186,8 +186,8 @@ class CallFunctionLocalValueTest : BiDiTestFixture
         {
             await context.Script.CallFunctionAsync($$"""
             (arg) => {
-              if (arg !== -0) {
-                throw new Error("Assert failed: " + arg);
+              if (arg !== 0 || arg.toLocaleString()[0] !== '-') {
+                throw new Error("Assert failed: " + arg.toLocaleString());
               }
             }
             """, false, new() { Arguments = [arg] });
