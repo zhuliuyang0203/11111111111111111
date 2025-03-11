@@ -117,7 +117,8 @@ public abstract record LocalValue
                 return new Array(node.AsArray().Select(FromNode));
 
             case JsonValueKind.Object:
-                return new Map(node.AsObject().ToDictionary(m => m.Key, m => FromNode(m.Value)));
+                Dictionary<string, LocalValue> values = node.AsObject().ToDictionary(node => node.Key, node => FromNode(node.Value));
+                return Object.FromDictionary(values);
 
             default:
                 throw new InvalidCastException($"Could not convert node {node}");
