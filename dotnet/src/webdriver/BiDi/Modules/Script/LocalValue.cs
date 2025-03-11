@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Text.Json;
@@ -232,7 +233,7 @@ public abstract record LocalValue
 
             const RegexOptions NonBacktracking = (RegexOptions)1024;
 #if NET8_0_OR_GREATER
-            System.Diagnostics.Debug.Assert(NonBacktracking == RegexOptions.NonBacktracking);
+            Debug.Assert(NonBacktracking == RegexOptions.NonBacktracking);
 #endif
 
             const RegexOptions NonApplicableOptions = RegexOptions.Compiled | NonBacktracking;
@@ -268,10 +269,7 @@ public abstract record LocalValue
                 flags += "s";
             }
 
-            if (options != RegexOptions.None)
-            {
-                // Consider logging?
-            }
+            Debug.Assert(options == RegexOptions.None);
 
             return new RegExp(new RegExpValue(regex.ToString()) { Flags = flags });
 
