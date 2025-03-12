@@ -117,8 +117,8 @@ public class CallFunctionRemoteValueTest : BiDiTestFixture
 
         Assert.That(response.Result, Is.AssignableTo<RemoteValue.Number>());
 
-        var expectedNegativeZero = ((RemoteValue.Number)response.Result).Value;
-        Assert.That(IsNegativeZero(expectedNegativeZero));
+        var actualNumberValue = ((RemoteValue.Number)response.Result).Value;
+        Assert.That(IsNegativeZero(actualNumberValue));
 
         static bool IsNegativeZero(double d)
         {
