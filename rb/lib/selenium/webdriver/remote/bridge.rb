@@ -385,6 +385,8 @@ module Selenium
         end
 
         def delete_cookie(name)
+          raise ArgumentError, 'Cookie name cannot be null or empty' if name.nil? || name.strip.empty?
+
           execute :delete_cookie, name: name
         end
 
@@ -686,7 +688,7 @@ module Selenium
         end
 
         def escaper
-          @escaper ||= defined?(URI::Parser) ? URI::DEFAULT_PARSER : URI
+          @escaper ||= defined?(URI::RFC2396_PARSER) ? URI::RFC2396_PARSER : URI::DEFAULT_PARSER
         end
 
         def commands(command)

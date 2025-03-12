@@ -76,7 +76,7 @@ public class NodeStatus {
     Set<Slot> slots = null;
     Availability availability = null;
     Duration heartbeatPeriod = null;
-    Duration sessionTimeout = null;
+    Duration sessionTimeout = Duration.ofSeconds(300);
     String version = null;
     Map<String, String> osInfo = null;
 
@@ -204,6 +204,14 @@ public class NodeStatus {
         .orElse(0);
   }
 
+  public String getBrowserVersion() {
+    return slots.stream()
+        .map(slot -> slot.getStereotype().getBrowserVersion())
+        .filter(Objects::nonNull)
+        .max(new SemanticVersionComparator())
+        .orElse("");
+  }
+
   @Override
   public boolean equals(Object o) {
     if (!(o instanceof NodeStatus)) {
@@ -214,6 +222,8 @@ public class NodeStatus {
     return Objects.equals(this.nodeId, that.nodeId)
         && Objects.equals(this.externalUri, that.externalUri)
         && this.maxSessionCount == that.maxSessionCount
+        && this.sessionTimeout.compareTo(that.sessionTimeout) == 0
+        && this.heartbeatPeriod.compareTo(that.heartbeatPeriod) == 0
         && Objects.equals(this.slots, that.slots)
         && Objects.equals(this.availability, that.availability)
         && Objects.equals(this.version, that.version);
@@ -224,7 +234,7 @@ public class NodeStatus {
     return Objects.hash(nodeId, externalUri, maxSessionCount, slots, version);
   }
 
-  private Map<String, Object> toJson() {
+  public Map<String, Object> toJson() {
     Map<String, Object> toReturn = new TreeMap<>();
     toReturn.put("nodeId", nodeId);
     toReturn.put("externalUri", externalUri);

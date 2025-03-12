@@ -18,8 +18,8 @@
 use crate::config::OS::{LINUX, MACOS, WINDOWS};
 use crate::shell::run_shell_command_by_os;
 use crate::{
-    default_cache_folder, format_one_arg, path_to_string, Command, REQUEST_TIMEOUT_SEC,
-    UNAME_COMMAND,
+    default_cache_folder, format_one_arg, path_to_string, Command, ENV_PROCESSOR_ARCHITECTURE,
+    REQUEST_TIMEOUT_SEC, UNAME_COMMAND,
 };
 use crate::{ARCH_AMD64, ARCH_ARM64, ARCH_X86, TTL_SEC, WMIC_COMMAND_OS};
 use anyhow::anyhow;
@@ -42,6 +42,7 @@ pub const CACHE_PATH_KEY: &str = "cache-path";
 
 pub struct ManagerConfig {
     pub cache_path: String,
+    pub fallback_driver_from_cache: bool,
     pub browser_version: String,
     pub driver_version: String,
     pub browser_path: String,
@@ -58,6 +59,8 @@ pub struct ManagerConfig {
     pub language_binding: String,
     pub selenium_version: String,
     pub avoid_stats: bool,
+    pub skip_driver_in_path: bool,
+    pub skip_browser_in_path: bool,
 }
 
 impl ManagerConfig {
@@ -66,11 +69,14 @@ impl ManagerConfig {
 
         let self_os = OS;
         let self_arch = if WINDOWS.is(self_os) {
-            let wmic_command = Command::new_single(WMIC_COMMAND_OS.to_string());
-            let wmic_output = run_shell_command_by_os(self_os, wmic_command).unwrap_or_default();
-            if wmic_output.contains("32") {
+            let mut architecture = env::var(ENV_PROCESSOR_ARCHITECTURE).unwrap_or_default();
+            if architecture.is_empty() {
+                let get_os_command = Command::new_single(WMIC_COMMAND_OS.to_string());
+                architecture = run_shell_command_by_os(self_os, get_os_command).unwrap_or_default();
+            }
+            if architecture.contains("32") {
                 ARCH_X86.to_string()
-            } else if wmic_output.contains("ARM") {
+            } else if architecture.contains("ARM") {
                 ARCH_ARM64.to_string()
             } else {
                 ARCH_AMD64.to_string()
@@ -97,6 +103,7 @@ impl ManagerConfig {
 
         ManagerConfig {
             cache_path,
+            fallback_driver_from_cache: true,
             browser_version: StringKey(vec!["browser-version", &browser_version_label], "")
                 .get_value(),
             driver_version: StringKey(vec!["driver-version", &driver_version_label], "")
@@ -117,6 +124,8 @@ impl ManagerConfig {
             language_binding: StringKey(vec!["language-binding"], "").get_value(),
             selenium_version: StringKey(vec!["selenium-version"], "").get_value(),
             avoid_stats: BooleanKey("avoid-stats", false).get_value(),
+            skip_driver_in_path: BooleanKey("skip-driver-in-path", false).get_value(),
+            skip_browser_in_path: BooleanKey("skip-browser-in-path", false).get_value(),
         }
     }
 }

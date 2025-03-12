@@ -37,6 +37,7 @@ csharp_library(
         "WebDriver.Common.Tests",
     ],
     langversion = "12.0",
+    nullable = "enable",
     resources = [
         "//javascript/atoms/fragments:find-elements.js",
         "//javascript/atoms/fragments:is-displayed.js",
@@ -52,7 +53,11 @@ csharp_library(
     ],
     deps = [
         framework("nuget", "NETStandard.Library"),
+        framework("nuget", "Microsoft.Bcl.AsyncInterfaces"),
+        framework("nuget", "System.Threading.Tasks.Extensions"),
         framework("nuget", "System.Memory"),
+        framework("nuget", "System.Runtime.CompilerServices.Unsafe"),
+        framework("nuget", "System.Text.Encodings.Web"),
         framework("nuget", "System.Text.Json"),
     ],
 )
@@ -65,10 +70,14 @@ csharp_library(
         "**/*.cs",
     ]) + devtools_version_targets(),
     out = "WebDriver",
+    defines = [
+        "NET8_0_OR_GREATER",
+    ],
     internals_visible_to = [
         "WebDriver.Common.Tests",
     ],
     langversion = "12.0",
+    nullable = "enable",
     resources = [
         "//javascript/atoms/fragments:find-elements.js",
         "//javascript/atoms/fragments:is-displayed.js",
@@ -96,6 +105,7 @@ csharp_library(
     out = "WebDriver.StrongNamed",
     keyfile = "//dotnet:WebDriver.snk",
     langversion = "12.0",
+    nullable = "enable",
     resources = [
         "//javascript/atoms/fragments:find-elements.js",
         "//javascript/atoms/fragments:is-displayed.js",
@@ -111,7 +121,11 @@ csharp_library(
     ],
     deps = [
         framework("nuget", "NETStandard.Library"),
+        framework("nuget", "Microsoft.Bcl.AsyncInterfaces"),
+        framework("nuget", "System.Threading.Tasks.Extensions"),
         framework("nuget", "System.Memory"),
+        framework("nuget", "System.Runtime.CompilerServices.Unsafe"),
+        framework("nuget", "System.Text.Encodings.Web"),
         framework("nuget", "System.Text.Json"),
     ],
 )
@@ -124,8 +138,12 @@ csharp_library(
         "**/*.cs",
     ]) + devtools_version_targets(),
     out = "WebDriver.StrongNamed",
+    defines = [
+        "NET8_0_OR_GREATER",
+    ],
     keyfile = "//dotnet:WebDriver.snk",
     langversion = "12.0",
+    nullable = "enable",
     resources = [
         "//javascript/atoms/fragments:find-elements.js",
         "//javascript/atoms/fragments:is-displayed.js",

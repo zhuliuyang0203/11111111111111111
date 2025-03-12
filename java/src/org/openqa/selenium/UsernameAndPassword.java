@@ -17,9 +17,11 @@
 
 package org.openqa.selenium;
 
+import org.jspecify.annotations.NullMarked;
 import org.openqa.selenium.internal.Require;
 
 /** A combination of username and password to use when authenticating a browser with a website. */
+@NullMarked
 public record UsernameAndPassword(String username, String password) implements Credentials {
 
   public UsernameAndPassword {

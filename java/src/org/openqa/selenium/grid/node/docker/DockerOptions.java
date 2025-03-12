@@ -25,6 +25,7 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -61,8 +62,9 @@ public class DockerOptions {
   static final String DOCKER_SECTION = "docker";
   static final String DEFAULT_ASSETS_PATH = "/opt/selenium/assets";
   static final String DEFAULT_DOCKER_URL = "unix:/var/run/docker.sock";
-  static final String DEFAULT_VIDEO_IMAGE = "selenium/video:latest";
+  static final String DEFAULT_VIDEO_IMAGE = "false";
   static final int DEFAULT_MAX_SESSIONS = Runtime.getRuntime().availableProcessors();
+  static final int DEFAULT_SERVER_START_TIMEOUT = 60;
   private static final String DEFAULT_DOCKER_NETWORK = "bridge";
   private static final Logger LOG = Logger.getLogger(DockerOptions.class.getName());
   private static final Json JSON = new Json();
@@ -102,6 +104,11 @@ public class DockerOptions {
     } catch (URISyntaxException e) {
       throw new ConfigException("Unable to determine docker url", e);
     }
+  }
+
+  private Duration getServerStartTimeout() {
+    return Duration.ofSeconds(
+        config.getInt(DOCKER_SECTION, "server-start-timeout").orElse(DEFAULT_SERVER_START_TIMEOUT));
   }
 
   private boolean isEnabled(Docker docker) {
@@ -159,7 +166,9 @@ public class DockerOptions {
 
     loadImages(docker, kinds.keySet().toArray(new String[0]));
     Image videoImage = getVideoImage(docker);
-    loadImages(docker, videoImage.getName());
+    if (videoImage != null) {
+      loadImages(docker, videoImage.getName());
+    }
 
     // Hard coding the config section value "node" to avoid an extra dependency
     int maxContainerCount =
@@ -177,6 +186,7 @@ public class DockerOptions {
                     tracer,
                     clientFactory,
                     options.getSessionTimeout(),
+                    getServerStartTimeout(),
                     docker,
                     getDockerUri(),
                     image,
@@ -224,6 +234,9 @@ public class DockerOptions {
 
   private Image getVideoImage(Docker docker) {
     String videoImage = config.get(DOCKER_SECTION, "video-image").orElse(DEFAULT_VIDEO_IMAGE);
+    if (videoImage.equalsIgnoreCase("false")) {
+      return null;
+    }
     return docker.getImage(videoImage);
   }
 

@@ -37,8 +37,8 @@ module Selenium
           @messages = {}
         end
 
-        def add_condition(name, condition = nil, &blk)
-          @guard_conditions << GuardCondition.new(name, condition, &blk)
+        def add_condition(name, condition = nil, &block)
+          @guard_conditions << GuardCondition.new(name, condition, &block)
         end
 
         def add_message(name, message)

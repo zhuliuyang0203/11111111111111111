@@ -136,9 +136,6 @@ public interface DriverCommand {
   // Logging API
   String GET_AVAILABLE_LOG_TYPES = "getAvailableLogTypes";
   String GET_LOG = "getLog";
-  // Mobile API
-  String GET_NETWORK_CONNECTION = "getNetworkConnection";
-  String SET_NETWORK_CONNECTION = "setNetworkConnection";
   // Virtual Authenticator API
   // http://w3c.github.io/webauthn#sctn-automation
   String ADD_VIRTUAL_AUTHENTICATOR = "addVirtualAuthenticator";
@@ -149,7 +146,7 @@ public interface DriverCommand {
   String REMOVE_ALL_CREDENTIALS = "removeAllCredentials";
   String SET_USER_VERIFIED = "setUserVerified";
   // Federated Credential Management API
-  // https://fedidcg.github.io/FedCM/#automation
+  // https://w3c-fedid.github.io/FedCM/#automation
   String CANCEL_DIALOG = "cancelDialog";
   String SELECT_ACCOUNT = "selectAccount";
   String CLICK_DIALOG = "clickDialog";

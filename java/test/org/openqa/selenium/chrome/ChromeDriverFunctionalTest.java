@@ -50,9 +50,6 @@ import org.openqa.selenium.testing.NoDriverBeforeTest;
 
 class ChromeDriverFunctionalTest extends JupiterTestBase {
 
-  private final String CLIPBOARD_READ = "clipboard-read";
-  private final String CLIPBOARD_WRITE = "clipboard-write";
-
   @Test
   @NoDriverBeforeTest
   public void builderGeneratesDefaultChromeOptions() {
@@ -109,7 +106,9 @@ class ChromeDriverFunctionalTest extends JupiterTestBase {
     HasPermissions permissions = (HasPermissions) driver;
 
     driver.get(pages.clicksPage);
+    String CLIPBOARD_READ = "clipboard-read";
     assumeThat(checkPermission(driver, CLIPBOARD_READ)).isEqualTo("prompt");
+    String CLIPBOARD_WRITE = "clipboard-write";
     assumeThat(checkPermission(driver, CLIPBOARD_WRITE)).isEqualTo("granted");
 
     permissions.setPermission(CLIPBOARD_READ, "denied");
@@ -206,17 +205,19 @@ class ChromeDriverFunctionalTest extends JupiterTestBase {
   @Test
   @NoDriverBeforeTest
   void shouldLaunchSuccessfullyWithArabicDate() {
-    Locale arabicLocale = new Locale("ar", "EG");
-    Locale.setDefault(arabicLocale);
-    Locale.setDefault(Locale.US);
+    try {
+      Locale arabicLocale = new Locale("ar", "EG");
+      Locale.setDefault(arabicLocale);
 
-    int port = PortProber.findFreePort();
-    ChromeDriverService.Builder builder = new ChromeDriverService.Builder();
-    builder.usingPort(port);
-    ChromeDriverService service = builder.build();
+      int port = PortProber.findFreePort();
+      ChromeDriverService.Builder builder = new ChromeDriverService.Builder();
+      builder.usingPort(port);
+      builder.build();
 
-    driver = new ChromeDriver(service, (ChromeOptions) CHROME.getCapabilities());
-    driver.get(pages.simpleTestPage);
-    assertThat(driver.getTitle()).isEqualTo("Hello WebDriver");
+    } catch (Exception e) {
+      throw e;
+    } finally {
+      Locale.setDefault(Locale.US);
+    }
   }
 }

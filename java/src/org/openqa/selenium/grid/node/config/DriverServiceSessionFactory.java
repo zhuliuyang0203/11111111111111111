@@ -264,13 +264,8 @@ public class DriverServiceSessionFactory implements SessionFactory {
             CdpEndpointFinder.getReportedUri("ms:edgeOptions", c)
                 .map(uri -> new DevToolsInfo(uri, c.getBrowserVersion()));
 
-    Function<Capabilities, Optional<DevToolsInfo>> firefox =
-        c ->
-            CdpEndpointFinder.getReportedUri("moz:debuggerAddress", c)
-                .map(uri -> new DevToolsInfo(uri, "85.0"));
-
     Optional<DevToolsInfo> maybeInfo =
-        Stream.of(chrome, edge, firefox)
+        Stream.of(chrome, edge)
             .map(finder -> finder.apply(caps))
             .filter(Optional::isPresent)
             .map(Optional::get)
@@ -308,12 +303,13 @@ public class DriverServiceSessionFactory implements SessionFactory {
     Map<String, Object> requestedCapsMap = requestedCaps.asMap();
     Map<String, Object> returnedCapsMap = returnedCaps.asMap();
 
-    requestedCapsMap.forEach(
-        (k, v) -> {
-          if (k.startsWith("se:") && !returnedCapsMap.containsKey(k)) {
-            returnPrefixedCaps.setCapability(k, v);
-          }
-        });
+    for (Map.Entry<String, Object> entry : requestedCapsMap.entrySet()) {
+      String key = entry.getKey();
+      Object value = entry.getValue();
+      if (key.startsWith("se:") && !returnedCapsMap.containsKey(key)) {
+        returnPrefixedCaps = returnPrefixedCaps.setCapability(key, value);
+      }
+    }
 
     return returnPrefixedCaps;
   }

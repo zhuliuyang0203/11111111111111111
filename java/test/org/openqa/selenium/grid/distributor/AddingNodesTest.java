@@ -109,6 +109,7 @@ class AddingNodesTest {
             new DefaultSlotMatcher(),
             Duration.ofSeconds(2),
             Duration.ofSeconds(2),
+            Duration.ofSeconds(1),
             registrationSecret,
             5);
 
@@ -142,7 +143,8 @@ class AddingNodesTest {
             false,
             Duration.ofSeconds(5),
             newSessionThreadPoolSize,
-            new DefaultSlotMatcher());
+            new DefaultSlotMatcher(),
+            Duration.ofSeconds(30));
 
     distributor =
         new RemoteDistributor(
@@ -182,7 +184,8 @@ class AddingNodesTest {
             false,
             Duration.ofSeconds(5),
             newSessionThreadPoolSize,
-            new DefaultSlotMatcher())) {
+            new DefaultSlotMatcher(),
+            Duration.ofSeconds(30))) {
 
       distributor =
           new RemoteDistributor(
@@ -222,7 +225,8 @@ class AddingNodesTest {
             false,
             Duration.ofSeconds(5),
             newSessionThreadPoolSize,
-            new DefaultSlotMatcher())) {
+            new DefaultSlotMatcher(),
+            Duration.ofSeconds(30))) {
 
       distributor =
           new RemoteDistributor(
@@ -271,7 +275,8 @@ class AddingNodesTest {
             false,
             Duration.ofSeconds(5),
             newSessionThreadPoolSize,
-            new DefaultSlotMatcher())) {
+            new DefaultSlotMatcher(),
+            Duration.ofSeconds(30))) {
 
       distributor =
           new RemoteDistributor(
@@ -313,7 +318,8 @@ class AddingNodesTest {
             false,
             Duration.ofSeconds(5),
             newSessionThreadPoolSize,
-            new DefaultSlotMatcher())) {
+            new DefaultSlotMatcher(),
+            Duration.ofSeconds(30))) {
 
       distributor =
           new RemoteDistributor(
@@ -444,6 +450,14 @@ class AddingNodesTest {
     public boolean isSessionOwner(SessionId id) {
       return running != null && running.getId().equals(id);
     }
+
+    @Override
+    public boolean tryAcquireConnection(SessionId id) {
+      return false;
+    }
+
+    @Override
+    public void releaseConnection(SessionId id) {}
 
     @Override
     public boolean isSupporting(Capabilities capabilities) {
