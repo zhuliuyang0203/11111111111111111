@@ -32,6 +32,29 @@ BROWSERS = {
             "//conditions:default": {},
         }),
     },
+    "chrome-beta": {
+        "data": chrome_data,
+        "deps": ["//rb/lib/selenium/webdriver:chrome"],
+        "tags": [],
+        "target_compatible_with": [],
+        "env": {
+            "WD_REMOTE_BROWSER": "chrome",
+            "WD_SPEC_DRIVER": "chrome-beta",
+        } | select({
+            "@selenium//common:use_pinned_linux_chrome": {
+                "CHROME_BINARY": "$(location @linux_chrome//:chrome-linux64/chrome)",
+                "CHROMEDRIVER_BINARY": "$(location @linux_chromedriver//:chromedriver)",
+            },
+            "@selenium//common:use_pinned_macos_chrome": {
+                "CHROME_BINARY": "$(location @mac_chrome//:Chrome.app)/Contents/MacOS/Chrome",
+                "CHROMEDRIVER_BINARY": "$(location @mac_chromedriver//:chromedriver)",
+            },
+            "//conditions:default": {},
+        }) | select({
+            "@selenium//common:use_headless_browser": {"HEADLESS": "true"},
+            "//conditions:default": {},
+        }),
+    },
     "edge": {
         "data": edge_data,
         "deps": ["//rb/lib/selenium/webdriver:edge"],

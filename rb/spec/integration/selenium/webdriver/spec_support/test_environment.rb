@@ -31,7 +31,7 @@ module Selenium
           WebDriver.logger.ignore(:logger_info)
           SeleniumManager.bin_path = root.join('bazel-bin/rb/bin').to_s if File.exist?(root.join('bazel-bin/rb/bin'))
 
-          @driver = ENV.fetch('WD_SPEC_DRIVER', 'chrome').tr('-', '_').to_sym
+          @driver = ENV.fetch('WD_SPEC_DRIVER', 'chrome-beta').tr('-', '_').to_sym
           @driver_instance = nil
           @remote_server = nil
         end
@@ -80,11 +80,11 @@ module Selenium
 
         def app_server
           @app_server ||= begin
-            app_server = RackServer.new(root.join('common/src/web').to_s, random_port)
-            app_server.start
+                            app_server = RackServer.new(root.join('common/src/web').to_s, random_port)
+                            app_server.start
 
-            app_server
-          end
+                            app_server
+                          end
         end
 
         def remote_server
@@ -166,11 +166,13 @@ module Selenium
         def create_driver!(listener: nil, **opts, &block)
           check_for_previous_error
 
+          chrome_beta(opts) if driver == :chrome_beta
+
           method = :"#{driver}_driver"
           instance = if private_methods.include?(method)
                        send(method, listener: listener, options: build_options(**opts))
                      else
-                       WebDriver::Driver.for(driver, listener: listener, options: build_options(**opts))
+                       WebDriver::Driver.for(method, listener: listener, options: build_options(**opts))
                      end
           @create_driver_error_count -= 1 unless @create_driver_error_count.zero?
           if block
@@ -254,13 +256,13 @@ module Selenium
         end
 
         def safari_driver(**opts)
-          service_opts = WebDriver.logger.debug? ? {args: '--diagnose'} : {}
+          service_opts = WebDriver.logger.debug? ? { args: '--diagnose' } : {}
           service = WebDriver::Service.safari(**service_opts)
           WebDriver::Driver.for(:safari, service: service, **opts)
         end
 
         def safari_preview_driver(**opts)
-          service_opts = WebDriver.logger.debug? ? {args: '--diagnose'} : {}
+          service_opts = WebDriver.logger.debug? ? { args: '--diagnose' } : {}
           service = WebDriver::Service.safari(**service_opts)
           WebDriver::Driver.for(:safari, service: service, **opts)
         end
@@ -312,6 +314,11 @@ module Selenium
           sock.local_address.ip_port
         ensure
           sock.close
+        end
+
+        def chrome_beta(opts = {})
+          @driver = :chrome
+          opts[:browser_version] = 'beta'
         end
       end
     end # SpecSupport
