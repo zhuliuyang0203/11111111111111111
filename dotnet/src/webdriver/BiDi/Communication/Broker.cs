@@ -24,6 +24,7 @@ using OpenQA.Selenium.Internal.Logging;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -108,6 +109,13 @@ public class Broker : IAsyncDisposable
         };
 
         _jsonSerializerContext = jsonSerializerOptions;
+    }
+
+    [RequiresUnreferencedCode("Uses reflection-based JSON serialization")]
+    [RequiresDynamicCode("Uses reflection-based JSON serialization")]
+    public void EnableReflectionBasedJson()
+    {
+        _jsonSerializerContext.TypeInfoResolverChain.Add(new DefaultJsonTypeInfoResolver());
     }
 
     public void ProvideCustomSerializationContext(JsonSerializerContext extensionContext)
