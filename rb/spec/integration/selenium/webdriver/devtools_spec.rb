@@ -67,11 +67,10 @@ module Selenium
           expect(target.get_target_info.dig('result', 'targetInfo', 'type')).to eq 'service_worker'
         end
 
-        it 'throws an error when service_worker target type is not found' do
+        it 'throws an error for unknown target type' do
           driver.devtools.page.navigate(url: url_for('xhtmlTest.html'))
-          sleep 0.5 # wait for non-existent service worker to register
-          expect { driver.devtools(target_type: 'service_worker') }
-            .to raise_error(Selenium::WebDriver::Error::WebDriverError, "Target type 'service_worker' not found")
+          expect { driver.devtools(target_type: 'unknown') }
+            .to raise_error(Selenium::WebDriver::Error::WebDriverError, "Target type 'unknown' not found")
         end
       end
 
