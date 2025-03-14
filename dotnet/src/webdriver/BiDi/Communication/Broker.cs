@@ -54,10 +54,10 @@ public class Broker : IAsyncDisposable
 
     private readonly BiDiJsonSerializerContext _jsonSerializerContext;
 
-    internal Broker(BiDi bidi, ITransport transport)
+    internal Broker(BiDi bidi, Uri url)
     {
         _bidi = bidi;
-        _transport = transport;
+        _transport = new WebSocketTransport(url);
 
         var jsonSerializerOptions = new JsonSerializerOptions
         {
@@ -298,7 +298,7 @@ public class Broker : IAsyncDisposable
         }
     }
 
-    public async ValueTask DisposeAsync()
+    public virtual async ValueTask DisposeAsyncCore()
     {
         _pendingEvents.CompleteAdding();
 
@@ -308,5 +308,13 @@ public class Broker : IAsyncDisposable
         {
             await _eventEmitterTask.ConfigureAwait(false);
         }
+
+        _transport.Dispose();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await DisposeAsyncCore();
+        GC.SuppressFinalize(this);
     }
 }
