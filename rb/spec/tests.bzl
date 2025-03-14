@@ -42,12 +42,12 @@ BROWSERS = {
             "WD_SPEC_DRIVER": "chrome-beta",
         } | select({
             "@selenium//common:use_pinned_linux_chrome": {
-                "CHROME_BINARY": "$(location @linux_chrome//:chrome-linux64/chrome)",
-                "CHROMEDRIVER_BINARY": "$(location @linux_chromedriver//:chromedriver)",
+                "CHROME_BINARY": "$(location @linux_chrome_beta//:chrome-linux64/chrome)",
+                "CHROMEDRIVER_BINARY": "$(location @linux_chromedriver_beta//:chromedriver)",
             },
             "@selenium//common:use_pinned_macos_chrome": {
-                "CHROME_BINARY": "$(location @mac_chrome//:Chrome.app)/Contents/MacOS/Chrome",
-                "CHROMEDRIVER_BINARY": "$(location @mac_chromedriver//:chromedriver)",
+                "CHROME_BINARY": "$(location @mac_chrome_beta//:Chrome.app)/Contents/MacOS/Chrome",
+                "CHROMEDRIVER_BINARY": "$(location @mac_chromedriver_beta//:chromedriver)",
             },
             "//conditions:default": {},
         }) | select({
@@ -128,7 +128,7 @@ BROWSERS = {
         "data": [],
         "deps": ["//rb/lib/selenium/webdriver:ie"],
         "tags": [
-            "skip-remote",  # RBE is Linux-only.
+            "skip-remote",
         ],
         "target_compatible_with": ["@platforms//os:windows"],
         "env": {
@@ -140,8 +140,8 @@ BROWSERS = {
         "data": [],
         "deps": ["//rb/lib/selenium/webdriver:safari"],
         "tags": [
-            "exclusive-if-local",  # Safari cannot run in parallel.
-            "skip-remote",  # RBE is Linux-only.
+            "exclusive-if-local",
+            "skip-remote",
         ],
         "target_compatible_with": ["@platforms//os:macos"],
         "env": {
@@ -153,8 +153,8 @@ BROWSERS = {
         "data": [],
         "deps": ["//rb/lib/selenium/webdriver:safari"],
         "tags": [
-            "exclusive-if-local",  # Safari cannot run in parallel.
-            "skip-remote",  # RBE is Linux-only.
+            "exclusive-if-local",
+            "skip-remote",
         ],
         "target_compatible_with": ["@platforms//os:macos"],
         "env": {
@@ -165,15 +165,12 @@ BROWSERS = {
 }
 
 def rb_integration_test(name, srcs, deps = [], data = [], browsers = BROWSERS.keys(), tags = []):
-    # Generate a library target that is used by //rb/spec:spec to expose all tests to //rb:lint.
     rb_library(
         name = name,
         srcs = srcs,
         visibility = ["//rb:__subpackages__"],
     )
-
     for browser in browsers:
-        # Generate a test target for local browser execution.
         rb_test(
             name = "{}-{}".format(name, browser),
             size = "large",
@@ -187,8 +184,6 @@ def rb_integration_test(name, srcs, deps = [], data = [], browsers = BROWSERS.ke
             visibility = ["//rb:__subpackages__"],
             target_compatible_with = BROWSERS[browser]["target_compatible_with"],
         )
-
-        # Generate a test target for remote browser execution (Grid).
         rb_test(
             name = "{}-{}-remote".format(name, browser),
             size = "large",
@@ -210,8 +205,6 @@ def rb_integration_test(name, srcs, deps = [], data = [], browsers = BROWSERS.ke
             visibility = ["//rb:__subpackages__"],
             target_compatible_with = BROWSERS[browser]["target_compatible_with"],
         )
-
-        # Generate a test target for bidi browser execution.
         rb_test(
             name = "{}-{}-bidi".format(name, browser),
             size = "large",
@@ -238,7 +231,7 @@ def rb_unit_test(name, srcs, deps, data = []):
         args = ["rb/spec/"],
         main = "@bundle//bin:rspec",
         data = data,
-        tags = ["no-sandbox"],  # TODO: Do we need this?
+        tags = ["no-sandbox"],
         deps = ["//rb/spec/unit/selenium/webdriver:spec_helper"] + deps,
         visibility = ["//rb:__subpackages__"],
     )
