@@ -233,7 +233,7 @@ To run Python code locally without building/installing the package, you must fir
 pip install -r py/requirements.txt
 ```
 
-Then, you can update the generated files:
+Then, update the generated files:
 ```shell
 ./go py:local_dev
 ```
