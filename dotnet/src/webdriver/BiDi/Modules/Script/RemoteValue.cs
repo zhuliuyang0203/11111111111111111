@@ -97,11 +97,11 @@ public abstract record RemoteValue
     }
 }
 
-public record RemoteBigIntValue(string Value) : PrimitiveProtocolRemoteValue;
-
 public record RemoteNumberValue(double Value) : PrimitiveProtocolRemoteValue;
 
 public record RemoteBooleanValue(bool Value) : PrimitiveProtocolRemoteValue;
+
+public record RemoteBigIntValue(string Value) : PrimitiveProtocolRemoteValue;
 
 public record RemoteStringValue(string Value) : PrimitiveProtocolRemoteValue;
 
