@@ -22,7 +22,9 @@ import static org.assertj.core.api.Assumptions.assumeThat;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.Optional;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -42,6 +44,20 @@ public abstract class JupiterTestBase {
   private static final Logger LOG = Logger.getLogger(JupiterTestBase.class.getName());
 
   @RegisterExtension protected static SeleniumExtension seleniumExtension = new SeleniumExtension();
+
+  static {
+    if ("true".equalsIgnoreCase(System.getenv("DEBUG"))) {
+      Logger rootLogger = Logger.getLogger("");
+      rootLogger.setLevel(Level.FINE);
+      Arrays.stream(rootLogger.getHandlers())
+          .forEach(
+              handler -> {
+                handler.setLevel(Level.FINE);
+              });
+
+      LOG.fine("Global debug logging enabled via DEBUG environment variable");
+    }
+  }
 
   protected TestEnvironment environment;
   protected AppServer appServer;
