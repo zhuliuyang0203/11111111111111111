@@ -43,15 +43,15 @@ public record InnerTextLocator(string Value) : Locator
 {
     public bool? IgnoreCase { get; set; }
 
-    public MatchType? MatchType { get; set; }
+    public Match? MatchType { get; set; }
 
     public long? MaxDepth { get; set; }
+
+    public enum Match
+    {
+        Full,
+        Partial
+    }
 }
 
 public record XPathLocator(string Value) : Locator;
-
-public enum MatchType
-{
-    Full,
-    Partial
-}
