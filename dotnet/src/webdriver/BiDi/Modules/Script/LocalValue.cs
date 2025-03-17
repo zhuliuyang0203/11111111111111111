@@ -199,7 +199,7 @@ public abstract record LocalValue
     {
         if (value is null)
         {
-            throw new ArgumentNullException(nameof(value), $"string value cannot be null, use a {nameof(NullLocalValue)} value instead");
+            throw new ArgumentNullException(nameof(value), $"string value cannot be null, use {nameof(LocalValue)}.{nameof(Null)} value instead");
         }
 
         return new StringLocalValue(value);
