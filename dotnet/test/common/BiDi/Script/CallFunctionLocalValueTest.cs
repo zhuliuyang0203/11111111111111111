@@ -314,7 +314,7 @@ class CallFunctionLocalValueTest : BiDiTestFixture
     [Test]
     public void CanCallFunctionWithArgumentArray()
     {
-        var arg = LocalValue.Array([new StringLocalValue("hi")]);
+        var arg = LocalValue.Array(["hi"]);
 
         Assert.That(async () =>
         {
@@ -331,7 +331,7 @@ class CallFunctionLocalValueTest : BiDiTestFixture
     [Test]
     public void CanCallFunctionWithArgumentObject()
     {
-        var arg = LocalValue.Object([[new StringLocalValue("objKey"), new StringLocalValue("objValue")]]);
+        var arg = LocalValue.Object([["objKey", "objValue"]]);
 
         Assert.That(async () =>
         {
@@ -348,7 +348,7 @@ class CallFunctionLocalValueTest : BiDiTestFixture
     [Test]
     public void CanCallFunctionWithArgumentMap()
     {
-        var arg = LocalValue.Map([[new StringLocalValue("mapKey"), new StringLocalValue("mapValue")]]);
+        var arg = LocalValue.Map([["mapKey", "mapValue"]]);
 
         Assert.That(async () =>
         {
@@ -365,7 +365,7 @@ class CallFunctionLocalValueTest : BiDiTestFixture
     [Test]
     public void CanCallFunctionWithArgumentSet()
     {
-        var arg = LocalValue.Set([new StringLocalValue("setKey")]);
+        var arg = LocalValue.Set(["setKey"]);
 
         Assert.That(async () =>
         {
