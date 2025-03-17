@@ -274,6 +274,45 @@ end
 task test_py: [:py_prep_for_install_release, 'py:marionette_test']
 task build: %i[all firefox remote selenium tests]
 
+desc 'Retry failed tests from a log file'
+task :retry_failed_tests, [:log_file, :rbe] do |_task, arguments|
+  log_file = arguments[:log_file]
+
+  raise 'Error: Please provide a bazel log file containing test results.' if log_file.nil?
+  raise "Error: Log file '#{log_file}' does not exist." unless File.exist?(log_file)
+
+  rbe = arguments[:rbe]
+  failing_tests = []
+
+  File.readlines(log_file).reverse_each do |line|
+    if line.match?(%r{//.+:.*FAILED})
+      failing_tests << line.strip.split[0]
+    elsif !failing_tests.empty? && line.match?(%r{//.+:.*PASSED})
+      break
+    end
+  end
+
+  puts "Found #{failing_tests.size} failing tests; Retrying"
+
+  retry_args = arguments.extras + %w[--test_output=streamed --test_env DEBUG=true]
+  retry_args << (rbe == 'true' ? '--config=remote' : '--pin_browsers')
+
+  retry_failures = false
+  failing_tests.each do |failed_target|
+    target_name = failed_target.split('/').last.tr(':', '_')
+    target_name += rbe ? '_rbe' : '_gha'
+    retry_logs = log_file.sub('.log', "_#{target_name}_retry.log")
+    begin
+      Bazel.execute('test', retry_args, failed_target, verbose: true, log_file: retry_logs)
+    rescue StandardError => e
+      retry_failures = true
+      puts "Failed retry of #{failed_target}: #{e.message}"
+    end
+  end
+
+  raise 'Some tests failed during retry' if retry_failures
+end
+
 desc 'Clean build artifacts.'
 task :clean do
   rm_rf 'build/'

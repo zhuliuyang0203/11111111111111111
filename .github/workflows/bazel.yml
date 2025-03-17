@@ -61,6 +61,16 @@ on:
         required: false
         type: string
         default: ''
+      download-name:
+        description: name of artifact to download
+        required: false
+        type: string
+        default: ''
+      download-path:
+        description: path of artifact to download
+        required: false
+        type: string
+        default: ''
       upload-name:
         description: Name of artifact to upload
         required: false
@@ -161,6 +171,12 @@ jobs:
       - name: Setup curl for Ubuntu
         if: inputs.os == 'ubuntu'
         run: sudo apt-get update && sudo apt-get install -y libcurl4-openssl-dev
+      - name: "Download artifact"
+        if: ${{ inputs.download-name != '' && inputs.download-path != '' }}
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.download-name }}
+          path: ${{ inputs.download-path }}
       - name: Run Bazel
         run: ${{ inputs.run }}
       - name: Start SSH session

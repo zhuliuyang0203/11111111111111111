@@ -29,3 +29,35 @@ jobs:
       upload-name: bazel-logs
       upload-path: bazel-logs
       run: ./scripts/github-actions/ci-build.sh
+  retry-remote:
+    name: Retry Failures on RBE
+    needs: test
+    if: always() && needs.test.result == 'failure' && github.repository_owner == 'seleniumhq' && startsWith(github.head_ref, 'renovate/') != true
+    uses: ./.github/workflows/bazel.yml
+    with:
+      name: RBE Retries
+      caching: false
+      ruby-version: jruby-9.4.12.0
+      download-name: bazel-logs
+      download-path: bazel-logs
+      upload-name: retry-remote-logs
+      upload-path: bazel-logs
+      run: |
+        ./go retry_failed_tests "${BAZEL_LOG_FILE}" true
+  retry-local:
+    name: Retry Failures on GHA
+    needs: test
+    if: always() && needs.test.result == 'failure' && github.repository_owner == 'seleniumhq' && startsWith(github.head_ref, 'renovate/') != true
+    uses: ./.github/workflows/bazel.yml
+    with:
+      name: GHA Retries
+      caching: false
+      ruby-version: jruby-9.4.12.0
+      browser: needs-xvfb
+      java-version: 17
+      download-name: bazel-logs
+      download-path: bazel-logs
+      upload-name: retry-local-logs
+      upload-path: bazel-logs
+      run: |
+        ./go retry_failed_tests "${BAZEL_LOG_FILE}" false
