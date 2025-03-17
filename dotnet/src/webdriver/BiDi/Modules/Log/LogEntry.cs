@@ -24,8 +24,8 @@ namespace OpenQA.Selenium.BiDi.Modules.Log;
 
 // https://github.com/dotnet/runtime/issues/72604
 //[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
-//[JsonDerivedType(typeof(Console), "console")]
-//[JsonDerivedType(typeof(Javascript), "javascript")]
+//[JsonDerivedType(typeof(ConsoleLogEntry), "console")]
+//[JsonDerivedType(typeof(JavascriptLogEntry), "javascript")]
 public abstract record LogEntry(BiDi BiDi, Level Level, Script.Source Source, string Text, DateTimeOffset Timestamp)
     : EventArgs(BiDi)
 {
