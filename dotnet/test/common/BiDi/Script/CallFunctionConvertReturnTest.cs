@@ -88,6 +88,19 @@ public class CallFunctionConvertReturnTest : BiDiTestFixture
         Assert.That(response.Result.ConvertTo<object>, Is.EqualTo(DateTime.Parse(PinnedDateTimeString)));
     }
 
+
+    [Test]
+    public async Task ReturnDateNowCanDeserialize()
+    {
+        DateTime before = DateTime.Now;
+        var response = await context.Script.CallFunctionAsync("""() => { return new Date(); }""", false);
+        DateTime after = DateTime.Now;
+
+        Assert.That(response.Result.ConvertTo<DateTime>, Is.InRange(before, after));
+        Assert.That(response.Result.ConvertTo<DateTime?>, Is.InRange(before, after));
+        Assert.That(response.Result.ConvertTo<object>, Is.InRange(before, after));
+    }
+
     [Test]
     public async Task ReturnFiveCanDeserialize()
     {
