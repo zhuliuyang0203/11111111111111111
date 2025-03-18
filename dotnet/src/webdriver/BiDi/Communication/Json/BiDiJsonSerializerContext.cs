@@ -57,17 +57,17 @@ namespace OpenQA.Selenium.BiDi.Communication.Json;
 [JsonSerializable(typeof(Modules.Script.NodeRemoteValue))]
 [JsonSerializable(typeof(Modules.Script.WindowProxyRemoteValue))]
 
-[JsonSerializable(typeof(Modules.Script.RealmInfo.Window))]
-[JsonSerializable(typeof(Modules.Script.RealmInfo.DedicatedWorker))]
-[JsonSerializable(typeof(Modules.Script.RealmInfo.SharedWorker))]
-[JsonSerializable(typeof(Modules.Script.RealmInfo.ServiceWorker))]
-[JsonSerializable(typeof(Modules.Script.RealmInfo.Worker))]
-[JsonSerializable(typeof(Modules.Script.RealmInfo.PaintWorklet))]
-[JsonSerializable(typeof(Modules.Script.RealmInfo.AudioWorklet))]
-[JsonSerializable(typeof(Modules.Script.RealmInfo.Worklet))]
+[JsonSerializable(typeof(Modules.Script.WindowRealmInfo))]
+[JsonSerializable(typeof(Modules.Script.DedicatedWorkerRealmInfo))]
+[JsonSerializable(typeof(Modules.Script.SharedWorkerRealmInfo))]
+[JsonSerializable(typeof(Modules.Script.ServiceWorkerRealmInfo))]
+[JsonSerializable(typeof(Modules.Script.WorkerRealmInfo))]
+[JsonSerializable(typeof(Modules.Script.PaintWorkletRealmInfo))]
+[JsonSerializable(typeof(Modules.Script.AudioWorkletRealmInfo))]
+[JsonSerializable(typeof(Modules.Script.WorkletRealmInfo))]
 
-[JsonSerializable(typeof(Modules.Log.Entry.Console))]
-[JsonSerializable(typeof(Modules.Log.Entry.Javascript))]
+[JsonSerializable(typeof(Modules.Log.ConsoleLogEntry))]
+[JsonSerializable(typeof(Modules.Log.JavascriptLogEntry))]
 #endregion
 
 [JsonSerializable(typeof(Command))]
@@ -119,10 +119,7 @@ namespace OpenQA.Selenium.BiDi.Communication.Json;
 
 [JsonSerializable(typeof(Modules.BrowsingContext.UserPromptOpenedEventArgs))]
 [JsonSerializable(typeof(Modules.BrowsingContext.UserPromptClosedEventArgs))]
-[JsonSerializable(typeof(Modules.BrowsingContext.Origin), TypeInfoPropertyName = "BrowsingContext_Origin")]
 
-[JsonSerializable(typeof(Modules.Network.BytesValue.String), TypeInfoPropertyName = "Network_BytesValue_String")]
-[JsonSerializable(typeof(Modules.Network.UrlPattern.String), TypeInfoPropertyName = "Network_UrlPattern_String")]
 [JsonSerializable(typeof(Modules.Network.ContinueWithAuthParameters.Default), TypeInfoPropertyName = "Network_ContinueWithAuthParameters_Default")]
 [JsonSerializable(typeof(Modules.Network.AddInterceptCommand))]
 [JsonSerializable(typeof(Modules.Network.AddInterceptResult))]
@@ -140,9 +137,6 @@ namespace OpenQA.Selenium.BiDi.Communication.Json;
 [JsonSerializable(typeof(Modules.Network.FetchErrorEventArgs))]
 [JsonSerializable(typeof(Modules.Network.AuthRequiredEventArgs))]
 
-[JsonSerializable(typeof(Modules.Script.Target.Realm), TypeInfoPropertyName = "Script_Target_Realm")]
-[JsonSerializable(typeof(Modules.Script.Target.Context), TypeInfoPropertyName = "Script_Target_Context")]
-
 [JsonSerializable(typeof(Modules.Script.AddPreloadScriptCommand))]
 [JsonSerializable(typeof(Modules.Script.AddPreloadScriptResult))]
 [JsonSerializable(typeof(Modules.Script.DisownCommand))]
@@ -157,7 +151,7 @@ namespace OpenQA.Selenium.BiDi.Communication.Json;
 [JsonSerializable(typeof(Modules.Script.RealmDestroyedEventArgs))]
 [JsonSerializable(typeof(IReadOnlyList<Modules.Script.RealmInfo>))]
 
-[JsonSerializable(typeof(Modules.Log.Entry))]
+[JsonSerializable(typeof(Modules.Log.LogEntry))]
 
 [JsonSerializable(typeof(Modules.Storage.GetCookiesCommand))]
 [JsonSerializable(typeof(Modules.Storage.GetCookiesResult))]
@@ -169,11 +163,6 @@ namespace OpenQA.Selenium.BiDi.Communication.Json;
 [JsonSerializable(typeof(Modules.Input.PerformActionsCommand))]
 [JsonSerializable(typeof(Modules.Input.ReleaseActionsCommand))]
 [JsonSerializable(typeof(Modules.Input.SetFilesCommand))]
-[JsonSerializable(typeof(Modules.Input.Pointer.Down), TypeInfoPropertyName = "Input_Pointer_Down")]
-[JsonSerializable(typeof(Modules.Input.Pointer.Up), TypeInfoPropertyName = "Input_Pointer_Up")]
-[JsonSerializable(typeof(Modules.Input.Pointer.Move), TypeInfoPropertyName = "Input_Pointer_Move")]
-[JsonSerializable(typeof(Modules.Input.Key.Down), TypeInfoPropertyName = "Input_Key_Down")]
-[JsonSerializable(typeof(Modules.Input.Key.Up), TypeInfoPropertyName = "Input_Key_Up")]
 [JsonSerializable(typeof(IEnumerable<Modules.Input.IPointerSourceAction>))]
 [JsonSerializable(typeof(IEnumerable<Modules.Input.IKeySourceAction>))]
 [JsonSerializable(typeof(IEnumerable<Modules.Input.INoneSourceAction>))]

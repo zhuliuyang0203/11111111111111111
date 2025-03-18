@@ -60,7 +60,7 @@ class ScriptEventsTest : BiDiTestFixture
         var realmInfo = await tcs.Task.WaitAsync(TimeSpan.FromSeconds(5));
 
         Assert.That(realmInfo, Is.Not.Null);
-        Assert.That(realmInfo, Is.AssignableFrom<RealmInfo.Window>());
+        Assert.That(realmInfo, Is.AssignableFrom<WindowRealmInfo>());
         Assert.That(realmInfo.Realm, Is.Not.Null);
     }
 
