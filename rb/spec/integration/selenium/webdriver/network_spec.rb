@@ -262,7 +262,9 @@ module Selenium
         end
       end
 
-      it 'adds a response handler that provides a response' do
+      it 'adds a response handler that provides a response',
+         except: {browser: :firefox,
+                  reason: 'https://github.com/w3c/webdriver-bidi/issues/747'} do
         reset_driver!(web_socket_url: true) do |driver|
           network = described_class.new(driver)
           network.add_response_handler do |response|
