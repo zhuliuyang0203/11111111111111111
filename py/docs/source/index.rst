@@ -21,7 +21,7 @@ The `selenium` package is used to automate web browser interaction from Python.
 | **IRC/Slack**:  | `Selenium chat room <https://www.selenium.dev/support/#ChatRoom>`_                   |
 +-----------------+--------------------------------------------------------------------------------------+
 
-Several browsers/drivers are supported (Firefox, Chrome, Internet Explorer), as well as the Remote protocol.
+Several browsers/drivers are supported (Firefox, Chrome, Edge, Safari), as well as the Remote protocol.
 
 Supported Python Versions
 =========================
