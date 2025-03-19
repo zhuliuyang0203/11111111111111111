@@ -48,7 +48,7 @@ executable was available on your system `PATH`, or specified explicitly in code.
 driver installation for you with `Selenium Manager <https://www.selenium.dev/documentation/selenium_manager>`_. You generally
 don't have to worry about driver installation or configuration now that it's done for you when you instantiate a WebDriver.
 Selenium Manager works with most supported platforms and browsers. If it doesn't meet your needs, you can still install and
-specify browsers abnd drivers yourself.
+specify browsers and drivers yourself.
 
 Links to some of the more popular browser drivers:
 
@@ -154,7 +154,7 @@ Contributing
  - Ensure `tox` is installed (using a `virtualenv` is recommended)
  - Run: `python -m venv venv && venv/bin/activate && pip install tox`
  - After making changes, before committing execute `tox -e linting`
- - If tox exits `0`, commit and push. Otherwise fix the newly introduced styke violations.
+ - If tox exits `0`, commit and push. Otherwise fix the newly introduced style violations.
  - `flake8` requires manual fixes
  - `black` will rewrite the violations automatically, however the files are unstaged and should staged again.
- - `isort` will rewrite the viiolations automatically, however the files are unstaged and should staged again.
+ - `isort` will rewrite the violations automatically, however the files are unstaged and should staged again.
