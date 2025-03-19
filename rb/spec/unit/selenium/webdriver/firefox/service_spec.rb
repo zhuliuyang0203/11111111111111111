@@ -98,7 +98,7 @@ module Selenium
           let(:driver) { Firefox::Driver }
           let(:service) do
             instance_double(described_class, launch: service_manager, executable_path: nil, 'executable_path=': nil,
-                            class: described_class)
+                                             class: described_class)
           end
           let(:service_manager) { instance_double(ServiceManager, uri: 'http://example.com') }
           let(:bridge) { instance_double(Remote::Bridge, quit: nil, create_session: {}) }
