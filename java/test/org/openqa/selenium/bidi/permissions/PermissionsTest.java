@@ -54,13 +54,15 @@ public class PermissionsTest extends JupiterTestBase {
   @Test
   @NeedsFreshDriver
   public void canSetPermission() {
-    driver.get(new Pages(appServer).blankPage);
+    BrowsingContext context = new BrowsingContext(driver, driver.getWindowHandle());
 
-    String windowHandle = driver.getWindowHandle();
+    context.navigate(new Pages(appServer).blankPage, ReadinessState.COMPLETE);
+
+    String contextId = context.getId();
 
     EvaluateResult origin =
         script.callFunctionInBrowsingContext(
-            windowHandle, GET_ORIGIN, true, Optional.empty(), Optional.empty(), Optional.empty());
+            contextId, GET_ORIGIN, true, Optional.empty(), Optional.empty(), Optional.empty());
 
     String originValue = (String) ((EvaluateResultSuccess) origin).getResult().getValue().get();
 
@@ -68,7 +70,7 @@ public class PermissionsTest extends JupiterTestBase {
 
     EvaluateResult result =
         script.callFunctionInBrowsingContext(
-            windowHandle,
+            contextId,
             GET_GEOLOCATION_PERMISSION,
             true,
             Optional.empty(),
@@ -82,7 +84,7 @@ public class PermissionsTest extends JupiterTestBase {
 
     result =
         script.callFunctionInBrowsingContext(
-            windowHandle,
+            contextId,
             GET_GEOLOCATION_PERMISSION,
             true,
             Optional.empty(),
@@ -96,7 +98,7 @@ public class PermissionsTest extends JupiterTestBase {
 
     result =
         script.callFunctionInBrowsingContext(
-            windowHandle,
+            contextId,
             GET_GEOLOCATION_PERMISSION,
             true,
             Optional.empty(),
