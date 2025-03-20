@@ -20,6 +20,7 @@
 using NUnit.Framework;
 using OpenQA.Selenium.Environment;
 using System.Threading.Tasks;
+using System;
 
 namespace OpenQA.Selenium.Remote
 {
