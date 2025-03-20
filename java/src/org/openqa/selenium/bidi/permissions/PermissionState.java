@@ -1,4 +1,3 @@
-// <copyright file="Origin.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -15,14 +14,33 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
-// </copyright>
 
-namespace OpenQA.Selenium.BiDi.Modules.Input;
+package org.openqa.selenium.bidi.permissions;
 
-public abstract record Origin;
+public enum PermissionState {
+  GRANTED("granted"),
+  DENIED("denied"),
+  PROMPT("prompt");
 
-public record ViewportOrigin() : Origin;
+  private final String state;
 
-public record PointerOrigin() : Origin;
+  PermissionState(String state) {
+    this.state = state;
+  }
 
-public record ElementOrigin(Script.ISharedReference Element) : Origin;
+  @Override
+  public String toString() {
+    return state;
+  }
+
+  public static PermissionState findByName(String name) {
+    PermissionState result = null;
+    for (PermissionState state : values()) {
+      if (state.toString().equalsIgnoreCase(name)) {
+        result = state;
+        break;
+      }
+    }
+    return result;
+  }
+}
