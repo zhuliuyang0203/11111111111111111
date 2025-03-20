@@ -819,7 +819,7 @@ class WebDriver(BaseWebDriver):
              - The amount of time to wait (in seconds)
 
         Example:
-        -------
+        --------
         >>> driver.set_page_load_timeout(30)
         """
         try:
