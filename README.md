@@ -201,7 +201,7 @@ for Maven to use locally by deploying to your local maven repository (`~/.m2/rep
 
 #### Updating Dependencies
 
-Dependencies are defined in the file [maven_deps.bzl](https://github.com/SeleniumHQ/selenium/blob/trunk/java/maven_deps.bzl).
+Dependencies are defined in the file [MODULE.bazel](https://github.com/SeleniumHQ/selenium/blob/trunk/MODULE.bazel).
 To automatically update and pin new dependencies, run:
 
 ```shell
@@ -313,6 +313,9 @@ Tests can also be filtered by tag like:
 ```sh
 bazel test //<language>/... --test_tag_filters=this,-not-this
 ```
+
+If there are multiple `--test_tag_filters`, only the last one is considered,
+so be careful if also using an inherited config
 
 ### Java
 
