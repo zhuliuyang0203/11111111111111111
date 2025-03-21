@@ -56,9 +56,16 @@ class ChromeDriverFunctionalTest extends JupiterTestBase {
     // This test won't pass if we want to use Chrome in a non-standard location
     Assumptions.assumeThat(System.getProperty("webdriver.chrome.binary")).isNull();
 
-    localDriver = ChromeDriver.builder().build();
-    Capabilities capabilities = ((ChromeDriver) localDriver).getCapabilities();
+    localDriver = initializeChromeDriver();
+    assertDefaultChromeCapabilities((ChromeDriver) localDriver);
+  }
+  
+  private ChromeDriver initializeChromeDriver(){
+    return ChromeDriver.builder().build();
+  }
 
+  private void assertDefaultChromeCapabilities(ChromeDriver driver){
+    Capabilities capabilities = driver.getCapabilities();
     assertThat(localDriver.manage().timeouts().getImplicitWaitTimeout()).isEqualTo(Duration.ZERO);
     assertThat(capabilities.getCapability("browserName")).isEqualTo("chrome");
   }
