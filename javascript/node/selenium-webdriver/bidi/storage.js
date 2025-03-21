@@ -57,7 +57,9 @@ class Storage {
       partition !== undefined &&
       !(partition instanceof BrowsingContextPartitionDescriptor || partition instanceof StorageKeyPartitionDescriptor)
     ) {
-      throw new Error(`Params must be an instance of PartitionDescriptor. Received:'${partition}'`)
+      throw new Error(
+        `Params must be an instance of BrowsingContextPartitionDescriptor or StorageKeyPartitionDescriptor. Received:'${partition}'`,
+      )
     }
 
     const command = {
@@ -120,7 +122,9 @@ class Storage {
       partition !== undefined &&
       !(partition instanceof BrowsingContextPartitionDescriptor || partition instanceof StorageKeyPartitionDescriptor)
     ) {
-      throw new Error(`Params must be an instance of PartitionDescriptor. Received:'${partition}'`)
+      throw new Error(
+        `Params must be an instance of BrowsingContextPartitionDescriptor or StorageKeyPartitionDescriptor. Received:'${partition}'`,
+      )
     }
 
     const command = {
@@ -160,7 +164,9 @@ class Storage {
       partition !== undefined &&
       !(partition instanceof BrowsingContextPartitionDescriptor || partition instanceof StorageKeyPartitionDescriptor)
     ) {
-      throw new Error(`Params must be an instance of PartitionDescriptor. Received:'${partition}'`)
+      throw new Error(
+        `Params must be an instance of BrowsingContextPartitionDescriptor or StorageKeyPartitionDescriptor. Received:'${partition}'`,
+      )
     }
 
     const command = {

@@ -381,7 +381,7 @@ exports.whereIs = function (filePath) {
   return server.url(filePath)
 }
 
-exports.getHostName = getHostName;
+exports.getHostName = getHostName
 
 exports.Pages = Pages
 
