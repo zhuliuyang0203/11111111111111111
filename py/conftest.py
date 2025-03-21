@@ -113,8 +113,8 @@ def driver(request):
         pytest.skip("Safari tests can only run on an Apple OS")
     if (driver_class == "Ie") and _platform != "Windows":
         pytest.skip("IE and EdgeHTML Tests can only run on Windows")
-    if "WebKit" in driver_class and _platform != "Linux":
-        pytest.skip("Webkit tests can only run on Linux")
+    if "WebKit" in driver_class and _platform == "Windows":
+        pytest.skip("WebKit tests can not be run on Windows")
 
     # conditionally mark tests as expected to fail based on driver
     marker = request.node.get_closest_marker(f"xfail_{driver_class.lower()}")
