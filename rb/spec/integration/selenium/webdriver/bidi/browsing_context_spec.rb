@@ -75,56 +75,46 @@ module Selenium
         end
 
         it 'sets the viewport' do
-          reset_driver!(web_socket_url: true) do |driver|
-            browsing_context = described_class.new(driver)
-            browsing_context.set_viewport(width: 800, height: 600, device_pixel_ratio: 2.0)
-            expect(driver.execute_script('return [window.innerWidth, window.innerHeight]')).to eq([800, 600])
-            expect(driver.execute_script('return window.devicePixelRatio')).to eq(2.0)
-          end
+          browsing_context = described_class.new(driver)
+          browsing_context.set_viewport(width: 800, height: 600, device_pixel_ratio: 2.0)
+          expect(driver.execute_script('return [window.innerWidth, window.innerHeight]')).to eq([800, 600])
+          expect(driver.execute_script('return window.devicePixelRatio')).to eq(2.0)
         end
 
         it 'accepts users prompts without text' do
-          reset_driver!(web_socket_url: true) do |driver|
-            browsing_context = described_class.new(driver)
-            window = browsing_context.create
+          browsing_context = described_class.new(driver)
+          window = browsing_context.create
 
-            browsing_context.handle_user_prompt(window, accept: true)
+          browsing_context.handle_user_prompt(window, accept: true)
 
-            expect(driver.page_source).to include('hello')
-          end
+          expect(driver.page_source).to include('hello')
         end
 
         it 'accepts users prompts with text' do
-          reset_driver!(web_socket_url: true) do |driver|
-            browsing_context = described_class.new(driver)
-            window = browsing_context.create
+          browsing_context = described_class.new(driver)
+          window = browsing_context.create
 
-            browsing_context.handle_user_prompt(window, accept: true, text: 'Hello, world!')
+          browsing_context.handle_user_prompt(window, accept: true, text: 'Hello, world!')
 
-            expect(driver.page_source).to include('hello')
-          end
+          expect(driver.page_source).to include('hello')
         end
 
         it 'rejects users prompts' do
-          reset_driver!(web_socket_url: true) do |driver|
-            browsing_context = described_class.new(driver)
-            window = browsing_context.create
+          browsing_context = described_class.new(driver)
+          window = browsing_context.create
 
-            browsing_context.handle_user_prompt(window, accept: false)
+          browsing_context.handle_user_prompt(window, accept: false)
 
-            expect(driver.page_source).to include('goodbye')
-          end
+          expect(driver.page_source).to include('goodbye')
         end
 
         it 'activates a browser context' do
-          reset_driver!(web_socket_url: true) do |driver|
-            browsing_context = described_class.new(driver)
-            browsing_context.create
+          browsing_context = described_class.new(driver)
+          browsing_context.create
 
-            expect(driver.execute_script('return document.hasFocus();')).to be_falsey
-            browsing_context.activate
-            expect(driver.execute_script('return document.hasFocus();')).to be_truthy
-          end
+          expect(driver.execute_script('return document.hasFocus();')).to be_falsey
+          browsing_context.activate
+          expect(driver.execute_script('return document.hasFocus();')).to be_truthy
         end
       end
     end # BiDi
