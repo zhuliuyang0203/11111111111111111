@@ -21,6 +21,15 @@ namespace OpenQA.Selenium.BiDi.Permissions
             return bidi;
         }
 
+        [TearDown]
+        public async Task TearDown()
+        {
+            if (_connection is not null)
+            {
+                await _connection.DisposeAsync();
+            }
+        }
+
         [Test]
         public async Task SettingPermissionsTest()
         {
@@ -50,15 +59,6 @@ namespace OpenQA.Selenium.BiDi.Permissions
             """, awaitPromise: true, new() { UserActivation = true });
 
             Assert.That(after.Result, Is.EqualTo(new StringRemoteValue("denied")));
-        }
-
-        [TearDown]
-        public async Task TearDown()
-        {
-            if (_connection is not null)
-            {
-                await _connection.DisposeAsync();
-            }
         }
     }
 }
