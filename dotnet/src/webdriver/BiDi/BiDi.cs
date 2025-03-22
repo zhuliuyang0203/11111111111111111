@@ -38,9 +38,9 @@ public class BiDi : IAsyncDisposable
     private readonly Lazy<Modules.Log.LogModule> _logModule;
     private readonly Lazy<Modules.Storage.StorageModule> _storageModule;
 
-    private BiDi(BiDiConnection connection) : this()
+    private BiDi(BiDiConnection connection, bool disposeConnection) : this()
     {
-        _ownsConnection = false;
+        _ownsConnection = disposeConnection;
         BiDiConnection = connection;
         AddBiDiModuleJsonInfo(connection);
     }
@@ -103,9 +103,9 @@ public class BiDi : IAsyncDisposable
         return bidi;
     }
 
-    public static ValueTask<BiDi> AttachAsync(BiDiConnection connection)
+    public static ValueTask<BiDi> AttachAsync(BiDiConnection connection, bool disposeConnection = false)
     {
-        var bidi = new BiDi(connection);
+        var bidi = new BiDi(connection, disposeConnection);
 
         return new ValueTask<BiDi>(bidi);
     }
