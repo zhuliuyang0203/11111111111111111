@@ -29,24 +29,13 @@ namespace OpenQA.Selenium.BiDi.Permissions
     internal class PermissionsTests : BiDiTestFixture
     {
         private PermissionsModule _permissions;
-        private Communication.BiDiConnection _connection;
 
         protected override async Task<BiDi> CreateBiDi(IWebDriver driver)
         {
-            _connection = await driver.AsBiDiConnectionAsync();
-            _permissions = await PermissionsModule.AttachAsync(_connection);
-            var bidi = await BiDi.AttachAsync(_connection);
-            await _connection.ConnectAsync(default);
-            return bidi;
-        }
-
-        [TearDown]
-        public async Task TearDown()
-        {
-            if (_connection is not null)
-            {
-                await _connection.DisposeAsync();
-            }
+            return await driver
+                .AsBiDiBuilder()
+                .AddExtension(PermissionsModule.Attach, out _permissions)
+                .BuildAsync();
         }
 
         [Test]

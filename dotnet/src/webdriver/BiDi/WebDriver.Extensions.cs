@@ -41,6 +41,12 @@ public static class WebDriverExtensions
         return Task.FromResult(connection);
     }
 
+    public static BiDiBuilder AsBiDiBuilder(this IWebDriver webDriver)
+    {
+        string webSocketUrl = GetWebSocketUrl(webDriver);
+        return new BiDiBuilder(webSocketUrl);
+    }
+
     private static string GetWebSocketUrl(IWebDriver webDriver)
     {
         if (webDriver is null)

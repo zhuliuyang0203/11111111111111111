@@ -26,11 +26,11 @@ namespace OpenQA.Selenium.BiDi.Extensions.Permissions;
 
 public class PermissionsModule(BiDiConnection broker) : Module(broker)
 {
-    internal static ValueTask<PermissionsModule> AttachAsync(BiDiConnection connection)
+    public static PermissionsModule Attach(BiDiConnection connection)
     {
         connection.AddSerializerContextAndConverters(PermissionsJsonSerializerContext.Default);
 
-        return new ValueTask<PermissionsModule>(new PermissionsModule(connection));
+        return new PermissionsModule(connection);
     }
 
     public async Task SetPermissionAsync(string permissionName, PermissionState state, string origin, UserContext? userContext, SetPermissionOptions? options = null)
