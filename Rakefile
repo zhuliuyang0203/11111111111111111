@@ -738,9 +738,9 @@ namespace :rb do
     mkdir_p base_dir
 
     {
-     '//javascript/atoms/fragments:find-elements': 'findElements.js',
-     '//javascript/atoms/fragments:is-displayed': 'isDisplayed.js',
-     '//javascript/webdriver/atoms:get-attribute': 'getAttribute.js',
+      '//javascript/atoms/fragments:find-elements': 'findElements.js',
+      '//javascript/atoms/fragments:is-displayed': 'isDisplayed.js',
+      '//javascript/webdriver/atoms:get-attribute': 'getAttribute.js',
     }.each do |target, name|
       puts "Generating #{target} as #{name}"
 
@@ -751,7 +751,6 @@ namespace :rb do
       end
     end
   end
-
 
   desc 'Update generated Ruby files for local development'
   task :local_dev do
