@@ -32,7 +32,10 @@ pub async fn download_to_tmp_folder(
     url: String,
     log: &Logger,
 ) -> Result<(TempDir, String), Error> {
-    let tmp_dir = Builder::new().prefix("selenium-manager").tempdir()?;
+    let tmp_dir = Builder::new()
+        .prefix("selenium-manager")
+        .keep(true)
+        .tempdir()?;
     log.trace(format!(
         "Downloading {} to temporal folder {:?}",
         url,
