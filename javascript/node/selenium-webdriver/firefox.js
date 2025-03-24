@@ -121,7 +121,7 @@ const zip = require('./io/zip')
 const { Browser, Capabilities, Capability } = require('./lib/capabilities')
 const { Zip } = require('./io/zip')
 const { getBinaryPaths } = require('./common/driverFinder')
-const portprober = require("./net/portprober")
+const portprober = require('./net/portprober')
 const FIREFOX_CAPABILITY_KEY = 'moz:firefoxOptions'
 
 /**
