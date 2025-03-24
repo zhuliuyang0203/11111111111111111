@@ -69,9 +69,9 @@ public class DockerOptions {
   private static final Logger LOG = Logger.getLogger(DockerOptions.class.getName());
   private static final Json JSON = new Json();
   private static final Pattern LINUX_DEVICE_MAPPING_WITH_DEFAULT_PERMISSIONS =
-    Pattern.compile("^([\\w/-]+):([\\w/-]+)$");
+      Pattern.compile("^([\\w/-]+):([\\w/-]+)$");
   private static final Pattern LINUX_DEVICE_MAPPING_WITH_PERMISSIONS =
-    Pattern.compile("^([\\w/-]+):([\\w/-]+):(\\w+)$");
+      Pattern.compile("^([\\w/-]+):([\\w/-]+):(\\w+)$");
   private final Config config;
 
   public DockerOptions(Config config) {
@@ -212,8 +212,8 @@ public class DockerOptions {
   }
 
   protected List<Device> getDevicesMapping() {
-    List<String> devices = config.getAll(DOCKER_SECTION, "devices")
-      .orElseGet(Collections::emptyList);
+    List<String> devices =
+        config.getAll(DOCKER_SECTION, "devices").orElseGet(Collections::emptyList);
 
     List<Device> deviceMapping = new ArrayList<>();
     for (String device : devices) {
