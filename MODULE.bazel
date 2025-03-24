@@ -103,7 +103,7 @@ oci.pull(
 )
 oci.pull(
     name = "chrome_standalone",
-    digest = "sha256:1b809a961a0a77787a7cccac74ddc5570b7e89747f925b8469ddb9a6624d4ece",
+    digest = "sha256:aeb5a614247c0b0965aa487f7fcb6ec05d9a8250deeb4037550efab3857897c9",
     image = "index.docker.io/selenium/standalone-chrome",
 )
 use_repo(oci, "chrome_standalone", "firefox_standalone", "java_image_base")
