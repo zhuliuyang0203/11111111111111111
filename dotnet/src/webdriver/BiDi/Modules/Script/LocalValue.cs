@@ -19,12 +19,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
-using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
-using System.Text.RegularExpressions;
 
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
@@ -75,73 +72,67 @@ public abstract record LocalValue
             case string str:
                 return new StringLocalValue(str);
 
+            case IDictionary<string, string?> dictionary:
+                {
+                    var bidiObject = new List<List<LocalValue>>(dictionary.Count);
+
+                    foreach (var item in dictionary)
+                    {
+                        bidiObject.Add([new StringLocalValue(item.Key), ConvertFrom(item.Value)]);
+                    }
+
+                    return new ObjectLocalValue(bidiObject);
+                }
+
+            case IDictionary<string, object?> dictionary:
+                {
+                    var bidiObject = new List<List<LocalValue>>(dictionary.Count);
+
+                    foreach (var item in dictionary)
+                    {
+                        bidiObject.Add([new StringLocalValue(item.Key), ConvertFrom(item.Value)]);
+                    }
+
+                    return new ObjectLocalValue(bidiObject);
+                }
+
+            case IDictionary<int, object?> dictionary:
+                {
+                    var bidiObject = new List<List<LocalValue>>(dictionary.Count);
+
+                    foreach (var item in dictionary)
+                    {
+                        bidiObject.Add([ConvertFrom(item.Key), ConvertFrom(item.Value)]);
+                    }
+
+                    return new MapLocalValue(bidiObject);
+                }
+
             case IEnumerable<object?> list:
                 return new ArrayLocalValue(list.Select(ConvertFrom).ToList());
 
             case object:
                 {
-                    var type = value.GetType();
+                    const System.Reflection.BindingFlags Flags = System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance;
+                    var properties = value.GetType().GetProperties(Flags);
 
-                    var properties = type.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
-
-                    List<List<LocalValue>> values = [];
-
+                    var values = new List<List<LocalValue>>(properties.Length);
                     foreach (var property in properties)
                     {
-                        values.Add([property.Name, ConvertFrom(property.GetValue(value))]);
+                        object? propertyValue;
+                        try
+                        {
+                            propertyValue = property.GetValue(value);
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new BiDiException($"Could not retrieve property {property.Name} from {property.DeclaringType}", ex);
+                        }
+                        values.Add([property.Name, ConvertFrom(propertyValue)]);
                     }
 
                     return new ObjectLocalValue(values);
                 }
-        }
-    }
-
-    public static LocalValue ConvertFrom(JsonNode? node)
-    {
-        if (node is null)
-        {
-            return new NullLocalValue();
-        }
-
-        switch (node.GetValueKind())
-        {
-            case System.Text.Json.JsonValueKind.Null:
-                return new NullLocalValue();
-
-            case System.Text.Json.JsonValueKind.True:
-                return new BooleanLocalValue(true);
-
-            case System.Text.Json.JsonValueKind.False:
-                return new BooleanLocalValue(false);
-
-            case System.Text.Json.JsonValueKind.String:
-                return new StringLocalValue(node.ToString());
-
-            case System.Text.Json.JsonValueKind.Number:
-                {
-                    var numberString = node.ToString();
-
-                    var numberAsDouble = double.Parse(numberString);
-
-                    if (double.IsInfinity(numberAsDouble))
-                    {
-                        // Numbers outside of Int64's range will successfully parse, but become +- Infinity
-                        // We can retain the value using a BigInt
-                        return new BigIntLocalValue(numberString);
-                    }
-
-                    return new NumberLocalValue(numberAsDouble);
-                }
-
-            case System.Text.Json.JsonValueKind.Array:
-                return new ArrayLocalValue(node.AsArray().Select(ConvertFrom));
-
-            case System.Text.Json.JsonValueKind.Object:
-                var convertedToListForm = node.AsObject().Select(property => new LocalValue[] { new StringLocalValue(property.Key), ConvertFrom(property.Value) }).ToList();
-                return new ObjectLocalValue(convertedToListForm);
-
-            default:
-                throw new InvalidOperationException("Invalid JSON node");
         }
     }
 }
