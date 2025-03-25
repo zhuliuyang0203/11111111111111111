@@ -29,7 +29,7 @@ namespace OpenQA.Selenium
     /// <summary>
     /// Provides a mechanism for finding elements spatially relative to other elements.
     /// </summary>
-    public class RelativeBy : By
+    public sealed class RelativeBy : By
     {
         private readonly string wrappedAtom;
         private readonly object root;
@@ -69,7 +69,6 @@ namespace OpenQA.Selenium
         {
             return new RelativeBy(by);
         }
-
 
         /// <summary>
         /// Finds the first element matching the criteria.
