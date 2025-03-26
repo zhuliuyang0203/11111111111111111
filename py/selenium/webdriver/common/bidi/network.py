@@ -241,7 +241,7 @@ class Network:
 
         return self.add_request_handler(event, _callback)
 
-    def _continue_with_auth(self, request, username, password):
+    def _continue_with_auth(self, request, username=None, password=None):
         """Continue with authentication.
 
         Parameters:
@@ -249,12 +249,21 @@ class Network:
             request (Request): The request to continue with.
             username (str): The username to authenticate with.
             password (str): The password to authenticate with.
+
+        Notes:
+        -----
+            If username or password is None, it attempts auth with no credentials
         """
 
         params = {}
         params["request"] = request.request_id
-        params["action"] = "provideCredentials"
-        params["credentials"] = {"type": "password", "username": username, "password": password}
+
+        if not username or not password:
+            params["action"] = "default"
+
+        else:
+            params["action"] = "provideCredentials"
+            params["credentials"] = {"type": "password", "username": username, "password": password}
 
         self.conn.execute(self.command_builder("network.continueWithAuth", params))
 
