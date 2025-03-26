@@ -22,10 +22,13 @@ import static org.openqa.selenium.remote.DriverCommand.FIND_CHILD_ELEMENTS;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.openqa.selenium.Beta;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
@@ -279,7 +282,34 @@ public class RemoteWebElement implements WebElement, Locatable, TakesScreenshot,
 
   @Override
   public boolean isDisplayed() {
-    Object value = execute(DriverCommand.IS_ELEMENT_DISPLAYED(id)).getValue();
+    // String script = "return arguments[0].checkVisibility({ visibilityProperty: true, opacityProperty: true });"
+    String script = "const visibility = arguments[0].checkVisibility({ visibilityProperty: true, opacityProperty: true, contentVisibilityAuto: true });\n"
+        + "if (visibility) {\n"
+        + "  const style = getComputedStyle(arguments[0]);\n"
+        + "  if (style.getPropertyValue('position') !== 'absolute') {\n"
+        + "    let parentElement = arguments[0].parentElement;\n"
+        + "    while (parentElement) {\n"
+        + "      const parentStyle = getComputedStyle(parentElement);\n"
+        + "      const parentOverflowX = parentStyle.getPropertyValue('overflow-x');\n"
+        + "      const parentOverflowY = parentStyle.getPropertyValue('overflow-y');\n"
+        + "      if (parentOverflowX === 'hidden' && parentOverflowY === 'hidden') {\n"
+        + "        return !(arguments[0].offsetLeft - parentElement.offsetLeft > parentElement.offsetWidth ||\n"
+        + "            arguments[0].offsetTop - parentElement.offsetTop > parentElement.offsetHeight);\n"
+        + "      }\n"
+        + "      if (parentOverflowX === 'hidden') {\n"
+        + "        return !(arguments[0].offsetLeft - parentElement.offsetLeft > parentElement.offsetWidth);\n"
+        + "      }\n"
+        + "      if (parentOverflowY === 'hidden') {\n"
+        + "        return !(arguments[0].offsetTop - parentElement.offsetTop > parentElement.offsetHeight);\n"
+        + "      }\n"
+        + "      parentElement = parentElement.parentElement;\n"
+        + "    }\n"
+        + "  }\n"
+        + "}\n"
+        + "return visibility;";
+    Object value = parent.executeScript(script, this);
+
+    // Object value = execute(DriverCommand.IS_ELEMENT_DISPLAYED(id)).getValue();
     try {
       // See https://github.com/SeleniumHQ/selenium/issues/9266
       if (value == null) {
