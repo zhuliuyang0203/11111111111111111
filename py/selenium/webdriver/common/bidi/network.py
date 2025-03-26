@@ -35,7 +35,8 @@ class Network:
         "response_completed": "network.responseCompleted",
         "auth_required": "network.authRequired",
         "fetch_error": "network.fetchError",
-        "continue_request": "network.continueWithRequest",
+        "continue_request": "network.continueRequest",
+        "continue_auth": "network.continueWithAuth",
     }
 
     PHASES = {
@@ -225,12 +226,12 @@ class Network:
             username (str): The username to authenticate with.
             password (str): The password to authenticate with.
         """
-        event_name = "auth_required"
+        event = "auth_required"
 
         def _callback(request):
             self._continue_with_auth(request, username, password)
 
-        return self.add_request_handler(event_name, _callback)
+        return self.add_request_handler(event, _callback)
 
     def _continue_with_auth(self, request, username, password):
         """Continue with authentication."""
@@ -300,4 +301,4 @@ class Request:
         if self.url is not None:
             params["url"] = self.url
 
-        self.network.conn.execute(self.command_builder("network.continueWithRequest", params))
+        self.network.conn.execute(self.command_builder("network.continueRequest", params))

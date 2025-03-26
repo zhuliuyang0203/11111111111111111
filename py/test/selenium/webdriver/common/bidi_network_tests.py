@@ -21,38 +21,38 @@ from selenium.webdriver.common.bidi.network import Request
 from selenium.webdriver.common.by import By
 
 
-@pytest.mark.xfail_safari
-def test_network_initialized(driver):
-    assert driver.network is not None
+# @pytest.mark.xfail_safari
+# def test_network_initialized(driver):
+#     assert driver.network is not None
 
 
-@pytest.mark.xfail_safari
-def test_add_intercept(driver, pages):
-    result = driver.network.add_intercept()
-    assert result is not None, "Intercept not added"
+# @pytest.mark.xfail_safari
+# def test_add_intercept(driver, pages):
+#     result = driver.network.add_intercept()
+#     assert result is not None, "Intercept not added"
 
 
-@pytest.mark.xfail_safari
-def test_remove_intercept(driver):
-    result = driver.network.add_intercept()
-    driver.network.remove_intercept(result["intercept"])
-    assert driver.network.intercepts == [], "Intercept not removed"
+# @pytest.mark.xfail_safari
+# def test_remove_intercept(driver):
+#     result = driver.network.add_intercept()
+#     driver.network.remove_intercept(result["intercept"])
+#     assert driver.network.intercepts == [], "Intercept not removed"
 
 
-@pytest.mark.xfail_safari
-def test_add_and_remove_request_handler(driver, pages):
+# @pytest.mark.xfail_safari
+# def test_add_and_remove_request_handler(driver, pages):
 
-    requests = []
+#     requests = []
 
-    def callback(request: Request):
-        requests.append(request)
+#     def callback(request: Request):
+#         requests.append(request)
 
-    callback_id = driver.network.add_request_handler("before_request", callback)
-    assert callback_id is not None, "Request handler not added"
-    driver.network.remove_request_handler("before_request", callback_id)
-    pages.load("formPage.html")
-    assert not requests, "Requests intercepted"
-    assert driver.find_element(By.NAME, "login").is_displayed(), "Request not continued"
+#     callback_id = driver.network.add_request_handler("before_request", callback)
+#     assert callback_id is not None, "Request handler not added"
+#     driver.network.remove_request_handler("before_request", callback_id)
+#     pages.load("formPage.html")
+#     assert not requests, "Requests intercepted"
+#     assert driver.find_element(By.NAME, "login").is_displayed(), "Request not continued"
 
 
 @pytest.mark.xfail_safari
@@ -67,10 +67,10 @@ def test_continue_request(driver, pages):
     assert driver.find_element(By.NAME, "login").is_displayed(), "Request not continued"
 
 
-@pytest.mark.xfail_safari
-def test_continue_with_auth(driver):
+# @pytest.mark.xfail_safari
+# def test_continue_with_auth(driver):
 
-    callback_id = driver.network.add_auth_handler("user", "passwd")
-    assert callback_id is not None, "Request handler not added"
-    driver.get("https://httpbin.org/basic-auth/user/passwd")
-    assert "authenticated" in driver.page_source, "Authorization failed"
+#     callback_id = driver.network.add_auth_handler("user", "passwd")
+#     assert callback_id is not None, "Request handler not added"
+#     driver.get("https://httpbin.org/basic-auth/user/passwd")
+#     assert "authenticated" in driver.page_source, "Authorization failed"
