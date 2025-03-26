@@ -59,7 +59,6 @@ class LocalValueConversionTests
     [Test]
     public void CanConvertZeroIntToLocalValue()
     {
-        int arg = 0;
         LocalValue result = 0;
         Assert.That(result, Is.TypeOf<NumberLocalValue>());
         Assert.That((result as NumberLocalValue).Value, Is.Zero);
