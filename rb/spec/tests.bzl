@@ -19,12 +19,12 @@ BROWSERS = {
             "WD_SPEC_DRIVER": "chrome",
         } | select({
             "@selenium//common:use_pinned_linux_chrome": {
-                "CHROME_BINARY": "$(location @linux_chrome//:chrome-linux64/chrome)",
-                "CHROMEDRIVER_BINARY": "$(location @linux_chromedriver//:chromedriver)",
+                "CHROME_BINARY": "$(rootpath @linux_chrome//:chrome-linux64/chrome)",
+                "CHROMEDRIVER_BINARY": "$(rootpath @linux_chromedriver//:chromedriver)",
             },
             "@selenium//common:use_pinned_macos_chrome": {
-                "CHROME_BINARY": "$(location @mac_chrome//:Chrome.app)/Contents/MacOS/Chrome",
-                "CHROMEDRIVER_BINARY": "$(location @mac_chromedriver//:chromedriver)",
+                "CHROME_BINARY": "$(rootpath @mac_chrome//:Chrome.app)/Contents/MacOS/Chrome",
+                "CHROMEDRIVER_BINARY": "$(rootpath @mac_chromedriver//:chromedriver)",
             },
             "//conditions:default": {},
         }) | select({
@@ -42,12 +42,12 @@ BROWSERS = {
             "WD_SPEC_DRIVER": "edge",
         } | select({
             "@selenium//common:use_pinned_linux_edge": {
-                "EDGE_BINARY": "$(location @linux_edge//:opt/microsoft/msedge/microsoft-edge)",
-                "MSEDGEDRIVER_BINARY": "$(location @linux_edgedriver//:msedgedriver)",
+                "EDGE_BINARY": "$(rootpath @linux_edge//:opt/microsoft/msedge/microsoft-edge)",
+                "MSEDGEDRIVER_BINARY": "$(rootpath @linux_edgedriver//:msedgedriver)",
             },
             "@selenium//common:use_pinned_macos_edge": {
-                "EDGE_BINARY": "$(location @mac_edge//:Edge.app)/Contents/MacOS/Microsoft\\ Edge",
-                "MSEDGEDRIVER_BINARY": "$(location @mac_edgedriver//:msedgedriver)",
+                "EDGE_BINARY": "$(rootpath @mac_edge//:Edge.app)/Contents/MacOS/Microsoft\\ Edge",
+                "MSEDGEDRIVER_BINARY": "$(rootpath @mac_edgedriver//:msedgedriver)",
             },
             "//conditions:default": {},
         }) | select({
@@ -65,12 +65,12 @@ BROWSERS = {
             "WD_SPEC_DRIVER": "firefox",
         } | select({
             "@selenium//common:use_pinned_linux_firefox": {
-                "FIREFOX_BINARY": "$(location @linux_firefox//:firefox/firefox)",
-                "GECKODRIVER_BINARY": "$(location @linux_geckodriver//:geckodriver)",
+                "FIREFOX_BINARY": "$(rootpath @linux_firefox//:firefox/firefox)",
+                "GECKODRIVER_BINARY": "$(rootpath @linux_geckodriver//:geckodriver)",
             },
             "@selenium//common:use_pinned_macos_firefox": {
-                "FIREFOX_BINARY": "$(location @mac_firefox//:Firefox.app)/Contents/MacOS/firefox",
-                "GECKODRIVER_BINARY": "$(location @mac_geckodriver//:geckodriver)",
+                "FIREFOX_BINARY": "$(rootpath @mac_firefox//:Firefox.app)/Contents/MacOS/firefox",
+                "GECKODRIVER_BINARY": "$(rootpath @mac_geckodriver//:geckodriver)",
             },
             "//conditions:default": {},
         }) | select({
@@ -88,12 +88,12 @@ BROWSERS = {
             "WD_SPEC_DRIVER": "firefox",
         } | select({
             "@selenium//common:use_pinned_linux_firefox": {
-                "FIREFOX_BINARY": "$(location @linux_beta_firefox//:firefox/firefox)",
-                "GECKODRIVER_BINARY": "$(location @linux_geckodriver//:geckodriver)",
+                "FIREFOX_BINARY": "$(rootpath @linux_beta_firefox//:firefox/firefox)",
+                "GECKODRIVER_BINARY": "$(rootpath @linux_geckodriver//:geckodriver)",
             },
             "@selenium//common:use_pinned_macos_firefox": {
-                "FIREFOX_BINARY": "$(location @mac_beta_firefox//:Firefox.app)/Contents/MacOS/firefox",
-                "GECKODRIVER_BINARY": "$(location @mac_geckodriver//:geckodriver)",
+                "FIREFOX_BINARY": "$(rootpath @mac_beta_firefox//:Firefox.app)/Contents/MacOS/firefox",
+                "GECKODRIVER_BINARY": "$(rootpath @mac_geckodriver//:geckodriver)",
             },
             "//conditions:default": {},
         }) | select({
