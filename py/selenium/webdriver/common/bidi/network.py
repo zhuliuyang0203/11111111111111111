@@ -219,7 +219,7 @@ class Network:
         if len(self.subscriptions[event_name]) == 0:
             params = {}
             params["events"] = [event_name]
-            self.conn.execute(self.command_builder("session.subscribe", params))
+            self.conn.execute(self.command_builder("session.unsubscribe", params))
             del self.subscriptions[event_name]
 
     def add_auth_handler(self, username, password):
