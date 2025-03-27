@@ -29,5 +29,5 @@ public class ScriptEvaluateException(EvaluateResultException evaluateResultExcep
 
     public long ColumNumber => _evaluateResultException.ExceptionDetails.ColumnNumber;
 
-    public override string Message => $"{Text}{Environment.NewLine}{_evaluateResultException.ExceptionDetails.StackTrace}";
+    public override string Message => $"{Text}{Environment.NewLine}{string.Join(Environment.NewLine, _evaluateResultException.ExceptionDetails.StackTrace.CallFrames)}";
 }

@@ -39,7 +39,18 @@ public record EvaluateOptions : CommandOptions
 //[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
 //[JsonDerivedType(typeof(EvaluateResultSuccess), "success")]
 //[JsonDerivedType(typeof(EvaluateResultException), "exception")]
-public abstract record EvaluateResult;
+public abstract record EvaluateResult
+{
+    public EvaluateResultSuccess ThrowOnError()
+    {
+        if (this is EvaluateResultSuccess success)
+        {
+            return success;
+        }
+
+        throw new ScriptEvaluateException((EvaluateResultException)this);
+    }
+}
 
 public record EvaluateResultSuccess(RemoteValue Result, Realm Realm) : EvaluateResult
 {

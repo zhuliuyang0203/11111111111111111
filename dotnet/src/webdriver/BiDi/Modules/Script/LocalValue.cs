@@ -92,9 +92,10 @@ public record BigIntLocalValue(string Value) : PrimitiveProtocolLocalValue;
 
 public record ChannelLocalValue(ChannelProperties Value) : LocalValue
 {
-    // TODO: Revise why we need it
+    // AddPreloadScript takes arguments typed as ChannelLocalValue but still requires "type":"channel"
     [JsonInclude]
-    internal string type = "channel";
+    [JsonPropertyName("type")]
+    internal string Type => "channel";
 }
 
 public record ArrayLocalValue(IEnumerable<LocalValue> Value) : LocalValue;
