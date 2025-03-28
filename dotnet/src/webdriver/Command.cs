@@ -20,6 +20,7 @@
 using OpenQA.Selenium.Internal;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
@@ -31,15 +32,22 @@ namespace OpenQA.Selenium
     /// </summary>
     public class Command
     {
-        private readonly static JsonSerializerOptions s_jsonSerializerOptions = new()
+        [UnconditionalSuppressMessage("Trimming", "IL2026", Justification = $"All trimming-unsafe access points to {nameof(JsonSerializerOptions)} are annotated as such")]
+        [UnconditionalSuppressMessage("AOT", "IL3050", Justification = $"All AOT-unsafe access points to {nameof(JsonSerializerOptions)} are annotated as such")]
+        private static class JsonOptionsHolder
         {
-            TypeInfoResolverChain =
+            public readonly static JsonSerializerOptions JsonSerializerOptions = new()
             {
-                CommandJsonSerializerContext.Default,
-                new DefaultJsonTypeInfoResolver()
-            },
-            Converters = { new ResponseValueJsonConverter() }
-        };
+                TypeInfoResolverChain =
+                {
+                    CommandJsonSerializerContext.Default,
+                    new DefaultJsonTypeInfoResolver()
+                },
+                Converters = { new ResponseValueJsonConverter() }
+            };
+        }
+
+        private readonly Dictionary<string, object?> _parameters;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Command"/> class using a command name and a JSON-encoded string for the parameters.
@@ -47,8 +55,10 @@ namespace OpenQA.Selenium
         /// <param name="name">Name of the command</param>
         /// <param name="jsonParameters">Parameters for the command as a JSON-encoded string.</param>
         public Command(string name, string jsonParameters)
-            : this(null, name, ConvertParametersFromJson(jsonParameters))
         {
+            this.SessionId = null;
+            this._parameters = ConvertParametersFromJson(jsonParameters) ?? new Dictionary<string, object?>();
+            this.Name = name ?? throw new ArgumentNullException(nameof(name));
         }
 
         /// <summary>
@@ -58,10 +68,12 @@ namespace OpenQA.Selenium
         /// <param name="name">Name of the command</param>
         /// <param name="parameters">Parameters for that command</param>
         /// <exception cref="ArgumentNullException">If <paramref name="name"/> is <see langword="null"/>.</exception>
+        [RequiresUnreferencedCode("Adding untyped parameter values for JSON serialization has best-effort AOT support. Ensure only Selenium types and well-known .NET types are added, or use the overload that takes pre-serialized string jsonParameters for guaranteed AOT compatibility.")]
+        [RequiresDynamicCode("Adding untyped parameter values for JSON serialization has best-effort AOT support. Ensure only Selenium types and well-known .NET types are added, or use the overload that takes pre-serialized string jsonParameters for guaranteed AOT compatibility.")]
         public Command(SessionId? sessionId, string name, Dictionary<string, object?>? parameters)
         {
             this.SessionId = sessionId;
-            this.Parameters = parameters ?? new Dictionary<string, object?>();
+            this._parameters = parameters ?? new Dictionary<string, object?>();
             this.Name = name ?? throw new ArgumentNullException(nameof(name));
         }
 
@@ -81,24 +93,50 @@ namespace OpenQA.Selenium
         /// Gets the parameters of the command
         /// </summary>
         [JsonPropertyName("parameters")]
-        public Dictionary<string, object?> Parameters { get; }
+        public Dictionary<string, object?> Parameters
+        {
+            [RequiresUnreferencedCode("Adding untyped parameter values for JSON serialization has best-effort AOT support. Ensure only Selenium types and well-known .NET types are added.")]
+            [RequiresDynamicCode("Adding untyped parameter values for JSON serialization has best-effort AOT support. Ensure only Selenium types and well-known .NET types are added.")]
+            get => _parameters;
+        }
 
         /// <summary>
         /// Gets the parameters of the command as a JSON-encoded string.
         /// </summary>
         public string ParametersAsJsonString
         {
+            [UnconditionalSuppressMessage("Trimming", "IL2026", Justification = $"All trimming-unsafe access points to {nameof(_parameters)} are annotated as such")]
+            [UnconditionalSuppressMessage("AOT", "IL3050", Justification = $"All AOT-unsafe access points to {nameof(_parameters)} are annotated as such")]
             get
             {
-                if (this.Parameters != null && this.Parameters.Count > 0)
+                if (HasParameters())
                 {
-                    return JsonSerializer.Serialize(this.Parameters, s_jsonSerializerOptions);
+                    return JsonSerializer.Serialize(this._parameters, JsonOptionsHolder.JsonSerializerOptions);
                 }
                 else
                 {
                     return "{}";
                 }
             }
+        }
+
+        internal bool HasParameters()
+        {
+            return this._parameters != null && this._parameters.Count > 0;
+        }
+
+        internal bool TryGetValueAndRemoveIfNotNull(string key, [NotNullWhen(true)] out object? value)
+        {
+            if (this._parameters.TryGetValue(key, out value))
+            {
+                if (value is not null)
+                {
+                    this._parameters.Remove(key);
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         /// <summary>
