@@ -80,9 +80,9 @@ class CallFunctionLocalValueTest : BiDiTestFixture
 
         var result = await context.Script.CallFunctionAsync($$"""
             (arg) => {
-                if (arg !== false) {
-                throw new Error("Assert failed: " + arg);
-                }
+              if (arg !== false) {
+              throw new Error("Assert failed: " + arg);
+              }
             }
             """, false, new() { Arguments = [arg] });
 
