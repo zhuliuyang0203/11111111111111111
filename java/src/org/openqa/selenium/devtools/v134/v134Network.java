@@ -191,7 +191,17 @@ public class v134Network extends Network<AuthRequired, RequestPaused> {
     }
 
     List<HeaderEntry> headers = new ArrayList<>();
-    req.forEachHeader((name, value) -> headers.add(new HeaderEntry(name, value)));
+    
+    // First add the original headers from the paused request to preserve them
+    pausedReq.getRequest().getHeaders().forEach(
+        (name, value) -> headers.add(new HeaderEntry(name, String.valueOf(value))));
+        
+    // Then add any new headers from the modified request, which will override existing ones if present
+    req.forEachHeader((name, value) -> {
+      // Remove any existing header with the same name
+      headers.removeIf(h -> h.getName().equalsIgnoreCase(name));
+      headers.add(new HeaderEntry(name, value));
+    });
 
     return Fetch.continueRequest(
         pausedReq.getRequestId(),
