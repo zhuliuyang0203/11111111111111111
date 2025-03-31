@@ -17,7 +17,6 @@
 
 # frozen_string_literal: true
 
-require_relative '../../spec_helper'
 require 'selenium/webdriver/common/print_options'
 
 
