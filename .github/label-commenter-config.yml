@@ -1,6 +1,6 @@
 # Configuration for Label Commenter - https://github.com/peaceiris/actions-label-commenter
 labels:
-  - name: needs-triaging
+  - name: A-needs-triaging
     labeled:
       issue:
         body: |
@@ -137,3 +137,17 @@ labels:
 
           Please turn on logging and re-run your code. Information on how to adjust logs for your language can be found in our
           [Troubleshooting documentation](https://www.selenium.dev/documentation/webdriver/troubleshooting/logging/).
+  - name: B-support
+    labeled:
+      issue:
+        body: |
+          Hi, @{{ issue.user.login }}.
+
+          This is related to code in the Support packages. The support packages contain example code that
+          many users find helpful, but they do not necessarily represent the best practices for using Selenium,
+          and the Selenium team is not prioritizing work on them right now.
+          This doesn't mean that we won't ever work on them, but it is not on our roadmap as we push to release Selenium 5.
+
+          We actively encourage people to create their own wrapper and helper code that makes sense for them.
+          If you have any questions, please [contact us](https://www.selenium.dev/support)
+
