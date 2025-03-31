@@ -552,38 +552,6 @@ namespace OpenQA.Selenium
         }
 
         /// <summary>
-        /// Executes commands with the driver
-        /// </summary>
-        /// <param name="driverCommandToExecute">Command that needs executing</param>
-        /// <param name="parameters">Parameters needed for the command</param>
-        /// <returns>WebDriver Response</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="driverCommandToExecute"/> is <see langword="null"/>.</exception>
-        internal Response InternalExecute(string driverCommandToExecute, Dictionary<string,
-#nullable disable
-            object
-#nullable enable
-            >? parameters)
-        {
-            return Task.Run(() => this.InternalExecuteAsync(driverCommandToExecute, parameters)).GetAwaiter().GetResult();
-        }
-
-        /// <summary>
-        /// Executes commands with the driver asynchronously
-        /// </summary>
-        /// <param name="driverCommandToExecute">Command that needs executing</param>
-        /// <param name="parameters">Parameters needed for the command</param>
-        /// <returns>A task object representing the asynchronous operation</returns>
-        /// <exception cref="ArgumentNullException">If <paramref name="driverCommandToExecute"/> is <see langword="null"/>.</exception>
-        internal Task<Response> InternalExecuteAsync(string driverCommandToExecute, Dictionary<string,
-#nullable disable
-                object
-#nullable enable
-                >? parameters)
-        {
-            return this.ExecuteAsync(driverCommandToExecute, parameters);
-        }
-
-        /// <summary>
         /// Executes a command with this driver.
         /// </summary>
         /// <param name="driverCommandToExecute">A <see cref="DriverCommand"/> value representing the command to execute.</param>
