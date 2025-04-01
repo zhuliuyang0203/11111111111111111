@@ -28,13 +28,34 @@ internal class MessageConverter : JsonConverter<Message>
 {
     public override Message? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        var jsonDocument = JsonDocument.ParseValue(ref reader);
+        Utf8JsonReader readerClone = reader;
 
-        return jsonDocument.RootElement.GetProperty("type").ToString() switch
+        if (readerClone.TokenType != JsonTokenType.StartObject)
+            throw new JsonException();
+
+        string? discriminator = null;
+
+        readerClone.Read();
+        while (readerClone.TokenType == JsonTokenType.PropertyName)
         {
-            "success" => jsonDocument.Deserialize<MessageSuccess>(options),
-            "error" => jsonDocument.Deserialize<MessageError>(options),
-            "event" => jsonDocument.Deserialize<MessageEvent>(options),
+            string? propName = readerClone.GetString();
+            readerClone.Read();
+
+            if (propName == "type")
+            {
+                discriminator = readerClone.GetString();
+                break;
+            }
+
+            readerClone.Skip();
+            readerClone.Read();
+        }
+
+        return discriminator switch
+        {
+            "success" => JsonSerializer.Deserialize<MessageSuccess>(ref reader, options),
+            "error" => JsonSerializer.Deserialize<MessageError>(ref reader, options),
+            "event" => JsonSerializer.Deserialize<MessageEvent>(ref reader, options),
             _ => null,
         };
     }
