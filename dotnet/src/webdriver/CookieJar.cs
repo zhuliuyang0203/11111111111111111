@@ -21,8 +21,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-#nullable enable
-
 namespace OpenQA.Selenium
 {
     internal sealed class CookieJar(WebDriver driver) : ICookieJar
@@ -34,7 +32,7 @@ namespace OpenQA.Selenium
         {
             get
             {
-                Response response = driver.InternalExecute(DriverCommand.GetAllCookies, new Dictionary<string, object>());
+                Response response = driver.Execute(DriverCommand.GetAllCookies, new Dictionary<string, object>());
 
                 List<Cookie> toReturn = new List<Cookie>();
                 if (response.Value is object?[] cookies)
@@ -67,7 +65,7 @@ namespace OpenQA.Selenium
 
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("cookie", cookie);
-            driver.InternalExecute(DriverCommand.AddCookie, parameters);
+            driver.Execute(DriverCommand.AddCookie, parameters);
         }
 
         /// <summary>
@@ -84,7 +82,7 @@ namespace OpenQA.Selenium
 
             Dictionary<string, object> parameters = new() { { "name", name } };
 
-            driver.InternalExecute(DriverCommand.DeleteCookie, parameters);
+            driver.Execute(DriverCommand.DeleteCookie, parameters);
         }
 
         /// <summary>
@@ -107,7 +105,7 @@ namespace OpenQA.Selenium
         /// </summary>
         public void DeleteAllCookies()
         {
-            driver.InternalExecute(DriverCommand.DeleteAllCookies, null);
+            driver.Execute(DriverCommand.DeleteAllCookies, null);
         }
 
         /// <summary>
@@ -125,9 +123,9 @@ namespace OpenQA.Selenium
 
             try
             {
-                var rawCookie = driver.InternalExecute(DriverCommand.GetCookie, new() { { "name", name } }).Value;
+                var rawCookie = driver.Execute(DriverCommand.GetCookie, new() { { "name", name } }).Value;
 
-                return Cookie.FromDictionary((Dictionary<string, object>)rawCookie!);
+                return Cookie.FromDictionary((Dictionary<string, object?>)rawCookie!);
             }
             catch (NoSuchCookieException)
             {

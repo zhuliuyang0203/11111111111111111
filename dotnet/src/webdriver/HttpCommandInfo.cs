@@ -44,42 +44,34 @@ namespace OpenQA.Selenium
 
         private const string SessionIdPropertyName = "sessionId";
 
-        private string resourcePath;
-        private string method;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="HttpCommandInfo"/> class
         /// </summary>
         /// <param name="method">Method of the Command</param>
         /// <param name="resourcePath">Relative URL path to the resource used to execute the command</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="method"/> or <paramref name="resourcePath"/> are <see langword="null"/>.</exception>
         public HttpCommandInfo(string method, string resourcePath)
         {
-            this.resourcePath = resourcePath;
-            this.method = method;
+            this.ResourcePath = resourcePath ?? throw new ArgumentNullException(nameof(resourcePath));
+            this.Method = method ?? throw new ArgumentNullException(nameof(method));
         }
 
         /// <summary>
         /// Gets the URL representing the path to the resource.
         /// </summary>
-        public string ResourcePath
-        {
-            get { return this.resourcePath; }
-        }
+        public string ResourcePath { get; }
 
         /// <summary>
         /// Gets the HTTP method associated with the command.
         /// </summary>
-        public string Method
-        {
-            get { return this.method; }
-        }
+        public string Method { get; }
 
         /// <summary>
         /// Gets the unique identifier for this command within the scope of its protocol definition
         /// </summary>
         public override string CommandIdentifier
         {
-            get { return string.Format(CultureInfo.InvariantCulture, "{0} {1}", this.method, this.resourcePath); }
+            get { return string.Format(CultureInfo.InvariantCulture, "{0} {1}", this.Method, this.ResourcePath); }
         }
 
         /// <summary>
@@ -93,7 +85,7 @@ namespace OpenQA.Selenium
         /// substituted for the tokens in the template.</returns>
         public Uri CreateCommandUri(Uri baseUri, Command commandToExecute)
         {
-            string[] urlParts = this.resourcePath.Split(new string[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
+            string[] urlParts = this.ResourcePath.Split(["/"], StringSplitOptions.RemoveEmptyEntries);
             for (int i = 0; i < urlParts.Length; i++)
             {
                 string urlPart = urlParts[i];
@@ -103,13 +95,11 @@ namespace OpenQA.Selenium
                 }
             }
 
-            Uri fullUri;
             string relativeUrlString = string.Join("/", urlParts);
             Uri relativeUri = new Uri(relativeUrlString, UriKind.Relative);
-            bool uriCreateSucceeded = Uri.TryCreate(baseUri, relativeUri, out fullUri);
-            if (!uriCreateSucceeded)
+            if (!Uri.TryCreate(baseUri, relativeUri, out Uri? fullUri))
             {
-                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Unable to create URI from base {0} and relative path {1}", baseUri == null ? string.Empty : baseUri.ToString(), relativeUrlString));
+                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Unable to create URI from base {0} and relative path {1}", baseUri?.ToString(), relativeUrlString));
             }
 
             return fullUri;
@@ -133,11 +123,11 @@ namespace OpenQA.Selenium
             {
                 // Extract the URL parameter, and remove it from the parameters dictionary
                 // so it doesn't get transmitted as a JSON parameter.
-                if (commandToExecute.Parameters.ContainsKey(propertyName))
+                if (commandToExecute.Parameters.TryGetValue(propertyName, out var propertyValueObject))
                 {
-                    if (commandToExecute.Parameters[propertyName] != null)
+                    if (propertyValueObject != null)
                     {
-                        propertyValue = commandToExecute.Parameters[propertyName].ToString();
+                        propertyValue = propertyValueObject.ToString()!;
                         commandToExecute.Parameters.Remove(propertyName);
                     }
                 }
