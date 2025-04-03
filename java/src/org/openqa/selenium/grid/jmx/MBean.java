@@ -57,6 +57,7 @@ public class MBean implements DynamicMBean {
       this.setter = setter;
     }
 
+    @SuppressWarnings("NullAway")
     MBeanAttributeInfo getMBeanAttributeInfo() {
       try {
         return new MBeanAttributeInfo(name, description, getter, setter);
@@ -116,6 +117,7 @@ public class MBean implements DynamicMBean {
         .forEach(ai -> attributeMap.put(ai.name, ai));
   }
 
+  @SuppressWarnings("NullAway")
   private AttributeInfo getAttributeInfo(Method m) {
     ManagedAttribute ma = m.getAnnotation(ManagedAttribute.class);
     if (ma == null) {
@@ -130,6 +132,7 @@ public class MBean implements DynamicMBean {
     }
   }
 
+  @SuppressWarnings("NullAway")
   private Method findGetter(Method annotatedMethod) {
     ManagedAttribute ma = annotatedMethod.getAnnotation(ManagedAttribute.class);
     try {
@@ -151,6 +154,7 @@ public class MBean implements DynamicMBean {
     }
   }
 
+  @SuppressWarnings("NullAway")
   private Method findSetter(Method annotatedMethod) {
     ManagedAttribute ma = annotatedMethod.getAnnotation(ManagedAttribute.class);
     if (!"".equals(ma.setter())) {
@@ -170,6 +174,7 @@ public class MBean implements DynamicMBean {
     return null;
   }
 
+  @SuppressWarnings("NullAway")
   private Method findMethod(Class<?> cls, String name) {
     return Stream.of(cls.getMethods())
         .filter(m -> m.getName().equals(name))
@@ -184,6 +189,7 @@ public class MBean implements DynamicMBean {
         .forEach(oi -> operationMap.put(oi.name, oi));
   }
 
+  @SuppressWarnings("NullAway")
   private OperationInfo getOperationInfo(Method m) {
     ManagedOperation mo = m.getAnnotation(ManagedOperation.class);
     if (mo == null) {
@@ -213,6 +219,7 @@ public class MBean implements DynamicMBean {
     }
   }
 
+  @SuppressWarnings("NullAway")
   @Override
   public Object getAttribute(String attribute) {
     try {
@@ -232,6 +239,7 @@ public class MBean implements DynamicMBean {
     }
   }
 
+  @SuppressWarnings("NullAway")
   @Override
   public void setAttribute(Attribute attribute) {
     try {
@@ -256,11 +264,13 @@ public class MBean implements DynamicMBean {
     return resultList;
   }
 
+  @SuppressWarnings("NullAway")
   @Override
   public AttributeList setAttributes(AttributeList attributes) {
     return null;
   }
 
+  @SuppressWarnings("NullAway")
   @Override
   public Object invoke(String actionName, Object[] params, String[] signature) {
     try {

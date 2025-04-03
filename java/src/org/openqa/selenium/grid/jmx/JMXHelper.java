@@ -27,6 +27,7 @@ public class JMXHelper {
 
   private static final Logger LOG = Logger.getLogger(JMXHelper.class.getName());
 
+  @SuppressWarnings("NullAway")
   public MBean register(Object bean) {
     MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
     MBean mBean = new MBean(bean);
