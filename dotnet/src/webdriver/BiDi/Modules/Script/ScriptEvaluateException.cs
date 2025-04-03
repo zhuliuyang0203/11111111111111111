@@ -23,7 +23,7 @@ namespace OpenQA.Selenium.BiDi.Modules.Script;
 
 public class ScriptEvaluateException(ExceptionDetails evaluateResultException) : Exception
 {
-    public ExceptionDetails EvaluateResultException { get; } = evaluateResultException;
+    public ExceptionDetails ExceptionDetails { get; } = evaluateResultException;
 
-    public override string Message => $"{EvaluateResultException.Text}{Environment.NewLine}{string.Join(Environment.NewLine, EvaluateResultException.StackTrace.CallFrames)}";
+    public override string Message => $"{ExceptionDetails.Text}{Environment.NewLine}{string.Join(Environment.NewLine, ExceptionDetails.StackTrace.CallFrames)}";
 }
