@@ -35,8 +35,9 @@ public abstract class Command
     public int Id { get; internal set; }
 }
 
-internal abstract class Command<TCommandParameters>(TCommandParameters @params, string method) : Command(method)
+internal abstract class Command<TCommandParameters, TCommandResult>(TCommandParameters @params, string method) : Command(method)
     where TCommandParameters : CommandParameters
+    where TCommandResult : EmptyResult
 {
     [JsonPropertyOrder(2)]
     public TCommandParameters Params { get; } = @params;
@@ -46,3 +47,5 @@ internal record CommandParameters
 {
     public static CommandParameters Empty { get; } = new CommandParameters();
 }
+
+public record EmptyResult;
