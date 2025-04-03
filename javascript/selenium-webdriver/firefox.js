@@ -514,22 +514,22 @@ class ServiceBuilder extends remote.DriverService.Builder {
    * @return {!DriverService} A new driver service instance.
    */
   build() {
-    let port = this.options_.port || findFreePort();
+    let port = this.options_.port || findFreePort()
     let argsPromise = Promise.resolve(port).then((port) => {
       // Start with the default --port argument.
-      let args = this.options_.args.concat(`--port=${port}`);
+      let args = this.options_.args.concat(`--port=${port}`)
       // If the "--connect-existing" flag is not set, add the websocket port.
-      if (!this.options_.args.some(arg => arg === '--connect-existing')) {
-        return findFreePort().then(wsPort => {
-          args.push(`--websocket-port=${wsPort}`);
-          return args;
-        });
+      if (!this.options_.args.some((arg) => arg === '--connect-existing')) {
+        return findFreePort().then((wsPort) => {
+          args.push(`--websocket-port=${wsPort}`)
+          return args
+        })
       }
-      return args;
-    });
+      return args
+    })
 
-    let options = Object.assign({}, this.options_, { args: argsPromise, port });
-    return new remote.DriverService(this.exe_, options);
+    let options = Object.assign({}, this.options_, { args: argsPromise, port })
+    return new remote.DriverService(this.exe_, options)
   }
 }
 
