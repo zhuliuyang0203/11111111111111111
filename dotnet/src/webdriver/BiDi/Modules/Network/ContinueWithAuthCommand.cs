@@ -48,3 +48,4 @@ public record ContinueWithAuthNoCredentialsOptions : ContinueWithAuthOptions;
 public record ContinueWithAuthDefaultCredentialsOptions : ContinueWithAuthNoCredentialsOptions;
 
 public record ContinueWithAuthCancelCredentialsOptions : ContinueWithAuthNoCredentialsOptions;
+
