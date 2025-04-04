@@ -280,7 +280,7 @@ class Request:
         command = {"method": method, "params": params}
         cmd = yield command
         return cmd
-    
+
     def fail_request(self):
         """Fail this request."""
 
