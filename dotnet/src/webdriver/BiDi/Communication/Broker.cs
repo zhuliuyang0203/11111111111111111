@@ -174,7 +174,10 @@ public class Broker : IAsyncDisposable
             }
             catch (Exception ex)
             {
-                _logger.Error($"Couldn't process received message: {ex}");
+                if (!cancellationToken.IsCancellationRequested)
+                {
+                    _logger.Error($"Couldn't process received message: {ex}");
+                }
             }
 
             //switch (message)
