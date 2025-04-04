@@ -17,6 +17,7 @@
 
 package org.openqa.selenium;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -26,12 +27,14 @@ import java.net.URI;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.bidi.module.Network;
 import org.openqa.selenium.bidi.network.Header;
 import org.openqa.selenium.environment.webserver.NettyAppServer;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.remote.http.Contents;
 import org.openqa.selenium.remote.http.HttpMethod;
 import org.openqa.selenium.remote.http.HttpRequest;
 import org.openqa.selenium.remote.http.HttpResponse;
@@ -181,7 +184,7 @@ class WebNetworkTest extends JupiterTestBase {
   @Ignore(Browser.CHROME)
   @Ignore(Browser.EDGE)
   void canAddRequestHandler() {
-    Predicate<URI> filter = uri -> uri.getPath().contains("logEntry");
+    Predicate<HttpRequest> filter = httpRequest -> httpRequest.getUri().contains("logEntry");
 
     page = appServer.whereIs("/bidi/logEntryAdded.html");
 
@@ -197,7 +200,7 @@ class WebNetworkTest extends JupiterTestBase {
   @Ignore(Browser.CHROME)
   @Ignore(Browser.EDGE)
   void canAddRequestHandlerToModifyMethod() {
-    Predicate<URI> filter = uri -> uri.getPath().contains("logEntry");
+    Predicate<HttpRequest> filter = httpRequest -> httpRequest.getUri().contains("logEntry");
 
     page = appServer.whereIs("/bidi/logEntryAdded.html");
 
@@ -235,7 +238,7 @@ class WebNetworkTest extends JupiterTestBase {
     appServer = new NettyAppServer(route);
     appServer.start();
 
-    Predicate<URI> filter = uri -> uri.getPath().contains("network");
+    Predicate<HttpRequest> filter = httpRequest -> httpRequest.getUri().contains("network");
 
     CountDownLatch latch = new CountDownLatch(1);
 
@@ -285,7 +288,7 @@ class WebNetworkTest extends JupiterTestBase {
     appServer = new NettyAppServer(route);
     appServer.start();
 
-    Predicate<URI> filter = uri -> uri.getPath().contains("network");
+    Predicate<HttpRequest> filter = httpRequest -> httpRequest.getUri().contains("network");
 
     page = appServer.whereIs("network.html");
 
@@ -311,12 +314,13 @@ class WebNetworkTest extends JupiterTestBase {
 
     ((RemoteWebDriver) driver)
         .network()
-        .addRequestHandler(uri -> uri.getPath().contains("logEntry"), httpRequest -> httpRequest);
+        .addRequestHandler(
+            httpRequest -> httpRequest.getUri().contains("logEntry"), httpRequest -> httpRequest);
 
     ((RemoteWebDriver) driver)
         .network()
         .addRequestHandler(
-            uri -> uri.getPath().contains("hello"),
+            httpRequest -> httpRequest.getUri().contains("hello"),
             httpRequest -> new HttpRequest(HttpMethod.HEAD, page));
 
     driver.get(page);
@@ -331,11 +335,13 @@ class WebNetworkTest extends JupiterTestBase {
   void canAddMultipleRequestHandlersWithTheSameFilter() {
     ((RemoteWebDriver) driver)
         .network()
-        .addRequestHandler(uri -> uri.getPath().contains("logEntry"), httpRequest -> httpRequest);
+        .addRequestHandler(
+            httpRequest -> httpRequest.getUri().contains("logEntry"), httpRequest -> httpRequest);
 
     ((RemoteWebDriver) driver)
         .network()
-        .addRequestHandler(uri -> uri.getPath().contains("logEntry"), httpRequest -> httpRequest);
+        .addRequestHandler(
+            httpRequest -> httpRequest.getUri().contains("logEntry"), httpRequest -> httpRequest);
 
     page = appServer.whereIs("/bidi/logEntryAdded.html");
 
@@ -368,7 +374,7 @@ class WebNetworkTest extends JupiterTestBase {
     appServer = new NettyAppServer(route);
     appServer.start();
 
-    Predicate<URI> filter = uri -> uri.getPath().contains("network");
+    Predicate<HttpRequest> filter = httpRequest -> httpRequest.getUri().contains("network");
 
     CountDownLatch latch = new CountDownLatch(1);
 
@@ -409,7 +415,7 @@ class WebNetworkTest extends JupiterTestBase {
   @Ignore(Browser.CHROME)
   @Ignore(Browser.EDGE)
   void canRemoveRequestHandlerThatDoesNotExist() {
-    ((RemoteWebDriver) driver).network().removeAuthenticationHandler(5);
+    ((RemoteWebDriver) driver).network().removeRequestHandler(5);
     page = appServer.whereIs("/bidi/logEntryAdded.html");
     driver.get(page);
 
@@ -426,16 +432,174 @@ class WebNetworkTest extends JupiterTestBase {
     ((RemoteWebDriver) driver)
         .network()
         .addRequestHandler(
-            uri -> uri.getPath().contains("logEntryAdded"),
+            httpRequest -> httpRequest.getUri().contains("logEntryAdded"),
             httpRequest -> new HttpRequest(HttpMethod.DELETE, page));
 
     ((RemoteWebDriver) driver)
         .network()
         .addRequestHandler(
-            uri -> uri.getPath().contains("hello"),
+            httpRequest -> httpRequest.getUri().contains("hello"),
             httpRequest -> new HttpRequest(HttpMethod.HEAD, page));
 
     ((RemoteWebDriver) driver).network().clearRequestHandlers();
+
+    driver.get(page);
+
+    assertThat(driver.findElement(By.tagName("h1")).getText()).isEqualTo("Long entry added events");
+  }
+
+  @Test
+  @NeedsFreshDriver
+  @Ignore(Browser.CHROME)
+  @Ignore(Browser.EDGE)
+  void canAddResponseHandlerToModifyStatusCode() {
+    AtomicBoolean seen = new AtomicBoolean(false);
+    Predicate<HttpRequest> filter = httpRequest -> httpRequest.getUri().contains("logEntry");
+
+    page = appServer.whereIs("/bidi/logEntryAdded.html");
+
+    try (Network network = new Network(driver)) {
+
+      ((RemoteWebDriver) driver)
+          .network()
+          .addResponseHandler(
+              filter,
+              () -> {
+                HttpResponse res = new HttpResponse();
+                return res.setStatus(500);
+              });
+
+      network.onResponseCompleted(
+          responseDetails -> {
+            if (responseDetails.getResponseData().getUrl().contains("logEntryAdded")) {
+              assertThat(responseDetails.getResponseData().getStatus()).isEqualTo(500);
+              seen.set(true);
+            }
+          });
+
+      driver.get(page);
+
+      assertThat(seen.get()).isTrue();
+    }
+  }
+
+  @Test
+  @NeedsFreshDriver
+  @Ignore(Browser.CHROME)
+  @Ignore(Browser.EDGE)
+  void canAddResponseHandlerToModifyBody() {
+    Predicate<HttpRequest> filter = httpRequest -> httpRequest.getUri().contains("logEntry");
+
+    page = appServer.whereIs("/bidi/logEntryAdded.html");
+
+    ((RemoteWebDriver) driver)
+        .network()
+        .addResponseHandler(
+            filter,
+            () ->
+                new HttpResponse().setContent(Contents.string("<h1>Mocked response</h1>", UTF_8)));
+
+    driver.get(page);
+
+    assertThat(driver.getPageSource()).contains("Mocked response");
+  }
+
+  @Test
+  @NeedsFreshDriver
+  @Ignore(Browser.CHROME)
+  @Ignore(Browser.EDGE)
+  void canAddResponseHandlerToModifyHeaders() {
+    AtomicBoolean seen = new AtomicBoolean(false);
+    Predicate<HttpRequest> filter = httpRequest -> httpRequest.getUri().contains("logEntry");
+
+    page = appServer.whereIs("/bidi/logEntryAdded.html");
+
+    try (Network network = new Network(driver)) {
+
+      ((RemoteWebDriver) driver)
+          .network()
+          .addResponseHandler(
+              filter,
+              () -> {
+                HttpResponse res = new HttpResponse();
+                return res.setHeader("hello", "world");
+              });
+
+      network.onResponseCompleted(
+          responseDetails -> {
+            if (responseDetails.getResponseData().getUrl().contains("logEntryAdded")) {
+              assertThat(responseDetails.getResponseData().getStatus()).isEqualTo(200);
+              Header header = responseDetails.getResponseData().getHeaders().get(0);
+              assertThat(header.getName()).isEqualTo("hello");
+              assertThat(header.getValue().getValue()).isEqualTo("world");
+              seen.set(true);
+            }
+          });
+
+      driver.get(page);
+
+      assertThat(seen.get()).isTrue();
+    }
+  }
+
+  @Test
+  @NeedsFreshDriver
+  @Ignore(Browser.CHROME)
+  @Ignore(Browser.EDGE)
+  void canAddMultipleResponseHandlersWithTheSameFilter() {
+    ((RemoteWebDriver) driver)
+        .network()
+        .addResponseHandler(
+            httpRequest -> httpRequest.getUri().contains("logEntryAdded"),
+            () ->
+                new HttpResponse().setContent(Contents.string("<h1>Mocked response</h1>", UTF_8)));
+
+    ((RemoteWebDriver) driver)
+        .network()
+        .addResponseHandler(
+            httpRequest -> httpRequest.getUri().contains("logEntryAdded"),
+            () ->
+                new HttpResponse().setContent(Contents.string("<h1>Mocked response</h1>", UTF_8)));
+
+    page = appServer.whereIs("/bidi/logEntryAdded.html");
+
+    driver.get(page);
+
+    assertThat(driver.getPageSource()).contains("Mocked response");
+  }
+
+  @Test
+  @NeedsFreshDriver
+  @Ignore(Browser.CHROME)
+  @Ignore(Browser.EDGE)
+  void canRemoveResponseHandlerThatDoesNotExist() {
+    ((RemoteWebDriver) driver).network().removeResponseHandler(5);
+    page = appServer.whereIs("/bidi/logEntryAdded.html");
+    driver.get(page);
+
+    assertThat(driver.findElement(By.tagName("h1")).getText()).isEqualTo("Long entry added events");
+  }
+
+  @Test
+  @NeedsFreshDriver
+  @Ignore(Browser.CHROME)
+  @Ignore(Browser.EDGE)
+  void canClearResponseHandlers() {
+    page = appServer.whereIs("/bidi/logEntryAdded.html");
+
+    ((RemoteWebDriver) driver)
+        .network()
+        .addResponseHandler(
+            httpRequest -> httpRequest.getUri().contains("logEntryAdded"), HttpResponse::new);
+
+    ((RemoteWebDriver) driver)
+        .network()
+        .addResponseHandler(
+            httpRequest -> httpRequest.getUri().contains("logEntryAdded"),
+            () ->
+                new HttpResponse().setContent(Contents.string("<h1>Mocked response</h1>", UTF_8)));
+
+    ((RemoteWebDriver) driver).network().clearResponseHandlers();
 
     driver.get(page);
 
