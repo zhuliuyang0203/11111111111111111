@@ -75,7 +75,7 @@ namespace OpenQA.Selenium.BiDi.Communication.Json;
 [JsonSerializable(typeof(Message))]
 
 [JsonSerializable(typeof(Modules.Session.StatusCommand))]
-[JsonSerializable(typeof(Modules.Session.StatusResult))]
+[JsonSerializable(typeof(MessageSuccess<Modules.Session.StatusResult>))]
 [JsonSerializable(typeof(Modules.Session.NewCommand))]
 [JsonSerializable(typeof(Modules.Session.NewResult))]
 [JsonSerializable(typeof(Modules.Session.EndCommand))]
