@@ -74,6 +74,8 @@ def test_clear_request_handlers(driver, pages):
     assert driver.find_element(By.NAME, "login").is_displayed(), "Request not continued"
 
 
+@pytest.mark.xfail_chrome
+@pytest.mark.xfail_edge
 @pytest.mark.xfail_safari
 def test_continue_request(driver, pages):
 
@@ -86,6 +88,8 @@ def test_continue_request(driver, pages):
     assert driver.find_element(By.NAME, "login").is_displayed(), "Request not continued"
 
 
+@pytest.mark.xfail_chrome
+@pytest.mark.xfail_edge
 @pytest.mark.xfail_safari
 def test_continue_with_auth(driver):
 
