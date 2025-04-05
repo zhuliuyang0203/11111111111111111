@@ -39,7 +39,7 @@ public sealed class Broker : IAsyncDisposable
     private readonly BiDi _bidi;
     private readonly ITransport _transport;
 
-    private readonly ConcurrentDictionary<long, (Command, TaskCompletionSource<EmptyResult>)> _pendingCommands = new();
+    private readonly ConcurrentDictionary<long, CommandInfo> _pendingCommands = new();
     private readonly BlockingCollection<MessageEvent> _pendingEvents = [];
     private readonly Dictionary<string, Type> _eventTypesMap = [];
 
@@ -206,7 +206,7 @@ public sealed class Broker : IAsyncDisposable
 
         cts.Token.Register(() => tcs.TrySetCanceled(cts.Token));
 
-        _pendingCommands[command.Id] = (command, tcs);
+        _pendingCommands[command.Id] = new(command.Id, command.ResultType, tcs);
 
         var data = JsonSerializer.SerializeToUtf8Bytes(command, typeof(TCommand), _jsonSerializerContext);
 
@@ -379,8 +379,8 @@ public sealed class Broker : IAsyncDisposable
                 if (id is null) throw new JsonException("The remote end responded with 'success' message type, but missed required 'id' property.");
 
                 var successCommand = _pendingCommands[id.Value];
-                var messageSuccess = JsonSerializer.Deserialize(ref resultReader, successCommand.Item1.ResultType, _jsonSerializerContext)!;
-                successCommand.Item2.SetResult((EmptyResult)messageSuccess);
+                var messageSuccess = JsonSerializer.Deserialize(ref resultReader, successCommand.ResultType, _jsonSerializerContext)!;
+                successCommand.TaskCompletionSource.SetResult((EmptyResult)messageSuccess);
                 _pendingCommands.TryRemove(id.Value, out _);
                 break;
 
@@ -400,9 +400,18 @@ public sealed class Broker : IAsyncDisposable
 
                 var messageError = new MessageError(id.Value) { Error = error, Message = message };
                 var errorCommand = _pendingCommands[messageError.Id];
-                errorCommand.Item2.SetException(new BiDiException($"{messageError.Error}: {messageError.Message}"));
+                errorCommand.TaskCompletionSource.SetException(new BiDiException($"{messageError.Error}: {messageError.Message}"));
                 _pendingCommands.TryRemove(messageError.Id, out _);
                 break;
         }
     }
+
+    class CommandInfo(long id, Type resultType, TaskCompletionSource<EmptyResult> taskCompletionSource)
+    {
+        public long Id { get; } = id;
+
+        public Type ResultType { get; } = resultType;
+
+        public TaskCompletionSource<EmptyResult> TaskCompletionSource { get; } = taskCompletionSource;
+    };
 }
