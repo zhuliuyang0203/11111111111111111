@@ -1120,11 +1120,11 @@ namespace :all do
 
   desc 'Update all API Documentation'
   task :docs do
-    Rake::Task['java:docs'].invoke(true)
-    Rake::Task['py:docs'].invoke(true)
-    Rake::Task['rb:docs'].invoke(true)
-    Rake::Task['dotnet:docs'].invoke(true)
-    Rake::Task['node:docs'].invoke(true)
+    Rake::Task['java:docs'].invoke('skip_update')
+    Rake::Task['py:docs'].invoke('skip_update')
+    Rake::Task['rb:docs'].invoke('skip_update')
+    Rake::Task['dotnet:docs'].invoke('skip_update')
+    Rake::Task['node:docs'].invoke('skip_update')
 
     update_gh_pages
   end

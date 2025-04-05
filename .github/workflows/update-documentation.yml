@@ -85,7 +85,7 @@ jobs:
           branch: api-docs-${{ inputs.version }}
           base: gh-pages
           add-paths: docs/api/**
-          title: Update documentation for Selenium ${{ inputs.version }}
+          title: Update documentation for Selenium ${{ inputs.version }}-${{ inputs.language }}
           body: |
             This PR updates the API documentation for version **${{ inputs.version }}-${{ inputs.language }}**.
 
