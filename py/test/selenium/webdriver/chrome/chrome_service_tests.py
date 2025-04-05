@@ -30,17 +30,24 @@ def test_uses_chromedriver_logging(clean_driver, driver_executable) -> None:
     log_file = "chromedriver.log"
     service_args = ["--append-log"]
 
-    service = Service(
+    service1 = Service(
         log_output=log_file,
         service_args=service_args,
         executable_path=driver_executable,
     )
+
+    service2 = Service(
+        log_output=log_file,
+        service_args=service_args,
+        executable_path=driver_executable,
+    )
+
     driver2 = None
     try:
-        driver1 = clean_driver(service=service)
+        driver1 = clean_driver(service=service1)
         with open(log_file) as fp:
             lines = len(fp.readlines())
-        driver2 = clean_driver(service=service)
+        driver2 = clean_driver(service=service2)
         with open(log_file) as fp:
             assert len(fp.readlines()) >= 2 * lines
     finally:
