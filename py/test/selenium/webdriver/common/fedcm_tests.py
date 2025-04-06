@@ -65,7 +65,7 @@ class TestFedCM:
 
     def test_trigger_and_verify_dialog_subtitle(self, driver):
         driver.execute_script("triggerFedCm();")
-        dialog = driver.fedcm_dialog()
+        dialog = driver.fedcm_dialog(timeout=10)
         assert dialog.subtitle is None
 
     def test_trigger_and_verify_dialog_type(self, driver):
@@ -75,7 +75,7 @@ class TestFedCM:
 
     def test_trigger_and_verify_account_list(self, driver):
         driver.execute_script("triggerFedCm();")
-        dialog = driver.fedcm_dialog()
+        dialog = driver.fedcm_dialog(timeout=10)
         accounts = dialog.get_accounts()
         assert len(accounts) > 0
         assert accounts[0].name == "John Doe"
