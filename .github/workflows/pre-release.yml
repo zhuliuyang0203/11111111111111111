@@ -34,8 +34,7 @@ jobs:
           fi
           git checkout -b rust-release-${{ github.event.inputs.version }}
       - name: Update Rust Version
-        run: |
-          ./go rust:version ${{ github.event.inputs.version }}
+        run: ./go rust:version ${{ github.event.inputs.version }}
       - name: Commit Rust updates
         run: git commit -m "update selenium manager version and rust changelog"
       - name: Push changes
