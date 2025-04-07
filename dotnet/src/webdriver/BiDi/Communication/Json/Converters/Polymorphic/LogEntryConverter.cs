@@ -20,23 +20,20 @@
 using OpenQA.Selenium.BiDi.Communication.Json.Internal;
 using OpenQA.Selenium.BiDi.Modules.Log;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Communication.Json.Converters.Polymorphic;
 
 // https://github.com/dotnet/runtime/issues/72604
-[UnconditionalSuppressMessage("Trimming", "IL2026", Justification = "Json serializer options should have AOT-safe type resolution")]
-[UnconditionalSuppressMessage("AOT", "IL3050", Justification = "Json serializer options should have AOT-safe type resolution")]
 internal class LogEntryConverter : JsonConverter<Modules.Log.LogEntry>
 {
     public override Modules.Log.LogEntry? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         return reader.GetDiscriminator("type") switch
         {
-            "console" => JsonSerializer.Deserialize<ConsoleLogEntry>(ref reader, options),
-            "javascript" => JsonSerializer.Deserialize<JavascriptLogEntry>(ref reader, options),
+            "console" => JsonSerializer.Deserialize(ref reader, options.GetTypeInfo<ConsoleLogEntry>()),
+            "javascript" => JsonSerializer.Deserialize(ref reader, options.GetTypeInfo<JavascriptLogEntry>()),
             _ => null,
         };
     }

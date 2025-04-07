@@ -20,29 +20,26 @@
 using OpenQA.Selenium.BiDi.Communication.Json.Internal;
 using OpenQA.Selenium.BiDi.Modules.Script;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Communication.Json.Converters.Polymorphic;
 
 // https://github.com/dotnet/runtime/issues/72604
-[UnconditionalSuppressMessage("Trimming", "IL2026", Justification = "Json serializer options should have AOT-safe type resolution")]
-[UnconditionalSuppressMessage("AOT", "IL3050", Justification = "Json serializer options should have AOT-safe type resolution")]
 internal class RealmInfoConverter : JsonConverter<RealmInfo>
 {
     public override RealmInfo? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         return reader.GetDiscriminator("type") switch
         {
-            "window" => JsonSerializer.Deserialize<WindowRealmInfo>(ref reader, options),
-            "dedicated-worker" => JsonSerializer.Deserialize<DedicatedWorkerRealmInfo>(ref reader, options),
-            "shared-worker" => JsonSerializer.Deserialize<SharedWorkerRealmInfo>(ref reader, options),
-            "service-worker" => JsonSerializer.Deserialize<ServiceWorkerRealmInfo>(ref reader, options),
-            "worker" => JsonSerializer.Deserialize<WorkerRealmInfo>(ref reader, options),
-            "paint-worklet" => JsonSerializer.Deserialize<PaintWorkletRealmInfo>(ref reader, options),
-            "audio-worklet" => JsonSerializer.Deserialize<AudioWorkletRealmInfo>(ref reader, options),
-            "worklet" => JsonSerializer.Deserialize<WorkletRealmInfo>(ref reader, options),
+            "window" => JsonSerializer.Deserialize(ref reader, options.GetTypeInfo<WindowRealmInfo>()),
+            "dedicated-worker" => JsonSerializer.Deserialize(ref reader, options.GetTypeInfo<DedicatedWorkerRealmInfo>()),
+            "shared-worker" => JsonSerializer.Deserialize(ref reader, options.GetTypeInfo<SharedWorkerRealmInfo>()),
+            "service-worker" => JsonSerializer.Deserialize(ref reader, options.GetTypeInfo<ServiceWorkerRealmInfo>()),
+            "worker" => JsonSerializer.Deserialize(ref reader, options.GetTypeInfo<WorkerRealmInfo>()),
+            "paint-worklet" => JsonSerializer.Deserialize(ref reader, options.GetTypeInfo<PaintWorkletRealmInfo>()),
+            "audio-worklet" => JsonSerializer.Deserialize(ref reader, options.GetTypeInfo<AudioWorkletRealmInfo>()),
+            "worklet" => JsonSerializer.Deserialize(ref reader, options.GetTypeInfo<WorkletRealmInfo>()),
             _ => null,
         };
     }
