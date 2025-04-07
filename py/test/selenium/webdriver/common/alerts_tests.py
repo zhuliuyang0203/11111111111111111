@@ -195,6 +195,8 @@ def test_should_throw_an_exception_if_an_alert_has_not_been_dealt_with_and_dismi
         driver.find_element(By.ID, "select").click()
     alert = _wait_for_alert(driver)
     alert.dismiss()
+    with pytest.raises(NoAlertPresentException):
+        alert.text
 
 
 def test_prompt_should_use_default_value_if_no_keys_sent(driver, pages):
