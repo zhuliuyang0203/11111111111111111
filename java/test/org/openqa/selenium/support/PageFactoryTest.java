@@ -32,6 +32,7 @@ import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.AbstractExtendedElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.TickingClock;
 import org.openqa.selenium.support.ui.Wait;
@@ -53,6 +54,38 @@ class PageFactoryTest {
 
     assertThat(page.q).isNotNull();
     assertThat(page.list).isNotNull();
+  }
+
+  @Test
+  void shouldProxyExtendedElements() {
+    PublicPageWithExtendedElements page = new PublicPageWithExtendedElements();
+
+    assertThat(page.q).isNull();
+    assertThat(page.list).isNull();
+    assertThat(page.rendered).isNull();
+    assertThat(page.renderedList).isNull();
+
+    PageFactory.initElements(searchContext, page);
+
+    assertThat(page.q).isNotNull();
+    assertThat(page.list).isNotNull();
+    assertThat(page.rendered).isNotNull();
+    assertThat(page.renderedList).isNotNull();
+  }
+
+  @Test
+  void shouldProxyNestedExtendedElements() {
+    PublicPageWithExtendedElements page = new PublicPageWithExtendedElements();
+
+    assertThat(page.q).isNull();
+
+    PageFactory.initElements(searchContext, page);
+
+    assertThat(page.q).isNotNull();
+
+    assertThat(page.q.a).isNull();
+    PageFactory.initElements(page.q, page.q);
+    assertThat(page.q.a).isNotNull();
   }
 
   @Test
@@ -154,7 +187,7 @@ class PageFactoryTest {
     GrottyPage page = new GrottyPage();
 
     assertThatExceptionOfType(IllegalArgumentException.class)
-        .isThrownBy(() -> PageFactory.initElements((WebDriver) null, page));
+      .isThrownBy(() -> PageFactory.initElements((WebDriver) null, page));
   }
 
   @Test
@@ -162,25 +195,66 @@ class PageFactoryTest {
     GrottyPage2 page = new GrottyPage2();
 
     assertThatExceptionOfType(IllegalArgumentException.class)
-        .isThrownBy(() -> PageFactory.initElements((WebDriver) null, page));
+      .isThrownBy(() -> PageFactory.initElements((WebDriver) null, page));
   }
 
   @Test
   void shouldNotThrowANoSuchElementExceptionWhenUsedWithAFluentWait() {
     WebDriver driver = mock(WebDriver.class);
     when(driver.findElement(ArgumentMatchers.any()))
-        .thenThrow(new NoSuchElementException("because"));
+      .thenThrow(new NoSuchElementException("because"));
 
     TickingClock clock = new TickingClock();
     Wait<WebDriver> wait =
-        new WebDriverWait(driver, Duration.ofSeconds(1), Duration.ofMillis(1001), clock, clock);
+      new WebDriverWait(driver, Duration.ofSeconds(1), Duration.ofMillis(1001), clock, clock);
 
     PublicPage page = new PublicPage();
     PageFactory.initElements(driver, page);
     WebElement element = page.q;
 
     assertThatExceptionOfType(TimeoutException.class)
-        .isThrownBy(() -> wait.until(ExpectedConditions.visibilityOf(element)));
+      .isThrownBy(() -> wait.until(ExpectedConditions.visibilityOf(element)));
+  }
+
+  public static class ExtendedElement extends AbstractExtendedElement {
+
+    public ExtendedElement(WebElement element) {
+      super(element);
+    }
+
+    @FindBy(name = "a")
+    public OtherExtendedElement a;
+
+    @FindBy(name = "a")
+    public List<OtherExtendedElement> aList;
+
+    @FindBy(name = "a")
+    public WebElement internalRender;
+
+    @FindBy(name = "a")
+    public List<WebElement> internalRenderList;
+  }
+
+
+  public static class OtherExtendedElement extends AbstractExtendedElement {
+
+    public OtherExtendedElement(WebElement element) {
+      super(element);
+    }
+  }
+
+  public static class PublicPageWithExtendedElements {
+    @FindBy(name = "q")
+    public ExtendedElement q;
+
+    @FindBy(name = "q")
+    public List<ExtendedElement> list;
+
+    @FindBy(name = "a")
+    public WebElement rendered;
+
+    @FindBy(name = "a")
+    public List<WebElement> renderedList;
   }
 
   public static class PublicPage {

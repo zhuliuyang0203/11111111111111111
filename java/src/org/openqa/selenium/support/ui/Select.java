@@ -22,10 +22,9 @@ import java.util.stream.Collectors;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.WrapsElement;
 
 /** Models a SELECT tag, providing helper methods to select and deselect options. */
-public class Select implements ISelect, WrapsElement {
+public class Select extends AbstractExtendedElement implements ISelect {
 
   private final WebElement element;
   private final boolean isMulti;
@@ -38,6 +37,7 @@ public class Select implements ISelect, WrapsElement {
    * @throws UnexpectedTagNameException when element is not a SELECT
    */
   public Select(WebElement element) {
+    super(element);
     String tagName = element.getTagName();
 
     if (!"select".equalsIgnoreCase(tagName)) {

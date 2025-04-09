@@ -31,6 +31,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.pagefactory.internal.LocatingElementHandler;
 import org.openqa.selenium.support.pagefactory.internal.LocatingElementListHandler;
+import org.openqa.selenium.support.ui.AbstractExtendedElement;
 
 /**
  * Default decorator for use with PageFactory. Will decorate 1) all the WebElement fields and 2)
@@ -48,7 +49,8 @@ public class DefaultFieldDecorator implements FieldDecorator {
 
   @Override
   public Object decorate(ClassLoader loader, Field field) {
-    if (!(WebElement.class.isAssignableFrom(field.getType()) || isDecoratableList(field))) {
+    Class<?> type = field.getType();
+    if (!(WebElement.class.isAssignableFrom(type) || isDecoratableList(field))) {
       return null;
     }
 
@@ -57,11 +59,20 @@ public class DefaultFieldDecorator implements FieldDecorator {
       return null;
     }
 
-    if (WebElement.class.isAssignableFrom(field.getType())) {
-      return proxyForLocator(loader, locator);
-    } else if (List.class.isAssignableFrom(field.getType())) {
-      return proxyForListLocator(loader, locator);
-    } else {
+    if (WebElement.class.isAssignableFrom(type)) {
+      WebElement elementProxy = proxyForLocator(loader, locator);
+      if(AbstractExtendedElement.class.isAssignableFrom(type)) {
+        try {
+          return type.getConstructor(WebElement.class).newInstance(elementProxy);
+        } catch (Exception e) {
+          return null;
+        }
+      }
+      return elementProxy;
+    } else if (List.class.isAssignableFrom(type)) {
+      return proxyForListLocator(loader, locator, getErasureType(field));
+    }
+    else {
       return null;
     }
   }
@@ -81,12 +92,26 @@ public class DefaultFieldDecorator implements FieldDecorator {
     Type listType = ((ParameterizedType) genericType).getActualTypeArguments()[0];
 
     if (!WebElement.class.equals(listType)) {
-      return false;
+      if (listType instanceof Class) {
+        if (!AbstractExtendedElement.class.isAssignableFrom((Class<?>) listType)) {
+          return false;
+        }
+      } else {
+        return false;
+      }
     }
 
     return field.getAnnotation(FindBy.class) != null
         || field.getAnnotation(FindBys.class) != null
         || field.getAnnotation(FindAll.class) != null;
+  }
+
+  private Class<?> getErasureType(Field field) {
+    Type genericType = field.getGenericType();
+    if (!(genericType instanceof ParameterizedType)) {
+      return null;
+    }
+    return (Class<?>) ((ParameterizedType) genericType).getActualTypeArguments()[0];
   }
 
   protected WebElement proxyForLocator(ClassLoader loader, ElementLocator locator) {
@@ -103,11 +128,11 @@ public class DefaultFieldDecorator implements FieldDecorator {
   }
 
   @SuppressWarnings("unchecked")
-  protected List<WebElement> proxyForListLocator(ClassLoader loader, ElementLocator locator) {
-    InvocationHandler handler = new LocatingElementListHandler(locator);
+  protected <T extends WebElement> List<T> proxyForListLocator(ClassLoader loader, ElementLocator locator, Class<?> type) {
+    InvocationHandler handler = new LocatingElementListHandler(locator, type);
 
-    List<WebElement> proxy;
-    proxy = (List<WebElement>) Proxy.newProxyInstance(loader, new Class[] {List.class}, handler);
+    List<T> proxy;
+    proxy = (List<T>) Proxy.newProxyInstance(loader, new Class[] {List.class}, handler);
     return proxy;
   }
 }

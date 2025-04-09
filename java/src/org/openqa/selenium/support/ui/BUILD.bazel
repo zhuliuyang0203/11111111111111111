@@ -28,6 +28,7 @@ java_library(
 java_library(
     name = "elements",
     srcs = [
+        "AbstractExtendedElement.java",
         "ISelect.java",
         "Quotes.java",
         "Select.java",
@@ -38,6 +39,7 @@ java_library(
     ],
     deps = [
         "//java/src/org/openqa/selenium:core",
+        "//java/src/org/openqa/selenium/remote",
     ],
 )
 

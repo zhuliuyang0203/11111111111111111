@@ -25,9 +25,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.testing.Ignore;
 import org.openqa.selenium.testing.JupiterTestBase;
+
+import java.util.List;
 
 class SelectElementTest extends JupiterTestBase {
 
@@ -86,6 +91,34 @@ class SelectElementTest extends JupiterTestBase {
     assertThat(select.getOptions())
         .extracting(WebElement::getText)
         .containsExactly("One", "Two", "Four", "Still learning how to count, apparently");
+  }
+
+  @Test
+  void selectExtensionWithPageFactory() {
+    PageWithSelect page = new PageWithSelect(driver);
+    assertThat(page.selector.getOptions())
+      .extracting(WebElement::getText)
+      .containsExactly("One", "Two", "Four", "Still learning how to count, apparently");
+  }
+
+  @Test
+  void shouldAllowOptionsToBeSelectedByVisibleTextFromExtension() {
+    PageWithSelect page = new PageWithSelect(driver);
+    page.selectElement.get(0).selectByVisibleText("select_2");
+    WebElement firstSelected = page.selectElement.get(0).getFirstSelectedOption();
+    assertThat(firstSelected.getText()).isEqualTo("select_2");
+  }
+
+  public class PageWithSelect {
+    public PageWithSelect(WebDriver driver) {
+      PageFactory.initElements(driver, this);
+    }
+
+    @FindBy(name = "selectomatic")
+    public Select selector;
+
+    @FindBy(name = "select_empty_multiple")
+    public List<Select> selectElement;
   }
 
   @Test
