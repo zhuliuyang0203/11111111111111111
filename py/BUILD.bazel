@@ -58,16 +58,15 @@ compile_pip_requirements(
     requirements_in = ":requirements.txt",
     requirements_txt = ":requirements_lock.txt",
     tags = [
-        "skip-remote",  # This test won't run on the RBE because of a lack of network connectivity
+        "skip-rbe",  # This test won't run on the RBE because of a lack of network connectivity
     ],
 )
 
-SE_VERSION = "4.30.0.202502201302"
+SE_VERSION = "4.32.0.202504060755"
 
 BROWSER_VERSIONS = [
-    "v85",
-    "v131",
-    "v132",
+    "v134",
+    "v135",
     "v133",
 ]
 
@@ -406,7 +405,6 @@ BIDI_TESTS = glob(["test/selenium/webdriver/common/**/*bidi*_tests.py"])
         ),
         args = [
             "--instafail",
-            "--bidi=false",
         ] + BROWSERS[browser]["args"],
         data = BROWSERS[browser]["data"],
         env_inherit = ["DISPLAY"],
@@ -433,7 +431,7 @@ BIDI_TESTS = glob(["test/selenium/webdriver/common/**/*bidi*_tests.py"])
         ),
         args = [
             "--instafail",
-            "--bidi=true",
+            "--bidi",
         ] + BROWSERS[browser]["args"],
         data = BROWSERS[browser]["data"],
         env_inherit = ["DISPLAY"],
@@ -481,13 +479,13 @@ py_test_suite(
     ),
     args = [
         "--instafail",
-        "--headless=true",
+        "--headless",
     ] + BROWSERS["chrome"]["args"],
     data = BROWSERS["chrome"]["data"],
     env_inherit = ["DISPLAY"],
     tags = [
         "no-sandbox",
-        "skip-remote",
+        "skip-rbe",
     ] + BROWSERS["chrome"]["tags"],
     deps = [
         ":init-tree",
@@ -534,7 +532,7 @@ py_test_suite(
     env_inherit = ["DISPLAY"],
     tags = [
         "no-sandbox",
-        "skip-remote",
+        "skip-rbe",
     ] + BROWSERS["firefox"]["tags"],
     deps = [
         ":init-tree",
@@ -562,7 +560,7 @@ py_test_suite(
     ],
     tags = [
         "no-sandbox",
-        "skip-remote",
+        "skip-rbe",
     ],
     deps = [
         ":init-tree",
@@ -585,7 +583,7 @@ py_test_suite(
     ],
     tags = [
         "no-sandbox",
-        "skip-remote",
+        "skip-rbe",
     ],
     deps = [
         ":init-tree",
@@ -607,7 +605,7 @@ py_test_suite(
     tags = [
         "exclusive-if-local",
         "no-sandbox",
-        "skip-remote",
+        "skip-rbe",
     ],
     deps = [
         ":init-tree",
@@ -632,7 +630,7 @@ py_test_suite(
     tags = [
         "exclusive-if-local",
         "no-sandbox",
-        "skip-remote",
+        "skip-rbe",
     ],
     deps = [
         ":init-tree",
@@ -657,7 +655,7 @@ py_test_suite(
     tags = [
         "exclusive-if-local",
         "no-sandbox",
-        "skip-remote",
+        "skip-rbe",
     ],
     deps = [
         ":init-tree",

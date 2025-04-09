@@ -40,7 +40,7 @@ class NetworkTest : BiDiTestFixture
         await using var intercept = await bidi.Network.InterceptRequestAsync(e => Task.CompletedTask, new()
         {
             UrlPatterns = [
-                new UrlPattern.String("http://localhost:4444"),
+                new StringUrlPattern("http://localhost:4444"),
                 "http://localhost:4444/"
                 ]
         });
@@ -53,7 +53,7 @@ class NetworkTest : BiDiTestFixture
     {
         await using var intercept = await bidi.Network.InterceptRequestAsync(e => Task.CompletedTask, interceptOptions: new()
         {
-            UrlPatterns = [new UrlPattern.Pattern()
+            UrlPatterns = [new PatternUrlPattern()
             {
                 Hostname = "localhost",
                 Protocol = "http"
@@ -162,8 +162,7 @@ class NetworkTest : BiDiTestFixture
     {
         await using var intercept = await bidi.Network.InterceptAuthAsync(async e =>
         {
-            //TODO Seems it would be better to have method which takes abstract options
-            await e.Request.Request.ContinueWithAuthAsync(new AuthCredentials.Basic("test", "test"));
+            await e.Request.Request.ContinueWithAuthAsync(new AuthCredentials("test", "test"));
         });
 
         await context.NavigateAsync(UrlBuilder.WhereIs("basicAuth"), new() { Wait = ReadinessState.Complete });
@@ -177,7 +176,7 @@ class NetworkTest : BiDiTestFixture
     {
         await using var intercept = await bidi.Network.InterceptAuthAsync(async e =>
         {
-            await e.Request.Request.ContinueWithAuthAsync(new ContinueWithDefaultAuthOptions());
+            await e.Request.Request.ContinueWithAuthAsync(new ContinueWithAuthDefaultCredentialsOptions());
         });
 
         var action = async () => await context.NavigateAsync(UrlBuilder.WhereIs("basicAuth"), new() { Wait = ReadinessState.Complete });
@@ -191,7 +190,7 @@ class NetworkTest : BiDiTestFixture
     {
         await using var intercept = await bidi.Network.InterceptAuthAsync(async e =>
         {
-            await e.Request.Request.ContinueWithAuthAsync(new ContinueWithCancelledAuthOptions());
+            await e.Request.Request.ContinueWithAuthAsync(new ContinueWithAuthCancelCredentialsOptions());
         });
 
         var action = async () => await context.NavigateAsync(UrlBuilder.WhereIs("basicAuth"), new() { Wait = ReadinessState.Complete });

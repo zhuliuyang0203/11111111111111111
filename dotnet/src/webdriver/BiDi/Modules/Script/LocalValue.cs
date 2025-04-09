@@ -17,103 +17,162 @@
 // under the License.
 // </copyright>
 
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
 using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
-[JsonDerivedType(typeof(Number), "number")]
-[JsonDerivedType(typeof(String), "string")]
-[JsonDerivedType(typeof(Null), "null")]
-[JsonDerivedType(typeof(Undefined), "undefined")]
-[JsonDerivedType(typeof(Channel), "channel")]
-[JsonDerivedType(typeof(Array), "array")]
-[JsonDerivedType(typeof(Date), "date")]
-[JsonDerivedType(typeof(Map), "map")]
-[JsonDerivedType(typeof(Object), "object")]
-[JsonDerivedType(typeof(RegExp), "regexp")]
-[JsonDerivedType(typeof(Set), "set")]
+[JsonDerivedType(typeof(NumberLocalValue), "number")]
+[JsonDerivedType(typeof(StringLocalValue), "string")]
+[JsonDerivedType(typeof(NullLocalValue), "null")]
+[JsonDerivedType(typeof(UndefinedLocalValue), "undefined")]
+[JsonDerivedType(typeof(BooleanLocalValue), "boolean")]
+[JsonDerivedType(typeof(BigIntLocalValue), "bigint")]
+[JsonDerivedType(typeof(ChannelLocalValue), "channel")]
+[JsonDerivedType(typeof(ArrayLocalValue), "array")]
+[JsonDerivedType(typeof(DateLocalValue), "date")]
+[JsonDerivedType(typeof(MapLocalValue), "map")]
+[JsonDerivedType(typeof(ObjectLocalValue), "object")]
+[JsonDerivedType(typeof(RegExpLocalValue), "regexp")]
+[JsonDerivedType(typeof(SetLocalValue), "set")]
 public abstract record LocalValue
 {
-    public static implicit operator LocalValue(int value) { return new Number(value); }
-    public static implicit operator LocalValue(string value) { return new String(value); }
+    public static implicit operator LocalValue(bool? value) { return value is bool b ? new BooleanLocalValue(b) : new NullLocalValue(); }
+    public static implicit operator LocalValue(int? value) { return value is int i ? new NumberLocalValue(i) : new NullLocalValue(); }
+    public static implicit operator LocalValue(double? value) { return value is double d ? new NumberLocalValue(d) : new NullLocalValue(); }
+    public static implicit operator LocalValue(string? value) { return value is null ? new NullLocalValue() : new StringLocalValue(value); }
 
     // TODO: Extend converting from types
     public static LocalValue ConvertFrom(object? value)
     {
         switch (value)
         {
-            case LocalValue:
-                return (LocalValue)value;
+            case LocalValue localValue:
+                return localValue;
+
             case null:
-                return new Null();
-            case int:
-                return (int)value;
-            case string:
-                return (string)value;
-            case object:
+                return new NullLocalValue();
+
+            case bool b:
+                return new BooleanLocalValue(b);
+
+            case int i:
+                return new NumberLocalValue(i);
+
+            case double d:
+                return new NumberLocalValue(d);
+
+            case long l:
+                return new NumberLocalValue(l);
+
+            case DateTime dt:
+                return new DateLocalValue(dt.ToString("o"));
+
+            case BigInteger bigInt:
+                return new BigIntLocalValue(bigInt.ToString());
+
+            case string str:
+                return new StringLocalValue(str);
+
+            case IDictionary<string, string?> dictionary:
                 {
-                    var type = value.GetType();
-
-                    var properties = type.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
-
-                    List<List<LocalValue>> values = [];
-
-                    foreach (var property in properties)
+                    var bidiObject = new List<List<LocalValue>>(dictionary.Count);
+                    foreach (var item in dictionary)
                     {
-                        values.Add([property.Name, ConvertFrom(property.GetValue(value))]);
+                        bidiObject.Add([new StringLocalValue(item.Key), ConvertFrom(item.Value)]);
                     }
 
-                    return new Object(values);
+                    return new ObjectLocalValue(bidiObject);
+                }
+
+            case IDictionary<string, object?> dictionary:
+                {
+                    var bidiObject = new List<List<LocalValue>>(dictionary.Count);
+                    foreach (var item in dictionary)
+                    {
+                        bidiObject.Add([new StringLocalValue(item.Key), ConvertFrom(item.Value)]);
+                    }
+
+                    return new ObjectLocalValue(bidiObject);
+                }
+
+            case IDictionary<int, object?> dictionary:
+                {
+                    var bidiObject = new List<List<LocalValue>>(dictionary.Count);
+                    foreach (var item in dictionary)
+                    {
+                        bidiObject.Add([ConvertFrom(item.Key), ConvertFrom(item.Value)]);
+                    }
+
+                    return new MapLocalValue(bidiObject);
+                }
+
+            case IEnumerable<object?> list:
+                return new ArrayLocalValue(list.Select(ConvertFrom).ToList());
+
+            case object:
+                {
+                    const System.Reflection.BindingFlags Flags = System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance;
+
+                    var properties = value.GetType().GetProperties(Flags);
+
+                    var values = new List<List<LocalValue>>(properties.Length);
+                    foreach (var property in properties)
+                    {
+                        object? propertyValue;
+                        try
+                        {
+                            propertyValue = property.GetValue(value);
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new BiDiException($"Could not retrieve property {property.Name} from {property.DeclaringType}", ex);
+                        }
+                        values.Add([property.Name, ConvertFrom(propertyValue)]);
+                    }
+
+                    return new ObjectLocalValue(values);
                 }
         }
     }
-
-    public abstract record PrimitiveProtocolLocalValue : LocalValue
-    {
-
-    }
-
-    public record Number(double Value) : PrimitiveProtocolLocalValue
-    {
-        public static explicit operator Number(double n) => new Number(n);
-    }
-
-    public record String(string Value) : PrimitiveProtocolLocalValue;
-
-    public record Null : PrimitiveProtocolLocalValue;
-
-    public record Undefined : PrimitiveProtocolLocalValue;
-
-    public record Channel(Channel.ChannelProperties Value) : LocalValue
-    {
-        [JsonInclude]
-        internal string type = "channel";
-
-        public record ChannelProperties(Script.Channel Channel)
-        {
-            public SerializationOptions? SerializationOptions { get; set; }
-
-            public ResultOwnership? Ownership { get; set; }
-        }
-    }
-
-    public record Array(IEnumerable<LocalValue> Value) : LocalValue;
-
-    public record Date(string Value) : LocalValue;
-
-    public record Map(IDictionary<string, LocalValue> Value) : LocalValue; // seems to implement IDictionary
-
-    public record Object(IEnumerable<IEnumerable<LocalValue>> Value) : LocalValue;
-
-    public record RegExp(RegExp.RegExpValue Value) : LocalValue
-    {
-        public record RegExpValue(string Pattern)
-        {
-            public string? Flags { get; set; }
-        }
-    }
-
-    public record Set(IEnumerable<LocalValue> Value) : LocalValue;
 }
+
+public abstract record PrimitiveProtocolLocalValue : LocalValue;
+
+public record NumberLocalValue(double Value) : PrimitiveProtocolLocalValue
+{
+    public static explicit operator NumberLocalValue(double n) => new NumberLocalValue(n);
+}
+
+public record StringLocalValue(string Value) : PrimitiveProtocolLocalValue;
+
+public record NullLocalValue : PrimitiveProtocolLocalValue;
+
+public record UndefinedLocalValue : PrimitiveProtocolLocalValue;
+
+public record BooleanLocalValue(bool Value) : PrimitiveProtocolLocalValue;
+
+public record BigIntLocalValue(string Value) : PrimitiveProtocolLocalValue;
+
+public record ChannelLocalValue(ChannelProperties Value) : LocalValue
+{
+    // TODO: Revise why we need it
+    [JsonInclude]
+    internal string type = "channel";
+}
+
+public record ArrayLocalValue(IEnumerable<LocalValue> Value) : LocalValue;
+
+public record DateLocalValue(string Value) : LocalValue;
+
+public record MapLocalValue(IEnumerable<IEnumerable<LocalValue>> Value) : LocalValue;
+
+public record ObjectLocalValue(IEnumerable<IEnumerable<LocalValue>> Value) : LocalValue;
+
+public record RegExpLocalValue(RegExpValue Value) : LocalValue;
+
+public record SetLocalValue(IEnumerable<LocalValue> Value) : LocalValue;

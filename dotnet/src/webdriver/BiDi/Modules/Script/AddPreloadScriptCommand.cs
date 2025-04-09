@@ -23,9 +23,9 @@ using System.Collections.Generic;
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
 internal class AddPreloadScriptCommand(AddPreloadScriptCommandParameters @params)
-    : Command<AddPreloadScriptCommandParameters>(@params, "script.addPreloadScript");
+    : Command<AddPreloadScriptCommandParameters, AddPreloadScriptResult>(@params, "script.addPreloadScript");
 
-internal record AddPreloadScriptCommandParameters(string FunctionDeclaration, IEnumerable<LocalValue.Channel>? Arguments, IEnumerable<BrowsingContext.BrowsingContext>? Contexts, string? Sandbox) : CommandParameters;
+internal record AddPreloadScriptCommandParameters(string FunctionDeclaration, IEnumerable<ChannelLocalValue>? Arguments, IEnumerable<BrowsingContext.BrowsingContext>? Contexts, string? Sandbox) : CommandParameters;
 
 public record AddPreloadScriptOptions : CommandOptions
 {
@@ -37,7 +37,7 @@ public record AddPreloadScriptOptions : CommandOptions
         Sandbox = options?.Sandbox;
     }
 
-    public IEnumerable<LocalValue.Channel>? Arguments { get; set; }
+    public IEnumerable<ChannelLocalValue>? Arguments { get; set; }
 
     public IEnumerable<BrowsingContext.BrowsingContext>? Contexts { get; set; }
 
@@ -46,9 +46,9 @@ public record AddPreloadScriptOptions : CommandOptions
 
 public record BrowsingContextAddPreloadScriptOptions
 {
-    public IEnumerable<LocalValue.Channel>? Arguments { get; set; }
+    public IEnumerable<ChannelLocalValue>? Arguments { get; set; }
 
     public string? Sandbox { get; set; }
 }
 
-internal record AddPreloadScriptResult(PreloadScript Script);
+internal record AddPreloadScriptResult(PreloadScript Script) : EmptyResult;
