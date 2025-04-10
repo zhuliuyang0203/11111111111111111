@@ -160,7 +160,7 @@ def driver(request):
             options = get_options(driver_class, request.config)
         if driver_class == "WebKitGTK":
             options = get_options(driver_class, request.config)
-        if driver_class.lower() == "WPEWebKit":
+        if driver_class == "WPEWebKit":
             options = get_options(driver_class, request.config)
         if driver_class == "Remote":
             options = get_options("Firefox", request.config) or webdriver.FirefoxOptions()
