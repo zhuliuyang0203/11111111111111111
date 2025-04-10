@@ -9,7 +9,8 @@ build:
   tools:
     python: "latest"
   commands:
-    - pip install sphinx
+    - pip install -r py/docs/requirements.txt
+    - pip install -r py/requirements.txt
     - PYTHONPATH=py sphinx-autogen py/docs/source/api.rst
     - sphinx-build -b html -d build/docs/doctrees py/docs/source $READTHEDOCS_OUTPUT/html
 
