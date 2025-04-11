@@ -92,6 +92,12 @@ def test_get_client_windows(driver):
 
 
 @pytest.mark.xfail_safari
+def test_raises_exception_when_removing_default_user_context(driver):
+    with pytest.raises(Exception):
+        driver.browser.remove_user_context("default")
+
+
+@pytest.mark.xfail_safari
 def test_client_window_state_constants(driver):
     assert ClientWindowState.FULLSCREEN == "fullscreen"
     assert ClientWindowState.MAXIMIZED == "maximized"

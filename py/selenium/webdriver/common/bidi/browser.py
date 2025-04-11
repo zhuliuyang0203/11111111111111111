@@ -176,6 +176,9 @@ class Browser:
         ------
             Exception: If the user context ID is "default" or does not exist.
         """
+        if user_context_id == "default":
+            raise Exception("Cannot remove the default user context")
+
         params = {"userContext": user_context_id}
         self.conn.execute(command_builder("browser.removeUserContext", params))
 
