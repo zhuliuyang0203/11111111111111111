@@ -160,22 +160,22 @@ Use The Source Luke!
 
 View source code online:
 
-+-----------+------------------------------------------------------+
-| Official: | https://github.com/SeleniumHQ/selenium/tree/trunk/py |
-+-----------+------------------------------------------------------+
++---------------+-------------------------------------------------------+
+| **Official**: | https://github.com/SeleniumHQ/selenium/tree/trunk/py  |
++---------------+-------------------------------------------------------+
 
 Contributing
 =============
 
  - Fork the selenium repo and clone it locally
  - Create a branch for your work
-   - `git checkout -b my-cool-branch-name`
+     - Run: `git checkout -b my-cool-branch-name`
  - Create a virtual environment and install tox
-   - `python -m venv venv && source venv/bin/activate && pip install tox`
+     - Run: `python -m venv venv && source venv/bin/activate && pip install tox`
  - Make your changes
- - Run `tox -e linting`
+ - Run: `tox -e linting`
  - If tox exits `0`, commit and push. Otherwise, fix the newly introduced style violations
-   - `flake8` requires manual fixes
-   - `black` will rewrite the violations automatically, however the files are unstaged and should staged again
-   - `isort` will rewrite the violations automatically, however the files are unstaged and should staged again
+     - `flake8` requires manual fixes
+     - `black` will rewrite the violations automatically, however the files are unstaged and should staged again
+     - `isort` will rewrite the violations automatically, however the files are unstaged and should staged again
  - Submit a Pull Request
