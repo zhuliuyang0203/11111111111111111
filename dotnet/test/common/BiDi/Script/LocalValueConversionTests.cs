@@ -162,12 +162,21 @@ class LocalValueConversionTests
     [Test]
     public void CanConvertObjectValue()
     {
-        var arg = new { UIntNumber = 5u };
+        var arg = new
+        {
+            UIntNumber = 5u,
+            Array = new int[] { 1, 2 },
+            List = new List<string> { "a", "b" }
+        };
 
         var value = LocalValue.ConvertFrom(arg);
 
         Console.WriteLine(value);
 
         Assert.That(value, Is.TypeOf<ObjectLocalValue>());
+
+        var objValue = value as ObjectLocalValue;
+
+        Assert.That(objValue.Value, Has.Exactly(3).Count);
     }
 }

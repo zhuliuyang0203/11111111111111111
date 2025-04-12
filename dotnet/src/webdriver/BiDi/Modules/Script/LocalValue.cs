@@ -18,6 +18,7 @@
 // </copyright>
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -90,7 +91,7 @@ public abstract record LocalValue
             case ISet<object?> set:
                 return ConvertFrom(set);
 
-            case IList<object?> set:
+            case IList set:
                 return ConvertFrom(set);
 
             case IEnumerable<object?> list:
@@ -182,15 +183,23 @@ public abstract record LocalValue
         return new ArrayLocalValue(convertedList);
     }
 
-    public static LocalValue ConvertFrom<T>(IList<T?>? value)
+    public static LocalValue ConvertFrom(IList? value)
     {
         if (value is null)
         {
             return new NullLocalValue();
         }
 
-        List<LocalValue> convertedList = [.. value.Select(element => ConvertFrom(element))];
-        return new ArrayLocalValue(convertedList);
+        var type = value.GetType();
+
+        List<LocalValue> list = [];
+
+        foreach (var element in value)
+        {
+            list.Add(ConvertFrom(element));
+        }
+
+        return new ArrayLocalValue(list);
     }
 
     public static LocalValue ConvertFrom<TValue>(IDictionary<string, TValue?>? value)
