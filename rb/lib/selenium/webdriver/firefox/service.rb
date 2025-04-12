@@ -30,7 +30,7 @@ module Selenium
           args ||= []
           unless args.any? { |arg| arg.include?('--connect-existing') }
             args << '--websocket-port'
-            args << Support::Sockets.free_port.to_s
+            args << WebDriver::PortProber.above(4444).to_s
           end
           super
         end
