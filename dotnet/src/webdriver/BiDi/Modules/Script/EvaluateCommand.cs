@@ -40,7 +40,7 @@ public record EvaluateOptions : CommandOptions
 //[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
 //[JsonDerivedType(typeof(EvaluateResultSuccess), "success")]
 //[JsonDerivedType(typeof(EvaluateResultException), "exception")]
-public abstract record EvaluateResult
+public abstract record EvaluateResult : EmptyResult
 {
     public RemoteValue AsSuccessResult()
     {
