@@ -88,11 +88,11 @@ class LocalValueConversionTests
     [Test]
     public void CanConvertZeroIntToLocalValue()
     {
-        LocalValue arg = 0;
+        int arg = 0;
 
         AssertValue(arg);
 
-        AssertValue(LocalValue.ConvertFrom(0));
+        AssertValue(LocalValue.ConvertFrom(arg));
 
         static void AssertValue(LocalValue value)
         {
@@ -123,7 +123,7 @@ class LocalValueConversionTests
 
         AssertValue(arg);
 
-        AssertValue(LocalValue.ConvertFrom(0));
+        AssertValue(LocalValue.ConvertFrom(arg));
 
         static void AssertValue(LocalValue value)
         {
