@@ -68,7 +68,7 @@ namespace OpenQA.Selenium.BiDi.Communication.Json;
 #endregion
 
 [JsonSerializable(typeof(Command))]
-[JsonSerializable(typeof(EmptyResult))]
+[JsonSerializable(typeof(BiDiResult))]
 
 [JsonSerializable(typeof(Modules.Session.StatusCommand))]
 [JsonSerializable(typeof(Modules.Session.StatusResult))]
