@@ -105,13 +105,9 @@ class ClientConfig:
         self.extra_headers = extra_headers
 
         self.timeout = (
-            (
-                float(os.getenv("GLOBAL_DEFAULT_TIMEOUT", str(socket.getdefaulttimeout())))
-                if os.getenv("GLOBAL_DEFAULT_TIMEOUT") is not None
-                else socket.getdefaulttimeout()
-            )
-            if timeout is None
-            else timeout
+            float(os.getenv("GLOBAL_DEFAULT_TIMEOUT"))
+            if os.getenv("GLOBAL_DEFAULT_TIMEOUT") is not None
+            else (timeout if timeout is not None else socket.getdefaulttimeout())
         )
 
         self.ca_certs = (
@@ -122,7 +118,11 @@ class ClientConfig:
 
     def reset_timeout(self) -> None:
         """Resets the timeout to the default value of socket."""
-        self._timeout = socket.getdefaulttimeout()
+        self._timeout = (
+            float(os.getenv("GLOBAL_DEFAULT_TIMEOUT"))
+            if os.getenv("GLOBAL_DEFAULT_TIMEOUT") is not None
+            else socket.getdefaulttimeout()
+        )
 
     def get_proxy_url(self) -> Optional[str]:
         """Returns the proxy URL to use for the connection."""
