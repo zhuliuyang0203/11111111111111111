@@ -189,6 +189,7 @@ class VirtualAuthenticatorTest extends JupiterTestBase {
         Credential.createNonResidentCredential(
             credentialId, "localhost", privateKey, /* signCount= */ 0);
     authenticator.addCredential(credential);
+    authenticator.getCredentials();
 
     // Attempt to use the credential to generate an assertion.
     Object response = getAssertionFor(Arrays.asList(1, 2, 3, 4));
@@ -215,6 +216,7 @@ class VirtualAuthenticatorTest extends JupiterTestBase {
         Credential.createNonResidentCredential(
             credentialId, "localhost", privateKey, /* signCount= */ 0);
     authenticator.addCredential(credential);
+    authenticator.getCredentials();
 
     // Attempt to use the credential to generate an assertion.
     Object response = getAssertionFor(Arrays.asList(1, 2, 3, 4));
@@ -231,6 +233,7 @@ class VirtualAuthenticatorTest extends JupiterTestBase {
         Credential.createResidentCredential(
             credentialId, "localhost", privateKey, userHandle, /* signCount= */ 0);
     authenticator.addCredential(credential);
+    authenticator.getCredentials();
 
     // Attempt to use the credential to generate an assertion. Notice we use an
     // empty allowCredentials array.
@@ -265,6 +268,7 @@ class VirtualAuthenticatorTest extends JupiterTestBase {
               Credential.createResidentCredential(
                   credentialId, "localhost", privateKey, userHandle, /* signCount= */ 0);
           authenticator.addCredential(credential);
+          authenticator.getCredentials();
         });
   }
 
