@@ -42,6 +42,7 @@ from selenium.common.exceptions import NoSuchCookieException
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.bidi.browser import Browser
+from selenium.webdriver.common.bidi.browsing_context import BrowsingContext
 from selenium.webdriver.common.bidi.network import Network
 from selenium.webdriver.common.bidi.script import Script
 from selenium.webdriver.common.by import By
@@ -256,6 +257,7 @@ class WebDriver(BaseWebDriver):
         self._script = None
         self._network = None
         self._browser = None
+        self._browsing_context = None
 
     def __repr__(self):
         return f'<{type(self).__module__}.{type(self).__name__} (session="{self.session_id}")>'
@@ -1293,6 +1295,29 @@ class WebDriver(BaseWebDriver):
             self._browser = Browser(self._websocket_connection)
 
         return self._browser
+
+    @property
+    def browsing_context(self):
+        """Returns a browsing context module object for BiDi browsing context commands.
+
+        Returns:
+        --------
+        BrowsingContext: an object containing access to BiDi browsing context commands.
+
+        Examples:
+        ---------
+        >>> context_id = driver.browsing_context.create(type="tab")
+        >>> driver.browsing_context.navigate(context=context_id, url="https://www.selenium.dev")
+        >>> driver.browsing_context.capture_screenshot(context=context_id)
+        >>> driver.browsing_context.close(context_id)
+        """
+        if not self._websocket_connection:
+            self._start_bidi()
+
+        if self._browsing_context is None:
+            self._browsing_context = BrowsingContext(self._websocket_connection)
+
+        return self._browsing_context
 
     def _get_cdp_details(self):
         import json
