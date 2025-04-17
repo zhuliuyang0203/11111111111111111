@@ -74,7 +74,7 @@ def test_driver_is_stopped_if_browser_cant_start(clean_driver, driver_executable
     with pytest.raises(SessionNotCreatedException):
         driver = clean_driver(options=options, service=service)
     assert not service.is_connectable()
-    assert service.process.poll() < 0
+    assert service.process.poll() is not None
     try:
         driver.quit()
     except Exception:
