@@ -14,7 +14,9 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+
 """The WebDriver implementation."""
+
 import base64
 import contextlib
 import copy
@@ -348,8 +350,9 @@ class WebDriver(BaseWebDriver):
             response = self.execute(Command.NEW_SESSION, caps)["value"]
             self.session_id = response.get("sessionId")
             self.caps = response.get("capabilities")
-        except SessionNotCreatedException:
-            self.service.stop()
+        except (SessionNotCreatedException, WebDriverException):
+            if self.service is not None:
+                self.service.stop()
             raise
 
     def _wrap_value(self, value):
