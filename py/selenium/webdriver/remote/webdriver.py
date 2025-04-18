@@ -42,7 +42,6 @@ from selenium.common.exceptions import InvalidArgumentException
 from selenium.common.exceptions import JavascriptException
 from selenium.common.exceptions import NoSuchCookieException
 from selenium.common.exceptions import NoSuchElementException
-from selenium.common.exceptions import SessionNotCreatedException
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.bidi.browser import Browser
 from selenium.webdriver.common.bidi.network import Network
@@ -350,7 +349,7 @@ class WebDriver(BaseWebDriver):
             response = self.execute(Command.NEW_SESSION, caps)["value"]
             self.session_id = response.get("sessionId")
             self.caps = response.get("capabilities")
-        except (SessionNotCreatedException, WebDriverException):
+        except Exception:
             if self.service is not None:
                 self.service.stop()
             raise
