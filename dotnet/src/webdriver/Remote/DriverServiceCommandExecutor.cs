@@ -115,7 +115,7 @@ namespace OpenQA.Selenium.Remote
             Response toReturn;
             if (commandToExecute.Name == DriverCommand.NewSession)
             {
-                this.service.Start();
+                await this.service.StartAsync().ConfigureAwait(false);
             }
 
             // Use a try-catch block to catch exceptions for the Quit

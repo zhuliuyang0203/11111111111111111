@@ -174,33 +174,41 @@ namespace OpenQA.Selenium
         {
             get
             {
-                bool isInitialized = false;
+                return Task.Run(this.IsInitializedAsync).GetAwaiter().GetResult();
+            }
+        }
 
-                try
+        /// <summary>
+        /// Gets a value indicating whether the service is responding to HTTP requests.
+        /// </summary>
+        /// <returns>A task that represents the asynchronous initialization check operation.</returns>
+        protected async virtual Task<bool> IsInitializedAsync()
+        {
+            bool isInitialized = false;
+            try
+            {
+                using (var httpClient = new HttpClient())
                 {
-                    using (var httpClient = new HttpClient())
-                    {
-                        httpClient.DefaultRequestHeaders.ConnectionClose = true;
-                        httpClient.Timeout = TimeSpan.FromSeconds(5);
+                    httpClient.DefaultRequestHeaders.ConnectionClose = true;
+                    httpClient.Timeout = TimeSpan.FromSeconds(5);
 
-                        Uri serviceHealthUri = new Uri(this.ServiceUrl, new Uri(DriverCommand.Status, UriKind.Relative));
-                        using (var response = Task.Run(async () => await httpClient.GetAsync(serviceHealthUri)).GetAwaiter().GetResult())
-                        {
-                            // Checking the response from the 'status' end point. Note that we are simply checking
-                            // that the HTTP status returned is a 200 status, and that the resposne has the correct
-                            // Content-Type header. A more sophisticated check would parse the JSON response and
-                            // validate its values. At the moment we do not do this more sophisticated check.
-                            isInitialized = response.StatusCode == HttpStatusCode.OK && response.Content.Headers.ContentType is { MediaType: string mediaType } && mediaType.StartsWith("application/json", StringComparison.OrdinalIgnoreCase);
-                        }
+                    Uri serviceHealthUri = new Uri(this.ServiceUrl, new Uri(DriverCommand.Status, UriKind.Relative));
+                    using (var response = await httpClient.GetAsync(serviceHealthUri))
+                    {
+                        // Checking the response from the 'status' end point. Note that we are simply checking
+                        // that the HTTP status returned is a 200 status, and that the response has the correct
+                        // Content-Type header. A more sophisticated check would parse the JSON response and
+                        // validate its values. At the moment we do not do this more sophisticated check.
+                        isInitialized = response.StatusCode == HttpStatusCode.OK && response.Content.Headers.ContentType is { MediaType: string mediaType } && mediaType.StartsWith("application/json", StringComparison.OrdinalIgnoreCase);
                     }
                 }
-                catch (Exception ex) when (ex is HttpRequestException || ex is TaskCanceledException)
-                {
-                    // Do nothing. The exception is expected, meaning driver service is not initialized.
-                }
-
-                return isInitialized;
             }
+            catch (Exception ex) when (ex is HttpRequestException || ex is TaskCanceledException)
+            {
+                // Do nothing. The exception is expected, meaning driver service is not initialized.
+            }
+
+            return isInitialized;
         }
 
         /// <summary>
@@ -215,39 +223,55 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Starts the DriverService if it is not already running.
         /// </summary>
-        [MemberNotNull(nameof(driverServiceProcess))]
         public void Start()
         {
-            if (this.driverServiceProcess != null)
-            {
-                return;
-            }
+            Task.Run(this.StartAsync).GetAwaiter().GetResult();
+        }
 
-            this.driverServiceProcess = new Process();
-
-            if (this.DriverServicePath != null)
+        /// <summary>
+        /// Starts the DriverService if it is not already running.
+        /// </summary>
+        /// <returns>A task that represents the asynchronous start operation.</returns>
+        public async Task StartAsync()
+        {
+            if (this.driverServiceProcess == null)
             {
-                if (this.DriverServiceExecutableName is null)
+                this.driverServiceProcess = new Process();
+
+                try
                 {
-                    throw new InvalidOperationException("If the driver service path is specified, the driver service executable name must be as well");
+                    if (this.DriverServicePath != null)
+                    {
+                        if (this.DriverServiceExecutableName is null)
+                        {
+                            throw new InvalidOperationException("If the driver service path is specified, the driver service executable name must be as well");
+                        }
+
+                        this.driverServiceProcess.StartInfo.FileName = Path.Combine(this.DriverServicePath, this.DriverServiceExecutableName);
+                    }
+                    else
+                    {
+                        this.driverServiceProcess.StartInfo.FileName = new DriverFinder(this.GetDefaultDriverOptions()).GetDriverPath();
+                    }
+
+                    this.driverServiceProcess.StartInfo.Arguments = this.CommandLineArguments;
+                    this.driverServiceProcess.StartInfo.UseShellExecute = false;
+                    this.driverServiceProcess.StartInfo.CreateNoWindow = this.HideCommandPromptWindow;
+
+                    DriverProcessStartingEventArgs eventArgs = new DriverProcessStartingEventArgs(this.driverServiceProcess.StartInfo);
+                    this.OnDriverProcessStarting(eventArgs);
+
+                    this.driverServiceProcess.Start();
                 }
-
-                this.driverServiceProcess.StartInfo.FileName = Path.Combine(this.DriverServicePath, this.DriverServiceExecutableName);
+                catch
+                {
+                    this.driverServiceProcess.Dispose();
+                    this.driverServiceProcess = null;
+                    throw;
+                }
             }
-            else
-            {
-                this.driverServiceProcess.StartInfo.FileName = new DriverFinder(this.GetDefaultDriverOptions()).GetDriverPath();
-            }
 
-            this.driverServiceProcess.StartInfo.Arguments = this.CommandLineArguments;
-            this.driverServiceProcess.StartInfo.UseShellExecute = false;
-            this.driverServiceProcess.StartInfo.CreateNoWindow = this.HideCommandPromptWindow;
-
-            DriverProcessStartingEventArgs eventArgs = new DriverProcessStartingEventArgs(this.driverServiceProcess.StartInfo);
-            this.OnDriverProcessStarting(eventArgs);
-
-            this.driverServiceProcess.Start();
-            bool serviceAvailable = this.WaitForServiceInitialization();
+            bool serviceAvailable = await this.WaitForServiceInitializationAsync().ConfigureAwait(false);
             DriverProcessStartedEventArgs processStartedEventArgs = new DriverProcessStartedEventArgs(this.driverServiceProcess);
             this.OnDriverProcessStarted(processStartedEventArgs);
 
@@ -273,11 +297,31 @@ namespace OpenQA.Selenium
             {
                 if (disposing)
                 {
-                    this.Stop();
+                    Task.Run(this.StopAsync).GetAwaiter().GetResult();
                 }
 
                 this.isDisposed = true;
             }
+        }
+
+        /// <summary>
+        /// Releases all resources associated with this <see cref="DriverService"/>.
+        /// </summary>
+        /// <returns>A task that represents the asynchronous dispose operation.</returns>
+        public async ValueTask DisposeAsync()
+        {
+            await DisposeAsyncCore();
+            Dispose(false);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Releases all resources associated with this type in the instance's type chain. Override to dispose more resources.
+        /// </summary>
+        /// <returns>A task that represents the asynchronous dispose operation.</returns>
+        protected virtual async ValueTask DisposeAsyncCore()
+        {
+            await this.StopAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -311,7 +355,7 @@ namespace OpenQA.Selenium
         /// <summary>
         /// Stops the DriverService.
         /// </summary>
-        private void Stop()
+        private async Task StopAsync()
         {
             if (this.IsRunning)
             {
@@ -332,7 +376,7 @@ namespace OpenQA.Selenium
                                 // we'll retry. We wait for exit here, since catching the exception
                                 // for a failed HTTP request due to a closed socket is particularly
                                 // expensive.
-                                using (var response = Task.Run(async () => await httpClient.GetAsync(shutdownUrl)).GetAwaiter().GetResult())
+                                using (var response = await httpClient.GetAsync(shutdownUrl).ConfigureAwait(false))
                                 {
 
                                 }
@@ -369,7 +413,7 @@ namespace OpenQA.Selenium
         /// </summary>
         /// <returns><see langword="true"/> if the service is properly started and receiving HTTP requests;
         /// otherwise; <see langword="false"/>.</returns>
-        private bool WaitForServiceInitialization()
+        private async Task<bool> WaitForServiceInitializationAsync()
         {
             bool isInitialized = false;
             DateTime timeout = DateTime.Now.Add(this.InitializationTimeout);
@@ -381,7 +425,7 @@ namespace OpenQA.Selenium
                     break;
                 }
 
-                isInitialized = this.IsInitialized;
+                isInitialized = await this.IsInitializedAsync().ConfigureAwait(false);
             }
 
             return isInitialized;
