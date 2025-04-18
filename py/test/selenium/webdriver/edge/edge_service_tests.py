@@ -21,11 +21,9 @@ from unittest.mock import patch
 
 import pytest
 
-from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.edge.service import Service
 
 
-@pytest.mark.xfail_edge(raises=WebDriverException)
 @pytest.mark.no_driver_after_test
 def test_uses_edgedriver_logging(clean_driver, driver_executable) -> None:
     log_file = "msedgedriver.log"
