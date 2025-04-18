@@ -72,10 +72,6 @@ def test_driver_is_stopped_if_browser_cant_start(clean_driver) -> None:
         driver = clean_driver(options=options, service=service)
     assert not service.is_connectable()
     assert service.process.poll() is not None
-    try:
-        driver.quit()
-    except Exception:
-        pass
 
 
 @pytest.fixture
