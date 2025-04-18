@@ -1174,33 +1174,6 @@ class WebDriver(BaseWebDriver):
         else:
             raise WebDriverException("You can only set the orientation to 'LANDSCAPE' and 'PORTRAIT'")
 
-    @property
-    def log_types(self):
-        """Gets a list of the available log types. This only works with w3c
-        compliant browsers.
-
-        Example:
-        --------
-        >>> driver.log_types
-        """
-        return self.execute(Command.GET_AVAILABLE_LOG_TYPES)["value"]
-
-    def get_log(self, log_type):
-        """Gets the log for a given log type.
-
-        Parameters:
-        -----------
-        log_type : str
-            - Type of log that which will be returned
-
-        Example:
-        --------
-        >>> driver.get_log('browser')
-        >>> driver.get_log('driver')
-        >>> driver.get_log('client')
-        >>> driver.get_log('server')
-        """
-        return self.execute(Command.GET_LOG, {"type": log_type})["value"]
 
     def start_devtools(self):
         global devtools

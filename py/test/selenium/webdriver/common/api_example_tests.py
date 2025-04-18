@@ -274,17 +274,23 @@ def test_change_window_size(driver, pages):
     assert size["height"] == newSize[1]
 
 
-@pytest.mark.xfail_firefox(raises=WebDriverException)
-@pytest.mark.xfail_remote
-@pytest.mark.xfail_safari
+@pytest.mark.xfail_ie(raises=AttributeError, reason="Logging API is no longer available")
+@pytest.mark.xfail_firefox(raises=AttributeError, reason="Logging API is no longer available")
+@pytest.mark.xfail_remote(raises=AttributeError, reason="Logging API is no longer available")
+@pytest.mark.xfail_safari(raises=AttributeError, reason="Logging API is no longer available")
+@pytest.mark.xfail_webkitgtk(raises=AttributeError, reason="Logging API is no longer available")
+@pytest.mark.xfail_wpewebkit(raises=AttributeError, reason="Logging API is no longer available")
 def test_get_log_types(driver, pages):
     pages.load("blank.html")
     assert isinstance(driver.log_types, list)
 
 
-@pytest.mark.xfail_firefox(raises=WebDriverException)
-@pytest.mark.xfail_remote
-@pytest.mark.xfail_safari
+@pytest.mark.xfail_ie(raises=AttributeError, reason="Logging API is no longer available")
+@pytest.mark.xfail_firefox(raises=AttributeError, reason="Logging API is no longer available")
+@pytest.mark.xfail_remote(raises=AttributeError, reason="Logging API is no longer available")
+@pytest.mark.xfail_safari(raises=AttributeError, reason="Logging API is no longer available")
+@pytest.mark.xfail_webkitgtk(raises=AttributeError, reason="Logging API is no longer available")
+@pytest.mark.xfail_wpewebkit()(raises=AttributeError, reason="Logging API is no longer available")
 def test_get_log(driver, pages):
     pages.load("blank.html")
     for log_type in driver.log_types:
