@@ -154,4 +154,5 @@ remove-unused-variables = true
 
 [tool.docformatter]
 exclude = 'selenium/webdriver/common/devtools'
+in-place = true
 recursive = true
