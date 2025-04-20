@@ -31,6 +31,7 @@ namespace OpenQA.Selenium.Firefox
     public sealed class FirefoxDriverService : DriverService
     {
         private const string DefaultFirefoxDriverServiceFileName = "geckodriver";
+        private string logPath = string.Empty;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FirefoxDriverService"/> class.
@@ -122,6 +123,15 @@ namespace OpenQA.Selenium.Firefox
         }
 
         /// <summary>
+        /// Gets or sets the path to which service logging should be written.
+        /// </summary>
+        public string LogPath
+        {
+            get { return this.logPath; }
+            set { this.logPath = value; }
+        }
+
+        /// <summary>
         /// Gets the command-line arguments for the driver service.
         /// </summary>
         protected override string CommandLineArguments
@@ -138,7 +148,12 @@ namespace OpenQA.Selenium.Firefox
                     argsBuilder.Append(string.Format(CultureInfo.InvariantCulture, " --websocket-port {0}", PortUtilities.FindFreePort()));
                 }
 
-                if (this.BrowserCommunicationPort > 0)
+                if (!string.IsNullOrEmpty(this.logPath))
+                {
+                    argsBuilder.Append(string.Format(CultureInfo.InvariantCulture, " --log \"{0}\"", this.logPath));
+                }
+
+                if (this.browserCommunicationPort > 0)
                 {
                     argsBuilder.AppendFormat(CultureInfo.InvariantCulture, " --marionette-port {0}", this.BrowserCommunicationPort);
                 }

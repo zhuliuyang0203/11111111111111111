@@ -360,6 +360,43 @@ namespace OpenQA.Selenium.Firefox
             Assert.That(driver.FindElements(By.Id("webextensions-selenium-example")).Count, Is.Zero);
         }
 
+        [Test]
+        public void ShouldBeAbleToLogToFile()
+        {
+            string tempFileName = Path.GetTempFileName();
+            try
+            {
+                File.Delete(tempFileName);
+                FirefoxOptions options = new FirefoxOptions();
+                FirefoxDriverService service = FirefoxDriverService.CreateDefaultService();
+                service.LogPath = tempFileName;
+
+                IWebDriver firefox = new FirefoxDriver(service, options);
+                firefox.Url = xhtmlTestPage;
+                Assert.That(firefox.Title, Is.EqualTo("XHTML Test Page"));
+
+                firefox.Quit();
+
+                Assert.That(File.Exists(tempFileName), Is.True, "Log file should exist");
+                string logContent = File.ReadAllText(tempFileName);
+                Assert.That(logContent, Is.Not.Empty, "Log file should not be empty");
+            }
+            finally
+            {
+                if (File.Exists(tempFileName))
+                {
+                    File.Delete(tempFileName);
+                }
+            }
+        }
+
+        [Test]
+        public void LogPathShouldBeNullByDefault()
+        {
+            FirefoxDriverService service = FirefoxDriverService.CreateDefaultService();
+            Assert.That(service.LogPath, Is.Empty);
+        }
+
         private string GetPath(string name)
         {
             string sCurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
