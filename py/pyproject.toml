@@ -138,7 +138,8 @@ ignore_missing_imports = true
 force_single_line = true
 profile = "black"
 py_version = 39
-only_modified = true
+quiet = true
+skip = "selenium/webdriver/common/devtools"
 
 [tool.black]
 extend-exclude = "selenium/webdriver/common/devtools"
