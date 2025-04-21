@@ -152,6 +152,7 @@ ignore-pass-after-docstring = true
 in-place = true
 quiet = true
 recursive = true
+remove-all-unused-imports = true
 remove-duplicate-keys = true
 remove-unused-variables = true
 
