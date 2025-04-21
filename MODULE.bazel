@@ -225,7 +225,7 @@ maven.install(
         "org.tomlj:tomlj:1.1.1",
         "org.zeromq:jeromq:0.6.0",
         "uk.org.webcompere:system-stubs-jupiter:2.1.8",
-        "uk.org.webcompere:system-stubs-core:2.1.8"
+        "uk.org.webcompere:system-stubs-core:2.1.8",
     ],
     boms = [
         "io.opentelemetry:opentelemetry-bom:1.46.0",
