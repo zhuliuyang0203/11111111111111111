@@ -218,7 +218,6 @@ class BrowsingContextInspectorTest extends JupiterTestBase {
 
   @Test
   @NeedsFreshDriver
-  @NotYetImplemented(EDGE)
   @NotYetImplemented(FIREFOX)
   void canListenToNavigationCommittedEvent()
       throws ExecutionException, InterruptedException, TimeoutException {
