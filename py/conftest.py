@@ -389,3 +389,8 @@ def clean_driver(request):
 
     if request.node.get_closest_marker("no_driver_after_test"):
         driver_reference = None
+
+
+def pytest_generate_tests(metafunc):
+    if "driver" in metafunc.fixturenames and metafunc.config.option.drivers:
+        metafunc.parametrize("driver", metafunc.config.option.drivers, indirect=True)

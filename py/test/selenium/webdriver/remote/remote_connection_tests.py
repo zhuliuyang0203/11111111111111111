@@ -16,9 +16,8 @@
 # under the License.
 
 import base64
-import filetype
 
-import pytest
+import filetype
 
 
 def test_browser_specific_method(driver, pages):

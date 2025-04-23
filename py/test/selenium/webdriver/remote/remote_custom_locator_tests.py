@@ -15,9 +15,9 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from selenium.webdriver.remote.locator_converter import LocatorConverter
-
 import pytest
+
+from selenium.webdriver.remote.locator_converter import LocatorConverter
 
 
 class CustomLocatorConverter(LocatorConverter):
