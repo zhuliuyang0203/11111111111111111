@@ -34,6 +34,7 @@ import org.openqa.selenium.bidi.BiDiException;
 import org.openqa.selenium.bidi.module.Input;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.WheelInput;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.testing.JupiterTestBase;
 import org.openqa.selenium.testing.NeedsFreshDriver;
 import org.openqa.selenium.testing.NotYetImplemented;
@@ -137,7 +138,7 @@ class DefaultWheelTest extends JupiterTestBase {
         appServer.whereIs("scrolling_tests/frame_with_nested_scrolling_frame_out_of_view.html"));
     WebElement footer = driver.findElement(By.tagName("footer"));
     int deltaY = footer.getRect().y;
-
+    
     input.perform(
         windowHandle,
         new Actions(driver)
@@ -145,6 +146,8 @@ class DefaultWheelTest extends JupiterTestBase {
             .scrollByAmount(0, deltaY)
             .pause(3000)
             .getSequences());
+
+    wait.until(driver -> driver.findElement(By.name("nested_scrolling_frame")).isDisplayed());
 
     assertTrue(inViewport(footer));
   }
