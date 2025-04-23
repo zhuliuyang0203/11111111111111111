@@ -1,0 +1,66 @@
+import time
+from datetime import datetime
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+import requests
+import base64
+
+# إعدادات 2Captcha
+API_KEY = 'YOUR_2CAPTCHA_API_KEY'
+
+# إعداد متصفح Selenium
+driver = webdriver.Chrome()  # تأكد من أن chromedriver في PATH
+
+# فتح صفحة تسجيل الدخول
+driver.get('https://ecsc.gov.sy/login')
+
+# تسجيل الدخول
+username = driver.find_element(By.ID, 'username')
+password = driver.find_element(By.ID, 'password')
+username.send_keys('YOUR_USERNAME')
+password.send_keys('YOUR_PASSWORD')
+driver.find_element(By.ID, 'login-button').click()
+
+# الانتظار حتى الساعة 8:01:50 صباحًا
+target_time = datetime.strptime('08:01:50', '%H:%M:%S').time()
+while datetime.now().time() < target_time:
+    time.sleep(1)
+
+# الضغط على زر "تثبيت المعاملة"
+driver.find_element(By.ID, 'submit-button').click()
+
+# التقاط صورة الكابتشا
+captcha_element = driver.find_element(By.ID, 'captcha-image')
+captcha_base64 = captcha_element.screenshot_as_base64
+
+# إرسال الكابتشا إلى 2Captcha
+def solve_captcha(api_key, base64_image):
+    url = 'http://2captcha.com/in.php'
+    data = {
+        'key': api_key,
+        'method': 'base64',
+        'body': base64_image,
+        'json': 1
+    }
+    response = requests.post(url, data=data).json()
+    if response['status'] == 1:
+        captcha_id = response['request']
+        # الانتظار لحل الكابتشا
+        fetch_url = f"http://2captcha.com/res.php?key={api_key}&action=get&id={captcha_id}&json=1"
+        while True:
+            res = requests.get(fetch_url).json()
+            if res['status'] == 1:
+                return res['request']
+            time.sleep(5)
+    else:
+        raise Exception('Failed to send captcha')
+
+captcha_text = solve_captcha(API_KEY, captcha_base64)
+
+# إدخال نص الكابتشا
+captcha_input = driver.find_element(By.ID, 'captcha-input')
+captcha_input.send_keys(captcha_text)
+
+# الضغط على "تم" ثم "تأكيد"
+driver.find_element(By.ID, 'confirm-button').click()
+driver.find_element(By.ID, 'final-confirm-button').click()
