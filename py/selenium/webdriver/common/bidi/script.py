@@ -18,8 +18,7 @@
 from dataclasses import dataclass
 from typing import List
 
-from .session import session_subscribe
-from .session import session_unsubscribe
+from .session import Session
 
 
 class Script:
@@ -43,12 +42,14 @@ class Script:
 
     def _subscribe_to_log_entries(self):
         if not self.log_entry_subscribed:
-            self.conn.execute(session_subscribe(LogEntryAdded.event_class))
+            session = Session(self.conn)
+            self.conn.execute(session.subscribe(LogEntryAdded.event_class))
             self.log_entry_subscribed = True
 
     def _unsubscribe_from_log_entries(self):
         if self.log_entry_subscribed and LogEntryAdded.event_class not in self.conn.callbacks:
-            self.conn.execute(session_unsubscribe(LogEntryAdded.event_class))
+            session = Session(self.conn)
+            self.conn.execute(session.unsubscribe(LogEntryAdded.event_class))
             self.log_entry_subscribed = False
 
     def _handle_log_entry(self, type, handler):

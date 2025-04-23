@@ -47,6 +47,7 @@ from selenium.webdriver.common.bidi.browser import Browser
 from selenium.webdriver.common.bidi.browsing_context import BrowsingContext
 from selenium.webdriver.common.bidi.network import Network
 from selenium.webdriver.common.bidi.script import Script
+from selenium.webdriver.common.bidi.session import Session
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.options import ArgOptions
 from selenium.webdriver.common.options import BaseOptions
@@ -263,6 +264,7 @@ class WebDriver(BaseWebDriver):
         self._script = None
         self._network = None
         self._browser = None
+        self._bidi_session = None
         self._browsing_context = None
 
     def __repr__(self):
@@ -1278,6 +1280,19 @@ class WebDriver(BaseWebDriver):
             self._browser = Browser(self._websocket_connection)
 
         return self._browser
+
+    @property
+    def _session(self):
+        """
+        Returns the BiDi session object for the current WebDriver session.
+        """
+        if not self._websocket_connection:
+            self._start_bidi()
+
+        if self._bidi_session is None:
+            self._bidi_session = Session(self._websocket_connection)
+
+        return self._bidi_session
 
     @property
     def browsing_context(self):
