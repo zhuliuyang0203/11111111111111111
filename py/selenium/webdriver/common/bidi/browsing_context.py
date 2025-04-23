@@ -22,9 +22,7 @@ from typing import Union
 
 from selenium.webdriver.common.bidi.common import command_builder
 
-# TODO: use new session module when https://github.com/SeleniumHQ/selenium/pull/15615 is merged
-from selenium.webdriver.common.bidi.session import session_subscribe
-from selenium.webdriver.common.bidi.session import session_unsubscribe
+from .session import Session
 
 
 class ReadinessState:
@@ -694,7 +692,8 @@ class BrowsingContext:
             params = {"events": [event_name]}
             if contexts is not None:
                 params["browsingContexts"] = contexts
-            self.conn.execute(session_subscribe(**params))
+            session = Session(self.conn)
+            self.conn.execute(session.subscribe(**params))
             self.subscriptions[event_name] = [callback_id]
 
         return callback_id
@@ -718,7 +717,8 @@ class BrowsingContext:
         self.subscriptions[event_name].remove(callback_id)
         if len(self.subscriptions[event_name]) == 0:
             params = {"events": [event_name]}
-            self.conn.execute(session_unsubscribe(**params))
+            session = Session(self.conn)
+            self.conn.execute(session.unsubscribe(**params))
             del self.subscriptions[event_name]
 
     def clear_event_handlers(self) -> None:
@@ -728,5 +728,6 @@ class BrowsingContext:
             for callback_id in self.subscriptions[event_name]:
                 self.conn.remove_callback(event, callback_id)
             params = {"events": [event_name]}
-            self.conn.execute(session_unsubscribe(**params))
+            session = Session(self.conn)
+            self.conn.execute(session.unsubscribe(**params))
         self.subscriptions = {}
