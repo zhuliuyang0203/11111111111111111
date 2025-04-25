@@ -136,7 +136,8 @@ class Server:
         if self.process is None:
             raise RuntimeError("Selenium server isn't running")
         else:
-            self.process.terminate()
-            self.process.wait()
+            if self.process.poll() is None:
+                self.process.terminate()
+                self.process.wait()
             self.process = None
             print("Selenium server has been terminated")
