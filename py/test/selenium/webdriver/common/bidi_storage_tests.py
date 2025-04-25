@@ -75,6 +75,16 @@ def get_document_cookie_or_none(driver):
         return None
 
 
+@pytest.fixture(autouse=True)
+def setup(driver, pages):
+    driver.get(pages.url("simpleTest.html"))
+    driver.delete_all_cookies()
+
+    yield
+
+    driver.quit()
+
+
 def test_storage_initialized(driver):
     """Test that the storage module is initialized properly."""
     assert driver.storage is not None
@@ -82,9 +92,6 @@ def test_storage_initialized(driver):
 
 def test_get_cookie_by_name(driver, pages, webserver):
     """Test getting a cookie by name."""
-    # Setup
-    driver.get(pages.url("simpleTest.html"))
-    driver.delete_all_cookies()
     assert_no_cookies_are_present(driver)
 
     key = generate_unique_key()
@@ -107,9 +114,6 @@ def test_get_cookie_by_name(driver, pages, webserver):
 @pytest.mark.xfail_edge
 def test_get_cookie_in_default_user_context(driver, pages, webserver):
     """Test getting a cookie in the default user context."""
-    # Setup
-    driver.get(pages.url("simpleTest.html"))
-    driver.delete_all_cookies()
     assert_no_cookies_are_present(driver)
 
     window_handle = driver.current_window_handle
@@ -149,9 +153,6 @@ def test_get_cookie_in_default_user_context(driver, pages, webserver):
 
 def test_get_cookie_in_a_user_context(driver, pages, webserver):
     """Test getting a cookie in a user context."""
-    # Setup
-    driver.get(pages.url("simpleTest.html"))
-    driver.delete_all_cookies()
     assert_no_cookies_are_present(driver)
 
     user_context = driver.browser.create_user_context()
@@ -198,9 +199,6 @@ def test_get_cookie_in_a_user_context(driver, pages, webserver):
 
 def test_add_cookie(driver, pages, webserver):
     """Test adding a cookie."""
-    # Setup
-    driver.get(pages.url("simpleTest.html"))
-    driver.delete_all_cookies()
     assert_no_cookies_are_present(driver)
 
     key = generate_unique_key()
@@ -222,9 +220,6 @@ def test_add_cookie(driver, pages, webserver):
 @pytest.mark.xfail_edge
 def test_add_and_get_cookie(driver, pages, webserver):
     """Test adding and getting a cookie with all parameters."""
-    # Setup
-    driver.get(pages.url("simpleTest.html"))
-    driver.delete_all_cookies()
     assert_no_cookies_are_present(driver)
 
     value = BytesValue(BytesValue.TYPE_STRING, "cod")
@@ -279,9 +274,6 @@ def test_add_and_get_cookie(driver, pages, webserver):
 @pytest.mark.xfail_edge
 def test_get_all_cookies(driver, pages, webserver):
     """Test getting all cookies."""
-    # Setup
-    driver.get(pages.url("simpleTest.html"))
-    driver.delete_all_cookies()
     assert_no_cookies_are_present(driver)
 
     key1 = generate_unique_key()
@@ -311,9 +303,6 @@ def test_get_all_cookies(driver, pages, webserver):
 
 def test_delete_all_cookies(driver, pages, webserver):
     """Test deleting all cookies."""
-    # Setup
-    driver.get(pages.url("simpleTest.html"))
-    driver.delete_all_cookies()
     assert_no_cookies_are_present(driver)
 
     driver.add_cookie({"name": "foo", "value": "set"})
@@ -331,9 +320,6 @@ def test_delete_all_cookies(driver, pages, webserver):
 
 def test_delete_cookie_with_name(driver, pages, webserver):
     """Test deleting a cookie with a specific name."""
-    # Setup
-    driver.get(pages.url("simpleTest.html"))
-    driver.delete_all_cookies()
     assert_no_cookies_are_present(driver)
 
     key1 = generate_unique_key()
@@ -359,9 +345,6 @@ def test_delete_cookie_with_name(driver, pages, webserver):
 
 def test_add_cookies_with_different_paths(driver, pages, webserver):
     """Test adding cookies with different paths that are related to ours."""
-    # Setup
-    driver.get(pages.url("simpleTest.html"))
-    driver.delete_all_cookies()
     assert_no_cookies_are_present(driver)
 
     cookie1 = PartialCookie("fish", BytesValue(BytesValue.TYPE_STRING, "cod"), webserver.host, path="/simpleTest.html")
