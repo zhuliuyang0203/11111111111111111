@@ -44,3 +44,9 @@ def test_server_with_invalid_port():
 def test_server_with_port_out_of_range():
     with pytest.raises(ValueError, match="port must be 0-65535"):
         Server(port=99999)
+
+def test_stopping_server_thats_not_running():
+    server = Server()
+    with pytest.raises(RuntimeError, match="Selenium server isn't running"):
+        server.stop()
+    assert server.process is None

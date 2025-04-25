@@ -129,7 +129,7 @@ class Server:
             if not self._wait_for_server():
                 f"Timed out waiting for Selenium server at {self.status_url}"
             print("Selenium server is ready")
-            return self.process
+        return self.process
 
     def stop(self):
         """Stop the server."""
