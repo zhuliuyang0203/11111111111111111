@@ -92,7 +92,7 @@ class Server:
     def _validate_log_level(self, log_level):
         levels = ("SEVERE", "WARNING", "INFO", "CONFIG", "FINE", "FINER", "FINEST")
         if log_level not in levels:
-            raise TypeError(f"log_level must be one of: {", ".join(levels)}")
+            raise TypeError(f"log_level must be one of: {', '.join(levels)}")
         return log_level
 
     def _validate_env(self, env):
