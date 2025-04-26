@@ -157,7 +157,7 @@ class Server:
                 sock.connect((host, self.port))
             raise ConnectionError(f"Selenium server is already running, or something else is using port {self.port}")
         except ConnectionRefusedError:
-            print(f"Starting Selenium server...")
+            print("Starting Selenium server...")
             self.process = subprocess.Popen(command, env=self.env)
             print(f"Selenium server running as process: {self.process.pid}")
             if not self._wait_for_server():
