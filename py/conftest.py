@@ -292,7 +292,7 @@ def server(request):
         yield None
         return
 
-    path = os.path.join(
+    jar_path = os.path.join(
         os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
         "java/src/org/openqa/selenium/grid/selenium_server_deploy.jar",
     )
@@ -303,7 +303,12 @@ def server(request):
         # under Wayland, so we use XWayland instead.
         remote_env["MOZ_ENABLE_WAYLAND"] = "0"
 
-    server = Server(path=path, env=remote_env)
+    if os.path.exists(jar_path):
+        # use the grid server built by bazel
+        server = Server(path=jar_path, env=remote_env)
+    else:
+        # use the local grid server (downloads a new one if needed)
+        server = Server(env=remote_env)
     server.start()
     yield server
     server.stop()
