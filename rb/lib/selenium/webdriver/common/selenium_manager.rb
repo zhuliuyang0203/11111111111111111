@@ -107,14 +107,15 @@ module Selenium
 
         def validate_command_result(command, status, result, stderr)
           if status.nil? || status.exitstatus.nil?
-            WebDriver.logger.info("Invalid process exit status for: #{command}. Assuming success if result is present.",
+            WebDriver.logger.info("No exit status for: #{command}. Assuming success if result is present.",
                                   id: :selenium_manager)
           end
 
           return unless status&.exitstatus&.positive? || result.nil?
 
+          code = status&.exitstatus || 'exit status not available'
           raise Error::WebDriverError,
-                "Unsuccessful command executed: #{command} - Code #{status&.exitstatus}\n#{result}\n#{stderr}"
+                "Unsuccessful command executed: #{command} - Code #{code}\n#{result}\n#{stderr}"
         end
       end
     end # SeleniumManager
