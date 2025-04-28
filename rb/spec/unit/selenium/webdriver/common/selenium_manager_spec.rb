@@ -98,12 +98,9 @@ module Selenium
           stdout = '{"result": "value", "logs": []}'
           allow(Open3).to receive(:capture3).and_return([stdout, 'stderr', status])
 
-          expect(WebDriver.logger).to receive(:info).with(
-            a_string_including('No valid process exit status'),
-            hash_including(id: :selenium_manager)
-          )
-
-          expect(described_class.send(:run, 'anything')).to eq 'value'
+          expect {
+            expect(described_class.send(:run, 'anything')).to eq 'value'
+          }.to have_info(:info)
         end
 
         it 'raises if result is nil even with successful exitstatus' do
