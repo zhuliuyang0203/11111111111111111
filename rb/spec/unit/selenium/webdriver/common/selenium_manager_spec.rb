@@ -100,7 +100,7 @@ module Selenium
 
           expect {
             expect(described_class.send(:run, 'anything')).to eq 'value'
-          }.to have_info(:info)
+          }.to have_info(:selenium_manager)
         end
 
         it 'raises if result is nil even with successful exitstatus' do
