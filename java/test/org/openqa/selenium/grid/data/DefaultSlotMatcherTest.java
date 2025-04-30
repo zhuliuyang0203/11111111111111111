@@ -76,9 +76,7 @@ class DefaultSlotMatcherTest {
             CapabilityType.PLATFORM_NAME,
             Platform.WINDOWS,
             "se:downloadsEnabled",
-            true,
-            "moz:debuggerAddress",
-            "127.0.0.1:34959");
+            true);
     Capabilities capabilities =
         new ImmutableCapabilities(
             CapabilityType.BROWSER_NAME,
@@ -86,8 +84,6 @@ class DefaultSlotMatcherTest {
             CapabilityType.PLATFORM_NAME,
             Platform.WINDOWS,
             "se:downloadsEnabled",
-            true,
-            "moz:debuggerAddress",
             true);
     assertThat(slotMatcher.matches(stereotype, capabilities)).isTrue();
   }
@@ -566,6 +562,32 @@ class DefaultSlotMatcherTest {
             "gouda",
             "ms:fruit",
             "orange");
+    assertThat(slotMatcher.matches(stereotype, capabilities)).isTrue();
+  }
+
+  @Test
+  void extensionPrefixedOptionCapabilityIsIgnoredForMatching() {
+    Capabilities stereotype =
+        new ImmutableCapabilities(
+            CapabilityType.BROWSER_NAME,
+            "chrome",
+            CapabilityType.BROWSER_VERSION,
+            "84",
+            CapabilityType.PLATFORM_NAME,
+            Platform.WINDOWS,
+            "node:options",
+            "appium");
+
+    Capabilities capabilities =
+        new ImmutableCapabilities(
+            CapabilityType.BROWSER_NAME,
+            "chrome",
+            CapabilityType.BROWSER_VERSION,
+            "84",
+            CapabilityType.PLATFORM_NAME,
+            Platform.WINDOWS,
+            "node:options",
+            "selenium");
     assertThat(slotMatcher.matches(stereotype, capabilities)).isTrue();
   }
 
