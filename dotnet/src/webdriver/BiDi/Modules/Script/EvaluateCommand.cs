@@ -18,11 +18,12 @@
 // </copyright>
 
 using OpenQA.Selenium.BiDi.Communication;
+using System;
 
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
 internal class EvaluateCommand(EvaluateCommandParameters @params)
-    : Command<EvaluateCommandParameters>(@params, "script.evaluate");
+    : Command<EvaluateCommandParameters, EvaluateResult>(@params, "script.evaluate");
 
 internal record EvaluateCommandParameters(string Expression, Target Target, bool AwaitPromise, ResultOwnership? ResultOwnership, SerializationOptions? SerializationOptions, bool? UserActivation) : CommandParameters;
 
@@ -37,16 +38,26 @@ public record EvaluateOptions : CommandOptions
 
 // https://github.com/dotnet/runtime/issues/72604
 //[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
-//[JsonDerivedType(typeof(Success), "success")]
-//[JsonDerivedType(typeof(Exception), "exception")]
-public abstract record EvaluateResult
+//[JsonDerivedType(typeof(EvaluateResultSuccess), "success")]
+//[JsonDerivedType(typeof(EvaluateResultException), "exception")]
+public abstract record EvaluateResult : EmptyResult
 {
-    public record Success(RemoteValue Result, Realm Realm) : EvaluateResult
+    public RemoteValue AsSuccessResult()
     {
-        public static implicit operator RemoteValue(Success success) => success.Result;
-    }
+        if (this is EvaluateResultSuccess success)
+        {
+            return success.Result;
+        }
 
-    public record Exception(ExceptionDetails ExceptionDetails, Realm Realm) : EvaluateResult;
+        throw new InvalidCastException($"Expected the result to be {nameof(EvaluateResultSuccess)}, but received {this}");
+    }
 }
+
+public record EvaluateResultSuccess(RemoteValue Result, Realm Realm) : EvaluateResult
+{
+    public static implicit operator RemoteValue(EvaluateResultSuccess success) => success.Result;
+}
+
+public record EvaluateResultException(ExceptionDetails ExceptionDetails, Realm Realm) : EvaluateResult;
 
 public record ExceptionDetails(long ColumnNumber, long LineNumber, StackTrace StackTrace, string Text);
