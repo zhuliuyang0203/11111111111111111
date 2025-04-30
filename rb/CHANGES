@@ -1,3 +1,31 @@
+4.32.0 (2025-04-30)
+=========================
+* bump versions to nightly
+* log at info level with names and values when Guards#add_condition used
+* guards should match false not nil
+* Add PrintOptions Implementation for Ruby WebDriver (#15158)
+* [ruby] fix lint for print_options.rb (#15608)
+* add enable_downloads to attr_accessor for all options classes
+    > this only applies to chromium & firefox via grid, but it needs to be supported directly like this
+* make logging of test guards debug level not info
+    > logs are too noisy as info
+* Set remote active protocol in Firefox to BiDi only
+* handle issue with selenium manager exit status being nil (#15676)
+    > Fixes #14622
+* Add websocket-port parameter to firefox service (#15458)
+    > * Add --websocket-port parameter to firefox service
+    > * Correct identation issue
+    > * Add guard to test
+    > * Improve unit test
+    > * Improve unit test
+    > * fix identation
+    > * Simplifying test and fixing formatting issue
+    > * Simplifying test and fixing formatting issue
+    > * Use the PortProber isntead of Sockets
+    > * Change port to 9222
+* update devtools versions
+* bump versions in preparation for release
+
 4.31.0 (2025-04-04)
 =========================
 * Add support for 135 and remove 132

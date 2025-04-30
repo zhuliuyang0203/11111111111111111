@@ -1,3 +1,18 @@
+v4.32.0
+======
+* [grid] Dynamic Grid can enforce platform for node browser images
+* [grid] Ignored options when they are prefixed, safari specif as well (#15574)
+    > Fixes #15481
+    > Fixes #14485
+* [bidi]: add browsingContext event `onNavigationCommitted` (#15560)
+* Set remote active protocol to BiDi for Firefox (#15224)
+* Add header while creating websocket (#15655)
+    > * Add header while creating websocket
+    > * Adding a wait to the test to see if it passes
+    > * Remove unnecessary changes
+    > * Fix formatting
+* update devtools versions
+
 v4.31.0
 ======
 * Add CDP for Chrome 135 and remove 132

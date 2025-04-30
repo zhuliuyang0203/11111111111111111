@@ -1,3 +1,130 @@
+Selenium 4.32.0
+* bump versions to nightly
+* BiDi Network implementation of Intercepts and Auth in Python (#14592)
+    > * added network.py, updated webdriver.py, added bidi_network_tests.py
+    > * Tests are passing
+    > * Removed redundant bazel test
+    > * deleted unused leftover function
+    > * deleting other leftover function
+    > Thought I might need it, but didn't
+    > * removed unused imports
+    > * cleanup
+    > * fixed url_for() - tests passing
+    > * added instantiation of self._network = None
+    > * Made functions async
+    > * Update network.py
+    > * linting
+    > * linting
+    > * linting
+    > * remove debugging port from fixture
+    > * Removed Async/Await
+    > * Made changes per review
+    > * added back linting
+    > * Added intial high-level api implementation with basic docstring for users
+    > * extended the tests
+    > * added docstrings to all functions
+    > * abstracted out response/request... rewrote tests
+    > * Update network.py
+    > * refactored high-level api implementation
+    > * minor fix
+    > * New adjustments per @p0deje
+    > * Updated assert text on failure
+    > * Added xfails for safari
+    > * fixed tests
+    > * Update bidi_network_tests.py
+    > * linting
+    > * added back commands
+    > * linting
+    > * linting
+    > * nonlocalized request_id
+    > * replaced fixture with driver.network
+    > * updated webdriver.py to intiailize websocket if none
+    > * updated tests
+    > * added license
+    > * update serialize and network
+    > * Update websocket_connection.py
+    > * Update network.py
+    > * got network to intialize and browser to recognize commands, issue with getting callbacks to call
+    > * don't need to explicitly return there
+    > * switched to using add_callback
+    > * unified callback_id and request/response_id
+    > * removed wasted memort
+    > * removed nonlocal usage
+    > * added import, gave abstractions command_iterator class, added .to_json()
+    > * added session_subscribe() to __on()
+    > * shift ooo
+    > * format.sh
+    > * spinning wheel of death
+    > * removed unused import
+    > * Added more comprehensive docstrings ... minor tweaks
+    > * formatting
+    > * Update command.py
+    > * command.py
+    > * Complete rewrite - all tests passing but auth on google.com
+    > * linting
+    > * remove unused command.py commands
+    > * removed commands
+    > * Removed unused Response functionality - refined tests. All that fails is continue_request and continue_with_auth
+    > * minor tweak
+    > * Updated auth test - was trying to find page that onlt exists in rb bindings, removed change from websocket_connection.py
+    > * updated event_name for continue, still failing
+    > * linting
+    > * uncommented
+    > * refactored continue_with_auth to proceed with ContinueWithNoAuthCredentials per BiDi spec
+    > * updated continue_request, moved _continue_with_auth under Request object -- still failing 2 tests
+    > * typo
+    > * made changes to websocket_connection.py, added fail_request()
+    > * Update network.py
+    > * marked add/remove_intercept() private, added clear_request_handlers()
+    > * marked xfail for chromium bidi issues
+    > * added remove_auth_handler, all tests passing
+    > * prevented editing iterator during iteration
+* Fix select being able to select options hidden by css rules (#15135)
+    > * Fix select being able to select options hidden by css rules
+    > * corrected formatting with format.sh
+    > * Fix select_by_visible_test to raise an exception on hidden options even if the argument text has spaces
+    > Fix error messages to be the same as java's one
+    > * adding check to all instances of invisible properties to test_raises_exception_select_by_text_multiple_hidden
+    > - adding "opacity: 0.0", "display: none", "visibility: hidden" to formPage.html#invisible_multi_select
+    > - checking all the options of formPage.html#invisible_multi_select in test_raises_exception_select_by_text_multiple_hidden()
+* [bidi]: Implement BiDi browser module  (#15616)
+    > * implement BiDi browser module
+    > * add test browser tests
+    > * run `format.sh`
+    > * move `command_builder` to `common.py` to avoid function duplication
+    > * add `init.py`
+    > * move bidi test to `bidi/` directory
+    > * fix tests
+    > * check user_context_id for default and raise exception
+    > * revert tests relocation since CI is failing
+* Call service.stop() when session can't be started (#15636)
+* Remove logging API for non-Chromium browsers  (#15641)
+* Raise TypeError when creating webdriver.Remote() without options (#15619)
+* Add autoflake linter and update linting dependencies (#15643)
+* Fix driver service stop when starting browser fails (#15656)
+    > Fix Remote service stop
+* [bidi]: add bidi command `session.status` and encapsulate in Session class (#15615)
+    > * add bidi command session status
+    > * use Session class for session module
+    > * make webdriver bidi session private
+* Set remote active protocol in Firefox to BiDi only
+* [bidi]: Implement BiDi `browsing_context` module (#15631)
+    > * implement bidi browsing context module
+    > * add tests
+    > * run `format.sh`
+    > * use Session class
+    > * add locate nodes tests
+* [BiDi] separate log module from script module and add more tests (#15668)
+* Add client_config property and update deprecation messages (#15674)
+    > * Add client_config property and update deprecation messages
+    > * Add timeout test and update unit tests
+* Remove support for GLOBAL_DEFAULT_TIMEOUT environment variable (#15673)
+* Server class to manage (download/run) grid server (#15666)
+    > * Add class to manage remote/grid server
+    > * User Server class in conftest
+    > * Add server tests
+* bump versions in preparation for release
+
 Selenium 4.31.0
 * Add CDP for Chrome 135 and remove 132
 * Fix docstring issues that sphinx complains about (#15466)

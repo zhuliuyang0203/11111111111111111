@@ -1,3 +1,10 @@
+## 4.32.0
+
+- bump versions to nightly
+- Set remote active protocol in Firefox to BiDi only
+- update devtools versions
+- bump versions in preparation for release
+
 ## 4.31.0
 
 - [bidi]: fix storage module instance checks and add user context cookie test (#15467)
