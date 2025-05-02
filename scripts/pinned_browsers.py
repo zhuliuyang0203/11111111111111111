@@ -26,29 +26,52 @@ def calculate_hash(url):
     return h.hexdigest()
 
 
-def get_chrome_milestone():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--chrome_channel', default='Stable', help='Set the Chrome channel')
-    args = parser.parse_args()
-    channel = args.chrome_channel
+#!/usr/bin/env python
 
-    r = http.request(
-        "GET", f"https://chromiumdash.appspot.com/fetch_releases?channel={channel}&num=1&platform=Mac,Linux"
-    )
-    all_versions = json.loads(r.data)
-    # use the same milestone for all chrome releases, so pick the lowest
-    milestone = min([version["milestone"] for version in all_versions if version["milestone"]])
-    r = http.request(
-        "GET", "https://googlechromelabs.github.io/chrome-for-testing/known-good-versions-with-downloads.json"
-    )
-    versions = json.loads(r.data)["versions"]
+import argparse
+import hashlib
+import json
+import os
+import sys
+from pathlib import Path
 
-    return sorted(
-        filter(lambda v: v["version"].split(".")[0] == str(milestone), versions), key=lambda v: parse(v["version"])
-    )[-1]
+import urllib3
+from packaging.version import parse
+
+http = urllib3.PoolManager()
 
 
-def chromedriver(selected_version):
+def calculate_hash(url):
+    print("Calculate hash for %s" % url, file=sys.stderr)
+    h = hashlib.sha256()
+    r = http.request("GET", url, preload_content=False)
+    for b in iter(lambda: r.read(4096), b""):
+        h.update(b)
+    return h.hexdigest()
+
+
+def get_chrome_versions():
+    channels = ['Stable', 'Beta']
+    versions = {}
+    for channel in channels:
+        r = http.request(
+            "GET", f"https://chromiumdash.appspot.com/fetch_releases?channel={channel}&num=1&platform=Mac,Linux"
+        )
+        all_versions = json.loads(r.data)
+        milestone = min([version["milestone"] for version in all_versions if version["milestone"]])
+        r = http.request(
+            "GET", "https://googlechromelabs.github.io/chrome-for-testing/known-good-versions-with-downloads.json"
+        )
+        all_known_versions = json.loads(r.data)["versions"]
+        selected_version = sorted(
+            filter(lambda v: v["version"].split(".")[0] == str(milestone), all_known_versions),
+            key=lambda v: parse(v["version"])
+        )[-1]
+        versions[channel] = selected_version
+    return versions
+
+
+def chromedriver(selected_version, workspace_name=""):
     content = ""
 
     drivers = selected_version["downloads"]["chromedriver"]
@@ -56,69 +79,62 @@ def chromedriver(selected_version):
     linux = [d["url"] for d in drivers if d["platform"] == "linux64"][0]
     sha = calculate_hash(linux)
 
-    content = (
-      content
-      + """    http_archive(
-        name = "linux_chromedriver",
-        url = "%s",
-        sha256 = "%s",
-        strip_prefix = "chromedriver-linux64",
+    content += f"""    http_archive(
+        name = \"linux_{workspace_name}chromedriver\",
+        url = \"{linux}\",
+        sha256 = \"{sha}\",
+        strip_prefix = \"chromedriver-linux64\",
         build_file_content = \"\"\"
-load("@aspect_rules_js//js:defs.bzl", "js_library")
-package(default_visibility = ["//visibility:public"])
+load(\"@aspect_rules_js//js:defs.bzl\", \"js_library\")
+package(default_visibility = [\"//visibility:public\"])
 
-exports_files(["chromedriver"])
+exports_files([\"chromedriver\"])
 
 js_library(
-    name = "chromedriver-js",
-    data = ["chromedriver"],
+    name = \"chromedriver-js\",
+    data = [\"chromedriver\"],
 )
 \"\"\",
     )
 """
-      % (linux, sha)
-    )
 
     mac = [d["url"] for d in drivers if d["platform"] == "mac-x64"][0]
     sha = calculate_hash(mac)
-    content = (
-      content
-      + """
+    content += f"""
     http_archive(
-        name = "mac_chromedriver",
-        url = "%s",
-        sha256 = "%s",
-        strip_prefix = "chromedriver-mac-x64",
+        name = \"mac_{workspace_name}chromedriver\",
+        url = \"{mac}\",
+        sha256 = \"{sha}\",
+        strip_prefix = \"chromedriver-mac-x64\",
         build_file_content = \"\"\"
-load("@aspect_rules_js//js:defs.bzl", "js_library")
-package(default_visibility = ["//visibility:public"])
+load(\"@aspect_rules_js//js:defs.bzl\", \"js_library\")
+package(default_visibility = [\"//visibility:public\"])
 
-exports_files(["chromedriver"])
+exports_files([\"chromedriver\"])
 
 js_library(
-    name = "chromedriver-js",
-    data = ["chromedriver"],
+    name = \"chromedriver-js\",
+    data = [\"chromedriver\"],
 )
 \"\"\",
     )
 """
-      % (mac, sha)
-    )
 
     return content
 
+def chrome(selected_version, workspace_name=""):
+    print(f"Calculating hash for Chrome ({workspace_name or 'stable'}) version {selected_version['version']}", file=sys.stderr)
 
-def chrome(selected_version):
     chrome_downloads = selected_version["downloads"]["chrome"]
 
     linux = [d["url"] for d in chrome_downloads if d["platform"] == "linux64"][0]
     sha = calculate_hash(linux)
 
-    content = """
+    content = f"""
     http_archive(
-        name = "linux_chrome",
-        url = "%s",
-        sha256 = "%s",
+        name = "linux_{workspace_name}chrome",
+        url = "{linux}",
+        sha256 = "{sha}",
         build_file_content = \"\"\"
 load("@aspect_rules_js//js:defs.bzl", "js_library")
 package(default_visibility = ["//visibility:public"])
@@ -136,19 +152,15 @@ js_library(
 )
 \"\"\",
     )
-
-""" % (
-        linux,
-        sha,
-    )
+"""
 
     mac = [d["url"] for d in chrome_downloads if d["platform"] == "mac-x64"][0]
     sha = calculate_hash(mac)
 
-    content += """    http_archive(
-        name = "mac_chrome",
-        url = "%s",
-        sha256 = "%s",
+    content += f"""    http_archive(
+        name = "mac_{workspace_name}chrome",
+        url = "{mac}",
+        sha256 = "{sha}",
         strip_prefix = "chrome-mac-x64",
         patch_cmds = [
             "mv 'Google Chrome for Testing.app' Chrome.app",
@@ -166,11 +178,7 @@ js_library(
 )
 \"\"\",
     )
-
-""" % (
-        mac,
-        sha,
-    )
+"""
 
     return content
 
@@ -496,13 +504,21 @@ def pin_browsers():
     local_drivers(name = "local_drivers")
 
 """
-    content = content + firefox()
-    content = content + geckodriver()
-    content = content + edge()
-    content = content + edgedriver()
-    chrome_milestone = get_chrome_milestone()
-    content = content + chrome(chrome_milestone)
-    content = content + chromedriver(chrome_milestone)
+    content += firefox()
+    content += geckodriver()
+    content += edge()
+    content += edgedriver()
+
+    chrome_versions = get_chrome_versions()
+    chrome_stable = chrome_versions['Stable']
+    content += chrome(chrome_stable)
+    content += chromedriver(chrome_stable)
+
+    chrome_beta = chrome_versions['Beta']
+    if chrome_stable["version"] != chrome_beta["version"]:
+        content += chrome(chrome_beta, workspace_name="beta_")
+        content += chromedriver(chrome_beta, workspace_name="beta_")
+
     content += """
 def _pin_browsers_extension_impl(_ctx):
     pin_browsers()
