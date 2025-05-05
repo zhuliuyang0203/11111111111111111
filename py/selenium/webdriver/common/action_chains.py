@@ -15,6 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 """The ActionChains implementation."""
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING

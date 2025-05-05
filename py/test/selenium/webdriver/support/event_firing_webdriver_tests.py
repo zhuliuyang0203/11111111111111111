@@ -113,9 +113,7 @@ def test_should_fire_change_value_event(driver, log, pages):
     keyReporter.send_keys("abc def")
     assert keyReporter.get_attribute("value") == "abc def"
 
-    assert (
-        b"before_change_value_of" b"after_change_value_of" b"before_change_value_of" b"after_change_value_of"
-    ) == log.getvalue()
+    assert (b"before_change_value_ofafter_change_value_ofbefore_change_value_ofafter_change_value_of") == log.getvalue()
 
 
 def test_should_fire_find_event(driver, log, pages):

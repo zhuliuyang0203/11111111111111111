@@ -162,9 +162,9 @@ def test_should_be_able_to_execute_asynchronous_scripts(driver, pages):
     driver.find_element(by=By.ID, value="red").click()
     driver.find_element(by=By.NAME, value="submit").click()
 
-    assert 1 == len(
-        driver.find_elements(by=By.TAG_NAME, value="div")
-    ), "There should only be 1 DIV at this point, which is used for the butter message"
+    assert 1 == len(driver.find_elements(by=By.TAG_NAME, value="div")), (
+        "There should only be 1 DIV at this point, which is used for the butter message"
+    )
     driver.set_script_timeout(10)
     text = driver.execute_async_script(
         """var callback = arguments[arguments.length - 1];
@@ -173,9 +173,9 @@ def test_should_be_able_to_execute_asynchronous_scripts(driver, pages):
     assert "bob" == text
     assert "" == typer.get_attribute("value")
 
-    assert 2 == len(
-        driver.find_elements(by=By.TAG_NAME, value="div")
-    ), "There should be 1 DIV (for the butter message) + 1 DIV (for the new label)"
+    assert 2 == len(driver.find_elements(by=By.TAG_NAME, value="div")), (
+        "There should be 1 DIV (for the butter message) + 1 DIV (for the new label)"
+    )
 
 
 def test_should_be_able_to_pass_multiple_arguments_to_async_scripts(driver, pages):

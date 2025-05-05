@@ -945,7 +945,7 @@ def any_of(*expected_conditions: Callable[[D], T]) -> Callable[[D], Union[Litera
 
 
 def all_of(
-    *expected_conditions: Callable[[D], Union[T, Literal[False]]]
+    *expected_conditions: Callable[[D], Union[T, Literal[False]]],
 ) -> Callable[[D], Union[List[T], Literal[False]]]:
     """An expectation that all of multiple expected conditions is true.
 

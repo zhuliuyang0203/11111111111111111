@@ -166,6 +166,18 @@ extend-ignore = ["E501", "E203"]
 max-line-length = 120
 min-python-version = "3.9"
 
+[tool.ruff]
+exclude = [
+    "selenium/webdriver/common/devtools/",
+    "private/",
+    "generate.py",
+]
+line-length = 120
+
+[tool.ruff.lint]
+extend-select = ["E501"]
+fixable = ["ALL"]
+
 [tool.docformatter]
 exclude = "selenium/webdriver/common/devtools"
 in-place = true
