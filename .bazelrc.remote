@@ -11,7 +11,7 @@ build:rbe --define=EXECUTOR=remote
 build:rbe --experimental_inmemory_dotd_files
 build:rbe --experimental_inmemory_jdeps_files
 build:rbe --remote_timeout=3600
-build:rbe --spawn_strategy=remote,local
+build:rbe --spawn_strategy=remote
 #build:rbe --nolegacy_important_outputs
 build:rbe --incompatible_strict_action_env=true
 
