@@ -523,17 +523,15 @@ public class JdkHttpClient implements HttpClient {
       }
     }
 
-    if (this.client instanceof AutoCloseable) {
-      AutoCloseable closeable = (AutoCloseable) this.client;
-      executorService.submit(
-          () -> {
-            try {
-              closeable.close();
-            } catch (Exception e) {
-              LOG.log(Level.WARNING, "failed to close the http client: " + closeable, e);
-            }
-          });
-    }
+    AutoCloseable closeable = (AutoCloseable) this.client;
+    executorService.submit(
+        () -> {
+          try {
+            closeable.close();
+          } catch (Exception e) {
+            LOG.log(Level.WARNING, "failed to close the http client: " + closeable, e);
+          }
+        });
     this.client = null;
     executorService.shutdown();
   }
