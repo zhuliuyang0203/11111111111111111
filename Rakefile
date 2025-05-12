@@ -510,7 +510,9 @@ namespace :node do
 
   desc 'Generate Node documentation'
   task :docs do |_task, arguments|
-    abort('Aborting documentation update: nightly versions should not update docs.') if node_version.include?('nightly')
+    if node_version.include?('nightly') && !arguments.to_a.include?('force')
+      abort('Aborting documentation update: nightly versions should not update docs.')
+    end
 
     puts 'Generating Node documentation'
     FileUtils.rm_rf('build/docs/api/javascript/')
@@ -608,7 +610,7 @@ namespace :py do
 
   desc 'Generate Python documentation'
   task :docs do |_task, arguments|
-    if python_version.match?(/^\d+\.\d+\.\d+\.\d+$/)
+    if python_version.match?(/^\d+\.\d+\.\d+\.\d+$/) && !arguments.to_a.include?('force')
       abort('Aborting documentation update: nightly versions should not update docs.')
     end
     puts 'Generating Python documentation'
@@ -776,7 +778,9 @@ namespace :rb do
 
   desc 'Generate Ruby documentation'
   task :docs do |_task, arguments|
-    abort('Aborting documentation update: nightly versions should not update docs.') if ruby_version.include?('nightly')
+    if ruby_version.include?('nightly') && !arguments.to_a.include?('force')
+      abort('Aborting documentation update: nightly versions should not update docs.')
+    end
     puts 'Generating Ruby documentation'
 
     FileUtils.rm_rf('build/docs/api/rb/')
@@ -872,7 +876,7 @@ namespace :dotnet do
 
   desc 'Generate .NET documentation'
   task :docs do |_task, arguments|
-    if dotnet_version.include?('nightly')
+    if dotnet_version.include?('nightly') && !arguments.to_a.include?('force')
       abort('Aborting documentation update: nightly versions should not update docs.')
     end
 
@@ -987,7 +991,7 @@ namespace :java do
 
   desc 'Generate Java documentation'
   task :docs do |_task, arguments|
-    if java_version.include?('SNAPSHOT')
+    if java_version.include?('SNAPSHOT') && !arguments.to_a.include?('force')
       abort('Aborting documentation update: snapshot versions should not update docs.')
     end
 
