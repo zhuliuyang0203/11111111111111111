@@ -76,7 +76,7 @@ TEST_DEPS = [
     requirement("filetype"),
     requirement("idna"),
     requirement("iniconfig"),
-    requirement("importlib-metadata"),
+    requirement("importlib_metadata"),
     requirement("h11"),
     requirement("more-itertools"),
     requirement("multidict"),
@@ -200,7 +200,7 @@ py_library(
         requirement("trio"),
         requirement("trio-websocket"),
         requirement("certifi"),
-        requirement("typing-extensions"),
+        requirement("typing_extensions"),
         requirement("websocket-client"),
     ],
 )
@@ -292,7 +292,7 @@ py_wheel(
         "trio~=0.30.0",
         "trio-websocket~=0.12.2",
         "certifi>=2025.4.26",
-        "typing-extensions~=4.13.2",
+        "typing_extensions~=4.13.2",
         "websocket-client~=1.8.0",
     ],
     strip_path_prefixes = [
