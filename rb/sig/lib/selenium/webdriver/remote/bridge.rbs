@@ -1,9 +1,7 @@
 class Selenium::WebDriver::Remote::Bridge
-  def execute: (Symbol, ?Hash[untyped, untyped], ?Hash[untyped, untyped]) -> nil
-             | (Symbol, ?Hash[untyped, untyped], ?nil) -> Hash[untyped, untyped]
-             | (Symbol, ?Hash[untyped, untyped], ?nil) -> nil
+  def quit: () -> nil
+
+  def execute: (Symbol, ?Hash[untyped, untyped], ?nil) -> void
 
   def session_id: () -> String
-
-  def quit: () -> nil
 end

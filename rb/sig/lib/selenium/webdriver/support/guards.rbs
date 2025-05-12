@@ -7,11 +7,9 @@ class Selenium::WebDriver::Support::Guards
                    | (Symbol, ?nil) -> void
                    | (Symbol, ?bool) -> void
 
-  def disposition: () -> nil
+  def disposition: () -> Array[untyped]
 
-  def skipping_guard: () -> nil
+  def skipping_guard: () -> Selenium::WebDriver::Support::Guards::Guard
 
   def satisfied?: (Selenium::WebDriver::Support::Guards::Guard) -> bool
-
-  def pending_guard: () -> nil
 end
