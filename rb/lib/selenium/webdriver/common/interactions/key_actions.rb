@@ -44,9 +44,8 @@ module Selenium
       # @return [ActionBuilder] A self reference
       #
 
-      # @rbs (*String | Symbol, ?device: nil) -> Selenium::WebDriver::ActionBuilder
-      def key_down(*args, device: nil)
-        key_action(*args, action: :create_key_down, device: device)
+      def key_down(*, device: nil)
+        key_action(*, action: :create_key_down, device: device)
       end
 
       #
@@ -72,9 +71,8 @@ module Selenium
       # @return [ActionBuilder] A self reference
       #
 
-      # @rbs (*String | Symbol, ?device: nil) -> Selenium::WebDriver::ActionBuilder
-      def key_up(*args, device: nil)
-        key_action(*args, action: :create_key_up, device: device)
+      def key_up(*, device: nil)
+        key_action(*, action: :create_key_up, device: device)
       end
 
       #
@@ -103,7 +101,6 @@ module Selenium
       # @return [ActionBuilder] A self reference
       #
 
-      # @rbs (*String | Selenium::WebDriver::Element | String | String | Symbol, ?device: nil) -> Selenium::WebDriver::ActionBuilder
       def send_keys(*args, device: nil)
         click(args.shift) if args.first.is_a? Element
         args.map { |x| x.is_a?(String) ? x.chars : x }.flatten.each do |arg|
@@ -136,7 +133,6 @@ module Selenium
       # @return [ActionBuilder] A self reference
       #
 
-      # @rbs (*String | Symbol, ?action: Symbol, ?device: nil) -> Selenium::WebDriver::ActionBuilder
       def key_action(*args, action: nil, device: nil)
         key_input = key_input(device)
         click(args.shift) if args.first.is_a? Element
@@ -145,7 +141,6 @@ module Selenium
         self
       end
 
-      # @rbs (?nil) -> Selenium::WebDriver::Interactions::KeyInput
       def key_input(name = nil)
         device(name: name, type: Interactions::KEY) || add_key_input('keyboard')
       end

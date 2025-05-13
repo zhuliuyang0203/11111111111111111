@@ -41,7 +41,6 @@ module Selenium
         # @return [Driver]
         #
 
-        # @rbs (Symbol, ?Hash[untyped, untyped]) -> Selenium::WebDriver::Chrome::Driver
         def for(browser, opts = {})
           case browser
           when :chrome, :chrome_headless_shell
@@ -69,15 +68,13 @@ module Selenium
       # @api private
       #
 
-      # @rbs (?bridge: nil, ?listener: nil, **Hash[untyped, untyped] | URI::HTTP) -> void
-      def initialize(bridge: nil, listener: nil, **opts)
+      def initialize(bridge: nil, listener: nil, **)
         @devtools = nil
-        bridge ||= create_bridge(**opts)
+        bridge ||= create_bridge(**)
         @bridge = listener ? Support::EventFiringBridge.new(bridge, listener) : bridge
         add_extensions(@bridge.browser)
       end
 
-      # @rbs () -> String
       def inspect
         format '#<%<class>s:0x%<hash>x browser=%<browser>s>', class: self.class, hash: hash * 2,
                                                               browser: bridge.browser.inspect
@@ -89,7 +86,6 @@ module Selenium
       #
       # @return [Hash]
       #
-      # @rbs () -> Hash[untyped, untyped]
       def status
         @bridge.status
       end
@@ -99,7 +95,6 @@ module Selenium
       # @see Navigation
       #
 
-      # @rbs () -> Selenium::WebDriver::Navigation
       def navigate
         @navigate ||= WebDriver::Navigation.new(bridge)
       end
@@ -109,7 +104,6 @@ module Selenium
       # @see Script
       #
 
-      # @rbs () -> Selenium::WebDriver::Script?
       def script
         @script ||= WebDriver::Script.new(bridge)
       end
@@ -119,7 +113,6 @@ module Selenium
       # @see TargetLocator
       #
 
-      # @rbs () -> Selenium::WebDriver::TargetLocator
       def switch_to
         @switch_to ||= WebDriver::TargetLocator.new(bridge)
       end
@@ -129,7 +122,6 @@ module Selenium
       # @see Manager
       #
 
-      # @rbs () -> Selenium::WebDriver::Manager
       def manage
         bridge.manage
       end
@@ -139,16 +131,14 @@ module Selenium
       # @see ActionBuilder
       #
 
-      # @rbs (**nil) -> Selenium::WebDriver::ActionBuilder
-      def action(**opts)
-        bridge.action(**opts)
+      def action(**)
+        bridge.action(**)
       end
 
       #
       # Opens the specified URL in the browser.
       #
 
-      # @rbs (String) -> nil
       def get(url)
         navigate.to(url)
       end
@@ -159,7 +149,6 @@ module Selenium
       # @return [String]
       #
 
-      # @rbs () -> String
       def current_url
         bridge.url
       end
@@ -170,7 +159,6 @@ module Selenium
       # @return [String]
       #
 
-      # @rbs () -> String
       def title
         bridge.title
       end
@@ -181,7 +169,6 @@ module Selenium
       # @return [String]
       #
 
-      # @rbs () -> String
       def page_source
         bridge.page_source
       end
@@ -190,7 +177,6 @@ module Selenium
       # Quit the browser
       #
 
-      # @rbs () -> nil
       def quit
         bridge.quit
       ensure
@@ -202,7 +188,6 @@ module Selenium
       # Close the current window, or the browser if no windows are left.
       #
 
-      # @rbs () -> Array[untyped]
       def close
         bridge&.close
       end
@@ -214,7 +199,6 @@ module Selenium
       # @see TargetLocator#window
       #
 
-      # @rbs () -> Array[untyped]
       def window_handles
         bridge.window_handles
       end
@@ -225,7 +209,6 @@ module Selenium
       # @return [String]
       #
 
-      # @rbs () -> String
       def window_handle
         bridge.window_handle
       end
@@ -242,9 +225,8 @@ module Selenium
       #   The value returned from the script.
       #
 
-      # @rbs (String, *nil) -> String
-      def execute_script(script, *args)
-        bridge.execute_script(script, *args)
+      def execute_script(script, *)
+        bridge.execute_script(script, *)
       end
 
       # Execute an asynchronous piece of JavaScript in the context of the
@@ -262,9 +244,8 @@ module Selenium
       # @return [WebDriver::Element,Integer,Float,Boolean,NilClass,String,Array]
       #
 
-      # @rbs (String, *Array[untyped] | nil) -> Hash[untyped, untyped]
-      def execute_async_script(script, *args)
-        bridge.execute_async_script(script, *args)
+      def execute_async_script(script, *)
+        bridge.execute_async_script(script, *)
       end
 
       #
@@ -272,7 +253,6 @@ module Selenium
       # @see VirtualAuthenticator
       #
 
-      # @rbs (Selenium::WebDriver::VirtualAuthenticatorOptions) -> Selenium::WebDriver::VirtualAuthenticator
       def add_virtual_authenticator(options)
         bridge.add_virtual_authenticator(options)
       end
@@ -312,19 +292,16 @@ module Selenium
       #   driver[:tag_name => 'div'] #=> #<WebDriver::Element:0x1011c3b88>
       #
 
-      # @rbs (Symbol | Hash[untyped, untyped]) -> Selenium::WebDriver::Element
       def [](sel)
         sel = {id: sel} if sel.is_a?(String) || sel.is_a?(Symbol)
 
         find_element sel
       end
 
-      # @rbs () -> Symbol
       def browser
         bridge.browser
       end
 
-      # @rbs () -> Selenium::WebDriver::Remote::Capabilities
       def capabilities
         bridge.capabilities
       end
@@ -334,7 +311,6 @@ module Selenium
       # @see SearchContext
       #
 
-      # @rbs () -> Array[untyped]
       def ref
         [:driver, nil]
       end
@@ -343,7 +319,6 @@ module Selenium
 
       attr_reader :bridge
 
-      # @rbs (caps: Hash[untyped, untyped], url: URI::HTTP, ?http_client: nil) -> Selenium::WebDriver::Remote::Bridge
       def create_bridge(caps:, url:, http_client: nil)
         klass = caps['webSocketUrl'] ? Remote::BiDiBridge : Remote::Bridge
         klass.new(http_client: http_client, url: url).tap do |bridge|
@@ -351,18 +326,15 @@ module Selenium
         end
       end
 
-      # @rbs (Selenium::WebDriver::Chrome::Service) -> URI::HTTP
       def service_url(service)
         @service_manager = service.launch
         @service_manager.uri
       end
 
-      # @rbs () -> String
       def screenshot
         bridge.screenshot
       end
 
-      # @rbs (Symbol) -> Array[untyped]
       def add_extensions(browser)
         extensions = case browser
                      when :chrome, :chrome_headless_shell, :msedge, :microsoftedge

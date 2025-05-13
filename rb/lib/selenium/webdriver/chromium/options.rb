@@ -67,9 +67,8 @@ module Selenium
         # @option opts [Array<String>] window_types A list of window types to appear in the list of window handles
         #
 
-        # @rbs (?profile: nil, **Array[untyped] | Hash[untyped, untyped] | nil) -> void
-        def initialize(profile: nil, **opts)
-          super(**opts)
+        def initialize(profile: nil, **)
+          super(**)
 
           @profile = profile
 
@@ -204,7 +203,6 @@ module Selenium
 
         protected
 
-        # @rbs (Hash[untyped, untyped]) -> void
         def process_browser_options(browser_options)
           enable_logging(browser_options) unless @logging_prefs.empty?
 
@@ -236,7 +234,6 @@ module Selenium
           @extensions << path
         end
 
-        # @rbs (Symbol | String) -> bool
         def camelize?(key)
           !%w[localState prefs].include?(key)
         end

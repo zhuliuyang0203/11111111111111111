@@ -49,7 +49,6 @@ module Selenium
           puts "\n"
         end
 
-        # @rbs () -> Symbol
         def browser
           if driver == :remote
             ENV.fetch('WD_REMOTE_BROWSER', 'chrome').tr('-', '_').to_sym
@@ -58,12 +57,10 @@ module Selenium
           end
         end
 
-        # @rbs (*untyped, **untyped) -> bool
         def driver_instance(...)
           @driver_instance || create_driver!(...)
         end
 
-        # @rbs (?time: Integer, **Hash[untyped, untyped]) -> bool
         def reset_driver!(time: 0, **opts, &block)
           # do not reset if the test was marked skipped
           return if opts.delete(:example)&.metadata&.fetch(:skip, nil)
@@ -73,7 +70,6 @@ module Selenium
           driver_instance(**opts, &block)
         end
 
-        # @rbs () -> void
         def quit_driver
           @driver_instance&.quit
         rescue StandardError
@@ -82,7 +78,6 @@ module Selenium
           @driver_instance = nil
         end
 
-        # @rbs () -> Selenium::WebDriver::SpecSupport::RackServer
         def app_server
           @app_server ||= begin
             app_server = RackServer.new(root.join('common/src/web').to_s, random_port)
@@ -121,7 +116,6 @@ module Selenium
           File.expand_path(File.read(File.expand_path(ENV.fetch('WD_BAZEL_JAVA_LOCATION'))).chomp)
         end
 
-        # @rbs () -> bool
         def rbe?
           Dir.pwd.start_with?('/mnt/engflow')
         end
@@ -160,27 +154,24 @@ module Selenium
           @driver_instance = @app_server = @remote_server = nil
         end
 
-        # @rbs (String) -> String
         def url_for(filename)
           app_server.where_is filename
         end
 
-        # @rbs () -> Pathname
         def root
           # prefer #realpath over #expand_path to avoid problems with UNC
           # see https://bugs.ruby-lang.org/issues/13515
           @root ||= Pathname.new('../../../../../../../').realpath(__FILE__)
         end
 
-        # @rbs (?listener: nil, **Hash[untyped, untyped]) -> bool
-        def create_driver!(listener: nil, **opts, &block)
+        def create_driver!(listener: nil, **, &block)
           check_for_previous_error
 
           method = :"#{driver}_driver"
           instance = if private_methods.include?(method)
-                       send(method, listener: listener, options: build_options(**opts))
+                       send(method, listener: listener, options: build_options(**))
                      else
-                       WebDriver::Driver.for(driver, listener: listener, options: build_options(**opts))
+                       WebDriver::Driver.for(driver, listener: listener, options: build_options(**))
                      end
           @create_driver_error_count -= 1 unless @create_driver_error_count.zero?
           if block
@@ -198,19 +189,14 @@ module Selenium
           raise e
         end
 
-        def ci?
-          current_env[:ci]
-        end
-
         private
 
-        # @rbs (**Hash[untyped, untyped]) -> Selenium::WebDriver::Chrome::Options
-        def build_options(**opts)
+        def build_options(**)
           options_method = :"#{browser}_options"
           if private_methods.include?(options_method)
-            send(options_method, **opts)
+            send(options_method, **)
           else
-            WebDriver::Options.send(browser, **opts)
+            WebDriver::Options.send(browser, **)
           end
         end
 
@@ -230,7 +216,6 @@ module Selenium
         class DriverInstantiationError < StandardError
         end
 
-        # @rbs () -> void
         def check_for_previous_error
           return unless @create_driver_error && @create_driver_error_count >= MAX_ERRORS
 
@@ -240,49 +225,47 @@ module Selenium
           raise DriverInstantiationError, msg, @create_driver_error.backtrace
         end
 
-        def remote_driver(**opts)
+        def remote_driver(**)
           url = ENV.fetch('WD_REMOTE_URL', remote_server.webdriver_url)
 
-          WebDriver::Driver.for(:remote, url: url, **opts)
+          WebDriver::Driver.for(:remote, url: url, **)
         end
 
-        # @rbs (?service: nil, **Selenium::WebDriver::Chrome::Options?) -> Selenium::WebDriver::Chrome::Driver
-        def chrome_driver(service: nil, **opts)
+        def chrome_driver(service: nil, **)
           service ||= WebDriver::Service.chrome
           service.args << '--disable-build-check' if ENV['DISABLE_BUILD_CHECK']
           service.args << '--verbose' if WebDriver.logger.debug?
           service.executable_path = ENV['CHROMEDRIVER_BINARY'] if ENV.key?('CHROMEDRIVER_BINARY')
-          WebDriver::Driver.for(:chrome, service: service, **opts)
+          WebDriver::Driver.for(:chrome, service: service, **)
         end
 
-        def edge_driver(service: nil, **opts)
+        def edge_driver(service: nil, **)
           service ||= WebDriver::Service.edge
           service.args << '--disable-build-check' if ENV['DISABLE_BUILD_CHECK']
           service.args << '--verbose' if WebDriver.logger.debug?
           service.executable_path = ENV['MSEDGEDRIVER_BINARY'] if ENV.key?('MSEDGEDRIVER_BINARY')
-          WebDriver::Driver.for(:edge, service: service, **opts)
+          WebDriver::Driver.for(:edge, service: service, **)
         end
 
-        def firefox_driver(service: nil, **opts)
+        def firefox_driver(service: nil, **)
           service ||= WebDriver::Service.firefox
           service.args.push('--log', 'trace') if WebDriver.logger.debug?
           service.executable_path = ENV['GECKODRIVER_BINARY'] if ENV.key?('GECKODRIVER_BINARY')
-          WebDriver::Driver.for(:firefox, service: service, **opts)
+          WebDriver::Driver.for(:firefox, service: service, **)
         end
 
-        def safari_driver(**opts)
+        def safari_driver(**)
           service_opts = WebDriver.logger.debug? ? {args: '--diagnose'} : {}
           service = WebDriver::Service.safari(**service_opts)
-          WebDriver::Driver.for(:safari, service: service, **opts)
+          WebDriver::Driver.for(:safari, service: service, **)
         end
 
-        def safari_preview_driver(**opts)
+        def safari_preview_driver(**)
           service_opts = WebDriver.logger.debug? ? {args: '--diagnose'} : {}
           service = WebDriver::Service.safari(**service_opts)
-          WebDriver::Driver.for(:safari, service: service, **opts)
+          WebDriver::Driver.for(:safari, service: service, **)
         end
 
-        # @rbs (?args: Array[untyped], **Hash[untyped, untyped]) -> Selenium::WebDriver::Chrome::Options
         def chrome_options(args: [], **opts)
           opts[:browser_version] = 'stable' if WebDriver::Platform.windows?
           opts[:web_socket_url] = true if ENV['WEBDRIVER_BIDI'] && !opts.key?(:web_socket_url)
@@ -316,12 +299,11 @@ module Selenium
           WebDriver::Options.ie(**opts)
         end
 
-        def safari_preview_options(**opts)
+        def safari_preview_options(**)
           WebDriver::Safari.technology_preview!
-          WebDriver::Options.safari(**opts)
+          WebDriver::Options.safari(**)
         end
 
-        # @rbs () -> Integer
         def random_port
           addr = Socket.getaddrinfo(Platform.localhost, 0, Socket::AF_INET, Socket::SOCK_STREAM)
           addr = Socket.pack_sockaddr_in(0, addr[0][3])

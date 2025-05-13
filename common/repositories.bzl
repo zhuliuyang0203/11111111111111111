@@ -50,8 +50,8 @@ js_library(
 
     http_archive(
         name = "linux_beta_firefox",
-        url = "https://ftp.mozilla.org/pub/firefox/releases/139.0b6/linux-x86_64/en-US/firefox-139.0b6.tar.xz",
-        sha256 = "39f087356b885fb4bbfebe315d09bac3979798a7e0bff0b7c788707c0c7d4d11",
+        url = "https://ftp.mozilla.org/pub/firefox/releases/139.0b7/linux-x86_64/en-US/firefox-139.0b7.tar.xz",
+        sha256 = "49af55e7290c14261aa1356edaca81def40e5ec7557c5973454964b145f6ffa3",
         build_file_content = """
 load("@aspect_rules_js//js:defs.bzl", "js_library")
 package(default_visibility = ["//visibility:public"])
@@ -72,8 +72,8 @@ js_library(
 
     dmg_archive(
         name = "mac_beta_firefox",
-        url = "https://ftp.mozilla.org/pub/firefox/releases/139.0b6/mac/en-US/Firefox%20139.0b6.dmg",
-        sha256 = "d2fa2ef24f80cbadab7dfb31639f76d8a530acd1653bb8a437ef128937ce1019",
+        url = "https://ftp.mozilla.org/pub/firefox/releases/139.0b7/mac/en-US/Firefox%20139.0b7.dmg",
+        sha256 = "8aa485c0133aa2281c727ccd42d162ba70239d1bd7389ada145018f8a7b58c76",
         build_file_content = """
 load("@aspect_rules_js//js:defs.bzl", "js_library")
 package(default_visibility = ["//visibility:public"])
@@ -165,8 +165,8 @@ js_library(
 
     http_archive(
         name = "linux_edgedriver",
-        url = "https://msedgedriver.azureedge.net/136.0.3240.50/edgedriver_linux64.zip",
-        sha256 = "c987f3334ab00366d3afea79bddb510367a3b81ead88ff808980d3ed6b86e4aa",
+        url = "https://msedgedriver.azureedge.net/136.0.3240.64/edgedriver_linux64.zip",
+        sha256 = "0e9f65bb5fd87f80d0aca4d5330e0aab37057a8c233ba6bc46e5f43b9640103c",
         build_file_content = """
 load("@aspect_rules_js//js:defs.bzl", "js_library")
 package(default_visibility = ["//visibility:public"])

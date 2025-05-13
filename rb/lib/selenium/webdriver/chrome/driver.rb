@@ -30,20 +30,17 @@ module Selenium
       class Driver < Chromium::Driver
         include LocalDriver
 
-        # @rbs (?options: Selenium::WebDriver::Chrome::Options, ?service: Selenium::WebDriver::Chrome::Service, ?url: nil, **nil) -> void
-        def initialize(options: nil, service: nil, url: nil, **opts)
+        def initialize(options: nil, service: nil, url: nil, **)
           caps, url = initialize_local_driver(options, service, url)
-          super(caps: caps, url: url, **opts)
+          super(caps: caps, url: url, **)
         end
 
-        # @rbs () -> Symbol
         def browser
           :chrome
         end
 
         private
 
-        # @rbs () -> String
         def devtools_address
           "http://#{capabilities['goog:chromeOptions']['debuggerAddress']}"
         end
