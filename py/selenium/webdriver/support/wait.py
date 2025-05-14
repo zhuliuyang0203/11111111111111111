@@ -94,7 +94,7 @@ class WebDriverWait(Generic[D]):
         return f'<{type(self).__module__}.{type(self).__name__} (session="{self._driver.session_id}")>'
 
     def until(
-        self, method: Callable[[D], Union[Literal[False], T]], message: Union[str, Callable[[Any], str]] = ""
+        self, method: Callable[[D], Union[Literal[False], T]], message: Union[str, Callable[[], str]] = ""
     ) -> T:
         """Wait until the method returns a value that is not False.
 
@@ -151,7 +151,7 @@ class WebDriverWait(Generic[D]):
         raise TimeoutException(final_msg, screen, stacktrace)
 
     def until_not(
-        self, method: Callable[[D], T], message: Union[str, Callable[[Any], str]] = ""
+        self, method: Callable[[D], T], message: Union[str, Callable[[], str]] = ""
     ) -> Union[T, Literal[True]]:
         """Wait until the method returns a value that is not False.
 
