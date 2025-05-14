@@ -36,11 +36,13 @@ module Selenium
 
         include LocalDriver
 
+        # @rbs (?options: Selenium::WebDriver::Firefox::Options, ?service: Selenium::WebDriver::Firefox::Service, ?url: nil, **untyped) -> void
         def initialize(options: nil, service: nil, url: nil, **)
           caps, url = initialize_local_driver(options, service, url)
           super(caps: caps, url: url, **)
         end
 
+        # @rbs () -> Symbol
         def browser
           :firefox
         end

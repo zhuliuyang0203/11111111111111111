@@ -94,6 +94,7 @@ module Selenium
     # @return [Logger]
     #
 
+    # @rbs (**untyped) -> Selenium::WebDriver::Logger
     def self.logger(**)
       level = $DEBUG || ENV.key?('DEBUG') ? :debug : :info
       @logger ||= WebDriver::Logger.new('Selenium', default_level: level, **)

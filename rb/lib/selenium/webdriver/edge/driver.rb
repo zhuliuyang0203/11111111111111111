@@ -30,17 +30,20 @@ module Selenium
       class Driver < Chromium::Driver
         include LocalDriver
 
+        # @rbs (?options: Selenium::WebDriver::Edge::Options, ?service: Selenium::WebDriver::Edge::Service, ?url: nil, **untyped) -> void
         def initialize(options: nil, service: nil, url: nil, **)
           caps, url = initialize_local_driver(options, service, url)
           super(caps: caps, url: url, **)
         end
 
+        # @rbs () -> Symbol
         def browser
           :edge
         end
 
         private
 
+        # @rbs () -> String
         def devtools_address
           "http://#{capabilities['ms:edgeOptions']['debuggerAddress']}"
         end

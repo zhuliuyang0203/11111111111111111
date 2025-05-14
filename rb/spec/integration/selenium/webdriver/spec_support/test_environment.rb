@@ -189,6 +189,10 @@ module Selenium
           raise e
         end
 
+        def ci?
+          current_env[:ci]
+        end
+
         private
 
         def build_options(**)

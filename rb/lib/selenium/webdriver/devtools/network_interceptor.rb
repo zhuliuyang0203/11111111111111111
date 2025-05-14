@@ -71,6 +71,7 @@ module Selenium
           @cancelled_requests ||= []
         end
 
+        # @rbs (Hash[untyped, untyped]) -> nil
         def track_cancelled_request(data)
           return unless data['canceled']
 

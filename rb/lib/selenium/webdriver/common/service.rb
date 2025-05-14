@@ -28,10 +28,12 @@ module Selenium
       class << self
         attr_reader :driver_path
 
+        # @rbs (**untyped) -> Selenium::WebDriver::Chrome::Service
         def chrome(**)
           Chrome::Service.new(**)
         end
 
+        # @rbs (**untyped) -> Selenium::WebDriver::Firefox::Service
         def firefox(**)
           Firefox::Service.new(**)
         end
@@ -41,6 +43,7 @@ module Selenium
         end
         alias internet_explorer ie
 
+        # @rbs (**untyped) -> Selenium::WebDriver::Edge::Service
         def edge(**)
           Edge::Service.new(**)
         end
@@ -66,6 +69,7 @@ module Selenium
       # @api private
       #
 
+      # @rbs (?path: nil, ?port: nil, ?log: nil, ?args: nil) -> void
       def initialize(path: nil, port: nil, log: nil, args: nil)
         port ||= self.class::DEFAULT_PORT
         args ||= []
@@ -87,20 +91,24 @@ module Selenium
         raise Error::WebDriverError, "invalid port: #{@port}" if @port < 1
       end
 
+      # @rbs () -> Selenium::WebDriver::ServiceManager
       def launch
         @executable_path ||= env_path || find_driver_path
         ServiceManager.new(self).tap(&:start)
       end
 
+      # @rbs () -> bool
       def shutdown_supported
         self.class::SHUTDOWN_SUPPORTED
       end
 
+      # @rbs () -> String
       def find_driver_path
         default_options = WebDriver.const_get("#{self.class.name&.split('::')&.[](2)}::Options").new
         DriverFinder.new(default_options, self).driver_path
       end
 
+      # @rbs () -> nil
       def env_path
         ENV.fetch(self.class::DRIVER_PATH_ENV_KEY, nil)
       end
