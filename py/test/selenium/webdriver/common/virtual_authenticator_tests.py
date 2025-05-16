@@ -337,7 +337,8 @@ def test_set_user_verified(driver, pages):
     # Register a credential requiring UV.
 
     response = driver.execute_async_script(
-        "registerCredential({authenticatorSelection: {userVerification: 'required'}}).then(arguments[arguments.length - 1]);"
+        "registerCredential({authenticatorSelection: {userVerification: 'required'}})"
+        + ".then(arguments[arguments.length - 1]);"
     )
     assert response.get("status", "") == "OK"
     raw_id = response["credential"]["rawId"]

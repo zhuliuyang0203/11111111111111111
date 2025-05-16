@@ -79,7 +79,7 @@ class SwitchTo:
         :Usage:
             ::
 
-                driver.switch_to.frame('frame_name')
+                driver.switch_to.frame("frame_name")
                 driver.switch_to.frame(1)
                 driver.switch_to.frame(driver.find_elements(By.TAG_NAME, "iframe")[0])
         """
@@ -103,7 +103,7 @@ class SwitchTo:
         :Usage:
             ::
 
-                driver.switch_to.new_window('tab')
+                driver.switch_to.new_window("tab")
         """
         value = self._driver.execute(Command.NEW_WINDOW, {"type": type_hint})["value"]
         self._w3c_window(value["handle"])
@@ -128,7 +128,7 @@ class SwitchTo:
         :Usage:
             ::
 
-                driver.switch_to.window('main')
+                driver.switch_to.window("main")
         """
         self._w3c_window(window_name)
 

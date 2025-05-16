@@ -178,8 +178,7 @@ class WebDriverWait(Generic[D]):
 
         # Wait until an element is visible on the page
         >>> wait = WebDriverWait(driver, 10)
-        >>> is_disappeared = wait.until_not(EC.visibility_of_element_located(
-        ... (By.ID, "exampleId")))
+        >>> is_disappeared = wait.until_not(EC.visibility_of_element_located((By.ID, "exampleId")))
         """
         end_time = time.monotonic() + self._timeout
         while True:

@@ -76,7 +76,6 @@ def get_document_cookie_or_none(driver):
 
 
 class TestBidiStorage:
-
     @pytest.fixture(autouse=True)
     def setup(self, driver, pages):
         driver.get(pages.url("simpleTest.html"))

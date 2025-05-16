@@ -92,7 +92,7 @@ class RelativeBy:
     --------
     >>> lowest = driver.find_element(By.ID, "below")
     >>> elements = driver.find_elements(locate_with(By.CSS_SELECTOR, "p").above(lowest))
-    >>> ids = [el.get_attribute('id') for el in elements]
+    >>> ids = [el.get_attribute("id") for el in elements]
     >>> assert "above" in ids
     >>> assert "mid" in ids
     """

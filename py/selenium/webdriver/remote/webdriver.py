@@ -217,7 +217,8 @@ class WebDriver(BaseWebDriver):
         keep_alive : bool (Deprecated)
             - Whether to configure remote_connection.RemoteConnection to use HTTP keep-alive. Defaults to True.
         file_detector : object or None
-            - Pass a custom file detector object during instantiation. If None, the default LocalFileDetector() will be used.
+            - Pass a custom file detector object during instantiation. If None, the default
+                LocalFileDetector() will be used.
         options : options.Options
             - Instance of a driver options.Options class.
         locator_converter : object or None
@@ -418,7 +419,7 @@ class WebDriver(BaseWebDriver):
 
         Example:
         --------
-        >>> driver.execute_cdp_cmd('Network.getResponseBody', {'requestId': requestId})
+        >>> driver.execute_cdp_cmd("Network.getResponseBody", {"requestId": requestId})
 
         """
         return self.execute("executeCdpCommand", {"cmd": cmd, "params": cmd_args})["value"]
@@ -481,7 +482,7 @@ class WebDriver(BaseWebDriver):
 
         Example:
         --------
-        >>> element = driver.find_element(By.ID, 'foo')
+        >>> element = driver.find_element(By.ID, "foo")
         >>> print(element.title())
         """
         return self.execute(Command.GET_TITLE).get("value", "")
@@ -534,9 +535,7 @@ class WebDriver(BaseWebDriver):
         --------
         >>> input_id = "username"
         >>> input_value = "test_user"
-        >>> driver.execute_script(
-        ...     "document.getElementById(arguments[0]).value = arguments[1];", input_id, input_value
-        ... )
+        >>> driver.execute_script("document.getElementById(arguments[0]).value = arguments[1];", input_id, input_value)
         """
         if isinstance(script, ScriptKey):
             try:
@@ -685,11 +684,11 @@ class WebDriver(BaseWebDriver):
         >>> element = driver.switch_to.active_element
         >>> alert = driver.switch_to.alert
         >>> driver.switch_to.default_content()
-        >>> driver.switch_to.frame('frame_name')
+        >>> driver.switch_to.frame("frame_name")
         >>> driver.switch_to.frame(1)
         >>> driver.switch_to.frame(driver.find_elements(By.TAG_NAME, "iframe")[0])
         >>> driver.switch_to.parent_frame()
-        >>> driver.switch_to.window('main')
+        >>> driver.switch_to.window("main")
         """
         return self._switch_to
 
@@ -742,7 +741,7 @@ class WebDriver(BaseWebDriver):
 
         Example:
         --------
-        >>> cookie = driver.get_cookie('my_cookie')
+        >>> cookie = driver.get_cookie("my_cookie")
         """
         if not name or name.isspace():
             raise ValueError("Cookie name cannot be empty")
@@ -758,7 +757,7 @@ class WebDriver(BaseWebDriver):
 
         Example:
         --------
-        >>> driver.delete_cookie('my_cookie')
+        >>> driver.delete_cookie("my_cookie")
         """
 
         # firefox deletes all cookies when "" is passed as name
@@ -787,10 +786,10 @@ class WebDriver(BaseWebDriver):
 
         Examples:
         --------
-        >>> driver.add_cookie({'name' : 'foo', 'value' : 'bar'})
-        >>> driver.add_cookie({'name' : 'foo', 'value' : 'bar', 'path' : '/'})
-        >>> driver.add_cookie({'name' : 'foo', 'value' : 'bar', 'path' : '/', 'secure' : True})
-        >>> driver.add_cookie({'name' : 'foo', 'value' : 'bar', 'sameSite' : 'Strict'})
+        >>> driver.add_cookie({"name": "foo", "value": "bar"})
+        >>> driver.add_cookie({"name": "foo", "value": "bar", "path": "/"})
+        >>> driver.add_cookie({"name": "foo", "value": "bar", "path": "/", "secure": True})
+        >>> driver.add_cookie({"name": "foo", "value": "bar", "sameSite": "Strict"})
         """
         if "sameSite" in cookie_dict:
             assert cookie_dict["sameSite"] in ["Strict", "Lax", "None"]
@@ -980,7 +979,7 @@ class WebDriver(BaseWebDriver):
 
         Example:
         --------
-        >>> driver.get_screenshot_as_file('/Screenshots/foo.png')
+        >>> driver.get_screenshot_as_file("/Screenshots/foo.png")
         """
         if not str(filename).lower().endswith(".png"):
             warnings.warn(
@@ -1011,7 +1010,7 @@ class WebDriver(BaseWebDriver):
 
         Example:
         --------
-        >>> driver.save_screenshot('/Screenshots/foo.png')
+        >>> driver.save_screenshot("/Screenshots/foo.png")
         """
         return self.get_screenshot_as_file(filename)
 
@@ -1047,7 +1046,7 @@ class WebDriver(BaseWebDriver):
 
         Example:
         --------
-        >>> driver.set_window_size(800,600)
+        >>> driver.set_window_size(800, 600)
         """
         self._check_if_window_handle_is_current(windowHandle)
         self.set_window_rect(width=int(width), height=int(height))
@@ -1081,7 +1080,7 @@ class WebDriver(BaseWebDriver):
 
         Example:
         --------
-        >>> driver.set_window_position(0,0)
+        >>> driver.set_window_position(0, 0)
         """
         self._check_if_window_handle_is_current(windowHandle)
         return self.set_window_rect(x=int(x), y=int(y))
@@ -1177,7 +1176,7 @@ class WebDriver(BaseWebDriver):
 
         Example:
         --------
-        >>> driver.orientation = 'landscape'
+        >>> driver.orientation = "landscape"
         """
         allowed_values = ["LANDSCAPE", "PORTRAIT"]
         if value.upper() in allowed_values:
@@ -1332,7 +1331,9 @@ class WebDriver(BaseWebDriver):
         ---------
         >>> cookie_filter = CookieFilter(name="example")
         >>> result = driver.storage.get_cookies(filter=cookie_filter)
-        >>> driver.storage.set_cookie(cookie=PartialCookie("name", BytesValue(BytesValue.TYPE_STRING, "value"), "domain"))
+        >>> driver.storage.set_cookie(cookie=PartialCookie(
+                "name", BytesValue(BytesValue.TYPE_STRING, "value"), "domain")
+            )
         >>> driver.storage.delete_cookies(filter=CookieFilter(name="example"))
         """
         if not self._websocket_connection:
