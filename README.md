@@ -221,11 +221,7 @@ To automatically update and pin new dependencies, run:
 
 We follow the [PEP8 Style Guide for Python Code](https://peps.python.org/pep-0008) (except we use a 120 character line length).
 This is checked and enforced with [ruff](https://docs.astral.sh/ruff/), a linting/formatting tool.
-
-To run linting and formatting:
-```shell
-./go py:lint
-```
+There is also an auto-formatting script that can be run: `./scripts/format.sh`
 
 #### Local Installation
 
