@@ -19,10 +19,7 @@ import json
 import pkgutil
 from contextlib import asynccontextmanager
 from importlib import import_module
-from typing import Any
-from typing import AsyncGenerator
-from typing import Dict
-from typing import Optional
+from typing import Any, AsyncGenerator, Dict, Optional
 
 from selenium.webdriver.common.by import By
 

@@ -17,22 +17,17 @@
 
 import re
 from collections.abc import Iterable
-from typing import Any
-from typing import Callable
-from typing import List
-from typing import Literal
-from typing import Tuple
-from typing import TypeVar
-from typing import Union
+from typing import Any, Callable, List, Literal, Tuple, TypeVar, Union
 
-from selenium.common.exceptions import NoAlertPresentException
-from selenium.common.exceptions import NoSuchElementException
-from selenium.common.exceptions import NoSuchFrameException
-from selenium.common.exceptions import StaleElementReferenceException
-from selenium.common.exceptions import WebDriverException
+from selenium.common.exceptions import (
+    NoAlertPresentException,
+    NoSuchElementException,
+    NoSuchFrameException,
+    StaleElementReferenceException,
+    WebDriverException,
+)
 from selenium.webdriver.common.alert import Alert
-from selenium.webdriver.remote.webdriver import WebDriver
-from selenium.webdriver.remote.webdriver import WebElement
+from selenium.webdriver.remote.webdriver import WebDriver, WebElement
 
 """
  * Canned "Expected Conditions" which are generally useful within webdriver

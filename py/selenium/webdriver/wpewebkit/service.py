@@ -15,9 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 import shutil
-from typing import List
-from typing import Mapping
-from typing import Optional
+from typing import List, Mapping, Optional
 
 from selenium.webdriver.common import service
 

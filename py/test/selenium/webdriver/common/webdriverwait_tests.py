@@ -20,11 +20,13 @@ import time
 import pytest
 from urllib3.exceptions import ReadTimeoutError
 
-from selenium.common.exceptions import InvalidElementStateException
-from selenium.common.exceptions import InvalidSelectorException
-from selenium.common.exceptions import StaleElementReferenceException
-from selenium.common.exceptions import TimeoutException
-from selenium.common.exceptions import WebDriverException
+from selenium.common.exceptions import (
+    InvalidElementStateException,
+    InvalidSelectorException,
+    StaleElementReferenceException,
+    TimeoutException,
+    WebDriverException,
+)
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait

@@ -16,9 +16,7 @@
 # under the License.
 """The By implementation."""
 
-from typing import Dict
-from typing import Literal
-from typing import Optional
+from typing import Dict, Literal, Optional
 
 
 class By:

@@ -16,17 +16,9 @@
 # under the License.
 
 import time
-from typing import Callable
-from typing import Generic
-from typing import Literal
-from typing import Optional
-from typing import Tuple
-from typing import Type
-from typing import TypeVar
-from typing import Union
+from typing import Callable, Generic, Literal, Optional, Tuple, Type, TypeVar, Union
 
-from selenium.common.exceptions import NoSuchElementException
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.types import WaitExcTypes
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement

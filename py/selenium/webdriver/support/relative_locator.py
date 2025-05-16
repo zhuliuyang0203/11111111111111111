@@ -15,16 +15,10 @@
 # specific language governing permissions and limitations
 # under the License.
 import warnings
-from typing import Dict
-from typing import List
-from typing import NoReturn
-from typing import Optional
-from typing import Union
-from typing import overload
+from typing import Dict, List, NoReturn, Optional, Union, overload
 
 from selenium.common.exceptions import WebDriverException
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.by import ByType
+from selenium.webdriver.common.by import By, ByType
 from selenium.webdriver.remote.webelement import WebElement
 
 

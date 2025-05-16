@@ -15,9 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import List
-from typing import Optional
-from typing import Union
+from typing import List, Optional, Union
 
 from selenium.webdriver.remote.command import Command
 

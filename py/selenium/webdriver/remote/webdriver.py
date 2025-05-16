@@ -27,23 +27,18 @@ import types
 import warnings
 import zipfile
 from abc import ABCMeta
-from base64 import b64decode
-from base64 import urlsafe_b64encode
-from contextlib import asynccontextmanager
-from contextlib import contextmanager
+from base64 import b64decode, urlsafe_b64encode
+from contextlib import asynccontextmanager, contextmanager
 from importlib import import_module
-from typing import Any
-from typing import Dict
-from typing import List
-from typing import Optional
-from typing import Type
-from typing import Union
+from typing import Any, Dict, List, Optional, Type, Union
 
-from selenium.common.exceptions import InvalidArgumentException
-from selenium.common.exceptions import JavascriptException
-from selenium.common.exceptions import NoSuchCookieException
-from selenium.common.exceptions import NoSuchElementException
-from selenium.common.exceptions import WebDriverException
+from selenium.common.exceptions import (
+    InvalidArgumentException,
+    JavascriptException,
+    NoSuchCookieException,
+    NoSuchElementException,
+    WebDriverException,
+)
 from selenium.webdriver.common.bidi.browser import Browser
 from selenium.webdriver.common.bidi.browsing_context import BrowsingContext
 from selenium.webdriver.common.bidi.network import Network
@@ -51,13 +46,12 @@ from selenium.webdriver.common.bidi.script import Script
 from selenium.webdriver.common.bidi.session import Session
 from selenium.webdriver.common.bidi.storage import Storage
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.options import ArgOptions
-from selenium.webdriver.common.options import BaseOptions
+from selenium.webdriver.common.options import ArgOptions, BaseOptions
 from selenium.webdriver.common.print_page_options import PrintOptions
 from selenium.webdriver.common.timeouts import Timeouts
-from selenium.webdriver.common.virtual_authenticator import Credential
-from selenium.webdriver.common.virtual_authenticator import VirtualAuthenticatorOptions
 from selenium.webdriver.common.virtual_authenticator import (
+    Credential,
+    VirtualAuthenticatorOptions,
     required_virtual_authenticator,
 )
 from selenium.webdriver.support.relative_locator import RelativeBy
@@ -68,8 +62,7 @@ from .client_config import ClientConfig
 from .command import Command
 from .errorhandler import ErrorHandler
 from .fedcm import FedCM
-from .file_detector import FileDetector
-from .file_detector import LocalFileDetector
+from .file_detector import FileDetector, LocalFileDetector
 from .locator_converter import LocatorConverter
 from .mobile import Mobile
 from .remote_connection import RemoteConnection

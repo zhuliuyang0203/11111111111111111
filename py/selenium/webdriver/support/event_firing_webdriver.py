@@ -15,9 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from typing import Any
-from typing import List
-from typing import Tuple
+from typing import Any, List, Tuple
 
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.by import By

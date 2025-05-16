@@ -141,7 +141,7 @@ respect-gitignore = true
 target-version = "py39"
 
 [tool.ruff.lint]
-extend-select = ["E4", "E7", "E9", "F", "E501"]
+extend-select = ["E4", "E7", "E9", "F", "I", "E501", "RUF022"]
 fixable = ["ALL"]
 
 [tool.ruff.format]
