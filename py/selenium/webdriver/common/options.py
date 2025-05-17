@@ -19,10 +19,11 @@ import warnings
 from abc import ABCMeta
 from abc import abstractmethod
 from enum import Enum
+
+from typing import Any
 from typing import List
 from typing import Optional
 
-from selenium.common.exceptions import InvalidArgumentException
 from selenium.webdriver.common.proxy import Proxy
 
 
@@ -43,23 +44,28 @@ class PageLoadStrategy(str, Enum):
 
 
 class _BaseOptionsDescriptor:
-    def __init__(self, name):
+    def __init__(self, name: str):
         self.name = name
 
-    def __get__(self, obj, cls):
+    def __get__(self, obj: object, cls: type[object]):
+        if not isinstance(obj, BaseOptions):
+            raise ValueError("Invalid object: Expected an instance of BaseOptions.")
         if self.name == "enableBidi":
             # whether BiDi is or will be enabled
-            value = obj._caps.get("webSocketUrl")
+            value = obj.capabilities.get("webSocketUrl")
             return value is True or isinstance(value, str)
         if self.name == "webSocketUrl":
             # Return socket url or None if not created yet
-            value = obj._caps.get(self.name)
+            value = obj.capabilities.get(self.name)
             return None if not isinstance(value, str) else value
         if self.name in ("acceptInsecureCerts", "strictFileInteractability", "setWindowRect", "se:downloadsEnabled"):
-            return obj._caps.get(self.name, False)
-        return obj._caps.get(self.name)
+            return obj.capabilities.get(self.name, False)
+        return obj.capabilities.get(self.name)
 
-    def __set__(self, obj, value):
+    def __set__(self, obj: object, value: Any):
+        if not isinstance(obj, BaseOptions):
+            raise ValueError("Invalid object: Expected an instance of BaseOptions.")
+
         if self.name == "enableBidi":
             obj.set_capability("webSocketUrl", value)
         else:
@@ -73,17 +79,20 @@ class _PageLoadStrategyDescriptor:
     :param strategy: the strategy corresponding to a document readiness state
     """
 
-    def __init__(self, name):
+    def __init__(self, name: str):
         self.name = name
 
-    def __get__(self, obj, cls):
-        return obj._caps.get(self.name)
+    def __get__(self, obj: object, cls: type[object]):
+        if not isinstance(obj, BaseOptions):
+            raise ValueError("Invalid object: Expected an instance of BaseOptions.")
+        return obj.capabilities.get(self.name)
 
-    def __set__(self, obj, value):
-        if value in ("normal", "eager", "none"):
-            obj.set_capability(self.name, value)
-        else:
+    def __set__(self, obj: object, value: str):
+        if not isinstance(obj, BaseOptions):
+            raise ValueError("Invalid object: Expected an instance of BaseOptions.")
+        if value not in ("normal", "eager", "none"):
             raise ValueError("Strategy can only be one of the following: normal, eager, none")
+        obj.set_capability(self.name, value)
 
 
 class _UnHandledPromptBehaviorDescriptor:
@@ -96,20 +105,23 @@ class _UnHandledPromptBehaviorDescriptor:
     :returns: Values for implicit timeout, pageLoad timeout and script timeout if set (in milliseconds)
     """
 
-    def __init__(self, name):
+    def __init__(self, name: str):
         self.name = name
 
-    def __get__(self, obj, cls):
-        return obj._caps.get(self.name)
+    def __get__(self, obj: object, cls: type[object]):
+        if not isinstance(obj, BaseOptions):
+            raise ValueError("Invalid object: Expected an instance of BaseOptions.")
+        return obj.capabilities.get(self.name)
 
-    def __set__(self, obj, value):
-        if value in ("dismiss", "accept", "dismiss and notify", "accept and notify", "ignore"):
-            obj.set_capability(self.name, value)
-        else:
+    def __set__(self, obj: object, value: str):
+        if not isinstance(obj, BaseOptions):
+            raise ValueError("Invalid object: Expected an instance of BaseOptions.")
+        if value not in ("dismiss", "accept", "dismiss and notify", "accept and notify", "ignore"):
             raise ValueError(
                 "Behavior can only be one of the following: dismiss, accept, dismiss and notify, "
                 "accept and notify, ignore"
             )
+        obj.set_capability(self.name, value)
 
 
 class _TimeoutsDescriptor:
@@ -121,13 +133,17 @@ class _TimeoutsDescriptor:
     :returns: Values for implicit timeout, pageLoad timeout and script timeout if set (in milliseconds)
     """
 
-    def __init__(self, name):
+    def __init__(self, name: str):
         self.name = name
 
-    def __get__(self, obj, cls):
-        return obj._caps.get(self.name)
+    def __get__(self, obj: object, cls: type[object]):
+        if not isinstance(obj, BaseOptions):
+            raise ValueError("Invalid object: Expected an instance of BaseOptions.")
+        return obj.capabilities.get(self.name)
 
-    def __set__(self, obj, value):
+    def __set__(self, obj: object, value: dict[str, Any]):
+        if not isinstance(obj, BaseOptions):
+            raise ValueError("Invalid object: Expected an instance of BaseOptions.")
         if all(x in ("implicit", "pageLoad", "script") for x in value.keys()):
             obj.set_capability(self.name, value)
         else:
@@ -137,17 +153,19 @@ class _TimeoutsDescriptor:
 class _ProxyDescriptor:
     """:Returns: Proxy if set, otherwise None."""
 
-    def __init__(self, name):
+    def __init__(self, name: str):
         self.name = name
 
-    def __get__(self, obj, cls):
+    def __get__(self, obj: object, cls: type[object]):
+        if not isinstance(obj, BaseOptions):
+            raise ValueError("Invalid object: Expected an instance of BaseOptions.")
         return obj._proxy
 
-    def __set__(self, obj, value):
-        if not isinstance(value, Proxy):
-            raise InvalidArgumentException("Only Proxy objects can be passed in.")
+    def __set__(self, obj: object, value: Proxy):
+        if not isinstance(obj, BaseOptions):
+            raise ValueError("Invalid object: Expected an instance of BaseOptions.")
         obj._proxy = value
-        obj._caps[self.name] = value.to_capabilities()
+        obj.capabilities[self.name] = value.to_capabilities()
 
 
 class BaseOptions(metaclass=ABCMeta):
@@ -422,7 +440,7 @@ class BaseOptions(metaclass=ABCMeta):
     def __init__(self) -> None:
         super().__init__()
         self._caps = self.default_capabilities
-        self._proxy = None
+        self._proxy: Proxy | None = None
         self.set_capability("pageLoadStrategy", PageLoadStrategy.normal)
         self.mobile_options = None
         self._ignore_local_proxy = False
@@ -431,7 +449,7 @@ class BaseOptions(metaclass=ABCMeta):
     def capabilities(self):
         return self._caps
 
-    def set_capability(self, name, value) -> None:
+    def set_capability(self, name: Any, value: Any) -> None:
         """Sets a capability."""
         self._caps[name] = value
 
@@ -455,12 +473,12 @@ class BaseOptions(metaclass=ABCMeta):
             self.mobile_options["androidDeviceSerial"] = device_serial
 
     @abstractmethod
-    def to_capabilities(self):
+    def to_capabilities(self) -> dict[Any, Any]:
         """Convert options into capabilities dictionary."""
 
     @property
     @abstractmethod
-    def default_capabilities(self):
+    def default_capabilities(self) -> dict[Any, Any]:
         """Return minimal capabilities necessary as a dictionary."""
 
     def ignore_local_proxy_environment_variables(self) -> None:
@@ -476,8 +494,9 @@ class ArgOptions(BaseOptions):
 
     def __init__(self) -> None:
         super().__init__()
-        self._arguments: List[str] = []
 
+        self._arguments: List[str] = []
+   
     @property
     def arguments(self):
         """:Returns: A list of arguments needed for the browser."""
@@ -512,5 +531,5 @@ class ArgOptions(BaseOptions):
         return self._caps
 
     @property
-    def default_capabilities(self):
+    def default_capabilities(self) -> dict[Any, Any]:
         return {}

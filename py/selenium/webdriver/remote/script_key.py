@@ -19,14 +19,14 @@ import uuid
 
 
 class ScriptKey:
-    def __init__(self, id=None):
+    def __init__(self, id: uuid.UUID | str | None = None):
         self._id = id or uuid.uuid4()
 
     @property
     def id(self):
         return self._id
 
-    def __eq__(self, other):
+    def __eq__(self, other: object):
         return self._id == other
 
     def __repr__(self) -> str:

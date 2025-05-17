@@ -25,12 +25,15 @@ from base64 import b64decode
 from base64 import encodebytes
 from hashlib import md5 as md5_hash
 from io import BytesIO
+from typing import Any
 from typing import List
 
 from selenium.common.exceptions import JavascriptException
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.by import ByType
 from selenium.webdriver.common.utils import keys_to_typing
+from selenium.webdriver.remote.webdriver import WebDriver
 
 from .command import Command
 from .shadowroot import ShadowRoot
@@ -72,7 +75,7 @@ class WebElement(BaseWebElement):
     instance will fail.
     """
 
-    def __init__(self, parent, id_) -> None:
+    def __init__(self, parent: WebDriver, id_: str) -> None:
         self._parent = parent
         self._id = id_
 
@@ -157,7 +160,7 @@ class WebElement(BaseWebElement):
         """
         self._execute(Command.CLEAR_ELEMENT)
 
-    def get_property(self, name) -> str | bool | WebElement | dict:
+    def get_property(self, name: str) -> str | bool | WebElement | dict[Any, Any]:
         """Gets the given property of the element.
 
         Parameters:
@@ -179,7 +182,7 @@ class WebElement(BaseWebElement):
             # if we hit an end point that doesn't understand getElementProperty lets fake it
             return self.parent.execute_script("return arguments[0][arguments[1]]", self, name)
 
-    def get_dom_attribute(self, name) -> str:
+    def get_dom_attribute(self, name: str) -> str:
         """Gets the given attribute of the element. Unlike
         :func:`~selenium.webdriver.remote.BaseWebElement.get_attribute`, this
         method only returns attributes declared in the element's HTML markup.
@@ -199,7 +202,7 @@ class WebElement(BaseWebElement):
         """
         return self._execute(Command.GET_ELEMENT_ATTRIBUTE, {"name": name})["value"]
 
-    def get_attribute(self, name) -> str | None:
+    def get_attribute(self, name: str) -> str | None:
         """Gets the given attribute or property of the element.
 
         This method will first try to return the value of a property with the
@@ -344,7 +347,7 @@ class WebElement(BaseWebElement):
         return self.parent.execute_script(f"/* isDisplayed */return ({isDisplayed_js}).apply(null, arguments);", self)
 
     @property
-    def location_once_scrolled_into_view(self) -> dict:
+    def location_once_scrolled_into_view(self) -> dict[Any, Any]:
         """THIS PROPERTY MAY CHANGE WITHOUT WARNING. Use this to discover where
         on the screen an element is so that we can click it. This method should
         cause the element to be scrolled into view.
@@ -368,7 +371,7 @@ class WebElement(BaseWebElement):
         return {"x": round(old_loc["x"]), "y": round(old_loc["y"])}
 
     @property
-    def size(self) -> dict:
+    def size(self) -> dict[str, int | float]:
         """The size of the element.
 
         Returns:
@@ -383,7 +386,7 @@ class WebElement(BaseWebElement):
         new_size = {"height": size["height"], "width": size["width"]}
         return new_size
 
-    def value_of_css_property(self, property_name) -> str:
+    def value_of_css_property(self, property_name: str) -> str:
         """The value of a CSS property.
 
         Parameters:
@@ -402,7 +405,7 @@ class WebElement(BaseWebElement):
         return self._execute(Command.GET_ELEMENT_VALUE_OF_CSS_PROPERTY, {"propertyName": property_name})["value"]
 
     @property
-    def location(self) -> dict:
+    def location(self) -> dict[str, int | float]:
         """The location of the element in the renderable canvas.
 
         Returns:
@@ -418,7 +421,7 @@ class WebElement(BaseWebElement):
         return new_loc
 
     @property
-    def rect(self) -> dict:
+    def rect(self) -> dict[str, Any]:
         """A dictionary with the size and location of the element.
 
         Returns:
@@ -488,7 +491,7 @@ class WebElement(BaseWebElement):
         """
         return b64decode(self.screenshot_as_base64.encode("ascii"))
 
-    def screenshot(self, filename) -> bool:
+    def screenshot(self, filename: str) -> bool:
         """Saves a screenshot of the current element to a PNG image file.
         Returns False if there is any IOError, else returns True. Use full
         paths in your filename.
@@ -548,14 +551,17 @@ class WebElement(BaseWebElement):
         """
         return self._id
 
-    def __eq__(self, element):
+    def __eq__(self, element: object):
+        if not isinstance(element, WebElement):
+            return False
+
         return hasattr(element, "id") and self._id == element.id
 
-    def __ne__(self, element):
+    def __ne__(self, element: object):
         return not self.__eq__(element)
 
     # Private Methods
-    def _execute(self, command, params=None):
+    def _execute(self, command: Any, params: dict[Any, Any] | None = None):
         """Executes a command against the underlying HTML element.
 
         Parameters:
@@ -575,7 +581,7 @@ class WebElement(BaseWebElement):
         params["id"] = self._id
         return self._parent.execute(command, params)
 
-    def find_element(self, by=By.ID, value=None) -> WebElement:
+    def find_element(self, by: ByType = By.ID, value: str | None = None) -> WebElement:
         """Find an element given a By strategy and locator.
 
         Parameters:
@@ -604,7 +610,7 @@ class WebElement(BaseWebElement):
         by, value = self._parent.locator_converter.convert(by, value)
         return self._execute(Command.FIND_CHILD_ELEMENT, {"using": by, "value": value})["value"]
 
-    def find_elements(self, by=By.ID, value=None) -> List[WebElement]:
+    def find_elements(self, by: ByType = By.ID, value: str | None = None) -> List[WebElement]:
         """Find elements given a By strategy and locator.
 
         Parameters:
@@ -636,7 +642,7 @@ class WebElement(BaseWebElement):
     def __hash__(self) -> int:
         return int(md5_hash(self._id.encode("utf-8")).hexdigest(), 16)
 
-    def _upload(self, filename):
+    def _upload(self, filename: str):
         fp = BytesIO()
         zipped = zipfile.ZipFile(fp, "w", zipfile.ZIP_DEFLATED)
         zipped.write(filename, os.path.split(filename)[1])
