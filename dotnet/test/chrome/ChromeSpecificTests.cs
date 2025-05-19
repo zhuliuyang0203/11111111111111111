@@ -19,10 +19,9 @@
 
 using NUnit.Framework;
 
-namespace OpenQA.Selenium.Chrome
+namespace OpenQA.Selenium.Chrome;
+
+[TestFixture]
+public class ChromeSpecificTests : DriverTestFixture
 {
-    [TestFixture]
-    public class ChromeSpecificTests : DriverTestFixture
-    {
-    }
 }
