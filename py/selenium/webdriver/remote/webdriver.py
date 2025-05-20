@@ -1350,7 +1350,7 @@ class WebDriver(BaseWebDriver):
         Examples:
         ---------
         >>> extension_path = "/path/to/extension"
-        >>> extension_result = driver.webextension.install(path=extension_path)))
+        >>> extension_result = driver.webextension.install(path=extension_path)
         >>> driver.webextension.uninstall(extension_result)
         """
         if not self._websocket_connection:
