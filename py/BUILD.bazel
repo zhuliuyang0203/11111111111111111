@@ -1,3 +1,4 @@
+load("@aspect_bazel_lib//lib:copy_directory.bzl", "copy_directory")
 load("@aspect_rules_lint//format:defs.bzl", "format_multirun")
 load("@bazel_skylib//rules:select_file.bzl", "select_file")
 load("@py_dev_requirements//:requirements.bzl", "requirement")
@@ -6,7 +7,6 @@ load("@rules_pkg//pkg:pkg.bzl", "pkg_tar")
 load("@rules_python//python:defs.bzl", "py_binary", "py_library")
 load("@rules_python//python:packaging.bzl", "py_package", "py_wheel")
 load("@rules_python//python:pip.bzl", "compile_pip_requirements")
-load("@aspect_bazel_lib//lib:copy_directory.bzl", "copy_directory")
 load("//common:defs.bzl", "copy_file")
 load("//py:defs.bzl", "generate_devtools", "py_test_suite")
 load("//py/private:browsers.bzl", "BROWSERS")
@@ -180,7 +180,7 @@ copy_directory(
 copy_directory(
     name = "webextensions-selenium-example-signed-dir",
     src = "//common/extensions:webextensions-selenium-example-signed",
-    out = "test/extensions/webextensions-selenium-example-signed", 
+    out = "test/extensions/webextensions-selenium-example-signed",
 )
 
 select_file(
@@ -358,12 +358,12 @@ py_library(
         "pyproject.toml",
         "test/selenium/webdriver/common/test_file.txt",
         "test/selenium/webdriver/common/test_file2.txt",
-        ":webextensions-selenium-example-unsigned-zip",
-        ":webextensions-selenium-example-xpi",
-        ":webextensions-selenium-example-zip",
         ":webextensions-selenium-example-crx",
         ":webextensions-selenium-example-dir",
         ":webextensions-selenium-example-signed-dir",
+        ":webextensions-selenium-example-unsigned-zip",
+        ":webextensions-selenium-example-xpi",
+        ":webextensions-selenium-example-zip",
     ],
     imports = ["."],
     deps = [

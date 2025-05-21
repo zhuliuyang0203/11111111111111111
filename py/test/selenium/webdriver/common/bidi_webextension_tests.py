@@ -30,6 +30,28 @@ EXTENSION_ARCHIVE_PATH = "webextensions-selenium-example.xpi"
 extensions = os.path.abspath("../../../../../../test/extensions/")
 
 
+def install_extension(driver, **kwargs):
+    result = driver.webextension.install(**kwargs)
+    assert result.get("extension") == EXTENSION_ID
+    return result
+
+
+def verify_extension_injection(driver, pages):
+    pages.load("blank.html")
+    injected = WebDriverWait(driver, timeout=2).until(
+        lambda dr: dr.find_element(By.ID, "webextensions-selenium-example")
+    )
+    assert injected.text == "Content injected by webextensions-selenium-example"
+
+
+def uninstall_extension_and_verify_extension_uninstalled(driver, extension_info):
+    driver.webextension.uninstall(extension_info)
+
+    context_id = driver.current_window_handle
+    driver.browsing_context.reload(context_id)
+    assert len(driver.find_elements(By.ID, "webextensions-selenium-example")) == 0
+
+
 def test_webextension_initialized(driver):
     """Test that the webextension module is initialized properly."""
     assert driver.webextension is not None
@@ -41,20 +63,9 @@ def test_install_extension_path(driver, pages):
     """Test installing an extension from a directory path."""
     path = os.path.join(extensions, EXTENSION_PATH)
 
-    ex_in = driver.webextension.install(path=path)
-    assert ex_in.get("extension") == EXTENSION_ID
-
-    pages.load("blank.html")
-    injected = WebDriverWait(driver, timeout=2).until(
-        lambda dr: dr.find_element(By.ID, "webextensions-selenium-example")
-    )
-    assert injected.text == "Content injected by webextensions-selenium-example"
-
-    driver.webextension.uninstall(ex_in)
-
-    context_id = driver.current_window_handle
-    driver.browsing_context.reload(context_id)
-    assert len(driver.find_elements(By.ID, "webextensions-selenium-example")) == 0
+    ext_info = install_extension(driver, path=path)
+    verify_extension_injection(driver, pages)
+    uninstall_extension_and_verify_extension_uninstalled(driver, ext_info)
 
 
 @pytest.mark.xfail_chrome
@@ -63,21 +74,9 @@ def test_install_archive_extension_path(driver, pages):
     """Test installing an extension from an archive path."""
     path = os.path.join(extensions, EXTENSION_ARCHIVE_PATH)
 
-    ex = driver.webextension.install(archive_path=path)
-    assert ex.get("extension") == EXTENSION_ID
-
-    pages.load("blank.html")
-    injected = WebDriverWait(driver, timeout=2).until(
-        lambda dr: dr.find_element(By.ID, "webextensions-selenium-example")
-    )
-    assert injected.text == "Content injected by webextensions-selenium-example"
-
-    driver.webextension.uninstall(ex)
-
-    context_id = driver.current_window_handle
-    driver.browsing_context.reload(context_id)
-
-    assert len(driver.find_elements(By.ID, "webextensions-selenium-example")) == 0
+    ext_info = install_extension(driver, archive_path=path)
+    verify_extension_injection(driver, pages)
+    uninstall_extension_and_verify_extension_uninstalled(driver, ext_info)
 
 
 @pytest.mark.xfail_chrome
@@ -89,23 +88,12 @@ def test_install_base64_extension_path(driver, pages):
     with open(path, "rb") as file:
         base64_encoded = base64.b64encode(file.read()).decode("utf-8")
 
-    ex = driver.webextension.install(base64_value=base64_encoded)
-    assert ex.get("extension") == EXTENSION_ID
+    ext_info = install_extension(driver, base64_value=base64_encoded)
 
-    pages.load("blank.html")
+    # TODO: the extension is installed but the script is not injected, check and fix
+    # verify_extension_injection(driver, pages)
 
-    # TODO: the extension is installed but the content script is not injected, check and fix
-    # injected = WebDriverWait(driver, timeout=2).until(
-    #     lambda dr: dr.find_element(By.ID, "webextensions-selenium-example")
-    # )
-    # assert injected.text == "Content injected by webextensions-selenium-example"
-
-    driver.webextension.uninstall(ex)
-
-    context_id = driver.current_window_handle
-    driver.browsing_context.reload(context_id)
-
-    assert len(driver.find_elements(By.ID, "webextensions-selenium-example")) == 0
+    uninstall_extension_and_verify_extension_uninstalled(driver, ext_info)
 
 
 @pytest.mark.xfail_chrome
@@ -114,21 +102,9 @@ def test_install_unsigned_extension(driver, pages):
     """Test installing an unsigned extension."""
     path = os.path.join(extensions, "webextensions-selenium-example")
 
-    ex = driver.webextension.install(path=path)
-    assert ex.get("extension") == EXTENSION_ID
-
-    pages.load("blank.html")
-    injected = WebDriverWait(driver, timeout=2).until(
-        lambda dr: dr.find_element(By.ID, "webextensions-selenium-example")
-    )
-    assert injected.text == "Content injected by webextensions-selenium-example"
-
-    driver.webextension.uninstall(ex)
-
-    context_id = driver.current_window_handle
-    driver.browsing_context.reload(context_id)
-
-    assert len(driver.find_elements(By.ID, "webextensions-selenium-example")) == 0
+    ext_info = install_extension(driver, path=path)
+    verify_extension_injection(driver, pages)
+    uninstall_extension_and_verify_extension_uninstalled(driver, ext_info)
 
 
 @pytest.mark.xfail_chrome
@@ -137,16 +113,8 @@ def test_install_with_extension_id_uninstall(driver, pages):
     """Test uninstalling an extension using just the extension ID."""
     path = os.path.join(extensions, EXTENSION_PATH)
 
-    ex = driver.webextension.install(path=path)
-    extension_id = ex.get("extension")
-    assert extension_id == EXTENSION_ID
-
-    pages.load("blank.html")
+    ext_info = install_extension(driver, path=path)
+    extension_id = ext_info.get("extension")
 
     # Uninstall using the extension ID
-    driver.webextension.uninstall(extension_id)
-
-    context_id = driver.current_window_handle
-    driver.browsing_context.reload(context_id)
-
-    assert len(driver.find_elements(By.ID, "webextensions-selenium-example")) == 0
+    uninstall_extension_and_verify_extension_uninstalled(driver, extension_id)
