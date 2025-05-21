@@ -6,6 +6,7 @@ load("@rules_pkg//pkg:pkg.bzl", "pkg_tar")
 load("@rules_python//python:defs.bzl", "py_binary", "py_library")
 load("@rules_python//python:packaging.bzl", "py_package", "py_wheel")
 load("@rules_python//python:pip.bzl", "compile_pip_requirements")
+load("@aspect_bazel_lib//lib:copy_directory.bzl", "copy_directory")
 load("//common:defs.bzl", "copy_file")
 load("//py:defs.bzl", "generate_devtools", "py_test_suite")
 load("//py/private:browsers.bzl", "BROWSERS")
@@ -162,6 +163,24 @@ copy_file(
     name = "webextensions-selenium-example-unsigned-zip",
     src = "//common/extensions:webextensions-selenium-example-unsigned.zip",
     out = "test/extensions/webextensions-selenium-example-unsigned.zip",
+)
+
+copy_file(
+    name = "webextensions-selenium-example-crx",
+    src = "//common/extensions:webextensions-selenium-example.crx",
+    out = "test/extensions/webextensions-selenium-example.crx",
+)
+
+copy_directory(
+    name = "webextensions-selenium-example-dir",
+    src = "//common/extensions:webextensions-selenium-example",
+    out = "test/extensions/webextensions-selenium-example",
+)
+
+copy_directory(
+    name = "webextensions-selenium-example-signed-dir",
+    src = "//common/extensions:webextensions-selenium-example-signed",
+    out = "test/extensions/webextensions-selenium-example-signed", 
 )
 
 select_file(
@@ -342,6 +361,9 @@ py_library(
         ":webextensions-selenium-example-unsigned-zip",
         ":webextensions-selenium-example-xpi",
         ":webextensions-selenium-example-zip",
+        ":webextensions-selenium-example-crx",
+        ":webextensions-selenium-example-dir",
+        ":webextensions-selenium-example-signed-dir",
     ],
     imports = ["."],
     deps = [
