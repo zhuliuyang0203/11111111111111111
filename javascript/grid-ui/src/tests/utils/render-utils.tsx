@@ -27,6 +27,4 @@ const renderWithRouter = (ui, { route = '/' } = {}) => {
   )
 }
 
-export * from '@testing-library/react'
-
 export { renderWithRouter as render }
