@@ -18,8 +18,7 @@ import errno
 import logging
 import os
 import subprocess
-from abc import ABC
-from abc import abstractmethod
+from abc import ABC, abstractmethod
 from io import IOBase
 from platform import system
 from subprocess import PIPE
