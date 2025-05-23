@@ -19,7 +19,6 @@ import pytest
 
 from selenium.webdriver.common.bidi.log import LogLevel
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.log import Log
 from selenium.webdriver.support.ui import WebDriverWait
 
 
