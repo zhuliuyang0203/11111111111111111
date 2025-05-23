@@ -45,10 +45,10 @@
   
   
   
-    <title>selenium.webdriver.common.bidi.session &#8212; Selenium 4.31.0 documentation</title>
+    <title>selenium.webdriver.common.bidi.session &#8212; Selenium 4.33.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/material.css?v=79c92029" />
-    <script src="../../../../../_static/documentation_options.js?v=c6a64f85"></script>
+    <script src="../../../../../_static/documentation_options.js?v=250cdb37"></script>
     <script src="../../../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
@@ -76,7 +76,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../../../../index.html" title="Selenium 4.31.0 documentation"
+        <a href="../../../../../index.html" title="Selenium 4.33.0 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -88,7 +88,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">Selenium 4.31.0 documentation</span>
+          <span class="md-header-nav__topic">Selenium 4.33.0 documentation</span>
           <span class="md-header-nav__topic"> selenium.webdriver.common.bidi.session </span>
         </div>
       </div>
@@ -145,7 +145,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../../../../index.html" class="md-tabs__link">Selenium 4.31.0 documentation</a></li>
+          <li class="md-tabs__item"><a href="../../../../../index.html" class="md-tabs__link">Selenium 4.33.0 documentation</a></li>
           <li class="md-tabs__item"><a href="../../../../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -158,13 +158,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../../../../index.html" title="Selenium 4.31.0 documentation" class="md-nav__button md-logo">
+    <a href="../../../../../index.html" title="Selenium 4.33.0 documentation" class="md-nav__button md-logo">
       
         <img src="../../../../../_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../../../../../index.html"
-       title="Selenium 4.31.0 documentation">Selenium 4.31.0 documentation</a>
+       title="Selenium 4.33.0 documentation">Selenium 4.33.0 documentation</a>
   </label>
   
 
@@ -209,40 +209,56 @@
 <span class="c1"># specific language governing permissions and limitations</span>
 <span class="c1"># under the License.</span>
 
+<span class="kn">from</span><span class="w"> </span><span class="nn">selenium.webdriver.common.bidi.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">command_builder</span>
 
-<div class="viewcode-block" id="session_subscribe">
-<a class="viewcode-back" href="../../../../../webdriver/selenium.webdriver.common.bidi.session.html#selenium.webdriver.common.bidi.session.session_subscribe">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">session_subscribe</span><span class="p">(</span><span class="o">*</span><span class="n">events</span><span class="p">,</span> <span class="n">browsing_contexts</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="n">cmd_dict</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">"method"</span><span class="p">:</span> <span class="s2">"session.subscribe"</span><span class="p">,</span>
-        <span class="s2">"params"</span><span class="p">:</span> <span class="p">{</span>
+
+<div class="viewcode-block" id="Session">
+<a class="viewcode-back" href="../../../../../webdriver/selenium.webdriver.common.bidi.session.html#selenium.webdriver.common.bidi.session.Session">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Session</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conn</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span> <span class="o">=</span> <span class="n">conn</span>
+
+<div class="viewcode-block" id="Session.subscribe">
+<a class="viewcode-back" href="../../../../../webdriver/selenium.webdriver.common.bidi.session.html#selenium.webdriver.common.bidi.session.Session.subscribe">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">subscribe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">events</span><span class="p">,</span> <span class="n">browsing_contexts</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">"events"</span><span class="p">:</span> <span class="n">events</span><span class="p">,</span>
-        <span class="p">},</span>
-    <span class="p">}</span>
-    <span class="k">if</span> <span class="n">browsing_contexts</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">browsing_contexts</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">if</span> <span class="n">browsing_contexts</span><span class="p">:</span>
-        <span class="n">cmd_dict</span><span class="p">[</span><span class="s2">"params"</span><span class="p">][</span><span class="s2">"browsingContexts"</span><span class="p">]</span> <span class="o">=</span> <span class="n">browsing_contexts</span>
-    <span class="n">_</span> <span class="o">=</span> <span class="k">yield</span> <span class="n">cmd_dict</span>
-    <span class="k">return</span> <span class="kc">None</span></div>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">browsing_contexts</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">browsing_contexts</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">browsing_contexts</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">"browsingContexts"</span><span class="p">]</span> <span class="o">=</span> <span class="n">browsing_contexts</span>
+        <span class="k">return</span> <span class="n">command_builder</span><span class="p">(</span><span class="s2">"session.subscribe"</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span></div>
 
 
-
-<div class="viewcode-block" id="session_unsubscribe">
-<a class="viewcode-back" href="../../../../../webdriver/selenium.webdriver.common.bidi.session.html#selenium.webdriver.common.bidi.session.session_unsubscribe">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">session_unsubscribe</span><span class="p">(</span><span class="o">*</span><span class="n">events</span><span class="p">,</span> <span class="n">browsing_contexts</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="n">cmd_dict</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">"method"</span><span class="p">:</span> <span class="s2">"session.unsubscribe"</span><span class="p">,</span>
-        <span class="s2">"params"</span><span class="p">:</span> <span class="p">{</span>
+<div class="viewcode-block" id="Session.unsubscribe">
+<a class="viewcode-back" href="../../../../../webdriver/selenium.webdriver.common.bidi.session.html#selenium.webdriver.common.bidi.session.Session.unsubscribe">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">unsubscribe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">events</span><span class="p">,</span> <span class="n">browsing_contexts</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">"events"</span><span class="p">:</span> <span class="n">events</span><span class="p">,</span>
-        <span class="p">},</span>
-    <span class="p">}</span>
-    <span class="k">if</span> <span class="n">browsing_contexts</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">browsing_contexts</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">if</span> <span class="n">browsing_contexts</span><span class="p">:</span>
-        <span class="n">cmd_dict</span><span class="p">[</span><span class="s2">"params"</span><span class="p">][</span><span class="s2">"browsingContexts"</span><span class="p">]</span> <span class="o">=</span> <span class="n">browsing_contexts</span>
-    <span class="n">_</span> <span class="o">=</span> <span class="k">yield</span> <span class="n">cmd_dict</span>
-    <span class="k">return</span> <span class="kc">None</span></div>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">browsing_contexts</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">browsing_contexts</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">browsing_contexts</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">"browsingContexts"</span><span class="p">]</span> <span class="o">=</span> <span class="n">browsing_contexts</span>
+        <span class="k">return</span> <span class="n">command_builder</span><span class="p">(</span><span class="s2">"session.unsubscribe"</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Session.status">
+<a class="viewcode-back" href="../../../../../webdriver/selenium.webdriver.common.bidi.session.html#selenium.webdriver.common.bidi.session.Session.status">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        The session.status command returns information about the remote end's readiness</span>
+<span class="sd">        to create new sessions and may include implementation-specific metadata.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">            Dictionary containing the ready state (bool), message (str) and metadata</span>
+<span class="sd">        """</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="n">command_builder</span><span class="p">(</span><span class="s2">"session.status"</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div>
+</div>
 
 </pre></div>
 

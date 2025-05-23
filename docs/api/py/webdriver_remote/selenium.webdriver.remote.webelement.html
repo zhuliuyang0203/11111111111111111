@@ -46,10 +46,10 @@
   
   
   
-    <title>selenium.webdriver.remote.webelement &#8212; Selenium 4.31.0 documentation</title>
+    <title>selenium.webdriver.remote.webelement &#8212; Selenium 4.33.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/material.css?v=79c92029" />
-    <script src="../_static/documentation_options.js?v=c6a64f85"></script>
+    <script src="../_static/documentation_options.js?v=250cdb37"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -77,7 +77,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../index.html" title="Selenium 4.31.0 documentation"
+        <a href="../index.html" title="Selenium 4.33.0 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -89,7 +89,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">Selenium 4.31.0 documentation</span>
+          <span class="md-header-nav__topic">Selenium 4.33.0 documentation</span>
           <span class="md-header-nav__topic"> selenium.webdriver.remote.webelement </span>
         </div>
       </div>
@@ -146,7 +146,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">Selenium 4.31.0 documentation</a></li>
+          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">Selenium 4.33.0 documentation</a></li>
       </ul>
     </div>
   </nav>
@@ -158,13 +158,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../index.html" title="Selenium 4.31.0 documentation" class="md-nav__button md-logo">
+    <a href="../index.html" title="Selenium 4.33.0 documentation" class="md-nav__button md-logo">
       
         <img src="../_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../index.html"
-       title="Selenium 4.31.0 documentation">Selenium 4.31.0 documentation</a>
+       title="Selenium 4.33.0 documentation">Selenium 4.33.0 documentation</a>
   </label>
   
 
@@ -185,6 +185,8 @@
         </li>
         <li class="md-nav__item"><a href="#selenium.webdriver.remote.webelement.WebElement" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">WebElement</span></code></a><nav class="md-nav">
               <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#selenium.webdriver.remote.webelement.WebElement.session_id" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">WebElement.session_id</span></code></a>
+        </li>
         <li class="md-nav__item"><a href="#selenium.webdriver.remote.webelement.WebElement.tag_name" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">WebElement.tag_name</span></code></a>
         </li>
         <li class="md-nav__item"><a href="#selenium.webdriver.remote.webelement.WebElement.text" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">WebElement.text</span></code></a>
@@ -289,6 +291,10 @@ element is still attached to the DOM.  If this test fails, then an
 <code class="docutils literal notranslate"><span class="pre">StaleElementReferenceException</span></code> is thrown, and all future calls to this
 instance will fail.</p>
 <dl class="py property">
+<dt class="sig sig-object py" id="selenium.webdriver.remote.webelement.WebElement.session_id">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">session_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#selenium.webdriver.remote.webelement.WebElement.session_id" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py property">
 <dt class="sig sig-object py" id="selenium.webdriver.remote.webelement.WebElement.tag_name">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tag_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#selenium.webdriver.remote.webelement.WebElement.tag_name" title="Link to this definition">¶</a></dt>
 <dd><p>This element’s <code class="docutils literal notranslate"><span class="pre">tagName</span></code> property.</p>
@@ -298,7 +304,7 @@ instance will fail.</p>
 </section>
 <section id="example">
 <h2 id="example">Example:<a class="headerlink" href="#example" title="Link to this heading">¶</a></h2>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">element</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_element</span><span class="p">(</span><span class="n">By</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span> <span class="s1">'foo'</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">element</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_element</span><span class="p">(</span><span class="n">By</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span> <span class="s2">"foo"</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -313,7 +319,7 @@ instance will fail.</p>
 </section>
 <section id="id2">
 <h2 id="id2">Example:<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">element</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_element</span><span class="p">(</span><span class="n">By</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span> <span class="s1">'foo'</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">element</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_element</span><span class="p">(</span><span class="n">By</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span> <span class="s2">"foo"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">element</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -325,7 +331,7 @@ instance will fail.</p>
 <dd><p>Clicks the element.</p>
 <section id="id3">
 <h2 id="id3">Example:<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h2>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">element</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_element</span><span class="p">(</span><span class="n">By</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span> <span class="s1">'foo'</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">element</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_element</span><span class="p">(</span><span class="n">By</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span> <span class="s2">"foo"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">element</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -337,7 +343,7 @@ instance will fail.</p>
 <dd><p>Submits a form.</p>
 <section id="id4">
 <h2 id="id4">Example:<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h2>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">form</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_element</span><span class="p">(</span><span class="n">By</span><span class="o">.</span><span class="n">NAME</span><span class="p">,</span> <span class="s1">'login'</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">form</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_element</span><span class="p">(</span><span class="n">By</span><span class="o">.</span><span class="n">NAME</span><span class="p">,</span> <span class="s2">"login"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">form</span><span class="o">.</span><span class="n">submit</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -349,7 +355,7 @@ instance will fail.</p>
 <dd><p>Clears the text if it’s a text entry element.</p>
 <section id="id5">
 <h2 id="id5">Example:<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h2>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">text_field</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_element</span><span class="p">(</span><span class="n">By</span><span class="o">.</span><span class="n">NAME</span><span class="p">,</span> <span class="s1">'username'</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">text_field</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_element</span><span class="p">(</span><span class="n">By</span><span class="o">.</span><span class="n">NAME</span><span class="p">,</span> <span class="s2">"username"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">text_field</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -498,10 +504,10 @@ use <code class="xref py py-func docutils literal notranslate"><span class="pre"
 <section id="examples">
 <h2 id="examples">Examples:<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
 <p>To send a simple key event::
-&gt;&gt;&gt; form_textfield = driver.find_element(By.NAME, ‘username’)
+&gt;&gt;&gt; form_textfield = driver.find_element(By.NAME, “username”)
 &gt;&gt;&gt; form_textfield.send_keys(“admin”)</p>
 <p>or to set a file input field::
-&gt;&gt;&gt; file_input = driver.find_element(By.NAME, ‘profilePic’)
+&gt;&gt;&gt; file_input = driver.find_element(By.NAME, “profilePic”)
 &gt;&gt;&gt; file_input.send_keys(“path/to/profilepic.gif”)
 &gt;&gt;&gt; # Generally it’s better to wrap the file path in one of the methods
 &gt;&gt;&gt; # in os.path to return the actual path to support cross OS testing.
@@ -598,7 +604,7 @@ cause the element to be scrolled into view.</p>
 </section>
 <section id="id27">
 <h2 id="id27">Example:<a class="headerlink" href="#id27" title="Link to this heading">¶</a></h2>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">value</span> <span class="o">=</span> <span class="n">element</span><span class="o">.</span><span class="n">value_of_css_property</span><span class="p">(</span><span class="s1">'color'</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">value</span> <span class="o">=</span> <span class="n">element</span><span class="o">.</span><span class="n">value_of_css_property</span><span class="p">(</span><span class="s2">"color"</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -714,7 +720,7 @@ should end with a <cite>.png</cite> extension.</p>
 </section>
 <section id="element">
 <h2 id="element">Element:<a class="headerlink" href="#element" title="Link to this heading">¶</a></h2>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">element</span><span class="o">.</span><span class="n">screenshot</span><span class="p">(</span><span class="s1">'/Screenshots/foo.png'</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">element</span><span class="o">.</span><span class="n">screenshot</span><span class="p">(</span><span class="s2">"/Screenshots/foo.png"</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -726,7 +732,7 @@ should end with a <cite>.png</cite> extension.</p>
 from.</p>
 <section id="id42">
 <h2 id="id42">Example:<a class="headerlink" href="#id42" title="Link to this heading">¶</a></h2>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">element</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_element</span><span class="p">(</span><span class="n">By</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span> <span class="s1">'foo'</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">element</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_element</span><span class="p">(</span><span class="n">By</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span> <span class="s2">"foo"</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">parent_element</span> <span class="o">=</span> <span class="n">element</span><span class="o">.</span><span class="n">parent</span>
 </pre></div>
 </div>
@@ -800,7 +806,7 @@ webelements refer to the same element, can be done using <code class="docutils l
 </section>
 <section id="id48">
 <h2 id="id48">Example:<a class="headerlink" href="#id48" title="Link to this heading">¶</a></h2>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">element</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_elements</span><span class="p">(</span><span class="n">By</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span> <span class="s1">'foo'</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">element</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">find_elements</span><span class="p">(</span><span class="n">By</span><span class="o">.</span><span class="n">ID</span><span class="p">,</span> <span class="s2">"foo"</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>

@@ -46,10 +46,10 @@
   
   
   
-    <title>selenium.webdriver.common.bidi.session &#8212; Selenium 4.31.0 documentation</title>
+    <title>selenium.webdriver.common.bidi.session &#8212; Selenium 4.33.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/material.css?v=79c92029" />
-    <script src="../_static/documentation_options.js?v=c6a64f85"></script>
+    <script src="../_static/documentation_options.js?v=250cdb37"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -77,7 +77,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../index.html" title="Selenium 4.31.0 documentation"
+        <a href="../index.html" title="Selenium 4.33.0 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -89,7 +89,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">Selenium 4.31.0 documentation</span>
+          <span class="md-header-nav__topic">Selenium 4.33.0 documentation</span>
           <span class="md-header-nav__topic"> selenium.webdriver.common.bidi.session </span>
         </div>
       </div>
@@ -146,7 +146,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">Selenium 4.31.0 documentation</a></li>
+          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">Selenium 4.33.0 documentation</a></li>
       </ul>
     </div>
   </nav>
@@ -158,13 +158,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../index.html" title="Selenium 4.31.0 documentation" class="md-nav__button md-logo">
+    <a href="../index.html" title="Selenium 4.33.0 documentation" class="md-nav__button md-logo">
       
         <img src="../_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../index.html"
-       title="Selenium 4.31.0 documentation">Selenium 4.31.0 documentation</a>
+       title="Selenium 4.33.0 documentation">Selenium 4.33.0 documentation</a>
   </label>
   
 
@@ -181,9 +181,15 @@
   <ul class="md-nav__list" data-md-scrollfix="">
         <li class="md-nav__item"><a href="#webdriver-selenium-webdriver-common-bidi-session--page-root" class="md-nav__link">selenium.webdriver.common.bidi.session</a><nav class="md-nav">
               <ul class="md-nav__list">
-        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.session.session_subscribe" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">session_subscribe()</span></code></a>
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.session.Session" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Session</span></code></a><nav class="md-nav">
+              <ul class="md-nav__list">
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.session.Session.subscribe" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Session.subscribe()</span></code></a>
         </li>
-        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.session.session_unsubscribe" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">session_unsubscribe()</span></code></a>
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.session.Session.unsubscribe" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Session.unsubscribe()</span></code></a>
+        </li>
+        <li class="md-nav__item"><a href="#selenium.webdriver.common.bidi.session.Session.status" class="md-nav__link"><code class="docutils literal notranslate"><span class="pre">Session.status()</span></code></a>
+        </li></ul>
+            </nav>
         </li></ul>
             </nav>
         </li>
@@ -203,25 +209,39 @@
             
   <section id="module-selenium.webdriver.common.bidi.session">
 <span id="selenium-webdriver-common-bidi-session"></span><h1 id="webdriver-selenium-webdriver-common-bidi-session--page-root">selenium.webdriver.common.bidi.session<a class="headerlink" href="#webdriver-selenium-webdriver-common-bidi-session--page-root" title="Link to this heading">¶</a></h1>
-<p class="rubric">Functions</p>
+<p class="rubric">Classes</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#selenium.webdriver.common.bidi.session.session_subscribe" title="selenium.webdriver.common.bidi.session.session_subscribe"><code class="xref py py-obj docutils literal notranslate"><span class="pre">session_subscribe</span></code></a>(*events[, browsing_contexts])</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#selenium.webdriver.common.bidi.session.session_unsubscribe" title="selenium.webdriver.common.bidi.session.session_unsubscribe"><code class="xref py py-obj docutils literal notranslate"><span class="pre">session_unsubscribe</span></code></a>(*events[, browsing_contexts])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#selenium.webdriver.common.bidi.session.Session" title="selenium.webdriver.common.bidi.session.Session"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Session</span></code></a>(conn)</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
 </table>
-<dl class="py function">
-<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.session.session_subscribe">
-<span class="sig-prename descclassname"><span class="pre">selenium.webdriver.common.bidi.session.</span></span><span class="sig-name descname"><span class="pre">session_subscribe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">events</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">browsing_contexts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/selenium/webdriver/common/bidi/session.html#session_subscribe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#selenium.webdriver.common.bidi.session.session_subscribe" title="Link to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.session.Session">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">selenium.webdriver.common.bidi.session.</span></span><span class="sig-name descname"><span class="pre">Session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/selenium/webdriver/common/bidi/session.html#Session"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#selenium.webdriver.common.bidi.session.Session" title="Link to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.session.Session.subscribe">
+<span class="sig-name descname"><span class="pre">subscribe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">events</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">browsing_contexts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/selenium/webdriver/common/bidi/session.html#Session.subscribe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#selenium.webdriver.common.bidi.session.Session.subscribe" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
-<dl class="py function">
-<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.session.session_unsubscribe">
-<span class="sig-prename descclassname"><span class="pre">selenium.webdriver.common.bidi.session.</span></span><span class="sig-name descname"><span class="pre">session_unsubscribe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">events</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">browsing_contexts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/selenium/webdriver/common/bidi/session.html#session_unsubscribe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#selenium.webdriver.common.bidi.session.session_unsubscribe" title="Link to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.session.Session.unsubscribe">
+<span class="sig-name descname"><span class="pre">unsubscribe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">events</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">browsing_contexts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/selenium/webdriver/common/bidi/session.html#Session.unsubscribe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#selenium.webdriver.common.bidi.session.Session.unsubscribe" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="selenium.webdriver.common.bidi.session.Session.status">
+<span class="sig-name descname"><span class="pre">status</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/selenium/webdriver/common/bidi/session.html#Session.status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#selenium.webdriver.common.bidi.session.Session.status" title="Link to this definition">¶</a></dt>
+<dd><p>The session.status command returns information about the remote end’s readiness
+to create new sessions and may include implementation-specific metadata.</p>
+<section id="returns">
+<h2 id="returns">Returns<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h2>
+<dl class="simple">
+<dt>dict</dt><dd><p>Dictionary containing the ready state (bool), message (str) and metadata</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+</dd></dl>
 </section>
 
 

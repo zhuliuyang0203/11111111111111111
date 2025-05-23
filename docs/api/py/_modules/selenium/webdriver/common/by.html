@@ -45,10 +45,10 @@
   
   
   
-    <title>selenium.webdriver.common.by &#8212; Selenium 4.31.0 documentation</title>
+    <title>selenium.webdriver.common.by &#8212; Selenium 4.33.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/material.css?v=79c92029" />
-    <script src="../../../../_static/documentation_options.js?v=c6a64f85"></script>
+    <script src="../../../../_static/documentation_options.js?v=250cdb37"></script>
     <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
@@ -76,7 +76,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../../../index.html" title="Selenium 4.31.0 documentation"
+        <a href="../../../../index.html" title="Selenium 4.33.0 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -88,7 +88,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">Selenium 4.31.0 documentation</span>
+          <span class="md-header-nav__topic">Selenium 4.33.0 documentation</span>
           <span class="md-header-nav__topic"> selenium.webdriver.common.by </span>
         </div>
       </div>
@@ -145,7 +145,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../../../index.html" class="md-tabs__link">Selenium 4.31.0 documentation</a></li>
+          <li class="md-tabs__item"><a href="../../../../index.html" class="md-tabs__link">Selenium 4.33.0 documentation</a></li>
           <li class="md-tabs__item"><a href="../../../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -158,13 +158,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../../../index.html" title="Selenium 4.31.0 documentation" class="md-nav__button md-logo">
+    <a href="../../../../index.html" title="Selenium 4.33.0 documentation" class="md-nav__button md-logo">
       
         <img src="../../../../_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../../../../index.html"
-       title="Selenium 4.31.0 documentation">Selenium 4.31.0 documentation</a>
+       title="Selenium 4.33.0 documentation">Selenium 4.33.0 documentation</a>
   </label>
   
 
@@ -210,9 +210,7 @@
 <span class="c1"># under the License.</span>
 <span class="sd">"""The By implementation."""</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Optional</span>
 
 
 <div class="viewcode-block" id="By">
@@ -224,7 +222,7 @@
 <span class="sd">    --</span>
 <span class="sd">    Select the element by its ID.</span>
 
-<span class="sd">    &gt;&gt;&gt; element = driver.find_element(By.ID, 'myElement')</span>
+<span class="sd">    &gt;&gt;&gt; element = driver.find_element(By.ID, "myElement")</span>
 
 <span class="sd">    XPATH:</span>
 <span class="sd">    ------</span>
@@ -232,43 +230,43 @@
 <span class="sd">        - absolute path</span>
 <span class="sd">        - relative path</span>
 
-<span class="sd">    &gt;&gt;&gt; element = driver.find_element(By.XPATH, '//html/body/div')</span>
+<span class="sd">    &gt;&gt;&gt; element = driver.find_element(By.XPATH, "//html/body/div")</span>
 
 <span class="sd">    LINK_TEXT:</span>
 <span class="sd">    ----------</span>
 <span class="sd">    Select the link element having the exact text.</span>
 
-<span class="sd">    &gt;&gt;&gt; element = driver.find_element(By.LINK_TEXT, 'myLink')</span>
+<span class="sd">    &gt;&gt;&gt; element = driver.find_element(By.LINK_TEXT, "myLink")</span>
 
 <span class="sd">    PARTIAL_LINK_TEXT:</span>
 <span class="sd">    ------------------</span>
 <span class="sd">    Select the link element having the partial text.</span>
 
-<span class="sd">    &gt;&gt;&gt; element = driver.find_element(By.PARTIAL_LINK_TEXT, 'my')</span>
+<span class="sd">    &gt;&gt;&gt; element = driver.find_element(By.PARTIAL_LINK_TEXT, "my")</span>
 
 <span class="sd">    NAME:</span>
 <span class="sd">    ----</span>
 <span class="sd">    Select the element by its name attribute.</span>
 
-<span class="sd">    &gt;&gt;&gt; element = driver.find_element(By.NAME, 'myElement')</span>
+<span class="sd">    &gt;&gt;&gt; element = driver.find_element(By.NAME, "myElement")</span>
 
 <span class="sd">    TAG_NAME:</span>
 <span class="sd">    --------</span>
 <span class="sd">    Select the element by its tag name.</span>
 
-<span class="sd">    &gt;&gt;&gt; element = driver.find_element(By.TAG_NAME, 'div')</span>
+<span class="sd">    &gt;&gt;&gt; element = driver.find_element(By.TAG_NAME, "div")</span>
 
 <span class="sd">    CLASS_NAME:</span>
 <span class="sd">    -----------</span>
 <span class="sd">    Select the element by its class name.</span>
 
-<span class="sd">    &gt;&gt;&gt; element = driver.find_element(By.CLASS_NAME, 'myElement')</span>
+<span class="sd">    &gt;&gt;&gt; element = driver.find_element(By.CLASS_NAME, "myElement")</span>
 
 <span class="sd">    CSS_SELECTOR:</span>
 <span class="sd">    -------------</span>
 <span class="sd">    Select the element by its CSS selector.</span>
 
-<span class="sd">    &gt;&gt;&gt; element = driver.find_element(By.CSS_SELECTOR, 'div.myElement')</span>
+<span class="sd">    &gt;&gt;&gt; element = driver.find_element(By.CSS_SELECTOR, "div.myElement")</span>
 <span class="sd">    """</span>
 
     <span class="n">ID</span> <span class="o">=</span> <span class="s2">"id"</span>

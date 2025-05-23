@@ -45,10 +45,10 @@
   
   
   
-    <title>selenium.webdriver.firefox.firefox_binary &#8212; Selenium 4.31.0 documentation</title>
+    <title>selenium.webdriver.firefox.firefox_binary &#8212; Selenium 4.33.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/material.css?v=79c92029" />
-    <script src="../../../../_static/documentation_options.js?v=c6a64f85"></script>
+    <script src="../../../../_static/documentation_options.js?v=250cdb37"></script>
     <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
@@ -76,7 +76,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../../../index.html" title="Selenium 4.31.0 documentation"
+        <a href="../../../../index.html" title="Selenium 4.33.0 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -88,7 +88,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">Selenium 4.31.0 documentation</span>
+          <span class="md-header-nav__topic">Selenium 4.33.0 documentation</span>
           <span class="md-header-nav__topic"> selenium.webdriver.firefox.firefox_binary </span>
         </div>
       </div>
@@ -145,7 +145,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../../../index.html" class="md-tabs__link">Selenium 4.31.0 documentation</a></li>
+          <li class="md-tabs__item"><a href="../../../../index.html" class="md-tabs__link">Selenium 4.33.0 documentation</a></li>
           <li class="md-tabs__item"><a href="../../../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -158,13 +158,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../../../index.html" title="Selenium 4.31.0 documentation" class="md-nav__button md-logo">
+    <a href="../../../../index.html" title="Selenium 4.33.0 documentation" class="md-nav__button md-logo">
       
         <img src="../../../../_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../../../../index.html"
-       title="Selenium 4.31.0 documentation">Selenium 4.31.0 documentation</a>
+       title="Selenium 4.33.0 documentation">Selenium 4.33.0 documentation</a>
   </label>
   
 
@@ -213,9 +213,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">platform</span><span class="w"> </span><span class="kn">import</span> <span class="n">system</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">subprocess</span><span class="w"> </span><span class="kn">import</span> <span class="n">DEVNULL</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">subprocess</span><span class="w"> </span><span class="kn">import</span> <span class="n">STDOUT</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">subprocess</span><span class="w"> </span><span class="kn">import</span> <span class="n">Popen</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">subprocess</span><span class="w"> </span><span class="kn">import</span> <span class="n">DEVNULL</span><span class="p">,</span> <span class="n">STDOUT</span><span class="p">,</span> <span class="n">Popen</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing_extensions</span><span class="w"> </span><span class="kn">import</span> <span class="n">deprecated</span>
 
@@ -329,12 +327,9 @@
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_find_exe_in_registry</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="kn">from</span><span class="w"> </span><span class="nn">_winreg</span><span class="w"> </span><span class="kn">import</span> <span class="n">HKEY_CURRENT_USER</span>
-            <span class="kn">from</span><span class="w"> </span><span class="nn">_winreg</span><span class="w"> </span><span class="kn">import</span> <span class="n">HKEY_LOCAL_MACHINE</span>
-            <span class="kn">from</span><span class="w"> </span><span class="nn">_winreg</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenKey</span>
-            <span class="kn">from</span><span class="w"> </span><span class="nn">_winreg</span><span class="w"> </span><span class="kn">import</span> <span class="n">QueryValue</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">_winreg</span><span class="w"> </span><span class="kn">import</span> <span class="n">HKEY_CURRENT_USER</span><span class="p">,</span> <span class="n">HKEY_LOCAL_MACHINE</span><span class="p">,</span> <span class="n">OpenKey</span><span class="p">,</span> <span class="n">QueryValue</span>
         <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-            <span class="kn">from</span><span class="w"> </span><span class="nn">winreg</span><span class="w"> </span><span class="kn">import</span> <span class="n">OpenKey</span><span class="p">,</span> <span class="n">QueryValue</span><span class="p">,</span> <span class="n">HKEY_LOCAL_MACHINE</span><span class="p">,</span> <span class="n">HKEY_CURRENT_USER</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">winreg</span><span class="w"> </span><span class="kn">import</span> <span class="n">HKEY_CURRENT_USER</span><span class="p">,</span> <span class="n">HKEY_LOCAL_MACHINE</span><span class="p">,</span> <span class="n">OpenKey</span><span class="p">,</span> <span class="n">QueryValue</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">shlex</span>
 
         <span class="n">keys</span> <span class="o">=</span> <span class="p">(</span>

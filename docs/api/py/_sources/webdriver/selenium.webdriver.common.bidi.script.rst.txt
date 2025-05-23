@@ -8,8 +8,5 @@ selenium.webdriver.common.bidi.script
 
    .. autosummary::
    
-      ConsoleLogEntry
-      JavaScriptLogEntry
-      LogEntryAdded
       Script
    

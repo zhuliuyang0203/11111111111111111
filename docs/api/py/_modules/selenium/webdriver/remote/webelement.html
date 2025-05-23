@@ -45,10 +45,10 @@
   
   
   
-    <title>selenium.webdriver.remote.webelement &#8212; Selenium 4.31.0 documentation</title>
+    <title>selenium.webdriver.remote.webelement &#8212; Selenium 4.33.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/material.css?v=79c92029" />
-    <script src="../../../../_static/documentation_options.js?v=c6a64f85"></script>
+    <script src="../../../../_static/documentation_options.js?v=250cdb37"></script>
     <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
@@ -76,7 +76,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../../../index.html" title="Selenium 4.31.0 documentation"
+        <a href="../../../../index.html" title="Selenium 4.33.0 documentation"
            class="md-header-nav__button md-logo">
           
             &nbsp;
@@ -88,7 +88,7 @@
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
-          <span class="md-header-nav__topic">Selenium 4.31.0 documentation</span>
+          <span class="md-header-nav__topic">Selenium 4.33.0 documentation</span>
           <span class="md-header-nav__topic"> selenium.webdriver.remote.webelement </span>
         </div>
       </div>
@@ -145,7 +145,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../../../index.html" class="md-tabs__link">Selenium 4.31.0 documentation</a></li>
+          <li class="md-tabs__item"><a href="../../../../index.html" class="md-tabs__link">Selenium 4.33.0 documentation</a></li>
           <li class="md-tabs__item"><a href="../../../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -158,13 +158,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../../../index.html" title="Selenium 4.31.0 documentation" class="md-nav__button md-logo">
+    <a href="../../../../index.html" title="Selenium 4.33.0 documentation" class="md-nav__button md-logo">
       
         <img src="../../../../_static/" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../../../../index.html"
-       title="Selenium 4.31.0 documentation">Selenium 4.31.0 documentation</a>
+       title="Selenium 4.33.0 documentation">Selenium 4.33.0 documentation</a>
   </label>
   
 
@@ -215,14 +215,12 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">zipfile</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABCMeta</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">base64</span><span class="w"> </span><span class="kn">import</span> <span class="n">b64decode</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">base64</span><span class="w"> </span><span class="kn">import</span> <span class="n">encodebytes</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">base64</span><span class="w"> </span><span class="kn">import</span> <span class="n">b64decode</span><span class="p">,</span> <span class="n">encodebytes</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">hashlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">md5</span> <span class="k">as</span> <span class="n">md5_hash</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">io</span><span class="w"> </span><span class="kn">import</span> <span class="n">BytesIO</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">selenium.common.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">JavascriptException</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">selenium.common.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">WebDriverException</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">selenium.common.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">JavascriptException</span><span class="p">,</span> <span class="n">WebDriverException</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">selenium.webdriver.common.by</span><span class="w"> </span><span class="kn">import</span> <span class="n">By</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">selenium.webdriver.common.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">keys_to_typing</span>
 
@@ -276,7 +274,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_id</span> <span class="o">=</span> <span class="n">id_</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s1">'&lt;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__module__</span><span class="si">}</span><span class="s1">.</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s1"> (session="</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_parent</span><span class="o">.</span><span class="n">session_id</span><span class="si">}</span><span class="s1">", element="</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_id</span><span class="si">}</span><span class="s1">")&gt;'</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">'&lt;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__module__</span><span class="si">}</span><span class="s1">.</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s1"> (session="</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">session_id</span><span class="si">}</span><span class="s1">", element="</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_id</span><span class="si">}</span><span class="s1">")&gt;'</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">session_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span><span class="o">.</span><span class="n">session_id</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">tag_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -288,7 +290,7 @@
 
 <span class="sd">        Example:</span>
 <span class="sd">        --------</span>
-<span class="sd">        &gt;&gt;&gt; element = driver.find_element(By.ID, 'foo')</span>
+<span class="sd">        &gt;&gt;&gt; element = driver.find_element(By.ID, "foo")</span>
 <span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">Command</span><span class="o">.</span><span class="n">GET_ELEMENT_TAG_NAME</span><span class="p">)[</span><span class="s2">"value"</span><span class="p">]</span>
 
@@ -302,7 +304,7 @@
 
 <span class="sd">        Example:</span>
 <span class="sd">        --------</span>
-<span class="sd">        &gt;&gt;&gt; element = driver.find_element(By.ID, 'foo')</span>
+<span class="sd">        &gt;&gt;&gt; element = driver.find_element(By.ID, "foo")</span>
 <span class="sd">        &gt;&gt;&gt; print(element.text)</span>
 <span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">Command</span><span class="o">.</span><span class="n">GET_ELEMENT_TEXT</span><span class="p">)[</span><span class="s2">"value"</span><span class="p">]</span>
@@ -314,7 +316,7 @@
 
 <span class="sd">        Example:</span>
 <span class="sd">        --------</span>
-<span class="sd">        &gt;&gt;&gt; element = driver.find_element(By.ID, 'foo')</span>
+<span class="sd">        &gt;&gt;&gt; element = driver.find_element(By.ID, "foo")</span>
 <span class="sd">        &gt;&gt;&gt; element.click()</span>
 <span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">Command</span><span class="o">.</span><span class="n">CLICK_ELEMENT</span><span class="p">)</span></div>
@@ -327,7 +329,7 @@
 
 <span class="sd">        Example:</span>
 <span class="sd">        --------</span>
-<span class="sd">        &gt;&gt;&gt; form = driver.find_element(By.NAME, 'login')</span>
+<span class="sd">        &gt;&gt;&gt; form = driver.find_element(By.NAME, "login")</span>
 <span class="sd">        &gt;&gt;&gt; form.submit()</span>
 <span class="sd">        """</span>
         <span class="n">script</span> <span class="o">=</span> <span class="p">(</span>
@@ -355,7 +357,7 @@
 
 <span class="sd">        Example:</span>
 <span class="sd">        --------</span>
-<span class="sd">        &gt;&gt;&gt; text_field = driver.find_element(By.NAME, 'username')</span>
+<span class="sd">        &gt;&gt;&gt; text_field = driver.find_element(By.NAME, "username")</span>
 <span class="sd">        &gt;&gt;&gt; text_field.clear()</span>
 <span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">Command</span><span class="o">.</span><span class="n">CLEAR_ELEMENT</span><span class="p">)</span></div>
@@ -498,11 +500,11 @@
 <span class="sd">        Examples:</span>
 <span class="sd">        --------</span>
 <span class="sd">        To send a simple key event::</span>
-<span class="sd">        &gt;&gt;&gt; form_textfield = driver.find_element(By.NAME, 'username')</span>
+<span class="sd">        &gt;&gt;&gt; form_textfield = driver.find_element(By.NAME, "username")</span>
 <span class="sd">        &gt;&gt;&gt; form_textfield.send_keys("admin")</span>
 
 <span class="sd">        or to set a file input field::</span>
-<span class="sd">        &gt;&gt;&gt; file_input = driver.find_element(By.NAME, 'profilePic')</span>
+<span class="sd">        &gt;&gt;&gt; file_input = driver.find_element(By.NAME, "profilePic")</span>
 <span class="sd">        &gt;&gt;&gt; file_input.send_keys("path/to/profilepic.gif")</span>
 <span class="sd">        &gt;&gt;&gt; # Generally it's better to wrap the file path in one of the methods</span>
 <span class="sd">        &gt;&gt;&gt; # in os.path to return the actual path to support cross OS testing.</span>
@@ -624,7 +626,7 @@
 
 <span class="sd">        Example:</span>
 <span class="sd">        --------</span>
-<span class="sd">        &gt;&gt;&gt; value = element.value_of_css_property('color')</span>
+<span class="sd">        &gt;&gt;&gt; value = element.value_of_css_property("color")</span>
 <span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_execute</span><span class="p">(</span><span class="n">Command</span><span class="o">.</span><span class="n">GET_ELEMENT_VALUE_OF_CSS_PROPERTY</span><span class="p">,</span> <span class="p">{</span><span class="s2">"propertyName"</span><span class="p">:</span> <span class="n">property_name</span><span class="p">})[</span><span class="s2">"value"</span><span class="p">]</span></div>
 
@@ -735,7 +737,7 @@
 
 <span class="sd">        Element:</span>
 <span class="sd">        --------</span>
-<span class="sd">        &gt;&gt;&gt; element.screenshot('/Screenshots/foo.png')</span>
+<span class="sd">        &gt;&gt;&gt; element.screenshot("/Screenshots/foo.png")</span>
 <span class="sd">        """</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">filename</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">".png"</span><span class="p">):</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
@@ -760,7 +762,7 @@
 
 <span class="sd">        Example:</span>
 <span class="sd">        --------</span>
-<span class="sd">        &gt;&gt;&gt; element = driver.find_element(By.ID, 'foo')</span>
+<span class="sd">        &gt;&gt;&gt; element = driver.find_element(By.ID, "foo")</span>
 <span class="sd">        &gt;&gt;&gt; parent_element = element.parent</span>
 <span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span>
@@ -859,7 +861,7 @@
 
 <span class="sd">        Example:</span>
 <span class="sd">        --------</span>
-<span class="sd">        &gt;&gt;&gt; element = driver.find_elements(By.ID, 'foo')</span>
+<span class="sd">        &gt;&gt;&gt; element = driver.find_elements(By.ID, "foo")</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">        -------</span>

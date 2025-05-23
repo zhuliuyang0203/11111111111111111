@@ -4,10 +4,9 @@ selenium.webdriver.common.bidi.session
 .. automodule:: selenium.webdriver.common.bidi.session
 
    
-   .. rubric:: Functions
+   .. rubric:: Classes
 
    .. autosummary::
    
-      session_subscribe
-      session_unsubscribe
+      Session
    
