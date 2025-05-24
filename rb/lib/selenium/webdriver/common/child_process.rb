@@ -122,6 +122,8 @@ module Selenium
 
       def terminate(pid)
         Process.kill(SIGTERM, pid)
+      rescue Errno::ECHILD, Errno::ESRCH
+        # Process does not exist, nothing to terminate
       end
 
       def kill(pid)
