@@ -17,6 +17,7 @@
 
 import os
 import platform
+from pathlib import Path
 
 import pytest
 
@@ -84,13 +85,14 @@ def pytest_addoption(parser):
     )
 
 
-def pytest_ignore_collect(path, config):
+def pytest_ignore_collect(collection_path, config):
     drivers_opt = config.getoption("drivers")
     _drivers = set(drivers).difference(drivers_opt or drivers)
     if drivers_opt:
         _drivers.add("unit")
-    parts = path.dirname.split(os.path.sep)
-    return len([d for d in _drivers if d.lower() in parts]) > 0
+    if len([d for d in _drivers if d.lower() in collection_path.parts]) > 0:
+        return True
+    return None
 
 
 def pytest_generate_tests(metafunc):
@@ -213,11 +215,10 @@ def get_options(driver_class, config):
     browser_args = config.option.args
     headless = config.option.headless
     bidi = config.option.bidi
-    options = None
+
+    options = getattr(webdriver, f"{driver_class}Options")()
 
     if browser_path or browser_args:
-        if not options:
-            options = getattr(webdriver, f"{driver_class}Options")()
         if driver_class == "WebKitGTK":
             options.overlay_scrollbars_enabled = False
         if browser_path is not None:
@@ -227,16 +228,12 @@ def get_options(driver_class, config):
                 options.add_argument(arg)
 
     if headless:
-        if not options:
-            options = getattr(webdriver, f"{driver_class}Options")()
         if driver_class == "Chrome" or driver_class == "Edge":
             options.add_argument("--headless=new")
         if driver_class == "Firefox":
             options.add_argument("-headless")
 
     if bidi:
-        if not options:
-            options = getattr(webdriver, f"{driver_class}Options")()
         options.web_socket_url = True
         options.unhandled_prompt_behavior = "ignore"
 
@@ -303,7 +300,7 @@ def server(request):
         # under Wayland, so we use XWayland instead.
         remote_env["MOZ_ENABLE_WAYLAND"] = "0"
 
-    if os.path.exists(jar_path):
+    if Path(jar_path).exists():
         # use the grid server built by bazel
         server = Server(path=jar_path, env=remote_env)
     else:
@@ -337,27 +334,27 @@ def driver_executable(request):
 
 
 @pytest.fixture(scope="function")
-def clean_service(request):
-    try:
-        driver_class = get_driver_class(request.config.option.drivers[0])
-    except (AttributeError, TypeError):
-        raise Exception("This test requires a --driver to be specified")
-
-    yield get_service(driver_class, request.config.option.executable)
-
-
-@pytest.fixture(scope="function")
 def clean_driver(request):
     try:
         driver_class = get_driver_class(request.config.option.drivers[0])
     except (AttributeError, TypeError):
         raise Exception("This test requires a --driver to be specified")
-
     driver_reference = getattr(webdriver, driver_class)
     yield driver_reference
-
     if request.node.get_closest_marker("no_driver_after_test"):
         driver_reference = None
+
+
+@pytest.fixture(scope="function")
+def clean_service(request):
+    driver_class = get_driver_class(request.config.option.drivers[0])
+    yield get_service(driver_class, request.config.option.executable)
+
+
+@pytest.fixture(scope="function")
+def clean_options(request):
+    driver_class = get_driver_class(request.config.option.drivers[0])
+    yield get_options(driver_class, request.config)
 
 
 @pytest.fixture

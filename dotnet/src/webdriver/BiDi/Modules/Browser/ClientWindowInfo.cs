@@ -22,7 +22,7 @@ using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.Browser;
 
-public record ClientWindowInfo([property: JsonPropertyName("active")] bool IsActive, ClientWindow ClientWindow, ClientWindowState State, int Height, int Width, int X, int Y) : EmptyResult;
+public record ClientWindowInfo(bool Active, ClientWindow ClientWindow, ClientWindowState State, int Height, int Width, int X, int Y) : EmptyResult;
 
 public enum ClientWindowState
 {
