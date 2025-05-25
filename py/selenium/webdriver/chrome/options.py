@@ -22,9 +22,46 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 
 class Options(ChromiumOptions):
+    def __init__(self) -> None:
+        super().__init__()
+        self._enable_webextensions = False
+
     @property
     def default_capabilities(self) -> dict:
         return DesiredCapabilities.CHROME.copy()
+
+    @property
+    def enable_webextensions(self) -> bool:
+        """Returns whether webextension support is enabled for Chrome.
+
+        :Returns: True if webextension support is enabled, False otherwise.
+        """
+        return self._enable_webextensions
+
+    @enable_webextensions.setter
+    def enable_webextensions(self, value: bool) -> None:
+        """Enables or disables webextension support for Chrome.
+
+        When enabled, this automatically adds the required Chrome flags:
+        - --enable-unsafe-extension-debugging
+        - --remote-debugging-pipe
+
+        :Args:
+         - value: True to enable webextension support, False to disable.
+        """
+        self._enable_webextensions = value
+        if value:
+            # Add required flags for Chrome webextension support
+            required_flags = ["--enable-unsafe-extension-debugging", "--remote-debugging-pipe"]
+            for flag in required_flags:
+                if flag not in self._arguments:
+                    self.add_argument(flag)
+        else:
+            # Remove webextension flags if disabling
+            flags_to_remove = ["--enable-unsafe-extension-debugging", "--remote-debugging-pipe"]
+            for flag in flags_to_remove:
+                if flag in self._arguments:
+                    self._arguments.remove(flag)
 
     def enable_mobile(
         self,
