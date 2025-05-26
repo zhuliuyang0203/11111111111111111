@@ -24,6 +24,7 @@ import java.io.UncheckedIOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Locale;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -49,6 +50,17 @@ public class LoggingOptions {
   private final Config config;
   private Level level = Level.INFO;
   public static final String DEFAULT_LOG_TIMESTAMP_FORMAT = "HH:mm:ss.SSS";
+  private static final List<Level> DEFAULT_LOG_LEVELS =
+      Arrays.asList(
+          Level.ALL,
+          Level.INFO,
+          Level.CONFIG,
+          Level.FINE,
+          Level.FINER,
+          Level.FINEST,
+          Level.OFF,
+          Level.SEVERE,
+          Level.WARNING);
 
   public LoggingOptions(Config config) {
     this.config = Require.nonNull("Config", config);
@@ -82,8 +94,8 @@ public class LoggingOptions {
                   + configLevel
                   + ". Using default "
                   + DEFAULT_LOG_LEVEL
-                  + ". Available log levels can be found at"
-                  + " https://docs.oracle.com/en/java/javase/11/docs/api/java.logging/java/util/logging/Level.html")
+                  + ". Available log levels are: "
+                  + DEFAULT_LOG_LEVELS)
           .printStackTrace();
     }
   }
