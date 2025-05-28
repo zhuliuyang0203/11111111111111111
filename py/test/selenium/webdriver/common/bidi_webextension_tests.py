@@ -119,6 +119,17 @@ class TestChromiumWebExtension:
     """Chrome/Edge-specific WebExtension tests with custom driver."""
 
     @pytest.fixture
+    def pages_chromium(self, chromium_driver, pages):
+        class ChromiumPages:
+            def url(self, name, localhost=False):
+                return pages.url(name, localhost)
+
+            def load(self, name):
+                chromium_driver.get(self.url(name))
+
+        return ChromiumPages()
+
+    @pytest.fixture
     def chromium_driver(self, request):
         driver_option = request.config.option.drivers[0].lower()
 
@@ -142,27 +153,23 @@ class TestChromiumWebExtension:
         yield driver
         driver.quit()
 
-    def test_install_extension_path(self, chromium_driver, pages):
+    def test_install_extension_path(self, chromium_driver, pages_chromium):
         """Test installing an extension from a directory path."""
         path = os.path.join(extensions, EXTENSION_PATH)
         ext_info = chromium_driver.webextension.install(path=path)
 
-        chromium_driver.get("https://www.webpagetest.org/blank.html")
-
-        verify_extension_injection(chromium_driver, pages)
+        verify_extension_injection(chromium_driver, pages_chromium)
         uninstall_extension_and_verify_extension_uninstalled(chromium_driver, ext_info)
 
-    def test_install_unsigned_extension(self, chromium_driver, pages):
+    def test_install_unsigned_extension(self, chromium_driver, pages_chromium):
         """Test installing an unsigned extension."""
         path = os.path.join(extensions, "webextensions-selenium-example")
         ext_info = chromium_driver.webextension.install(path=path)
 
-        chromium_driver.get("https://www.webpagetest.org/blank.html")
-
-        verify_extension_injection(chromium_driver, pages)
+        verify_extension_injection(chromium_driver, pages_chromium)
         uninstall_extension_and_verify_extension_uninstalled(chromium_driver, ext_info)
 
-    def test_install_with_extension_id_uninstall(self, chromium_driver, pages):
+    def test_install_with_extension_id_uninstall(self, chromium_driver):
         """Test uninstalling an extension using just the extension ID."""
         path = os.path.join(extensions, EXTENSION_PATH)
         ext_info = chromium_driver.webextension.install(path=path)
