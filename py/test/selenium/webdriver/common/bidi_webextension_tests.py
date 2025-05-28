@@ -17,13 +17,15 @@
 
 import base64
 import os
+import tempfile
 
 import pytest
 from python.runfiles import Runfiles
+
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
-from selenium.webdriver.edge.options import Options as EdgeOptions
 from selenium.webdriver.common.by import By
+from selenium.webdriver.edge.options import Options as EdgeOptions
 from selenium.webdriver.support.wait import WebDriverWait
 
 EXTENSION_ID = "webextensions-selenium-example-v3@example.com"
@@ -129,8 +131,11 @@ class TestChromiumWebExtension:
         else:
             pytest.skip(f"This test requires Chrome or Edge, got {driver_option}")
 
+        temp_dir = tempfile.mkdtemp()
+
         options.enable_bidi = True
         options.enable_webextensions = True
+        options.add_argument(f"--user-data-dir={temp_dir}")
 
         driver = browser_class(options=options)
 
