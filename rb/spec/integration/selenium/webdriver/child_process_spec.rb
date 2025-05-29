@@ -17,13 +17,12 @@
 # specific language governing permissions and limitations
 # under the License.
 
-require File.expand_path('../spec_helper', __dir__)
+require_relative 'spec_helper'
 
 module Selenium
   module WebDriver
-    describe ChildProcess do
-      it 'does not raise an error when terminating a non-existent process',
-         except: [{platform: :windows, reason: 'This is only for Unix platforms'}] do
+    describe ChildProcess, except: [{platform: :windows, reason: 'This is only for Unix platforms'}] do
+      it 'does not raise an error when terminating a non-existent process' do
         process = described_class.new('sleep', '5')
         process.start
 
@@ -36,8 +35,7 @@ module Selenium
         }.not_to raise_error
       end
 
-      it 'does not raise an error when killing a non-existent process',
-         except: [{platform: :windows, reason: 'This is only for Unix platforms'}] do
+      it 'does not raise an error when killing a non-existent process' do
         process = described_class.new('sleep', '5')
         process.start
 
