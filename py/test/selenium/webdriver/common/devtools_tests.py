@@ -50,3 +50,4 @@ def test_check_console_messages(driver, pages, recwarn):
         except AssertionError:
             if _ == 2:
                 pytest.fail("Assertions failed after retries.")
+            time.sleep(0.5) # Add a delay between retries
