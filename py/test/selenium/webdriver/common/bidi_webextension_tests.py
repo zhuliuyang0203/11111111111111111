@@ -17,6 +17,8 @@
 
 import base64
 import os
+import shutil
+import tempfile
 
 import pytest
 from python.runfiles import Runfiles
@@ -133,13 +135,22 @@ class TestChromiumWebExtension:
         elif driver_option == "edge":
             browser_class = webdriver.Edge
 
+        temp_dir = tempfile.mkdtemp(prefix="chrome-profile-")
+
         chromium_options.enable_bidi = True
         chromium_options.enable_webextensions = True
+        chromium_options.add_argument(f"--user-data-dir={temp_dir}")
+        chromium_options.add_argument("--no-sandbox")
+        chromium_options.add_argument("--disable-dev-shm-usage")
 
         chromium_driver = browser_class(options=chromium_options)
 
         yield chromium_driver
         chromium_driver.quit()
+
+        # delete the temp directory
+        if os.path.exists(temp_dir):
+            shutil.rmtree(temp_dir)
 
     def test_install_extension_path(self, chromium_driver, pages_chromium):
         """Test installing an extension from a directory path."""
