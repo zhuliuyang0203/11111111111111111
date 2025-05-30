@@ -33,7 +33,6 @@ require 'selenium-webdriver'
 require 'securerandom'
 require 'pathname'
 require_relative '../../../rspec_matchers'
-require 'selenium/webdriver/support/guards'
 
 module Selenium
   module WebDriver
@@ -63,9 +62,7 @@ RSpec.configure do |c|
   c.run_all_when_everything_filtered = true
   c.default_formatter = c.files_to_run.count > 1 ? 'progress' : 'doc'
 
-  c.before do |example|
-    guards = Selenium::WebDriver::Support::Guards.new(example, bug_tracker: 'https://github.com/SeleniumHQ/selenium/issues')
-    guards.add_condition(:platform, Selenium::WebDriver::Platform.os)
+  c.before do
     # https://github.com/ruby/debug/issues/797
     allow(File).to receive(:exist?).and_call_original
   end

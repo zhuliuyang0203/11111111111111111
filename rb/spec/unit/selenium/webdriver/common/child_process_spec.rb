@@ -21,32 +21,33 @@ require File.expand_path('../spec_helper', __dir__)
 
 module Selenium
   module WebDriver
-    describe ChildProcess, except: [{platform: :windows,
-                                     reason: 'This is only for Unix based systems'}] do
-      it 'does not raise an error when terminating a non-existent process' do
-        process = described_class.new('sleep', '5')
-        process.start
+    describe ChildProcess do
+      unless Selenium::WebDriver::Platform.windows?
+        it 'does not raise an error when terminating a non-existent process' do
+          process = described_class.new('sleep', '5')
+          process.start
 
-        pid = process.instance_variable_get(:@pid)
-        Process.kill('KILL', pid)
-        Process.wait(pid)
+          pid = process.instance_variable_get(:@pid)
+          Process.kill('KILL', pid)
+          Process.wait(pid)
 
-        expect {
-          process.send(:terminate, pid)
-        }.not_to raise_error
-      end
+          expect {
+            process.send(:terminate, pid)
+          }.not_to raise_error
+        end
 
-      it 'does not raise an error when killing a non-existent process' do
-        process = described_class.new('sleep', '5')
-        process.start
+        it 'does not raise an error when killing a non-existent process' do
+          process = described_class.new('sleep', '5')
+          process.start
 
-        pid = process.instance_variable_get(:@pid)
-        Process.kill('KILL', pid)
-        Process.wait(pid)
+          pid = process.instance_variable_get(:@pid)
+          Process.kill('KILL', pid)
+          Process.wait(pid)
 
-        expect {
-          process.send(:kill, pid)
-        }.not_to raise_error
+          expect {
+            process.send(:kill, pid)
+          }.not_to raise_error
+        end
       end
     end
   end
