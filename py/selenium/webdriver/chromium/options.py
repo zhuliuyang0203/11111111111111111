@@ -17,7 +17,7 @@
 
 import base64
 import os
-from typing import BinaryIO, Dict, List, Optional, Union
+from typing import BinaryIO, Optional, Union
 
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.common.options import ArgOptions
@@ -29,10 +29,11 @@ class ChromiumOptions(ArgOptions):
     def __init__(self) -> None:
         super().__init__()
         self._binary_location: str = ""
-        self._extension_files: List[str] = []
-        self._extensions: List[str] = []
-        self._experimental_options: Dict[str, Union[str, int, dict, List[str]]] = {}
+        self._extension_files: list[str] = []
+        self._extensions: list[str] = []
+        self._experimental_options: dict[str, Union[str, int, dict, list[str]]] = {}
         self._debugger_address: Optional[str] = None
+        self._enable_webextensions: bool = False
 
     @property
     def binary_location(self) -> str:
@@ -68,7 +69,7 @@ class ChromiumOptions(ArgOptions):
         self._debugger_address = value
 
     @property
-    def extensions(self) -> List[str]:
+    def extensions(self) -> list[str]:
         """:Returns: A list of encoded extensions that will be loaded."""
 
         def _decode(file_data: BinaryIO) -> str:
@@ -117,7 +118,7 @@ class ChromiumOptions(ArgOptions):
         """:Returns: A dictionary of experimental options for chromium."""
         return self._experimental_options
 
-    def add_experimental_option(self, name: str, value: Union[str, int, dict, List[str]]) -> None:
+    def add_experimental_option(self, name: str, value: Union[str, int, dict, list[str]]) -> None:
         """Adds an experimental option which is passed to chromium.
 
         :Args:
@@ -125,6 +126,39 @@ class ChromiumOptions(ArgOptions):
           value: The option value.
         """
         self._experimental_options[name] = value
+
+    @property
+    def enable_webextensions(self) -> bool:
+        """Returns whether webextension support is enabled for Chromium-based browsers.
+
+        :Returns: True if webextension support is enabled, False otherwise.
+        """
+        return self._enable_webextensions
+
+    @enable_webextensions.setter
+    def enable_webextensions(self, value: bool) -> None:
+        """Enables or disables webextension support for Chromium-based browsers.
+
+        When enabled, this automatically adds the required Chromium flags:
+        - --enable-unsafe-extension-debugging
+        - --remote-debugging-pipe
+
+        :Args:
+         - value: True to enable webextension support, False to disable.
+        """
+        self._enable_webextensions = value
+        if value:
+            # Add required flags for Chromium webextension support
+            required_flags = ["--enable-unsafe-extension-debugging", "--remote-debugging-pipe"]
+            for flag in required_flags:
+                if flag not in self._arguments:
+                    self.add_argument(flag)
+        else:
+            # Remove webextension flags if disabling
+            flags_to_remove = ["--enable-unsafe-extension-debugging", "--remote-debugging-pipe"]
+            for flag in flags_to_remove:
+                if flag in self._arguments:
+                    self._arguments.remove(flag)
 
     def to_capabilities(self) -> dict:
         """Creates a capabilities with all the options that have been set
