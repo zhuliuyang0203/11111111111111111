@@ -58,5 +58,17 @@ public class WebDriverWait : DefaultWait<IWebDriver>
         this.IgnoreExceptionTypes(typeof(NotFoundException));
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="WebDriverWait"/> class.
+    /// </summary>
+    /// <param name="driver">The WebDriver instance used to wait.</param>
+    /// <param name="timeout">The timeout value indicating how long to wait for the condition.</param>
+    /// <param name="sleepInterval">A <see cref="TimeSpan"/> value indicating how often to check for the condition to be true.</param>
+    /// <exception cref="ArgumentNullException">If <paramref name="driver"/> is <see langword="null"/>.</exception>
+    public WebDriverWait(IWebDriver driver, TimeSpan timeout, TimeSpan sleepInterval)
+        : this(SystemClock.Instance, driver, timeout, DefaultSleepTimeout)
+    {
+    }
+
     private static TimeSpan DefaultSleepTimeout => TimeSpan.FromMilliseconds(500);
 }

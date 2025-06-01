@@ -130,7 +130,7 @@ public class PopupWindowFinder
 
         ReadOnlyCollection<string> existingHandles = this.driver.WindowHandles;
         popupMethod();
-        WebDriverWait wait = new WebDriverWait(SystemClock.Instance, this.driver, this.timeout, this.sleepInterval);
+        var wait = new WebDriverWait(this.driver, this.timeout, this.sleepInterval);
         string popupHandle = wait.Until(driver =>
         {
             ReadOnlyCollection<string> newHandles = driver.WindowHandles;
