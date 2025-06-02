@@ -49,14 +49,21 @@ echo
 pip list --outdated | while read -r line; do
     if [[ ! "${line}" =~ "Version Latest" && ! "${line}" =~ "----" ]]; then
         read -ra fields <<< "${line}"
-        echo "upgrading ${fields[0]} from ${fields[1]} to ${fields[2]}"
-        pip install --upgrade "${fields[0]}==${fields[2]}" > /dev/null
+        package="${fields[0]}"
+        echo "upgrading ${package} from ${fields[1]} to ${fields[2]}"
+        pip install --upgrade "${package}==${fields[2]}" > /dev/null
     fi
 done
 
 echo
 echo "generating new ${REQUIREMENTS_FILE}"
 pip freeze > "${REQUIREMENTS_FILE}"
+# `pip freeze` doesn't show package "extras", so we explicitly add it here for urllib3
+if [[ "${OSTYPE}" == "linux"* ]]; then
+    sed -i "s/urllib3/urllib3[socks]/g" "${REQUIREMENTS_FILE}" # GNU sed
+else
+    sed -i "" "s/urllib3/urllib3[socks]/g" "${REQUIREMENTS_FILE}"
+fi
 
 echo "generating new lock file"
 bazel run //py:requirements.update
