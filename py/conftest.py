@@ -229,7 +229,7 @@ def get_options(driver_class, config):
 
     if headless:
         if driver_class == "Chrome" or driver_class == "Edge":
-            options.add_argument("--headless=new")
+            options.add_argument("--headless")
         if driver_class == "Firefox":
             options.add_argument("-headless")
 
@@ -369,4 +369,30 @@ def firefox_options(request):
     options = webdriver.FirefoxOptions()
     if request.config.option.headless:
         options.add_argument("-headless")
+    return options
+
+
+@pytest.fixture
+def chromium_options(request):
+    try:
+        driver_option = request.config.option.drivers[0].lower()
+    except (AttributeError, TypeError):
+        raise Exception("This test requires a --driver to be specified")
+
+    # Skip if not Chrome or Edge
+    if driver_option not in ("chrome", "edge"):
+        pytest.skip(f"This test requires Chrome or Edge, got {driver_option}")
+
+    # skip tests in the 'remote' directory if run with a local driver
+    if request.node.path.parts[-2] == "remote" and get_driver_class(driver_option) != "Remote":
+        pytest.skip(f"Remote tests can't be run with driver '{driver_option}'")
+
+    if driver_option == "chrome":
+        options = webdriver.ChromeOptions()
+    elif driver_option == "edge":
+        options = webdriver.EdgeOptions()
+
+    if request.config.option.headless:
+        options.add_argument("--headless")
+
     return options
