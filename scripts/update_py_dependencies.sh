@@ -11,7 +11,7 @@
 # - deactivate and remove the temporary virtual env
 #
 # After running this script, you should also manually check package dependency versions in
-# `py/pyproject.toml` and `py/tox.ini` and update those if needed.
+# `py/pyproject.toml`, `py/tox.ini` and `py/BUILD.bazel`, and update those if needed.
 #
 # Once all dependencies are updated, create a new Pull Request with the changes.
 
