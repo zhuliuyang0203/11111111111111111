@@ -69,7 +69,8 @@ public class UrlTemplate {
 
     List<String> allGroups = List.copyOf(groups);
     // do we hit a fast path?
-    switch (allGroups.size()) {
+    int groupCount = allGroups.size();
+    switch (groupCount) {
       case 0: // no groups, just .equals
         this.compiled =
             (matchAgainst) -> {
@@ -119,7 +120,7 @@ public class UrlTemplate {
               }
 
               Map<String, String> params = new LinkedHashMap<>();
-              for (int i = 0; i < allGroups.size(); i++) {
+              for (int i = 0; i < groupCount; i++) {
                 params.put(allGroups.get(i), matcher.group(i + 1));
               }
 

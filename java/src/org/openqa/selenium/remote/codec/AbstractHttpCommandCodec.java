@@ -387,11 +387,12 @@ public abstract class AbstractHttpCommandCodec implements CommandCodec<HttpReque
         return false;
       }
 
-      if (parts.size() != this.pathSegments.size()) {
+      int pathSegmentCount = parts.size();
+      if (pathSegmentCount != this.pathSegments.size()) {
         return false;
       }
 
-      for (int i = 0; i < parts.size(); ++i) {
+      for (int i = 0; i < pathSegmentCount; ++i) {
         String reqPart = parts.get(i);
         String specPart = pathSegments.get(i);
         if (!(specPart.startsWith(":") || specPart.equals(reqPart))) {
@@ -403,7 +404,8 @@ public abstract class AbstractHttpCommandCodec implements CommandCodec<HttpReque
     }
 
     void parsePathParameters(List<String> parts, Map<String, Object> parameters) {
-      for (int i = 0; i < parts.size(); ++i) {
+      int pathSegmentCount = parts.size();
+      for (int i = 0; i < pathSegmentCount; ++i) {
         if (pathSegments.get(i).startsWith(":")) {
           parameters.put(pathSegments.get(i).substring(1), parts.get(i));
         }
