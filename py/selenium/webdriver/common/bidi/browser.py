@@ -123,16 +123,51 @@ class ClientWindowInfo:
         Returns:
         -------
             ClientWindowInfo: A new instance of ClientWindowInfo.
+
+        Raises:
+        ------
+            ValueError: If required fields are missing or have invalid types.
         """
-        return cls(
-            client_window=data.get("clientWindow"),
-            state=data.get("state"),
-            width=data.get("width"),
-            height=data.get("height"),
-            x=data.get("x"),
-            y=data.get("y"),
-            active=data.get("active"),
-        )
+        try:
+            client_window = data.get("clientWindow")
+            if not isinstance(client_window, str):
+                raise ValueError("clientWindow must be a string")
+
+            state = data.get("state")
+            if not isinstance(state, str):
+                raise ValueError("state must be a string")
+
+            width = data.get("width")
+            if not isinstance(width, int):
+                raise ValueError("width must be an integer")
+
+            height = data.get("height")
+            if not isinstance(height, int):
+                raise ValueError("height must be an integer")
+
+            x = data.get("x")
+            if not isinstance(x, int):
+                raise ValueError("x must be an integer")
+
+            y = data.get("y")
+            if not isinstance(y, int):
+                raise ValueError("y must be an integer")
+
+            active = data.get("active")
+            if not isinstance(active, bool):
+                raise ValueError("active must be a boolean")
+
+            return cls(
+                client_window=client_window,
+                state=state,
+                width=width,
+                height=height,
+                x=x,
+                y=y,
+                active=active,
+            )
+        except (KeyError, TypeError) as e:
+            raise ValueError(f"Invalid data format for ClientWindowInfo: {e}")
 
 
 class Browser:
