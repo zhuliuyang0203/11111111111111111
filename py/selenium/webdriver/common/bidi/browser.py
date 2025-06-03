@@ -131,7 +131,7 @@ class ClientWindowInfo:
             ValueError: If required fields are missing or have invalid types.
         """
         try:
-            client_window = data("clientWindow")
+            client_window = data["clientWindow"]
             if not isinstance(client_window, str):
                 raise ValueError("clientWindow must be a string")
 
@@ -157,7 +157,7 @@ class ClientWindowInfo:
             if not isinstance(y, int):
                 raise ValueError(f"y must be an integer, got {type(y).__name__}")
 
-            active = data.get("active")
+            active = data.get["active"]
             if not isinstance(active, bool):
                 raise ValueError("active must be a boolean")
 
