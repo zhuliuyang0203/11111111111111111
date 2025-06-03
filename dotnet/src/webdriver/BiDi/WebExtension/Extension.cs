@@ -17,6 +17,24 @@
 // under the License.
 // </copyright>
 
+using System.Threading.Tasks;
+
 namespace OpenQA.Selenium.BiDi.WebExtension;
 
-public record Extension(string Id);
+public class Extension
+{
+    private readonly BiDi _bidi;
+
+    public Extension(BiDi bidi, string id)
+    {
+        _bidi = bidi;
+        Id = id;
+    }
+
+    internal string Id { get; }
+
+    public Task UninstallAsync(UninstallOptions? options = null)
+    {
+        return _bidi.WebExtension.UninstallAsync(this, options);
+    }
+}

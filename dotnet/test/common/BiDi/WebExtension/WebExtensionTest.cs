@@ -55,4 +55,14 @@ class WebExtensionTest : BiDiTestFixture
 
         Assert.That(result, Is.Not.Null);
     }
+
+    [Test]
+    public async Task CanUninstallExtension()
+    {
+        string path = Path.GetFullPath("data/extensions/webextensions-selenium-example");
+
+        var result = await bidi.WebExtension.InstallAsync(new ExtensionPath(path));
+
+        await result.Extension.UninstallAsync();
+    }
 }

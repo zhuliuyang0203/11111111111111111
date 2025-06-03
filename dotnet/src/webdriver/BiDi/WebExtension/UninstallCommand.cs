@@ -1,4 +1,4 @@
-// <copyright file="WebExtensionModule.cs" company="Selenium Committers">
+// <copyright file="UninstallCommand.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -18,23 +18,12 @@
 // </copyright>
 
 using OpenQA.Selenium.BiDi.Communication;
-using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.WebExtension;
 
-public sealed class WebExtensionModule(Broker broker) : Module(broker)
-{
-    public async Task<InstallResult> InstallAsync(ExtensionData extensionData, InstallOptions? options = null)
-    {
-        var @params = new InstallCommandParameters(extensionData);
+internal class UninstallCommand(UninstallCommandParameters @params)
+    : Command<UninstallCommandParameters, EmptyResult>(@params, "webExtension.uninstall");
 
-        return await Broker.ExecuteCommandAsync<InstallCommand, InstallResult>(new InstallCommand(@params), options).ConfigureAwait(false);
-    }
+internal record UninstallCommandParameters(Extension Extension) : CommandParameters;
 
-    internal async Task UninstallAsync(Extension extension, UninstallOptions? options = null)
-    {
-        var @params = new UninstallCommandParameters(extension);
-
-        await Broker.ExecuteCommandAsync(new UninstallCommand(@params), options).ConfigureAwait(false);
-    }
-}
+public record UninstallOptions : CommandOptions;

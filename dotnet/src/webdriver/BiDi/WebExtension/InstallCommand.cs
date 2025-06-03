@@ -39,6 +39,6 @@ public record ExtensionBase64Encoded(string Value) : ExtensionData;
 
 public record ExtensionPath(string Path) : ExtensionData;
 
-public record InstallCommandOptions : CommandOptions;
+public record InstallOptions : CommandOptions;
 
 public record InstallResult(Extension Extension) : EmptyResult;

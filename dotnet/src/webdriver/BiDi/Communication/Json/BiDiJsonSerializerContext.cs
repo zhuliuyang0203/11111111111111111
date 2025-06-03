@@ -166,5 +166,6 @@ namespace OpenQA.Selenium.BiDi.Communication.Json;
 
 [JsonSerializable(typeof(WebExtension.InstallCommand))]
 [JsonSerializable(typeof(WebExtension.InstallResult))]
+[JsonSerializable(typeof(WebExtension.UninstallCommand))]
 
 internal partial class BiDiJsonSerializerContext : JsonSerializerContext;

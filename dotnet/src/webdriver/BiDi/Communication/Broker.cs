@@ -86,7 +86,7 @@ public sealed class Broker : IAsyncDisposable
                 new DateTimeOffsetConverter(),
                 new PrintPageRangeConverter(),
                 new InputOriginConverter(),
-                new WebExtensionConverter(),
+                new WebExtensionConverter(_bidi),
                 new SubscriptionConverter(),
                 new JsonStringEnumConverter(JsonNamingPolicy.CamelCase),
 
