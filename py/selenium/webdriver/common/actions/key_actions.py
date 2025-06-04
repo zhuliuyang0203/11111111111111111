@@ -27,8 +27,8 @@ class KeyActions(Interaction):
     def __init__(self, source: KeyInput | PointerInput | WheelInput | None = None) -> None:
         if source is None:
             source = KeyInput(KEY)
-        self.source = source
-        super().__init__(source)
+        self.input_source = source
+        super().__init__(KEY)
 
     def key_down(self, letter: str) -> KeyActions:
         return self._key_action("create_key_down", letter)
@@ -48,6 +48,6 @@ class KeyActions(Interaction):
         return self
 
     def _key_action(self, action: str, letter) -> KeyActions:
-        meth = getattr(self.source, action)
+        meth = getattr(self.input_source, action)
         meth(letter)
         return self
