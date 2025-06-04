@@ -196,19 +196,19 @@ class UserPromptOpenedParams:
         context = json.get("context")
         if context is None or not isinstance(context, str):
             raise ValueError("context is required and must be a string")
-        
+
         handler = json.get("handler")
         if handler is None or not isinstance(handler, str):
             raise ValueError("handler is required and must be a string")
-        
+
         message = json.get("message")
         if message is None or not isinstance(message, str):
             raise ValueError("message is required and must be a string")
-        
+
         type_value = json.get("type")
         if type_value is None or not isinstance(type_value, str):
             raise ValueError("type is required and must be a string")
-        
+
         default_value = json.get("defaultValue")
         if default_value is not None and not isinstance(default_value, str):
             raise ValueError("defaultValue must be a string if provided")
