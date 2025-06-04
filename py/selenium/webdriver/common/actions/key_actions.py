@@ -17,7 +17,7 @@
 from __future__ import annotations
 
 from ..utils import keys_to_typing
-from .interaction import KEY, Interaction
+from .interaction import KEY, POINTER, WHEEL, Interaction
 from .key_input import KeyInput
 from .pointer_input import PointerInput
 from .wheel_input import WheelInput
@@ -28,7 +28,19 @@ class KeyActions(Interaction):
         if source is None:
             source = KeyInput(KEY)
         self.input_source = source
-        super().__init__(KEY)
+
+        # Determine the correct source type string based on the input object
+        if isinstance(source, KeyInput):
+            source_type = KEY
+        elif isinstance(source, PointerInput):
+            source_type = POINTER
+        elif isinstance(source, WheelInput):
+            source_type = WHEEL
+        else:
+            source_type = KEY  # fallback
+            
+        super().__init__(source_type)
+      
 
     def key_down(self, letter: str) -> KeyActions:
         return self._key_action("create_key_down", letter)
