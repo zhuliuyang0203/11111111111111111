@@ -75,7 +75,7 @@ class NoSuchElementException(WebDriverException):
     def __init__(
         self, msg: Optional[str] = None, screen: Optional[str] = None, stacktrace: Optional[Sequence[str]] = None
     ) -> None:
-        with_support = f"{msg}; {SUPPORT_MSG} {ERROR_URL}#nosuchelementexception"
+        with_support = f"{msg}; {SUPPORT_MSG} {ERROR_URL}#no-such-element-exception"
 
         super().__init__(with_support, screen, stacktrace)
 
@@ -114,7 +114,7 @@ class StaleElementReferenceException(WebDriverException):
     def __init__(
         self, msg: Optional[str] = None, screen: Optional[str] = None, stacktrace: Optional[Sequence[str]] = None
     ) -> None:
-        with_support = f"{msg}; {SUPPORT_MSG} {ERROR_URL}#staleelementreferenceexception"
+        with_support = f"{msg}; {SUPPORT_MSG} {ERROR_URL}#stale-element-reference-exception"
 
         super().__init__(with_support, screen, stacktrace)
 
@@ -213,7 +213,7 @@ class InvalidSelectorException(WebDriverException):
     def __init__(
         self, msg: Optional[str] = None, screen: Optional[str] = None, stacktrace: Optional[Sequence[str]] = None
     ) -> None:
-        with_support = f"{msg}; {SUPPORT_MSG} {ERROR_URL}#invalidselectorexception"
+        with_support = f"{msg}; {SUPPORT_MSG} {ERROR_URL}#invalid-selector-exception"
 
         super().__init__(with_support, screen, stacktrace)
 
