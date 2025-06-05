@@ -283,7 +283,7 @@ def test_should_not_find_element_by_class_when_the_name_queried_is_shorter_than_
 @pytest.mark.xfail_edge(reason="https://bugs.chromium.org/p/chromedriver/issues/detail?id=4743")
 def test_finding_asingle_element_by_empty_class_name_should_throw(driver, pages):
     pages.load("xhtmlTest.html")
-    msg = r"\/errors#invalid-selector-exception"
+    msg = r"\/errors#invalidselectorexception"
     with pytest.raises(InvalidSelectorException, match=msg):
         driver.find_element(By.CLASS_NAME, "")
 
