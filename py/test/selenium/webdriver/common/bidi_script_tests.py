@@ -183,6 +183,51 @@ def test_add_preload_script_with_contexts(driver, pages):
     assert result.result["value"] is True
 
 
+def test_add_preload_script_with_user_contexts(driver, pages):
+    """Test adding a preload script with user contexts."""
+    function_declaration = "() => { window.contextSpecific = true; }"
+    user_context = driver.browser.create_user_context()
+
+    context1 = driver.browsing_context.create(type="window", user_context=user_context)
+    driver.switch_to.window(context1)
+
+    user_contexts = [user_context]
+
+    script_id = driver.script.add_preload_script(function_declaration, user_contexts=user_contexts)
+    assert script_id is not None
+
+    pages.load("blank.html")
+
+    result = driver.script.evaluate(
+        "window.contextSpecific", {"context": driver.current_window_handle}, await_promise=False
+    )
+    assert result.result["value"] is True
+
+
+def test_add_preload_script_with_sandbox(driver, pages):
+    """Test adding a preload script with sandbox."""
+    function_declaration = "() => { window.sandboxScript = true; }"
+
+    script_id = driver.script.add_preload_script(function_declaration, sandbox="test-sandbox")
+    assert script_id is not None
+
+    pages.load("blank.html")
+
+    # calling evaluate without sandbox should return undefined
+    result = driver.script.evaluate(
+        "window.sandboxScript", {"context": driver.current_window_handle}, await_promise=False
+    )
+    assert result.result["type"] == "undefined"
+
+    # calling evaluate within the sandbox should return True
+    result = driver.script.evaluate(
+        "window.sandboxScript",
+        {"context": driver.current_window_handle, "sandbox": "test-sandbox"},
+        await_promise=False,
+    )
+    assert result.result["value"] is True
+
+
 def test_add_preload_script_invalid_arguments(driver):
     """Test that providing both contexts and user_contexts raises an error."""
     function_declaration = "() => {}"
@@ -244,6 +289,91 @@ def test_evaluate_with_exception(driver, pages):
     assert "Test error" in str(result.exception_details)
 
 
+def test_evaluate_with_result_ownership(driver, pages):
+    """Test evaluating with different result ownership settings."""
+    pages.load("blank.html")
+
+    # Test with ROOT ownership
+    result = driver.script.evaluate(
+        "({ test: 'value' })",
+        {"context": driver.current_window_handle},
+        await_promise=False,
+        result_ownership=ResultOwnership.ROOT,
+    )
+
+    assert result.result is not None
+
+    # Test with NONE ownership
+    result = driver.script.evaluate(
+        "({ test: 'value' })",
+        {"context": driver.current_window_handle},
+        await_promise=False,
+        result_ownership=ResultOwnership.NONE,
+    )
+
+    assert result.result is not None
+
+
+def test_evaluate_with_serialization_options(driver, pages):
+    """Test evaluating with serialization options."""
+    pages.load("blank.html")
+
+    serialization_options = {"maxDomDepth": 1, "maxObjectDepth": 1}
+
+    result = driver.script.evaluate(
+        "document.body",
+        {"context": driver.current_window_handle},
+        await_promise=False,
+        serialization_options=serialization_options,
+    )
+
+    assert result.result is not None
+
+
+def test_evaluate_with_user_activation(driver, pages):
+    """Test evaluating with user activation."""
+    pages.load("blank.html")
+
+    result = driver.script.evaluate(
+        "navigator.userActivation ? navigator.userActivation.isActive : false",
+        {"context": driver.current_window_handle},
+        await_promise=False,
+        user_activation=True,
+    )
+
+    assert result.result is not None
+    # try to verify user_activation
+
+
+# def test_evaluate_clipboard_copy_and_read_with_user_activation(driver, pages):
+#     pages.load("blank.html")
+#
+#     # Step 1: Write some text and copy it
+#     driver.script.evaluate(
+#         """
+#         const el = document.createElement("textarea");
+#         el.value = "Copied from test!";
+#         document.body.appendChild(el);
+#         el.select();
+#         document.execCommand("copy");
+#         """,
+#         {"context": driver.current_window_handle},
+#         await_promise=True,
+#         user_activation=True
+#     )
+#
+#     # Step 2: Read from the clipboard
+#     result2 = driver.script.evaluate(
+#         "navigator.clipboard.readText()",
+#         {"context": driver.current_window_handle},
+#         await_promise=True,
+#         user_activation=True
+#     )
+#
+#     assert result2.result["type"] == "string"
+#     assert result2.result["value"] == "Copied from test!"
+
+
 def test_call_function(driver, pages):
     """Test calling a function."""
     pages.load("blank.html")
@@ -294,6 +424,70 @@ def test_call_function_with_user_activation(driver, pages):
     assert result.result is not None
 
 
+def test_call_function_with_serialization_options(driver, pages):
+    """Test calling a function with serialization options."""
+    pages.load("blank.html")
+
+    serialization_options = {"maxDomDepth": 1, "maxObjectDepth": 1}
+
+    result = driver.script.call_function(
+        "() => document.body",
+        await_promise=False,
+        target={"context": driver.current_window_handle},
+        serialization_options=serialization_options,
+    )
+
+    assert result.result is not None
+
+
+def test_call_function_with_exception(driver, pages):
+    """Test calling a function that throws an exception."""
+    pages.load("blank.html")
+
+    result = driver.script.call_function(
+        "() => { throw new Error('Function error'); }",
+        await_promise=False,
+        target={"context": driver.current_window_handle},
+    )
+
+    assert result.exception_details is not None
+    assert "Function error" in str(result.exception_details)
+
+
+def test_call_function_with_await_promise(driver, pages):
+    """Test calling a function that returns a promise."""
+    pages.load("blank.html")
+
+    result = driver.script.call_function(
+        "() => Promise.resolve('async result')", await_promise=True, target={"context": driver.current_window_handle}
+    )
+
+    assert result.result["type"] == "string"
+    assert result.result["value"] == "async result"
+
+
+def test_call_function_with_result_ownership(driver, pages):
+    """Test calling a function with different result ownership settings."""
+    pages.load("blank.html")
+    # Test with ROOT ownership
+    result = driver.script.call_function(
+        "() => ({ test: 'value' })",
+        await_promise=False,
+        target={"context": driver.current_window_handle},
+        result_ownership=ResultOwnership.ROOT,
+    )
+    assert result.result is not None
+    # Test with NONE ownership
+    result = driver.script.call_function(
+        "() => ({ test: 'value' })",
+        await_promise=False,
+        target={"context": driver.current_window_handle},
+        result_ownership=ResultOwnership.NONE,
+    )
+    assert result.result is not None
+    # have a better way to test the ownership behavior
+
+
 def test_get_realms(driver, pages):
     """Test getting all realms."""
     pages.load("blank.html")
@@ -326,7 +520,7 @@ def test_get_realms_filtered_by_type(driver, pages):
     realms = driver.script.get_realms(type=RealmType.WINDOW)
 
     assert len(realms) > 0
-    # All realms should be of the specified type
+    # All realms should be of the WINDOW type
     for realm in realms:
         assert realm.type == RealmType.WINDOW
 
@@ -352,113 +546,3 @@ def test_disown_handles(driver, pages):
 
         # The disown operation should complete without error
         # Note: We can't easily test the actual garbage collection behavior, try something
-
-
-def test_evaluate_with_result_ownership(driver, pages):
-    """Test evaluating with different result ownership settings."""
-    pages.load("blank.html")
-
-    # Test with ROOT ownership
-    result = driver.script.evaluate(
-        "({ test: 'value' })",
-        {"context": driver.current_window_handle},
-        await_promise=False,
-        result_ownership=ResultOwnership.ROOT,
-    )
-
-    assert result.result is not None
-
-    # Test with NONE ownership
-    result = driver.script.evaluate(
-        "({ test: 'value' })",
-        {"context": driver.current_window_handle},
-        await_promise=False,
-        result_ownership=ResultOwnership.NONE,
-    )
-
-    assert result.result is not None
-
-
-def test_evaluate_with_serialization_options(driver, pages):
-    """Test evaluating with serialization options."""
-    pages.load("blank.html")
-
-    serialization_options = {"maxDomDepth": 1, "maxObjectDepth": 1}
-
-    result = driver.script.evaluate(
-        "document.body",
-        {"context": driver.current_window_handle},
-        await_promise=False,
-        serialization_options=serialization_options,
-    )
-
-    assert result.result is not None
-
-
-def test_call_function_with_serialization_options(driver, pages):
-    """Test calling a function with serialization options."""
-    pages.load("blank.html")
-
-    serialization_options = {"maxDomDepth": 1, "maxObjectDepth": 1}
-
-    result = driver.script.call_function(
-        "() => document.body",
-        await_promise=False,
-        target={"context": driver.current_window_handle},
-        serialization_options=serialization_options,
-    )
-
-    assert result.result is not None
-
-
-def test_add_preload_script_with_sandbox(driver, pages):
-    """Test adding a preload script with sandbox."""
-    function_declaration = "() => { window.sandboxScript = true; }"
-
-    script_id = driver.script.add_preload_script(function_declaration, sandbox="test-sandbox")
-    assert script_id is not None
-
-    pages.load("blank.html")
-
-    # The script should execute in the sandbox, have a check to verify this
-
-
-def test_evaluate_with_user_activation(driver, pages):
-    """Test evaluating with user activation."""
-    pages.load("blank.html")
-
-    result = driver.script.evaluate(
-        "navigator.userActivation ? navigator.userActivation.isActive : false",
-        {"context": driver.current_window_handle},
-        await_promise=False,
-        user_activation=True,
-    )
-
-    assert result.result is not None
-    # try to verify user_activation
-
-
-def test_call_function_with_exception(driver, pages):
-    """Test calling a function that throws an exception."""
-    pages.load("blank.html")
-
-    result = driver.script.call_function(
-        "() => { throw new Error('Function error'); }",
-        await_promise=False,
-        target={"context": driver.current_window_handle},
-    )
-
-    assert result.exception_details is not None
-    assert "Function error" in str(result.exception_details)
-
-
-def test_call_function_with_await_promise(driver, pages):
-    """Test calling a function that returns a promise."""
-    pages.load("blank.html")
-
-    result = driver.script.call_function(
-        "() => Promise.resolve('async result')", await_promise=True, target={"context": driver.current_window_handle}
-    )
-
-    assert result.result["type"] == "string"
-    assert result.result["value"] == "async result"
