@@ -24,9 +24,14 @@ from abc import ABCMeta
 from base64 import b64decode, encodebytes
 from hashlib import md5 as md5_hash
 from io import BytesIO
+from typing import Union, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from selenium.webdriver.support.relative_locator import RelativeBy
+
 
 from selenium.common.exceptions import JavascriptException, WebDriverException
-from selenium.webdriver.common.by import By
+from selenium.webdriver.common.by import By, ByType
 from selenium.webdriver.common.utils import keys_to_typing
 
 from .command import Command
@@ -572,7 +577,7 @@ class WebElement(BaseWebElement):
         params["id"] = self._id
         return self._parent.execute(command, params)
 
-    def find_element(self, by=By.ID, value=None) -> WebElement:
+    def find_element(self, by: "Union[ByType, RelativeBy]" = By.ID, value=None) -> WebElement:
         """Find an element given a By strategy and locator.
 
         Parameters:
@@ -601,7 +606,7 @@ class WebElement(BaseWebElement):
         by, value = self._parent.locator_converter.convert(by, value)
         return self._execute(Command.FIND_CHILD_ELEMENT, {"using": by, "value": value})["value"]
 
-    def find_elements(self, by=By.ID, value=None) -> list[WebElement]:
+    def find_elements(self, by: "Union[ByType, RelativeBy]" = By.ID, value=None) -> list[WebElement]:
         """Find elements given a By strategy and locator.
 
         Parameters:
