@@ -16,7 +16,8 @@
 # under the License.
 
 from hashlib import md5 as md5_hash
-from typing import Union, TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
+
 if TYPE_CHECKING:
     from selenium.webdriver.support.relative_locator import RelativeBy
 
@@ -83,7 +84,9 @@ class ShadowRoot:
             by = By.CSS_SELECTOR
             value = f'[name="{value}"]'
 
-        return self._execute(Command.FIND_ELEMENT_FROM_SHADOW_ROOT, {"using": by, "value": value})["value"]
+        return self._execute(
+            Command.FIND_ELEMENT_FROM_SHADOW_ROOT, {"using": by, "value": value}
+        )["value"]
 
     def find_elements(self, by: "Union[ByType, RelativeBy]" = By.ID, value: str = None):
         """Find elements inside a shadow root given a By strategy and locator.
@@ -121,7 +124,9 @@ class ShadowRoot:
             by = By.CSS_SELECTOR
             value = f'[name="{value}"]'
 
-        return self._execute(Command.FIND_ELEMENTS_FROM_SHADOW_ROOT, {"using": by, "value": value})["value"]
+        return self._execute(
+            Command.FIND_ELEMENTS_FROM_SHADOW_ROOT, {"using": by, "value": value}
+        )["value"]
 
     # Private Methods
     def _execute(self, command, params=None):
