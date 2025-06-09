@@ -23,6 +23,20 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 
 
+def has_shadow_root(node):
+    if isinstance(node, dict):
+        shadow_root = node.get("shadowRoot")
+        if shadow_root and isinstance(shadow_root, dict):
+            return True
+
+        children = node.get("children", [])
+        for child in children:
+            if "value" in child and has_shadow_root(child["value"]):
+                return True
+
+    return False
+
+
 def test_logs_console_messages(driver, pages):
     pages.load("bidi/logEntryAdded.html")
 
@@ -301,7 +315,8 @@ def test_evaluate_with_result_ownership(driver, pages):
         result_ownership=ResultOwnership.ROOT,
     )
 
-    assert result.result is not None
+    # ROOT result ownership should return a handle
+    assert "handle" in result.result
 
     # Test with NONE ownership
     result = driver.script.evaluate(
@@ -311,14 +326,15 @@ def test_evaluate_with_result_ownership(driver, pages):
         result_ownership=ResultOwnership.NONE,
     )
 
+    assert "handle" not in result.result
     assert result.result is not None
 
 
 def test_evaluate_with_serialization_options(driver, pages):
     """Test evaluating with serialization options."""
-    pages.load("blank.html")
+    pages.load("shadowRootPage.html")
 
-    serialization_options = {"maxDomDepth": 1, "maxObjectDepth": 1}
+    serialization_options = {"maxDomDepth": 2, "maxObjectDepth": 2, "includeShadowTree": 'all'}
 
     result = driver.script.evaluate(
         "document.body",
@@ -326,8 +342,12 @@ def test_evaluate_with_serialization_options(driver, pages):
         await_promise=False,
         serialization_options=serialization_options,
     )
+    root_node = result.result["value"]
 
-    assert result.result is not None
+    # maxDomDepth will contain a children property
+    assert 'children' in result.result['value']
+    # the page will have atleast one shadow root
+    assert has_shadow_root(root_node)
 
 
 def test_evaluate_with_user_activation(driver, pages):
@@ -426,9 +446,9 @@ def test_call_function_with_user_activation(driver, pages):
 
 def test_call_function_with_serialization_options(driver, pages):
     """Test calling a function with serialization options."""
-    pages.load("blank.html")
+    pages.load("shadowRootPage.html")
 
-    serialization_options = {"maxDomDepth": 1, "maxObjectDepth": 1}
+    serialization_options = {"maxDomDepth": 2, "maxObjectDepth": 2, "includeShadowTree": 'all'}
 
     result = driver.script.call_function(
         "() => document.body",
@@ -437,7 +457,12 @@ def test_call_function_with_serialization_options(driver, pages):
         serialization_options=serialization_options,
     )
 
-    assert result.result is not None
+    root_node = result.result["value"]
+
+    # maxDomDepth will contain a children property
+    assert 'children' in result.result['value']
+    # the page will have atleast one shadow root
+    assert has_shadow_root(root_node)
 
 
 def test_call_function_with_exception(driver, pages):
@@ -469,23 +494,30 @@ def test_call_function_with_await_promise(driver, pages):
 def test_call_function_with_result_ownership(driver, pages):
     """Test calling a function with different result ownership settings."""
     pages.load("blank.html")
-    # Test with ROOT ownership
+
+    # Call a function that returns an object with ownership "root"
     result = driver.script.call_function(
-        "() => ({ test: 'value' })",
-        await_promise=False,
+        "function() { return { greet: 'Hi', number: 42 }; }",
         target={"context": driver.current_window_handle},
-        result_ownership=ResultOwnership.ROOT,
-    )
-    assert result.result is not None
-    # Test with NONE ownership
-    result = driver.script.call_function(
-        "() => ({ test: 'value' })",
         await_promise=False,
-        target={"context": driver.current_window_handle},
-        result_ownership=ResultOwnership.NONE,
+        result_ownership="root"
     )
-    assert result.result is not None
-    # have a better way to test the ownership behavior
+
+    # Verify that a handle is returned
+    assert result.result["type"] == "object"
+    assert "handle" in result.result
+    handle = result.result["handle"]
+
+    # Use the handle in another function call
+    result2 = driver.script.call_function(
+        "function() { return this.number + 1; }",
+        target={"context": driver.current_window_handle},
+        await_promise=False,
+        this={"handle": handle}
+    )
+
+    assert result2.result["type"] == "number"
+    assert result2.result["value"] == 43
 
 
 def test_get_realms(driver, pages):

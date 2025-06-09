@@ -104,6 +104,7 @@ class Source:
 class EvaluateResult:
     """Represents the result of script evaluation."""
 
+    type: str
     realm: str
     result: Optional[dict] = None
     exception_details: Optional[dict] = None
@@ -121,6 +122,7 @@ class EvaluateResult:
             EvaluateResult: A new instance of EvaluateResult.
         """
         return cls(
+            type=json.get("type"),
             realm=json.get("realm"),
             result=json.get("result"),
             exception_details=json.get("exceptionDetails"),
