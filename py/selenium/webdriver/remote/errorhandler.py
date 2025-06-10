@@ -15,6 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import json
 from typing import Any
 
 from selenium.common.exceptions import (
@@ -162,8 +163,6 @@ class ErrorHandler:
             value_json = response.get("value", None)
             if value_json and isinstance(value_json, str):
                 if not value_json.isdigit():
-                    import json
-
                     try:
                         value = json.loads(value_json)
                         if len(value) == 1:
