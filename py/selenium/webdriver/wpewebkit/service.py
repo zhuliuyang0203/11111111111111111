@@ -46,7 +46,7 @@ class Service(service.Service):
         env: Optional[Mapping[str, str]] = None,
         **kwargs,
     ):
-        self.service_args = service_args or []
+        self._service_args = service_args or []
 
         super().__init__(
             executable_path=executable_path,
