@@ -131,6 +131,7 @@ def keys_to_typing(value: Iterable[AnyKey]) -> list[str]:
     characters: list[str] = []
     for val in value:
         if isinstance(val, Keys):
+            # Todo: Does this even work?
             characters.append(str(val))
         elif isinstance(val, (int, float)):
             characters.extend(str(val))

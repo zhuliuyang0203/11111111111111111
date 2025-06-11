@@ -76,8 +76,8 @@ class NavigationInfo:
             raise ValueError("navigation must be a string")
 
         timestamp = json.get("timestamp")
-        if timestamp is None or not isinstance(timestamp, int):
-            raise ValueError("timestamp is required and must be an integer")
+        if timestamp is None or not isinstance(timestamp, int) or timestamp < 0:
+            raise ValueError("timestamp is required and must be a non-negative integer")
 
         url = json.get("url")
         if url is None or not isinstance(url, str):
@@ -121,13 +121,17 @@ class BrowsingContextInfo:
         """
         children = None
         raw_children = json.get("children")
-        if raw_children is not None and isinstance(raw_children, list):
-            children = []
-            for child in raw_children:
-                if isinstance(child, dict):
-                    children.append(BrowsingContextInfo.from_json(child))
-                else:
-                    warnings.warn(f"Unexpected child type in browsing context: {type(child)}")
+        if raw_children is not None:
+            if isinstance(raw_children, list):
+                children = []
+                for child in raw_children:
+                    if isinstance(child, dict):
+                        children.append(BrowsingContextInfo.from_json(child))
+                    else:
+                        warnings.warn(f"Unexpected child type in browsing context: {type(child)}")
+            else:
+                warnings.warn(f"'children' should be a list, got {type(raw_children)}")
+
         context = json.get("context")
         if context is None or not isinstance(context, str):
             raise ValueError("context is required and must be a string")
@@ -136,14 +140,30 @@ class BrowsingContextInfo:
         if url is None or not isinstance(url, str):
             raise ValueError("url is required and must be a string")
 
+        parent = json.get("parent")
+        if parent is not None and not isinstance(parent, str):
+            warnings.warn(f"'parent' should be a string, got {type(parent)}")
+
+        user_context = json.get("userContext")
+        if user_context is not None and not isinstance(user_context, str):
+            warnings.warn(f"'userContext' should be a string, got {type(user_context)}")
+
+        original_opener = json.get("originalOpener")
+        if original_opener is not None and not isinstance(original_opener, str):
+            warnings.warn(f"'originalOpener' should be a string, got {type(original_opener)}")
+
+        client_window = json.get("clientWindow")
+        if client_window is not None and not isinstance(client_window, str):
+            warnings.warn(f"'clientWindow' should be a string, got {type(client_window)}")
+
         return cls(
             context=context,
             url=url,
             children=children,
-            parent=json.get("parent"),
-            user_context=json.get("userContext"),
-            original_opener=json.get("originalOpener"),
-            client_window=json.get("clientWindow"),
+            parent=parent,
+            user_context=user_context,
+            original_opener=original_opener,
+            client_window=client_window,
         )
 
 
@@ -182,8 +202,8 @@ class DownloadWillBeginParams(NavigationInfo):
             raise ValueError("navigation must be a string")
 
         timestamp = json.get("timestamp")
-        if timestamp is None or not isinstance(timestamp, int):
-            raise ValueError("timestamp is required and must be an integer")
+        if timestamp is None or not isinstance(timestamp, int) or timestamp < 0:
+            raise ValueError("timestamp is required and must be a non-negative integer")
 
         url = json.get("url")
         if url is None or not isinstance(url, str):
