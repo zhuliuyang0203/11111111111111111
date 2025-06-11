@@ -17,7 +17,7 @@
 
 
 from collections.abc import Mapping
-from typing import Optional
+from typing import Optional, Sequence
 
 from selenium.types import SubprocessStdAlias
 from selenium.webdriver.chromium import service
@@ -29,7 +29,7 @@ class Service(service.ChromiumService):
 
     :param executable_path: install path of the chromedriver executable, defaults to `chromedriver`.
     :param port: Port for the service to run on, defaults to 0 where the operating system will decide.
-    :param service_args: (Optional) List of args to be passed to the subprocess when launching the executable.
+    :param service_args: (Optional) Sequence of args to be passed to the subprocess when launching the executable.
     :param log_output: (Optional) int representation of STDOUT/DEVNULL, any IO instance or String path to file.
     :param env: (Optional) Mapping of environment variables for the new process, defaults to `os.environ`.
     """
@@ -38,7 +38,7 @@ class Service(service.ChromiumService):
         self,
         executable_path: Optional[str] = None,
         port: int = 0,
-        service_args: Optional[list[str]] = None,
+        service_args: Optional[Sequence[str]] = None,
         log_output: Optional[SubprocessStdAlias] = None,
         env: Optional[Mapping[str, str]] = None,
         **kwargs,
