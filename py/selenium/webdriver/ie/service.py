@@ -75,4 +75,4 @@ class Service(service.Service):
     def service_args(self, value: Sequence[str]):
         if not isinstance(value, Sequence) or isinstance(value, str):
             raise TypeError("service_args must be a sequence")
-        self._service_args = value
+        self._service_args = list(value)
