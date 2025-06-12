@@ -14,7 +14,6 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-
 """The WebDriver implementation."""
 
 import base64
@@ -42,6 +41,7 @@ from selenium.common.exceptions import (
 from selenium.webdriver.common.bidi.browser import Browser
 from selenium.webdriver.common.bidi.browsing_context import BrowsingContext
 from selenium.webdriver.common.bidi.network import Network
+from selenium.webdriver.common.bidi.permissions import Permissions
 from selenium.webdriver.common.bidi.script import Script
 from selenium.webdriver.common.bidi.session import Session
 from selenium.webdriver.common.bidi.storage import Storage
@@ -74,7 +74,6 @@ from .webelement import WebElement
 from .websocket_connection import WebSocketConnection
 
 cdp = None
-devtools = None
 
 
 def import_cdp():
@@ -265,6 +264,8 @@ class WebDriver(BaseWebDriver):
         self._browsing_context = None
         self._storage = None
         self._webextension = None
+        self._permissions = None
+        self._devtools = None
 
     def __repr__(self):
         return f'<{type(self).__module__}.{type(self).__name__} (session="{self.session_id}")>'
@@ -1180,32 +1181,28 @@ class WebDriver(BaseWebDriver):
             raise WebDriverException("You can only set the orientation to 'LANDSCAPE' and 'PORTRAIT'")
 
     def start_devtools(self):
-        global devtools
-        if self._websocket_connection:
-            return devtools, self._websocket_connection
+        global cdp
+        import_cdp()
+        if self.caps.get("se:cdp"):
+            ws_url = self.caps.get("se:cdp")
+            version = self.caps.get("se:cdpVersion").split(".")[0]
         else:
-            global cdp
-            import_cdp()
+            version, ws_url = self._get_cdp_details()
 
-            if not devtools:
-                if self.caps.get("se:cdp"):
-                    ws_url = self.caps.get("se:cdp")
-                    version = self.caps.get("se:cdpVersion").split(".")[0]
-                else:
-                    version, ws_url = self._get_cdp_details()
+        if not ws_url:
+            raise WebDriverException("Unable to find url to connect to from capabilities")
 
-                if not ws_url:
-                    raise WebDriverException("Unable to find url to connect to from capabilities")
-
-                devtools = cdp.import_devtools(version)
-                if self.caps["browserName"].lower() == "firefox":
-                    raise RuntimeError("CDP support for Firefox has been removed. Please switch to WebDriver BiDi.")
-            self._websocket_connection = WebSocketConnection(ws_url)
-            targets = self._websocket_connection.execute(devtools.target.get_targets())
-            target_id = targets[0].target_id
-            session = self._websocket_connection.execute(devtools.target.attach_to_target(target_id, True))
-            self._websocket_connection.session_id = session
-            return devtools, self._websocket_connection
+        self._devtools = cdp.import_devtools(version)
+        if self._websocket_connection:
+            return self._devtools, self._websocket_connection
+        if self.caps["browserName"].lower() == "firefox":
+            raise RuntimeError("CDP support for Firefox has been removed. Please switch to WebDriver BiDi.")
+        self._websocket_connection = WebSocketConnection(ws_url)
+        targets = self._websocket_connection.execute(self._devtools.target.get_targets())
+        target_id = targets[0].target_id
+        session = self._websocket_connection.execute(self._devtools.target.attach_to_target(target_id, True))
+        self._websocket_connection.session_id = session
+        return self._devtools, self._websocket_connection
 
     @asynccontextmanager
     async def bidi_connection(self):
@@ -1280,9 +1277,8 @@ class WebDriver(BaseWebDriver):
 
     @property
     def _session(self):
-        """
-        Returns the BiDi session object for the current WebDriver session.
-        """
+        """Returns the BiDi session object for the current WebDriver
+        session."""
         if not self._websocket_connection:
             self._start_bidi()
 
@@ -1293,7 +1289,8 @@ class WebDriver(BaseWebDriver):
 
     @property
     def browsing_context(self):
-        """Returns a browsing context module object for BiDi browsing context commands.
+        """Returns a browsing context module object for BiDi browsing context
+        commands.
 
         Returns:
         --------
@@ -1338,6 +1335,28 @@ class WebDriver(BaseWebDriver):
             self._storage = Storage(self._websocket_connection)
 
         return self._storage
+
+    @property
+    def permissions(self):
+        """Returns a permissions module object for BiDi permissions commands.
+
+        Returns:
+        --------
+        Permissions: an object containing access to BiDi permissions commands.
+
+        Examples:
+        ---------
+        >>> from selenium.webdriver.common.bidi.permissions import PermissionDescriptor, PermissionState
+        >>> descriptor = PermissionDescriptor("geolocation")
+        >>> driver.permissions.set_permission(descriptor, PermissionState.GRANTED, "https://example.com")
+        """
+        if not self._websocket_connection:
+            self._start_bidi()
+
+        if self._permissions is None:
+            self._permissions = Permissions(self._websocket_connection)
+
+        return self._permissions
 
     @property
     def webextension(self):
