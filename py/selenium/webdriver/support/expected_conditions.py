@@ -428,7 +428,7 @@ def text_to_be_present_in_element_value(
     def _predicate(driver: WebDriverOrWebElement):
         try:
             element_text = driver.find_element(*locator).get_attribute("value")
-            return text_ in element_text
+            return element_text is not None and text_ in element_text
         except StaleElementReferenceException:
             return False
 
