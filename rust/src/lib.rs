@@ -20,6 +20,7 @@ use crate::config::OS::{MACOS, WINDOWS};
 use crate::config::{str_to_os, ManagerConfig};
 use crate::downloads::download_to_tmp_folder;
 use crate::edge::{EdgeManager, EDGEDRIVER_NAME, EDGE_NAMES, WEBVIEW2_NAME};
+use crate::files::get_win_file_version;
 use crate::files::{
     capitalize, collect_files_from_cache, create_path_if_not_exists, default_cache_folder,
     find_latest_from_cache, get_binary_extension, path_to_string,
@@ -75,8 +76,6 @@ pub const DEV: &str = "dev";
 pub const CANARY: &str = "canary";
 pub const NIGHTLY: &str = "nightly";
 pub const ESR: &str = "esr";
-pub const WMIC_COMMAND: &str = "wmic datafile where name='{}' get Version /value";
-pub const WMIC_COMMAND_OS: &str = "wmic os get osarchitecture";
 pub const REG_VERSION_ARG: &str = "version";
 pub const REG_CURRENT_VERSION_ARG: &str = "CurrentVersion";
 pub const REG_PV_ARG: &str = "pv";
@@ -94,11 +93,11 @@ pub const SINGLE_QUOTE: &str = "'";
 pub const ENV_PROGRAM_FILES: &str = "PROGRAMFILES";
 pub const ENV_PROGRAM_FILES_X86: &str = "PROGRAMFILES(X86)";
 pub const ENV_LOCALAPPDATA: &str = "LOCALAPPDATA";
+pub const ENV_PROCESSOR_ARCHITECTURE: &str = "PROCESSOR_ARCHITECTURE";
 pub const ENV_X86: &str = " (x86)";
 pub const ARCH_X86: &str = "x86";
 pub const ARCH_AMD64: &str = "amd64";
 pub const ARCH_ARM64: &str = "arm64";
-pub const ENV_PROCESSOR_ARCHITECTURE: &str = "PROCESSOR_ARCHITECTURE";
 pub const TTL_SEC: u64 = 3600;
 pub const UNAME_COMMAND: &str = "uname -{}";
 pub const ESCAPE_COMMAND: &str = r#"printf %q "{}""#;
@@ -180,6 +179,10 @@ pub trait SeleniumManager {
 
     fn set_download_browser(&mut self, download_browser: bool);
 
+    fn is_snap(&self, browser_path: &str) -> bool;
+
+    fn get_snap_path(&self) -> Option<PathBuf>;
+
     // ----------------------------------------------------------
     // Shared functions
     // ----------------------------------------------------------
@@ -189,7 +192,7 @@ pub trait SeleniumManager {
         let driver_name_with_extension = self.get_driver_name_with_extension();
 
         let mut lock = Lock::acquire(
-            &self.get_logger(),
+            self.get_logger(),
             &driver_path_in_cache,
             Some(driver_name_with_extension.clone()),
         )?;
@@ -322,7 +325,7 @@ pub trait SeleniumManager {
             }
 
             let browser_path_in_cache = self.get_browser_path_in_cache()?;
-            let mut lock = Lock::acquire(&self.get_logger(), &browser_path_in_cache, None)?;
+            let mut lock = Lock::acquire(self.get_logger(), &browser_path_in_cache, None)?;
             if !lock.exists() && browser_binary_path.exists() {
                 self.get_logger().debug(format!(
                     "Browser already in cache: {}",
@@ -347,7 +350,7 @@ pub trait SeleniumManager {
             uncompress(
                 &driver_zip_file,
                 &browser_path_in_cache,
-                &self.get_logger(),
+                self.get_logger(),
                 self.get_os(),
                 None,
                 browser_label_for_download,
@@ -449,8 +452,9 @@ pub trait SeleniumManager {
                 driver_version_command,
             ) {
                 Ok(out) => out,
-                Err(_e) => continue,
+                Err(_) => continue,
             };
+
             let full_browser_version = parse_version(output, self.get_logger()).unwrap_or_default();
             if full_browser_version.is_empty() {
                 continue;
@@ -605,6 +609,18 @@ pub trait SeleniumManager {
             if let Some(path) = browser_path {
                 self.get_logger()
                     .debug(format!("Found {} in PATH: {}", browser_name, &path));
+                if self.is_snap(&path) {
+                    if let Some(snap_path) = self.get_snap_path() {
+                        if snap_path.exists() {
+                            self.get_logger().debug(format!(
+                                "Using {} snap: {}",
+                                browser_name,
+                                path_to_string(snap_path.as_path())
+                            ));
+                            return Some(snap_path);
+                        }
+                    }
+                }
                 return Some(Path::new(&path).to_path_buf());
             }
         }
@@ -798,7 +814,9 @@ pub trait SeleniumManager {
         }
 
         // With the discovered browser version, discover the proper driver version using online endpoints
-        if self.get_driver_version().is_empty() {
+        if self.get_driver_version().is_empty()
+            || (self.is_grid() && self.is_nightly(self.get_driver_version()))
+        {
             match self.discover_driver_version() {
                 Ok(driver_version) => {
                     self.set_driver_version(driver_version);
@@ -823,6 +841,7 @@ pub trait SeleniumManager {
 
                 // Display warning if the discovered driver version is not the same as the driver in PATH
                 if !self.get_driver_version().is_empty()
+                    && !self.is_snap(self.get_browser_path())
                     && (self.is_firefox() && !version.eq(self.get_driver_version()))
                     || (!self.is_firefox() && !major_version.eq(&self.get_major_browser_version()))
                 {
@@ -856,7 +875,7 @@ pub trait SeleniumManager {
                     self.get_driver_version()
                 ));
             }
-        } else {
+        } else if !self.is_safari() {
             // If driver is not in the cache, download it
             self.assert_online_or_err(OFFLINE_DOWNLOAD_ERR_MSG)?;
             self.download_driver()?;
@@ -1030,7 +1049,7 @@ pub trait SeleniumManager {
         }
 
         let mut release_version = driver_version.to_string();
-        if !driver_version.ends_with('0') {
+        if !driver_version.ends_with('0') && !self.is_nightly(driver_version) {
             // E.g.: version 4.8.1 is shipped within release 4.8.0
             let error_message = format!(
                 "Wrong {} version: '{}'",
@@ -1139,9 +1158,7 @@ pub trait SeleniumManager {
         let mut commands = Vec::new();
         if WINDOWS.is(self.get_os()) {
             if !escaped_browser_path.is_empty() {
-                let wmic_command =
-                    Command::new_single(format_one_arg(WMIC_COMMAND, &escaped_browser_path));
-                commands.push(wmic_command);
+                return Ok(get_win_file_version(&escaped_browser_path));
             }
             if !self.is_browser_version_unstable() {
                 let reg_command =

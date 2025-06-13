@@ -16,8 +16,8 @@
 # under the License.
 """Exceptions that may happen in all the webdriver code."""
 
+from collections.abc import Sequence
 from typing import Optional
-from typing import Sequence
 
 SUPPORT_MSG = "For documentation on this error, please visit:"
 ERROR_URL = "https://www.selenium.dev/documentation/webdriver/troubleshooting/errors"
@@ -75,7 +75,7 @@ class NoSuchElementException(WebDriverException):
     def __init__(
         self, msg: Optional[str] = None, screen: Optional[str] = None, stacktrace: Optional[Sequence[str]] = None
     ) -> None:
-        with_support = f"{msg}; {SUPPORT_MSG} {ERROR_URL}#no-such-element-exception"
+        with_support = f"{msg}; {SUPPORT_MSG} {ERROR_URL}#nosuchelementexception"
 
         super().__init__(with_support, screen, stacktrace)
 
@@ -114,7 +114,7 @@ class StaleElementReferenceException(WebDriverException):
     def __init__(
         self, msg: Optional[str] = None, screen: Optional[str] = None, stacktrace: Optional[Sequence[str]] = None
     ) -> None:
-        with_support = f"{msg}; {SUPPORT_MSG} {ERROR_URL}#stale-element-reference-exception"
+        with_support = f"{msg}; {SUPPORT_MSG} {ERROR_URL}#staleelementreferenceexception"
 
         super().__init__(with_support, screen, stacktrace)
 
@@ -213,7 +213,7 @@ class InvalidSelectorException(WebDriverException):
     def __init__(
         self, msg: Optional[str] = None, screen: Optional[str] = None, stacktrace: Optional[Sequence[str]] = None
     ) -> None:
-        with_support = f"{msg}; {SUPPORT_MSG} {ERROR_URL}#invalid-selector-exception"
+        with_support = f"{msg}; {SUPPORT_MSG} {ERROR_URL}#invalidselectorexception"
 
         super().__init__(with_support, screen, stacktrace)
 

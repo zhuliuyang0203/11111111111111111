@@ -17,6 +17,8 @@
 
 package org.openqa.selenium.grid.node.config;
 
+import static org.openqa.selenium.remote.CapabilityType.ENABLE_DOWNLOADS;
+
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableMap;
@@ -203,6 +205,10 @@ public class NodeOptions {
         Math.max(config.getInt(NODE_SECTION, "register-period").orElse(DEFAULT_REGISTER_PERIOD), 1);
 
     return Duration.ofSeconds(seconds);
+  }
+
+  public boolean getRegisterShutdownOnFailure() {
+    return config.getBool(NODE_SECTION, "register-shutdown-on-failure").orElse(false);
   }
 
   public Duration getHeartbeatPeriod() {
@@ -745,8 +751,7 @@ public class NodeOptions {
               .setCapability("se:noVncPort", noVncPort());
     }
     if (isManagedDownloadsEnabled() && canConfigureDownloadsDir(capabilities)) {
-      capabilities =
-          new PersistentCapabilities(capabilities).setCapability("se:downloadsEnabled", true);
+      capabilities = new PersistentCapabilities(capabilities).setCapability(ENABLE_DOWNLOADS, true);
     }
     return capabilities;
   }

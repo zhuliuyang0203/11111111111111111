@@ -59,4 +59,14 @@ class BrowserTest : BiDiTestFixture
         Assert.That(userContexts, Does.Contain(userContext1));
         Assert.That(userContexts, Does.Not.Contain(userContext2));
     }
+
+    [Test]
+    public async Task CanGetClientWindows()
+    {
+        var clientWindows = await bidi.Browser.GetClientWindowsAsync();
+
+        Assert.That(clientWindows, Is.Not.Null);
+        Assert.That(clientWindows, Has.Count.GreaterThanOrEqualTo(1));
+        Assert.That(clientWindows[0].ClientWindow, Is.Not.Null);
+    }
 }

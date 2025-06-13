@@ -166,10 +166,13 @@ public class JdkHttpClient implements HttpClient {
       throw new ConnectionFailedException("JdkWebSocket initial request execution error", e);
     }
 
+    java.net.http.WebSocket.Builder builder = client.newWebSocketBuilder();
+
+    request.getHeaderNames().forEach(name -> builder.header(name, request.getHeader(name)));
+
     CompletableFuture<Integer> closed = new CompletableFuture<>();
     CompletableFuture<java.net.http.WebSocket> webSocketCompletableFuture =
-        client
-            .newWebSocketBuilder()
+        builder
             .connectTimeout(connectTimeout)
             .buildAsync(
                 uri,
@@ -511,7 +514,7 @@ public class JdkHttpClient implements HttpClient {
     if (this.client == null) {
       return;
     }
-    this.client = null;
+
     for (WebSocket websocket : websockets) {
       try {
         websocket.close();
@@ -519,7 +522,20 @@ public class JdkHttpClient implements HttpClient {
         LOG.log(Level.WARNING, "failed to close the websocket: " + websocket, e);
       }
     }
-    executorService.shutdownNow();
+
+    if (this.client instanceof AutoCloseable) {
+      AutoCloseable closeable = (AutoCloseable) this.client;
+      executorService.submit(
+          () -> {
+            try {
+              closeable.close();
+            } catch (Exception e) {
+              LOG.log(Level.WARNING, "failed to close the http client: " + closeable, e);
+            }
+          });
+    }
+    this.client = null;
+    executorService.shutdown();
   }
 
   @AutoService(HttpClient.Factory.class)

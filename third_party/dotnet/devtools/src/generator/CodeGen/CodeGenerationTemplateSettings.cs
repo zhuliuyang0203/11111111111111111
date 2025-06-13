@@ -1,16 +1,18 @@
+using System.Text.Json.Serialization;
+
 namespace OpenQA.Selenium.DevToolsGenerator.CodeGen
 {
-    using System.Text.Json.Serialization;
-
     /// <summary>
     /// Defines settings around templates
     /// </summary>
     public class CodeGenerationTemplateSettings
     {
         [JsonPropertyName("templatePath")]
-        public string TemplatePath { get; set; }
+        [JsonRequired]
+        public string TemplatePath { get; set; } = null!;
 
         [JsonPropertyName("outputPath")]
-        public string OutputPath { get; set; }
+        [JsonRequired]
+        public string OutputPath { get; set; } = null!;
     }
 }

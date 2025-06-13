@@ -17,13 +17,12 @@
 // under the License.
 // </copyright>
 
-using OpenQA.Selenium.BiDi.Modules.Browser;
+using OpenQA.Selenium.BiDi.Communication.Json.Internal;
+using OpenQA.Selenium.BiDi.Browser;
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-
-#nullable enable
 
 namespace OpenQA.Selenium.BiDi.Communication.Json.Converters.Enumerable;
 
@@ -31,8 +30,8 @@ internal class GetUserContextsResultConverter : JsonConverter<GetUserContextsRes
 {
     public override GetUserContextsResult Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        var doc = JsonDocument.ParseValue(ref reader);
-        var userContexts = doc.RootElement.GetProperty("userContexts").Deserialize<IReadOnlyList<UserContextInfo>>(options);
+        using var doc = JsonDocument.ParseValue(ref reader);
+        var userContexts = doc.RootElement.GetProperty("userContexts").Deserialize(options.GetTypeInfo<IReadOnlyList<UserContextInfo>>());
 
         return new GetUserContextsResult(userContexts!);
     }

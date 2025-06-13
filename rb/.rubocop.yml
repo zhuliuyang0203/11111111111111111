@@ -1,10 +1,10 @@
-require:
+plugins:
   - rubocop-performance
   - rubocop-rake
   - rubocop-rspec
 
 AllCops:
-  TargetRubyVersion: 3.1
+  TargetRubyVersion: 3.2
   NewCops: enable
   Exclude:
     - !ruby/regexp /lib\/selenium\/devtools\/v\d+/
@@ -75,6 +75,9 @@ Metrics/PerceivedComplexity:
     - 'lib/selenium/webdriver/common/local_driver.rb'
     - 'lib/selenium/webdriver/common/logger.rb'
 
+Naming/BlockForwarding:
+  EnforcedStyle: explicit
+
 Naming/FileName:
   Exclude:
     - 'lib/selenium-webdriver.rb'
@@ -144,7 +147,8 @@ Style/OptionalBooleanParameter:
   Enabled: false
 
 Lint/Debugger:
-  Enabled: true
-  DebuggerMethods:
-    Capybara:
-      - save_screenshot: ~
+  Exclude:
+    - 'lib/selenium/webdriver/common/driver_extensions/full_page_screenshot.rb'
+
+Lint/UselessConstantScoping:
+  Enabled: false
