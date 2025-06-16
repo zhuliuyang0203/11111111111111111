@@ -150,8 +150,8 @@ public class BrowsingContext {
 
   public List<BrowsingContextInfo> getTree(String root) {
     return this.bidi.send(
-      new Command<>(
-        "browsingContext.getTree", Map.of("root", root), browsingContextInfoListMapper));
+        new Command<>(
+            "browsingContext.getTree", Map.of("root", root), browsingContextInfoListMapper));
   }
 
   public List<BrowsingContextInfo> getTree(int maxDepth) {
@@ -166,12 +166,12 @@ public class BrowsingContext {
 
   public List<BrowsingContextInfo> getTree(String root, int maxDepth) {
     return this.bidi.send(
-      new Command<>(
-        "browsingContext.getTree",
-        Map.of(
-          "root", root,
-          "maxDepth", maxDepth),
-        browsingContextInfoListMapper));
+        new Command<>(
+            "browsingContext.getTree",
+            Map.of(
+                "root", root,
+                "maxDepth", maxDepth),
+            browsingContextInfoListMapper));
   }
 
   public List<BrowsingContextInfo> getTopLevelContexts() {

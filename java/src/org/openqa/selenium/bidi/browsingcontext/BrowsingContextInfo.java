@@ -67,7 +67,13 @@ public class BrowsingContextInfo {
   }
 
   public BrowsingContextInfo(
-    String id, String url, List<BrowsingContextInfo> children, String clientWindow, String originalOpener, String userContext, String parentBrowsingContext) {
+      String id,
+      String url,
+      List<BrowsingContextInfo> children,
+      String clientWindow,
+      String originalOpener,
+      String userContext,
+      String parentBrowsingContext) {
     this.id = id;
     this.url = url;
     this.children = children;
@@ -125,6 +131,7 @@ public class BrowsingContextInfo {
 
     input.endObject();
 
-    return new BrowsingContextInfo(id, url, children, clientWindow, originalOpener, userContext, parentBrowsingContext);
+    return new BrowsingContextInfo(
+        id, url, children, clientWindow, originalOpener, userContext, parentBrowsingContext);
   }
 }
