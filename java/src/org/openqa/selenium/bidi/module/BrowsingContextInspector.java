@@ -28,10 +28,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.bidi.BiDi;
 import org.openqa.selenium.bidi.Event;
 import org.openqa.selenium.bidi.HasBiDi;
-import org.openqa.selenium.bidi.browsingcontext.BrowsingContextInfo;
-import org.openqa.selenium.bidi.browsingcontext.NavigationInfo;
-import org.openqa.selenium.bidi.browsingcontext.UserPromptClosed;
-import org.openqa.selenium.bidi.browsingcontext.UserPromptOpened;
+import org.openqa.selenium.bidi.browsingcontext.*;
 import org.openqa.selenium.internal.Require;
 import org.openqa.selenium.json.Json;
 import org.openqa.selenium.json.JsonInput;
@@ -87,6 +84,16 @@ public class BrowsingContextInspector implements AutoCloseable {
               return input.read(UserPromptOpened.class);
             }
           });
+
+  private final Event<HistoryUpdated> historyUpdated =
+    new Event<>(
+      "browsingContext.historyUpdated",
+      params -> {
+        try (StringReader reader = new StringReader(JSON.toJson(params));
+             JsonInput input = JSON.newInput(reader)) {
+          return input.read(HistoryUpdated.class);
+        }
+      });
 
   public BrowsingContextInspector(WebDriver driver) {
     this(new HashSet<>(), driver);
@@ -172,6 +179,14 @@ public class BrowsingContextInspector implements AutoCloseable {
     }
   }
 
+  public void onHistoryUpdated(Consumer<HistoryUpdated> consumer) {
+    if (browsingContextIds.isEmpty()) {
+      this.bidi.addListener(historyUpdated, consumer);
+    } else {
+      this.bidi.addListener(browsingContextIds, historyUpdated, consumer);
+    }
+  }
+
   private void addNavigationEventListener(String name, Consumer<NavigationInfo> consumer) {
     Event<NavigationInfo> navigationEvent = new Event<>(name, navigationInfoMapper);
 
@@ -190,6 +205,7 @@ public class BrowsingContextInspector implements AutoCloseable {
     this.bidi.clearListener(browsingContextDestroyed);
     this.bidi.clearListener(userPromptOpened);
     this.bidi.clearListener(userPromptClosed);
+    this.bidi.clearListener(historyUpdated);
 
     navigationEventSet.forEach(this.bidi::clearListener);
   }
