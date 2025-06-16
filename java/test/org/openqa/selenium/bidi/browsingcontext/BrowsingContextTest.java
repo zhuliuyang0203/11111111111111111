@@ -24,6 +24,7 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.titleIs;
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
 
 import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -159,6 +160,52 @@ class BrowsingContextTest extends JupiterTestBase {
     BrowsingContextInfo info = contextInfoList.get(0);
     assertThat(info.getChildren()).isNull(); // since depth is 0
     assertThat(info.getId()).isEqualTo(referenceContextId);
+    assertThat(info.getOriginalOpener()).isNull();
+    assertThat(info.getClientWindow()).isNotNull();
+    assertThat(info.getUserContext()).isEqualTo("default");
+  }
+
+  @Test
+  @NeedsFreshDriver
+  void canGetTreeWithRootAndDepth() {
+    String referenceContextId = driver.getWindowHandle();
+    BrowsingContext parentWindow = new BrowsingContext(driver, referenceContextId);
+
+    String url = appServer.whereIs("iframes.html");
+
+    parentWindow.navigate(url, ReadinessState.COMPLETE);
+
+    List<BrowsingContextInfo> contextInfoList = parentWindow.getTree(referenceContextId, 1);
+
+    assertThat(contextInfoList.size()).isEqualTo(1);
+    BrowsingContextInfo info = contextInfoList.get(0);
+    assertThat(info.getChildren()).isNotNull(); // since depth is 1
+    assertThat(info.getId()).isEqualTo(referenceContextId);
+    assertThat(info.getOriginalOpener()).isNull();
+    assertThat(info.getClientWindow()).isNotNull();
+    assertThat(info.getUserContext()).isEqualTo("default");
+  }
+
+  @Test
+  @NeedsFreshDriver
+  void canGetTreeWithRoot() {
+    String referenceContextId = driver.getWindowHandle();
+    BrowsingContext parentWindow = new BrowsingContext(driver, referenceContextId);
+
+    String url = appServer.whereIs("iframes.html");
+
+    parentWindow.navigate(url, ReadinessState.COMPLETE);
+
+    BrowsingContext tab = new BrowsingContext(driver, WindowType.TAB);
+
+    List<BrowsingContextInfo> contextInfoList = parentWindow.getTree(tab.getId());
+
+    assertThat(contextInfoList.size()).isEqualTo(1);
+    BrowsingContextInfo info = contextInfoList.get(0);
+    assertThat(info.getId()).isEqualTo(tab.getId());
+    assertThat(info.getOriginalOpener()).isNull();
+    assertThat(info.getClientWindow()).isNotNull();
+    assertThat(info.getUserContext()).isEqualTo("default");
   }
 
   @Test
