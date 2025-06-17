@@ -259,12 +259,11 @@ class Proxy:
             # TODO: Remove ftpProxy in future version and remove deprecation warning
             # https://github.com/SeleniumHQ/selenium/issues/15905
             if "ftpProxy" in raw and raw["ftpProxy"]:
-                if self.name == "ftpProxy":
-                    warnings.warn(
-                        "ftpProxy is deprecated and will be removed in the future",
-                        DeprecationWarning,
-                        stacklevel=2,
-                    )
+                warnings.warn(
+                    "ftpProxy is deprecated and will be removed in the future",
+                    DeprecationWarning,
+                    stacklevel=2,
+                )
                 self.ftp_proxy = raw["ftpProxy"]
             if "httpProxy" in raw and raw["httpProxy"]:
                 self.http_proxy = raw["httpProxy"]
