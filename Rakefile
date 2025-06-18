@@ -96,7 +96,7 @@ task '//java/test/org/openqa/selenium/environment/webserver:webserver:uber' => [
 JAVA_RELEASE_TARGETS = %w[
   //java/src/org/openqa/selenium/chrome:chrome.publish
   //java/src/org/openqa/selenium/chromium:chromium.publish
-  //java/src/org/openqa/selenium/devtools/v134:v134.publish
+  //java/src/org/openqa/selenium/devtools/v137:v137.publish
   //java/src/org/openqa/selenium/devtools/v135:v135.publish
   //java/src/org/openqa/selenium/devtools/v136:v136.publish
   //java/src/org/openqa/selenium/edge:edge.publish
@@ -1105,7 +1105,7 @@ namespace :all do
 
     ['common/devtools/',
      'dotnet/src/webdriver/DevTools/',
-     'dotnet/src/webdriver/WebDriver.csproj',
+     'dotnet/src/webdriver/Selenium.WebDriver.csproj',
      'dotnet/test/common/DevTools/',
      'dotnet/test/common/CustomDriverConfigs/',
      'dotnet/selenium-dotnet-version.bzl',
