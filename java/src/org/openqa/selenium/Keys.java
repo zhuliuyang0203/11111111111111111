@@ -98,6 +98,8 @@ public enum Keys implements CharSequence {
 
   META('\uE03D'),
   COMMAND(Keys.META),
+  OPTION('\uE050'),
+  FN('\uE051'),
 
   ZENKAKU_HANKAKU('\uE040');
 
