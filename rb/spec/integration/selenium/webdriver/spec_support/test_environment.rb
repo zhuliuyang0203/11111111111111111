@@ -197,11 +197,12 @@ module Selenium
           chrome_beta_url = 'https://chromereleases.googleblog.com/search/label/Beta%20updates'
 
           uri = URI.parse(chrome_beta_url)
+
           response = Net::HTTP.get_response(uri)
 
           return "Failed to fetch Chrome Beta page: #{response&.code}" unless response.is_a?(Net::HTTPSuccess)
 
-          response.body.match(/Chrome Beta\s+\d+\s+\((\d+\.\d+\.\d+\.\d+)\)/)[1]
+          response.body.match(/\d+\.\d+\.\d+\.\d+/).to_s
         end
 
         private
