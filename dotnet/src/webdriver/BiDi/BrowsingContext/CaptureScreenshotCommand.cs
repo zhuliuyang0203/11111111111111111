@@ -42,7 +42,7 @@ public enum ScreenshotOrigin
     Document
 }
 
-public sealed record struct ImageFormat(string Type)
+public record struct ImageFormat(string Type)
 {
     public double? Quality { get; set; }
 }
