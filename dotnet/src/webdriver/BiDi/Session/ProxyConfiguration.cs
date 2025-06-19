@@ -17,6 +17,7 @@
 // under the License.
 // </copyright>
 
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Session;
@@ -41,7 +42,9 @@ public record ManualProxyConfiguration : ProxyConfiguration
 
     public string? SocksProxy { get; set; }
 
-    public long? SocksVersion { get; set; }
+    public int? SocksVersion { get; set; } // 0..255
+
+    public IEnumerable<string>? NoProxy { get; set; }
 }
 
 public record PacProxyConfiguration(string ProxyAutoConfigUrl) : ProxyConfiguration;
