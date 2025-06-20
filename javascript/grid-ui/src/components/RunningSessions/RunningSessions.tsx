@@ -301,9 +301,6 @@ function RunningSessions (props) {
         } else {
           setRowOpen('')
         }
-      } else if (response.status === 403) {
-        setFeedbackMessage('Session deletion is blocked by configuration')
-        setFeedbackSeverity('error')
       } else {
         setFeedbackMessage('Failed to delete session')
         setFeedbackSeverity('error')
@@ -374,6 +371,15 @@ function RunningSessions (props) {
       return String(value)
     } catch (e) {
       return ''
+    }
+  }
+
+  const hasDeleteSessionCapability = (capabilitiesStr: string): boolean => {
+    try {
+      const capabilities = JSON.parse(capabilitiesStr as string)
+      return capabilities['se:deleteSessionOnUi'] === true
+    } catch (e) {
+      return false
     }
   }
 
@@ -614,14 +620,16 @@ function RunningSessions (props) {
                                 </Typography>
                               </DialogContent>
                               <DialogActions>
-                                <Button
-                                  onClick={() => handleDeleteConfirmation(row.id as string, 'info')}
-                                  color='error'
-                                  variant='contained'
-                                  sx={{ marginRight: 1 }}
-                                >
-                                  Delete
-                                </Button>
+                                {hasDeleteSessionCapability(row.capabilities as string) && (
+                                  <Button
+                                    onClick={() => handleDeleteConfirmation(row.id as string, 'info')}
+                                    color='error'
+                                    variant='contained'
+                                    sx={{ marginRight: 1 }}
+                                  >
+                                    Delete
+                                  </Button>
+                                )}
                                 <Button
                                   onClick={() => setRowOpen('')}
                                   color='primary'
@@ -688,9 +696,6 @@ function RunningSessions (props) {
         <DialogContent>
           <Typography>
             Are you sure you want to delete this session? This action cannot be undone.
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 2, fontStyle: 'italic' }}>
-            Hint: Set config `--blocked-delete-session` when starting Router/Hub to block deletion of any session.
           </Typography>
         </DialogContent>
         <DialogActions>

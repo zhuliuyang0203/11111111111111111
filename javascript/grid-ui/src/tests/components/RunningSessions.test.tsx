@@ -101,6 +101,7 @@ const sessionWithWebSocketUrl: SessionInfo = {
     "se:cdp": "ws://localhost:4444/selenium/session/2103faaea8600e41a1e86f4189779e66/se/cdp",
     "se:cdpVersion": "136.0.7103.113",
     "se:containerName": "0ca4ada66da5",
+    "se:deleteSessionOnUi": true,
     "se:downloadsEnabled": true,
     "se:gridWebSocketUrl": "ws://localhost:4444/selenium/session/2103faaea8600e41a1e86f4189779e66",
     "se:noVncPort": 7900,
@@ -139,7 +140,8 @@ const sessionWithoutWebSocketUrl: SessionInfo = {
   capabilities: JSON.stringify({
     "browserName": "chrome",
     "browserVersion": "88.0.4324.182",
-    "platformName": "windows"
+    "platformName": "windows",
+    "se:deleteSessionOnUi": true
   }),
   startTime: '27/05/2025 13:13:05',
   uri: 'http://localhost:4444',
@@ -286,7 +288,7 @@ describe('Session deletion functionality', () => {
     expect(screen.getByText('Are you sure you want to delete this session? This action cannot be undone.')).toBeInTheDocument()
 
     expect(screen.getByRole('button', { name: /cancel/i })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /delete/i, exact: true })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /delete/i })).toBeInTheDocument()
   })
 
   it('uses window.location.origin for URL construction with se:gridWebSocketUrl', async () => {
@@ -302,7 +304,7 @@ describe('Session deletion functionality', () => {
     const deleteButton = screen.getByRole('button', { name: /delete/i })
     await user.click(deleteButton)
 
-    const confirmButton = screen.getByRole('button', { name: /delete/i, exact: true })
+    const confirmButton = screen.getByRole('button', { name: /delete/i })
     await user.click(confirmButton)
 
     expect(global.fetch).toHaveBeenCalledWith(
@@ -329,7 +331,7 @@ describe('Session deletion functionality', () => {
     const deleteButton = screen.getByRole('button', { name: /delete/i })
     await user.click(deleteButton)
 
-    const confirmButton = screen.getByRole('button', { name: /delete/i, exact: true })
+    const confirmButton = screen.getByRole('button', { name: /delete/i })
     await user.click(confirmButton)
 
     const expectedUrl = window.location.href.split('/ui')[0] + '/session/' + sessionWithoutWsData.id
@@ -358,7 +360,7 @@ describe('Session deletion functionality', () => {
     const deleteButton = screen.getByRole('button', { name: /delete/i })
     await user.click(deleteButton)
 
-    const confirmButton = screen.getByRole('button', { name: /delete/i, exact: true })
+    const confirmButton = screen.getByRole('button', { name: /delete/i })
     await user.click(confirmButton)
 
     await waitFor(() => {
@@ -388,5 +390,25 @@ describe('Session deletion functionality', () => {
     })
 
     expect(global.fetch).not.toHaveBeenCalled()
+  })
+
+  it('does not show delete button when session does not have se:deleteSessionOnUi capability', async () => {
+    const sessionWithoutDeleteCapability = {
+      ...sessionWithWsData,
+      capabilities: JSON.stringify({
+        "browserName": "chrome",
+        "browserVersion": "136.0.7103.113",
+        "platformName": "linux"
+      })
+    }
+
+    render(<RunningSessions sessions={[sessionWithoutDeleteCapability]} origin={origin} />)
+
+    const user = userEvent.setup()
+    const sessionRow = screen.getByText(sessionWithoutDeleteCapability.id).closest('tr')
+
+    await user.click(within(sessionRow as HTMLElement).getByTestId('InfoIcon'))
+
+    expect(screen.queryByRole('button', { name: /delete/i })).not.toBeInTheDocument()
   })
 })
