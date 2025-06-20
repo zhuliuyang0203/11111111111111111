@@ -27,12 +27,11 @@ namespace OpenQA.Selenium.BiDi.WebExtension;
 class WebExtensionTest : BiDiTestFixture
 {
     [Test]
-    [Ignore("qwe")]
     [IgnoreBrowser(Selenium.Browser.Chrome, "Web extensions are not supported yet?")]
     [IgnoreBrowser(Selenium.Browser.Edge, "Web extensions are not supported yet?")]
     public async Task CanInstallPathWebExtension()
     {
-        string path = Path.GetFullPath("data/extensions/webextensions-selenium-example");
+        string path = Path.GetFullPath("common/extensions/webextensions-selenium-example");
 
         var result = await bidi.WebExtension.InstallAsync(new ExtensionPath(path));
 
@@ -44,8 +43,7 @@ class WebExtensionTest : BiDiTestFixture
     [IgnoreBrowser(Selenium.Browser.Edge, "Web extensions are not supported yet?")]
     public async Task CanInstallArchiveWebExtension()
     {
-        //string path = Path.GetFullPath("data/extensions/webextensions-selenium-example.zip");
-        string path = Bazel.Runfiles.Create().Rlocation("_main/common/extensions/webextensions-selenium-example.zip");
+        string path = LocateRelativePath("common/extensions/webextensions-selenium-example.zip");
 
         var result = await bidi.WebExtension.InstallAsync(new ExtensionArchivePath(path));
 
@@ -53,12 +51,13 @@ class WebExtensionTest : BiDiTestFixture
     }
 
     [Test]
-    [Ignore("qwe")]
     [IgnoreBrowser(Selenium.Browser.Chrome, "Web extensions are not supported yet?")]
     [IgnoreBrowser(Selenium.Browser.Edge, "Web extensions are not supported yet?")]
     public async Task CanInstallBase64WebExtension()
     {
-        string base64 = Convert.ToBase64String(File.ReadAllBytes("data/extensions/webextensions-selenium-example.zip"));
+        var path = LocateRelativePath("common/extensions/webextensions-selenium-example.zip");
+
+        string base64 = Convert.ToBase64String(File.ReadAllBytes(path));
 
         var result = await bidi.WebExtension.InstallAsync(new ExtensionBase64Encoded(base64));
 
@@ -66,15 +65,26 @@ class WebExtensionTest : BiDiTestFixture
     }
 
     [Test]
-    [Ignore("qwe")]
     [IgnoreBrowser(Selenium.Browser.Chrome, "Web extensions are not supported yet?")]
     [IgnoreBrowser(Selenium.Browser.Edge, "Web extensions are not supported yet?")]
     public async Task CanUninstallExtension()
     {
-        string path = Path.GetFullPath("data/extensions/webextensions-selenium-example");
+        string path = LocateRelativePath("common/extensions/webextensions-selenium-example");
 
         var result = await bidi.WebExtension.InstallAsync(new ExtensionPath(path));
 
         await result.Extension.UninstallAsync();
+    }
+
+    private string LocateRelativePath(string path)
+    {
+        try
+        {
+            return Bazel.Runfiles.Create().Rlocation($"_main/{path}");
+        }
+        catch (FileNotFoundException)
+        {
+            return Path.GetFullPath(path);
+        }
     }
 }
