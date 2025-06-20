@@ -49,6 +49,7 @@ import org.openqa.selenium.internal.Require;
 import org.openqa.selenium.net.PortProber;
 import org.openqa.selenium.net.UrlChecker;
 import org.openqa.selenium.os.ExternalProcess;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Manages the life and death of a native executable driver server. It is expected that the driver
@@ -145,15 +146,15 @@ public class DriverService implements Closeable {
     return new ImmutableCapabilities();
   }
 
-  protected String getDriverName() {
+  protected @Nullable String getDriverName() {
     return null;
   }
 
-  public String getDriverProperty() {
+  public @Nullable String getDriverProperty() {
     return null;
   }
 
-  protected File getDriverExecutable() {
+  protected @Nullable File getDriverExecutable() {
     return null;
   }
 
