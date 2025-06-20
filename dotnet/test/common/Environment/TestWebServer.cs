@@ -53,14 +53,14 @@ public class TestWebServer
             {
                 var runfiles = Runfiles.Create();
 
+                var standaloneAppserverProbingPath = @"_main/java/test/org/openqa/selenium/environment/appserver";
+
                 if (OperatingSystem.IsWindows())
                 {
-                    standaloneAppserverPath = runfiles.Rlocation(@"_main/java/test/org/openqa/selenium/environment/appserver.exe");
+                    standaloneAppserverProbingPath += ".exe";
                 }
-                else
-                {
-                    standaloneAppserverPath = runfiles.Rlocation(@"_main/java/test/org/openqa/selenium/environment/appserver");
-                }
+
+                standaloneAppserverPath = runfiles.Rlocation(standaloneAppserverProbingPath);
             }
             catch (FileNotFoundException)
             {
