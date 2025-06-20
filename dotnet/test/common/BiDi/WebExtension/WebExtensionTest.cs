@@ -27,8 +27,6 @@ namespace OpenQA.Selenium.BiDi.WebExtension;
 class WebExtensionTest : BiDiTestFixture
 {
     [Test]
-    [IgnoreBrowser(Selenium.Browser.Chrome, "Web extensions are not supported yet?")]
-    [IgnoreBrowser(Selenium.Browser.Edge, "Web extensions are not supported yet?")]
     public async Task CanInstallPathWebExtension()
     {
         string path = Path.GetFullPath("common/extensions/webextensions-selenium-example");
@@ -39,8 +37,8 @@ class WebExtensionTest : BiDiTestFixture
     }
 
     [Test]
-    [IgnoreBrowser(Selenium.Browser.Chrome, "Web extensions are not supported yet?")]
-    [IgnoreBrowser(Selenium.Browser.Edge, "Web extensions are not supported yet?")]
+    [IgnoreBrowser(Selenium.Browser.Chrome, "Archived and Base64 extensions are not supported?")]
+    [IgnoreBrowser(Selenium.Browser.Edge, "Archived and Base64 extensions are not supported?")]
     public async Task CanInstallArchiveWebExtension()
     {
         string path = LocateRelativePath("common/extensions/webextensions-selenium-example.zip");
@@ -51,8 +49,8 @@ class WebExtensionTest : BiDiTestFixture
     }
 
     [Test]
-    [IgnoreBrowser(Selenium.Browser.Chrome, "Web extensions are not supported yet?")]
-    [IgnoreBrowser(Selenium.Browser.Edge, "Web extensions are not supported yet?")]
+    [IgnoreBrowser(Selenium.Browser.Chrome, "Archived and Base64 extensions are not supported?")]
+    [IgnoreBrowser(Selenium.Browser.Edge, "Archived and Base64 extensions are not supported?")]
     public async Task CanInstallBase64WebExtension()
     {
         var path = LocateRelativePath("common/extensions/webextensions-selenium-example.zip");
@@ -65,8 +63,6 @@ class WebExtensionTest : BiDiTestFixture
     }
 
     [Test]
-    [IgnoreBrowser(Selenium.Browser.Chrome, "Web extensions are not supported yet?")]
-    [IgnoreBrowser(Selenium.Browser.Edge, "Web extensions are not supported yet?")]
     public async Task CanUninstallExtension()
     {
         string path = LocateRelativePath("common/extensions/webextensions-selenium-example");
@@ -76,7 +72,7 @@ class WebExtensionTest : BiDiTestFixture
         await result.Extension.UninstallAsync();
     }
 
-    private string LocateRelativePath(string path)
+    private static string LocateRelativePath(string path)
     {
         try
         {
