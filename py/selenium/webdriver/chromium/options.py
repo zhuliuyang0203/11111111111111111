@@ -135,7 +135,7 @@ class ChromiumOptions(ArgOptions):
     @property
     def enable_webextensions(self) -> bool:
         """:Returns: Whether webextension support is enabled for Chromium-based browsers.
-            True if webextension support is enabled, False otherwise.
+        True if webextension support is enabled, False otherwise.
         """
         return self._enable_webextensions
 
@@ -173,8 +173,8 @@ class ChromiumOptions(ArgOptions):
 
     def to_capabilities(self) -> dict:
         """Creates a capabilities with all the options that have been set
-        
-        Returns: 
+
+        Returns:
         -------
             dict : a dictionary with all set options
         """
