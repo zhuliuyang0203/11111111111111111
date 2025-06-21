@@ -112,17 +112,10 @@ public class InternetExplorerDriver extends RemoteWebDriver {
       @Nullable InternetExplorerDriverService service,
       @Nullable InternetExplorerOptions options,
       @Nullable ClientConfig clientConfig) {
-    if (options == null) {
-      options = new InternetExplorerOptions();
-    }
-    if (service == null) {
-      service = InternetExplorerDriverService.createDefaultService();
-    }
+    options = options == null ? new InternetExplorerOptions() : options;
+    service = service == null ? InternetExplorerDriverService.createDefaultService() : service;
+    clientConfig = clientConfig == null ? ClientConfig.defaultConfig() : clientConfig;
     service.setExecutable(new DriverFinder(service, options).getDriverPath());
-    if (clientConfig == null) {
-      clientConfig = ClientConfig.defaultConfig();
-    }
-
     run(service, options, clientConfig);
   }
 
