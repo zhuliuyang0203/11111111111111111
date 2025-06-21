@@ -57,7 +57,7 @@ test.suite(
         it('uses SE_SAFARIDRIVER environment variable when set', function () {
           const testPath = '/custom/path/to/safaridriver'
           process.env.SE_SAFARIDRIVER = testPath
-          
+
           const serviceBuilder = new safari.ServiceBuilder()
           const service = serviceBuilder.build()
           assert.strictEqual(service.getExecutable(), testPath)
@@ -66,17 +66,17 @@ test.suite(
         it('explicit path overrides environment variable', function () {
           const envPath = '/env/path/to/safaridriver'
           const explicitPath = '/explicit/path/to/safaridriver'
-          
+
           process.env.SE_SAFARIDRIVER = envPath
           const serviceBuilder = new safari.ServiceBuilder(explicitPath)
           const service = serviceBuilder.build()
-          
+
           assert.strictEqual(service.getExecutable(), explicitPath)
         })
 
         it('falls back to default behavior when environment variable is not set', function () {
           delete process.env.SE_SAFARIDRIVER
-          
+
           const serviceBuilder = new safari.ServiceBuilder()
           const service = serviceBuilder.build()
           // Should be null/undefined when no explicit path and no env var

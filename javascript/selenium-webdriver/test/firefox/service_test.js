@@ -58,7 +58,7 @@ test.suite(
         it('uses SE_GECKODRIVER environment variable when set', function () {
           const testPath = '/custom/path/to/geckodriver'
           process.env.SE_GECKODRIVER = testPath
-          
+
           const serviceBuilder = new firefox.ServiceBuilder()
           const service = serviceBuilder.build()
           assert.strictEqual(service.getExecutable(), testPath)
@@ -67,17 +67,17 @@ test.suite(
         it('explicit path overrides environment variable', function () {
           const envPath = '/env/path/to/geckodriver'
           const explicitPath = '/explicit/path/to/geckodriver'
-          
+
           process.env.SE_GECKODRIVER = envPath
           const serviceBuilder = new firefox.ServiceBuilder(explicitPath)
           const service = serviceBuilder.build()
-          
+
           assert.strictEqual(service.getExecutable(), explicitPath)
         })
 
         it('falls back to default behavior when environment variable is not set', function () {
           delete process.env.SE_GECKODRIVER
-          
+
           const serviceBuilder = new firefox.ServiceBuilder()
           const service = serviceBuilder.build()
           // Should be null/undefined when no explicit path and no env var

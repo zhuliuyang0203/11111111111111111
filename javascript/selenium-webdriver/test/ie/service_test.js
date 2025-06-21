@@ -39,7 +39,7 @@ test.suite(
           this.skip()
           return
         }
-        
+
         service = new ie.ServiceBuilder().build()
         service.setExecutable(getBinaryPaths(new ie.Options()).driverPath)
         let url = await service.start()
@@ -64,7 +64,7 @@ test.suite(
         it('uses SE_IEDRIVER environment variable when set', function () {
           const testPath = '/custom/path/to/iedriver'
           process.env.SE_IEDRIVER = testPath
-          
+
           const serviceBuilder = new ie.ServiceBuilder()
           assert.strictEqual(serviceBuilder.getExecutable(), testPath)
         })
@@ -72,16 +72,16 @@ test.suite(
         it('explicit path overrides environment variable', function () {
           const envPath = '/env/path/to/iedriver'
           const explicitPath = '/explicit/path/to/iedriver'
-          
+
           process.env.SE_IEDRIVER = envPath
           const serviceBuilder = new ie.ServiceBuilder(explicitPath)
-          
+
           assert.strictEqual(serviceBuilder.getExecutable(), explicitPath)
         })
 
         it('falls back to default behavior when environment variable is not set', function () {
           delete process.env.SE_IEDRIVER
-          
+
           const serviceBuilder = new ie.ServiceBuilder()
           // Should be null/undefined when no explicit path and no env var
           assert.ok(!serviceBuilder.getExecutable())
