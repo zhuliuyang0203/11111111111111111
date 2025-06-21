@@ -39,6 +39,51 @@ test.suite(
         let url = await service.start()
         assert(/127\.0\.0\.1/.test(url), `unexpected url: ${url}`)
       })
+
+      describe('environment variable support', function () {
+        let originalEnvValue
+
+        beforeEach(function () {
+          originalEnvValue = process.env.SE_EDGEDRIVER
+        })
+
+        afterEach(function () {
+          if (originalEnvValue) {
+            process.env.SE_EDGEDRIVER = originalEnvValue
+          } else {
+            delete process.env.SE_EDGEDRIVER
+          }
+        })
+
+        it('uses SE_EDGEDRIVER environment variable when set', function () {
+          const testPath = '/custom/path/to/edgedriver'
+          process.env.SE_EDGEDRIVER = testPath
+          
+          const serviceBuilder = new edge.ServiceBuilder()
+          const service = serviceBuilder.build()
+          assert.strictEqual(service.getExecutable(), testPath)
+        })
+
+        it('explicit path overrides environment variable', function () {
+          const envPath = '/env/path/to/edgedriver'
+          const explicitPath = '/explicit/path/to/edgedriver'
+          
+          process.env.SE_EDGEDRIVER = envPath
+          const serviceBuilder = new edge.ServiceBuilder(explicitPath)
+          const service = serviceBuilder.build()
+          
+          assert.strictEqual(service.getExecutable(), explicitPath)
+        })
+
+        it('falls back to default behavior when environment variable is not set', function () {
+          delete process.env.SE_EDGEDRIVER
+          
+          const serviceBuilder = new edge.ServiceBuilder()
+          const service = serviceBuilder.build()
+          // Should be null/undefined when no explicit path and no env var
+          assert.ok(!service.getExecutable())
+        })
+      })
     })
   },
   { browsers: ['MicrosoftEdge'] },

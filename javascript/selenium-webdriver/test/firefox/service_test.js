@@ -18,12 +18,13 @@
 'use strict'
 
 const assert = require('node:assert')
-const safari = require('selenium-webdriver/safari')
-const test = require('../lib/test')
+const firefox = require('selenium-webdriver/firefox')
+const test = require('../../lib/test')
+const { getBinaryPaths } = require('selenium-webdriver/common/driverFinder')
 
 test.suite(
   function (_env) {
-    describe('safaridriver', function () {
+    describe('geckodriver', function () {
       let service
 
       afterEach(function () {
@@ -32,9 +33,9 @@ test.suite(
         }
       })
 
-      it('can start safaridriver', async function () {
-        service = new safari.ServiceBuilder().build()
-
+      it('can start geckodriver', async function () {
+        service = new firefox.ServiceBuilder().build()
+        service.setExecutable(getBinaryPaths(new firefox.Options()).driverPath)
         let url = await service.start()
         assert(/127\.0\.0\.1/.test(url), `unexpected url: ${url}`)
       })
@@ -43,41 +44,41 @@ test.suite(
         let originalEnvValue
 
         beforeEach(function () {
-          originalEnvValue = process.env.SE_SAFARIDRIVER
+          originalEnvValue = process.env.SE_GECKODRIVER
         })
 
         afterEach(function () {
           if (originalEnvValue) {
-            process.env.SE_SAFARIDRIVER = originalEnvValue
+            process.env.SE_GECKODRIVER = originalEnvValue
           } else {
-            delete process.env.SE_SAFARIDRIVER
+            delete process.env.SE_GECKODRIVER
           }
         })
 
-        it('uses SE_SAFARIDRIVER environment variable when set', function () {
-          const testPath = '/custom/path/to/safaridriver'
-          process.env.SE_SAFARIDRIVER = testPath
+        it('uses SE_GECKODRIVER environment variable when set', function () {
+          const testPath = '/custom/path/to/geckodriver'
+          process.env.SE_GECKODRIVER = testPath
           
-          const serviceBuilder = new safari.ServiceBuilder()
+          const serviceBuilder = new firefox.ServiceBuilder()
           const service = serviceBuilder.build()
           assert.strictEqual(service.getExecutable(), testPath)
         })
 
         it('explicit path overrides environment variable', function () {
-          const envPath = '/env/path/to/safaridriver'
-          const explicitPath = '/explicit/path/to/safaridriver'
+          const envPath = '/env/path/to/geckodriver'
+          const explicitPath = '/explicit/path/to/geckodriver'
           
-          process.env.SE_SAFARIDRIVER = envPath
-          const serviceBuilder = new safari.ServiceBuilder(explicitPath)
+          process.env.SE_GECKODRIVER = envPath
+          const serviceBuilder = new firefox.ServiceBuilder(explicitPath)
           const service = serviceBuilder.build()
           
           assert.strictEqual(service.getExecutable(), explicitPath)
         })
 
         it('falls back to default behavior when environment variable is not set', function () {
-          delete process.env.SE_SAFARIDRIVER
+          delete process.env.SE_GECKODRIVER
           
-          const serviceBuilder = new safari.ServiceBuilder()
+          const serviceBuilder = new firefox.ServiceBuilder()
           const service = serviceBuilder.build()
           // Should be null/undefined when no explicit path and no env var
           assert.ok(!service.getExecutable())
@@ -85,5 +86,5 @@ test.suite(
       })
     })
   },
-  { browsers: ['safari'] },
+  { browsers: ['firefox'] },
 )
