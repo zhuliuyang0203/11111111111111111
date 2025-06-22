@@ -154,7 +154,7 @@ class ChromiumOptions(ArgOptions):
             - --enable-unsafe-extension-debugging
             - --remote-debugging-pipe
         - Enabling --remote-debugging-pipe makes the connection b/w chromedriver
-        and the browser a pipe instead of a port, disabling many CDP functionalities
+        and the browser use a pipe instead of a port, disabling many CDP functionalities
         like devtools
         """
         self._enable_webextensions = value
