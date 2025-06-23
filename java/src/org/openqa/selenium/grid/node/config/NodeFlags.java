@@ -245,7 +245,7 @@ public class NodeFlags implements HasRoles {
   @Parameter(
       names = {"--delete-session-on-ui"},
       arity = 1,
-      description = "Enable capability to support deleting session on Grid UI. True by default")
+      description = "Enable capability to support deleting session on Grid UI. False by default")
   @ConfigValue(section = NODE_SECTION, name = "delete-session-on-ui", example = "true")
   public Boolean deleteSessionOnUi = DEFAULT_DELETE_SESSION_ON_UI;
 

@@ -768,7 +768,7 @@ class NodeOptionsTest {
   void deleteSessionOnUiIsEnabledByDefault() {
     Config config = new MapConfig(singletonMap("node", singletonMap("detect-drivers", "false")));
     NodeOptions nodeOptions = new NodeOptions(config);
-    assertThat(nodeOptions.isSessionDeletedOnUi()).isTrue();
+    assertThat(nodeOptions.isSessionDeletedOnUi()).isFalse();
   }
 
   @Test
@@ -864,13 +864,8 @@ class NodeOptionsTest {
             });
 
     assertThat(reported)
-        .filteredOn(capabilities -> capabilities.getCapability("se:deleteSessionOnUi") != null)
-        .hasSize(reported.size());
-
-    assertThat(reported)
-        .allMatch(
-            capabilities ->
-                Boolean.TRUE.equals(capabilities.getCapability("se:deleteSessionOnUi")));
+      .filteredOn(capabilities -> capabilities.getCapability("se:deleteSessionOnUi") == null)
+      .hasSize(reported.size());
   }
 
   private Condition<? super List<? extends Capabilities>> supporting(String name) {
