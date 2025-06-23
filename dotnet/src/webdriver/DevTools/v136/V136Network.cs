@@ -192,7 +192,7 @@ public class V136Network : DevTools.Network
         var commandSettings = new FulfillRequestCommandSettings()
         {
             RequestId = requestData.RequestId,
-            ResponseCode = responseData.StatusCode!.Value,
+            ResponseCode = responseData.StatusCode ?? throw new ArgumentException("Response data status code cannot be missing", nameof(responseData)),
         };
 
         if (responseData.Headers.Count > 0 || responseData.CookieHeaders.Count > 0)
