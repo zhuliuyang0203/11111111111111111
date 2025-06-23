@@ -1,4 +1,4 @@
-// <copyright file="Request.cs" company="Selenium Committers">
+// <copyright file="HistoryUpdatedEventArgs.cs" company="Selenium Committers">
 // Licensed to the Software Freedom Conservancy (SFC) under one
 // or more contributor license agreements.  See the NOTICE file
 // distributed with this work for additional information
@@ -17,14 +17,9 @@
 // under the License.
 // </copyright>
 
-namespace OpenQA.Selenium.BiDi.Network;
+using System;
 
-public sealed class Request
-{
-    internal Request(string id)
-    {
-        Id = id;
-    }
+namespace OpenQA.Selenium.BiDi.BrowsingContext;
 
-    public string Id { get; private set; }
-}
+public sealed record HistoryUpdatedEventArgs(BiDi BiDi, BrowsingContext Context, DateTimeOffset Timestamp, string Url)
+    : BrowsingContextEventArgs(BiDi, Context);
