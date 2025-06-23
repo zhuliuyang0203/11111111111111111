@@ -47,7 +47,7 @@ public class HttpResponseData
     /// <summary>
     /// Gets or sets the numeric status code of the HTTP response.
     /// </summary>
-    public long StatusCode { get; set; }
+    public long? StatusCode { get; set; }
 
     /// <summary>
     /// Gets or sets the body of the HTTP response.

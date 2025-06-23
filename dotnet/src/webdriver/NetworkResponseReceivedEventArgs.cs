@@ -59,7 +59,7 @@ public class NetworkResponseReceivedEventArgs : EventArgs
     /// <summary>
     /// Gets the HTTP status code of the network response.
     /// </summary>
-    public long ResponseStatusCode { get; }
+    public long? ResponseStatusCode { get; }
 
     /// <summary>
     /// Gets the body of the network response.

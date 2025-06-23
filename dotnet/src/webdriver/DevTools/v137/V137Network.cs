@@ -192,7 +192,7 @@ public class V137Network : DevTools.Network
         var commandSettings = new FulfillRequestCommandSettings()
         {
             RequestId = requestData.RequestId,
-            ResponseCode = responseData.StatusCode,
+            ResponseCode = responseData.StatusCode.GetValueOrDefault(),
         };
 
         if (responseData.Headers.Count > 0 || responseData.CookieHeaders.Count > 0)
@@ -354,7 +354,7 @@ public class V137Network : DevTools.Network
                 RequestId = e.RequestId,
                 Url = e.Request.Url,
                 ResourceType = e.ResourceType.ToString(),
-                StatusCode = e.ResponseStatusCode.GetValueOrDefault(),
+                StatusCode = e.ResponseStatusCode,
                 ErrorReason = e.ResponseErrorReason?.ToString()
             };
 
