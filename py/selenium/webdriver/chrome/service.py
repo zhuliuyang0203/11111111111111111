@@ -33,17 +33,19 @@ class Service(service.ChromiumService):
     :param log_output: (Optional) int representation of STDOUT/DEVNULL, any IO instance or String path to file.
     :param env: (Optional) Mapping of environment variables for the new process, defaults to `os.environ`.
     """
+
     _service_args: list[str]
+
     def __init__(
         self,
         executable_path: Optional[str] = None,
         port: int = 0,
-        service_args: Optional[list[str]] = None,
+        service_args: Optional[Sequence[str]] = None,
         log_output: Optional[SubprocessStdAlias] = None,
         env: Optional[Mapping[str, str]] = None,
         **kwargs,
     ) -> None:
-        self._service_args = service_args or []
+        self._service_args = list(service_args or [])
 
         super().__init__(
             executable_path=executable_path,

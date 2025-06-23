@@ -39,7 +39,7 @@ class Service(service.ChromiumService):
         executable_path: Optional[str] = None,
         port: int = 0,
         log_output: Optional[SubprocessStdAlias] = None,
-        service_args: Optional[list[str]] = None,
+        service_args: Optional[Sequence[str]] = None,
         env: Optional[Mapping[str, str]] = None,
         driver_path_env_key: Optional[str] = None,
         **kwargs,

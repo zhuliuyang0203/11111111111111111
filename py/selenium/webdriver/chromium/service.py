@@ -42,7 +42,7 @@ class ChromiumService(service.Service):
         self,
         executable_path: Optional[str] = None,
         port: int = 0,
-        service_args: Optional[list[str]] = None,
+        service_args: Optional[Sequence[str]] = None,
         log_output: Optional[SubprocessStdAlias] = None,
         env: Optional[Mapping[str, str]] = None,
         driver_path_env_key: Optional[str] = None,
