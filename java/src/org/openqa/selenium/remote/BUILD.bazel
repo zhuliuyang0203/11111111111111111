@@ -78,6 +78,7 @@ java_library(
         "//java/src/org/openqa/selenium/support/decorators",
         artifact("com.google.guava:guava"),
         artifact("net.bytebuddy:byte-buddy"),
+        artifact("org.jspecify:jspecify"),
     ],
 )
 
