@@ -127,6 +127,13 @@
 const { Browser } = require('./lib/capabilities')
 const chromium = require('./chromium')
 const CHROME_CAPABILITY_KEY = 'goog:chromeOptions'
+const path = require('node:path')
+let runfiles = null
+try {
+  runfiles = require('@bazel/runfiles').runfiles
+} catch (e) {
+  // Ignore if @bazel/runfiles is not available
+}
 
 /**
  * Environment variable that defines the location of the ChromeDriver executable.
@@ -152,7 +159,21 @@ class ServiceBuilder extends chromium.ServiceBuilder {
    *     cannot be found on the PATH.
    */
   constructor(opt_exe) {
-    super(opt_exe || process.env[CHROME_DRIVER_EXE_ENV_VAR])
+    let exePath = opt_exe || process.env[CHROME_DRIVER_EXE_ENV_VAR]
+    
+    // If path is from env variable and appears to be a relative path, try to resolve it using runfiles
+    if (!opt_exe && exePath && !path.isAbsolute(exePath) && runfiles) {
+      try {
+        const resolvedPath = runfiles.resolve(exePath)
+        if (resolvedPath) {
+          exePath = resolvedPath
+        }
+      } catch (e) {
+        // If resolution fails, use the original path
+      }
+    }
+    
+    super(exePath)
   }
 }
 
