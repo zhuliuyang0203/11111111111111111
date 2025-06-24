@@ -96,5 +96,5 @@ class Keys:
     RIGHT_COMMAND = "\ue053"
 
     # Symbolic macOS keys not yet standardized
-    OPTIONS = "\ue050" # TODO: verify Unicode value with WebDriver spec
-    FUNCTION = "\ue051" # TODO: symbolic only; confirm or remove in future
+    OPTIONS = "\ue050"  # TODO: verify Unicode value with WebDriver spec
+    FUNCTION = "\ue051"  # TODO: symbolic only; confirm or remove in future
