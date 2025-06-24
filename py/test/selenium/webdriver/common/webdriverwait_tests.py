@@ -18,12 +18,15 @@
 import time
 
 import pytest
+from urllib3.exceptions import ReadTimeoutError
 
-from selenium.common.exceptions import InvalidElementStateException
-from selenium.common.exceptions import InvalidSelectorException
-from selenium.common.exceptions import StaleElementReferenceException
-from selenium.common.exceptions import TimeoutException
-from selenium.common.exceptions import WebDriverException
+from selenium.common.exceptions import (
+    InvalidElementStateException,
+    InvalidSelectorException,
+    StaleElementReferenceException,
+    TimeoutException,
+    WebDriverException,
+)
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
@@ -204,7 +207,8 @@ def test_expected_condition_text_to_be_present_in_element(driver, pages):
     with pytest.raises(TimeoutException):
         WebDriverWait(driver, 0.01).until(EC.text_to_be_present_in_element((By.ID, "unwrappable"), "Expected"))
     driver.execute_script(
-        "setTimeout(function(){var el = document.getElementById('unwrappable'); el.textContent = el.innerText = 'Unwrappable Expected text'}, 200)"
+        "setTimeout(function(){var el = document.getElementById('unwrappable'); el.textContent = el.innerText = "
+        + "'Unwrappable Expected text'}, 200)"
     )
     WebDriverWait(driver, 5).until(EC.text_to_be_present_in_element((By.ID, "unwrappable"), "Expected"))
     assert "Unwrappable Expected text" == driver.find_element(By.ID, "unwrappable").text
@@ -357,3 +361,14 @@ def test_expected_condition_attribute_to_be_include_in_element(driver, pages):
         WebDriverWait(driver, 0.01).until(EC.element_attribute_to_include((By.ID, "inputRequired"), "test"))
     value = WebDriverWait(driver, 5).until(EC.element_attribute_to_include((By.ID, "inputRequired"), "value"))
     assert value is not None
+
+
+def test_driver_with_http_timeout(driver, pages):
+    """This test starts a webdriver with an http client timeout set less than the implicit
+    wait, and verifies the http timeout is triggered first when waiting for an element.
+    """
+    pages.load("simpleTest.html")
+    driver.command_executor.client_config.timeout = 6
+    driver.implicitly_wait(8)
+    with pytest.raises(ReadTimeoutError):
+        driver.find_element(By.ID, "no_element_to_be_found")
