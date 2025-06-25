@@ -39,7 +39,6 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.environment.InProcessTestEnvironment;
 import org.openqa.selenium.environment.webserver.AppServer;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.testing.Ignore;
 
 class FederatedCredentialManagementTest {
 
@@ -88,7 +87,6 @@ class FederatedCredentialManagementTest {
   }
 
   @Test
-  @Ignore(value = CHROME, reason = "https://issues.chromium.org/u/0/issues/425801332")
   void testDismissDialog() {
     fedcmDriver.setDelayEnabled(false);
     assertNull(fedcmDriver.getFederatedCredentialManagementDialog());
@@ -112,7 +110,6 @@ class FederatedCredentialManagementTest {
   }
 
   @Test
-  @Ignore(value = CHROME, reason = "https://issues.chromium.org/u/0/issues/425801332")
   void testSelectAccount() {
     assertNull(fedcmDriver.getFederatedCredentialManagementDialog());
 
@@ -133,7 +130,6 @@ class FederatedCredentialManagementTest {
   }
 
   @Test
-  @Ignore(value = CHROME, reason = "https://issues.chromium.org/u/0/issues/425801332")
   void testGetAccounts() {
     assertNull(fedcmDriver.getFederatedCredentialManagementDialog());
 
