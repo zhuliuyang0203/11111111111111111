@@ -133,12 +133,13 @@ public class Select implements ISelect, WrapsElement {
     boolean selectedAnyVisible = false;
 
     for (WebElement option : options) {
-      if (!hasCssPropertyAndVisible(option)) {
-        throw new NoSuchElementException("Invisible option with text: " + text);
-      }
-      setSelected(option, true);
-      if (!isMultiple()) {
-        return;
+      if (hasCssPropertyAndVisible(option)) {
+        // throw new NoSuchElementException("Invisible option with text: " + text);
+        setSelected(option, true);
+        selectedAnyVisible = true;
+        if (!isMultiple()) {
+          return;
+        }
       }
     }
 
