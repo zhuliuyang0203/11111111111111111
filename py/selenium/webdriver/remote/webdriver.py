@@ -29,7 +29,7 @@ from abc import ABCMeta
 from base64 import b64decode, urlsafe_b64encode
 from contextlib import asynccontextmanager, contextmanager
 from importlib import import_module
-from typing import Any, Optional, Union
+from typing import Any, Optional, Union, cast
 
 from selenium.common.exceptions import (
     InvalidArgumentException,
@@ -123,8 +123,13 @@ def get_remote_connection(
     candidates = [ChromeRemoteConnection, EdgeRemoteConnection, SafariRemoteConnection, FirefoxRemoteConnection]
     handler = next((c for c in candidates if c.browser_name == capabilities.get("browserName")), RemoteConnection)
 
+    if hasattr(command_executor, "client_config") and command_executor.client_config:
+        remote_server_addr = command_executor.client_config.remote_server_addr
+    else:
+        remote_server_addr = command_executor
+
     return handler(
-        remote_server_addr=command_executor,
+        remote_server_addr=remote_server_addr,
         keep_alive=keep_alive,
         ignore_proxy=ignore_local_proxy,
         client_config=client_config,
@@ -132,7 +137,7 @@ def get_remote_connection(
 
 
 def create_matches(options: list[BaseOptions]) -> dict:
-    capabilities = {"capabilities": {}}
+    capabilities: dict[str, Any] = {"capabilities": {}}
     opts = []
     for opt in options:
         opts.append(opt.to_capabilities())
@@ -155,9 +160,9 @@ def create_matches(options: list[BaseOptions]) -> dict:
     for k, v in samesies.items():
         always[k] = v
 
-    for i in opts:
+    for opt_dict in opts:
         for k in always:
-            del i[k]
+            del opt_dict[k]
 
     capabilities["capabilities"]["alwaysMatch"] = always
     capabilities["capabilities"]["firstMatch"] = opts
@@ -197,7 +202,7 @@ class WebDriver(BaseWebDriver):
         file_detector: Optional[FileDetector] = None,
         options: Optional[Union[BaseOptions, list[BaseOptions]]] = None,
         locator_converter: Optional[LocatorConverter] = None,
-        web_element_cls: Optional[type] = None,
+        web_element_cls: Optional[type[WebElement]] = None,
         client_config: Optional[ClientConfig] = None,
     ) -> None:
         """Create a new driver that will issue commands using the wire
@@ -243,9 +248,9 @@ class WebDriver(BaseWebDriver):
                 client_config=client_config,
             )
         self._is_remote = True
-        self.session_id = None
-        self.caps = {}
-        self.pinned_scripts = {}
+        self.session_id: Optional[str] = None
+        self.caps: dict[str, Any] = {}
+        self.pinned_scripts: dict[str, Any] = {}
         self.error_handler = ErrorHandler()
         self._switch_to = SwitchTo(self)
         self._mobile = Mobile(self)
@@ -445,7 +450,8 @@ class WebDriver(BaseWebDriver):
             elif "sessionId" not in params:
                 params["sessionId"] = self.session_id
 
-        response = self.command_executor.execute(driver_command, params)
+        response = cast(RemoteConnection, self.command_executor).execute(driver_command, params)
+
         if response:
             self.error_handler.check_response(response)
             response["value"] = self._unwrap_value(response.get("value", None))
@@ -608,7 +614,8 @@ class WebDriver(BaseWebDriver):
             self.execute(Command.QUIT)
         finally:
             self.stop_client()
-            self.command_executor.close()
+            executor = cast(RemoteConnection, self.command_executor)
+            executor.close()
 
     @property
     def current_window_handle(self) -> str:
@@ -663,7 +670,7 @@ class WebDriver(BaseWebDriver):
         --------
         >>> driver.print_page()
         """
-        options = {}
+        options: Union[dict[str, Any], Any] = {}
         if print_options:
             options = print_options.to_dict()
 
@@ -946,7 +953,10 @@ class WebDriver(BaseWebDriver):
 
         if isinstance(by, RelativeBy):
             _pkg = ".".join(__name__.split(".")[:-1])
-            raw_function = pkgutil.get_data(_pkg, "findElements.js").decode("utf8")
+            raw_data = pkgutil.get_data(_pkg, "findElements.js")
+            if raw_data is None:
+                raise FileNotFoundError(f"Could not find findElements.js in package {_pkg}")
+            raw_function = raw_data.decode("utf8")
             find_element_js = f"/* findElements */return ({raw_function}).apply(null, arguments);"
             return self.execute_script(find_element_js, by.to_dict())
 
@@ -1410,10 +1420,13 @@ class WebDriver(BaseWebDriver):
         import urllib3
 
         http = urllib3.PoolManager()
-        if self.caps.get("browserName") == "chrome":
-            debugger_address = self.caps.get("goog:chromeOptions").get("debuggerAddress")
-        elif self.caps.get("browserName") == "MicrosoftEdge":
-            debugger_address = self.caps.get("ms:edgeOptions").get("debuggerAddress")
+        try:
+            if self.caps.get("browserName") == "chrome":
+                debugger_address = self.caps.get("goog:chromeOptions").get("debuggerAddress")
+            elif self.caps.get("browserName") == "MicrosoftEdge":
+                debugger_address = self.caps.get("ms:edgeOptions").get("debuggerAddress")
+        except AttributeError:
+            raise WebDriverException("Can't get debugger address.")
 
         res = http.request("GET", f"http://{debugger_address}/json/version")
         data = json.loads(res.data)
@@ -1440,7 +1453,7 @@ class WebDriver(BaseWebDriver):
         self._authenticator_id = self.execute(Command.ADD_VIRTUAL_AUTHENTICATOR, options.to_dict())["value"]
 
     @property
-    def virtual_authenticator_id(self) -> str:
+    def virtual_authenticator_id(self) -> Optional[str]:
         """Returns the id of the virtual authenticator.
 
         Example:
