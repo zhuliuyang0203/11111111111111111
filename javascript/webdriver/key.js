@@ -98,6 +98,6 @@ webdriver.Key = {
   RIGHT_COMMAND: '\uE053',
 
   // Symbolic macOS keys
-  OPTIONS:       '\uE050',  // TODO: verify Unicode value with WebDriver spec
+  OPTIONS:       '\uE052',  // TODO: verify Unicode value with WebDriver spec
   FUNCTION:      '\uE051'   // TODO: symbolic only; confirm or remove in future
 };
