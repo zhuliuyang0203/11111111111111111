@@ -31,10 +31,13 @@ class Keys:
     ENTER = "\ue007"
     SHIFT = "\ue008"
     LEFT_SHIFT = SHIFT
+    RIGHT_SHIFT = "\ue050"
     CONTROL = "\ue009"
     LEFT_CONTROL = CONTROL
+    RIGHT_CONTROL = "\ue051"
     ALT = "\ue00a"
     LEFT_ALT = ALT
+    RIGHT_ALT = "\ue052"
     PAUSE = "\ue00b"
     ESCAPE = "\ue00c"
     SPACE = "\ue00d"
@@ -58,7 +61,7 @@ class Keys:
     NUMPAD0 = "\ue01a"  # number pad keys
     NUMPAD1 = "\ue01b"
     NUMPAD2 = "\ue01c"
-    NUMPAD3 = "\ue01d"
+    NUMPAD3 = "x\ue01d"
     NUMPAD4 = "\ue01e"
     NUMPAD5 = "\ue01f"
     NUMPAD6 = "\ue020"
@@ -86,15 +89,15 @@ class Keys:
     F12 = "\ue03c"
 
     META = "\ue03d"
+    LEFT_META = META
+    RIGHT_META = "\ue053"
     COMMAND = "\ue03d"
+    LEFT_COMMAND = COMMAND
     ZENKAKU_HANKAKU = "\ue040"
 
-    # Extended macOS/ChromeDriver keys (based on observed Chrome usage)
-    RIGHT_SHIFT = "\ue050"
-    RIGHT_CONTROL = "\ue051"
-    RIGHT_ALT = "\ue052"
-    RIGHT_COMMAND = "\ue053"
-
-    # Symbolic macOS keys not yet standardized
-    OPTIONS = "\ue050"  # TODO: verify Unicode value with WebDriver spec
-    FUNCTION = "\ue051"  # TODO: symbolic only; confirm or remove in future
+    # Extended macOS keys
+    LEFT_OPTION = LEFT_ALT
+    RIGHT_OPTION = RIGHT_ALT
+    
+    
+    
