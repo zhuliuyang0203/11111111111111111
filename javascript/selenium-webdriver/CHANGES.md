@@ -1,20 +1,9 @@
 ## 4.34.0
 
 - Bumping to nightly versions
-- Add warning when ftp proxy is used
-    > Related to #15905
-- Update dependency ws to ^8.18.2 (#15780)
-    > * Update dependency ws to ^8.18.2
-    > * Repin dependencies
-- Update dependency sinon to ^19.0.5 (#15771)
-    > * Update dependency sinon to ^19.0.5
-    > * Repin dependencies
-- Update dependency multer to v1.4.5-lts.2 (#15770)
-    > * Update dependency multer to v1.4.5-lts.2
-    > * Repin dependencies
-- [JS] specify min required node versiton to >=20.0.0
-- update devtools versions
-- bump versions in preparation for release
+- Add warning when ftp proxy is used (#15905)
+- specify min required node version to >=20.0.0
+- [cdp] Add CDP for Chrome 138 and remove 135
 
 ## 4.33.0
 
