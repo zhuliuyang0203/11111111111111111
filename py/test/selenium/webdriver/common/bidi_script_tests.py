@@ -593,20 +593,20 @@ def test_unpin_script(driver, pages):
     assert result["value"] == "undefined"
 
 
-def test_execute_script_with_undefined_argument(driver, pages):
+def test_execute_script_with_null_argument(driver, pages):
     """Test executing script with undefined argument."""
     pages.load("blank.html")
 
     result = driver.script.execute(
         """(arg) => {
-            if(arg!==undefined)
-                throw Error("Argument should be undefined, but was "+arg);
+            if(arg!==null)
+                throw Error("Argument should be null, but was "+arg);
             return arg;
         }""",
         None,
     )
 
-    assert result["type"] == "undefined"
+    assert result["type"] == "null"
 
 
 def test_execute_script_with_number_argument(driver, pages):
