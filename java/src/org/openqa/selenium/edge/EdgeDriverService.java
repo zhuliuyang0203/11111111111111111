@@ -29,12 +29,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import org.jspecify.annotations.Nullable;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.chromium.ChromiumDriverLogLevel;
 import org.openqa.selenium.remote.service.DriverFinder;
 import org.openqa.selenium.remote.service.DriverService;
-import org.jspecify.annotations.Nullable;
 
 /** Manages the life and death of the MSEdgeDriver */
 public class EdgeDriverService extends DriverService {
@@ -322,7 +322,11 @@ public class EdgeDriverService extends DriverService {
 
     @Override
     protected EdgeDriverService createDriverService(
-        @Nullable File exe, int port, @Nullable Duration timeout, @Nullable List<String> args, @Nullable Map<String, String> environment) {
+        @Nullable File exe,
+        int port,
+        @Nullable Duration timeout,
+        @Nullable List<String> args,
+        @Nullable Map<String, String> environment) {
       try {
         return new EdgeDriverService(exe, port, timeout, args, environment);
       } catch (IOException e) {
