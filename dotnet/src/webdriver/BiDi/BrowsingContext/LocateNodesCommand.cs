@@ -44,7 +44,7 @@ public sealed record LocateNodesResult : EmptyResult, IReadOnlyList<Script.NodeR
         Nodes = nodes;
     }
 
-    public readonly IReadOnlyList<Script.NodeRemoteValue> Nodes;
+    public IReadOnlyList<Script.NodeRemoteValue> Nodes { get; }
 
     public Script.NodeRemoteValue this[int index] => Nodes[index];
 
