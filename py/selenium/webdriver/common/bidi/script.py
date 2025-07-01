@@ -18,6 +18,7 @@
 import datetime
 import math
 from dataclasses import dataclass
+from functools import singledispatchmethod
 from typing import Any, Optional
 
 from selenium.common.exceptions import WebDriverException
@@ -232,6 +233,70 @@ class RealmDestroyed:
         return cls(realm=json["realm"])
 
 
+class _SupportedTypes:
+    def __init__(self, script):
+        self.script = script
+
+    @singledispatchmethod
+    def _type(self, value):
+        # default case for str and other types, convert to string
+        return {"type": "string", "value": str(value)}
+
+    @_type.register
+    def _(self, value: None):
+        return {"type": "null"}
+
+    @_type.register
+    def _(self, value: bool):
+        return {"type": "boolean", "value": value}
+
+    @_type.register
+    def _(self, value: set):
+        return {"type": "set", "value": [self.script.convert_to_local_value(item) for item in value]}
+
+    @_type.register
+    def _(self, value: list | tuple):
+        return {"type": "array", "value": [self.script.convert_to_local_value(item) for item in value]}
+
+    @_type.register
+    def _(self, value: dict):
+        value = [
+            [self.script.convert_to_local_value(k), self.script.convert_to_local_value(v)] for k, v in value.items()
+        ]
+        return {"type": "object", "value": value}
+
+    @_type.register
+    def _(self, value: int):
+        JS_MAX_SAFE_INTEGER = 9007199254740991
+        if value > JS_MAX_SAFE_INTEGER or value < -JS_MAX_SAFE_INTEGER:
+            return {"type": "bigint", "value": str(value)}
+        return {"type": "number", "value": value}
+
+    @_type.register
+    def _(self, value: float):
+        if math.isnan(value):
+            return {"type": "number", "value": "NaN"}
+        elif math.isinf(value):
+            if value > 0:
+                return {"type": "number", "value": "Infinity"}
+            else:
+                return {"type": "number", "value": "-Infinity"}
+        elif value == 0.0 and math.copysign(1.0, value) < 0:
+            return {"type": "number", "value": "-0"}
+        return {"type": "number", "value": value}
+
+    @_type.register
+    def _(self, value: datetime.datetime):
+        # Convert Python datetime to JavaScript Date (ISO 8601 format)
+        return {"type": "date", "value": value.isoformat() + "Z" if value.tzinfo is None else value.isoformat()}
+
+    @_type.register
+    def _(self, value: datetime.date):
+        # Convert Python date to JavaScript Date
+        dt = datetime.datetime.combine(value, datetime.time.min).replace(tzinfo=datetime.timezone.utc)
+        return {"type": "date", "value": dt.isoformat()}
+
+
 class Script:
     """BiDi implementation of the script module."""
 
@@ -334,51 +399,11 @@ class Script:
         """
         Converts a Python value to BiDi LocalValue format.
         """
-        if value is None:
-            return {"type": "null"}
-        elif isinstance(value, bool):
-            return {"type": "boolean", "value": value}
-        elif isinstance(value, (int, float)):
-            if isinstance(value, float):
-                if math.isnan(value):
-                    return {"type": "number", "value": "NaN"}
-                elif math.isinf(value):
-                    if value > 0:
-                        return {"type": "number", "value": "Infinity"}
-                    else:
-                        return {"type": "number", "value": "-Infinity"}
-                elif value == 0.0 and math.copysign(1.0, value) < 0:
-                    return {"type": "number", "value": "-0"}
+        supported_types = _SupportedTypes(self)
+        return getattr(supported_types, "_type")(value)
 
-            JS_MAX_SAFE_INTEGER = 9007199254740991
-            if isinstance(value, int) and (value > JS_MAX_SAFE_INTEGER or value < -JS_MAX_SAFE_INTEGER):
-                return {"type": "bigint", "value": str(value)}
-
-            return {"type": "number", "value": value}
-
-        elif isinstance(value, str):
-            return {"type": "string", "value": value}
-        elif isinstance(value, datetime.datetime):
-            # Convert Python datetime to JavaScript Date (ISO 8601 format)
-            return {"type": "date", "value": value.isoformat() + "Z" if value.tzinfo is None else value.isoformat()}
-        elif isinstance(value, datetime.date):
-            # Convert Python date to JavaScript Date
-            dt = datetime.datetime.combine(value, datetime.time.min).replace(tzinfo=datetime.timezone.utc)
-            return {"type": "date", "value": dt.isoformat()}
-        elif isinstance(value, set):
-            return {"type": "set", "value": [self.__convert_to_local_value(item) for item in value]}
-        elif isinstance(value, (list, tuple)):
-            return {"type": "array", "value": [self.__convert_to_local_value(item) for item in value]}
-        elif isinstance(value, dict):
-            return {
-                "type": "object",
-                "value": [
-                    [self.__convert_to_local_value(k), self.__convert_to_local_value(v)] for k, v in value.items()
-                ],
-            }
-        else:
-            # For other types, convert to string
-            return {"type": "string", "value": str(value)}
+    def convert_to_local_value(self, value) -> dict:
+        return self.__convert_to_local_value(value)
 
     # low-level APIs for script module
     def _add_preload_script(
