@@ -255,11 +255,11 @@ class _SupportedTypes:
         return {"type": "set", "value": [self.script.convert_to_local_value(item) for item in value]}
 
     @_type.register
-    def _(self, value: List):
+    def _(self, value: list):
         return {"type": "array", "value": [self.script.convert_to_local_value(item) for item in value]}
     
     @_type.register
-    def _(self, value: Tuple):
+    def _(self, value: tuple):
         return {"type": "array", "value": [self.script.convert_to_local_value(item) for item in value]}
 
     @_type.register
