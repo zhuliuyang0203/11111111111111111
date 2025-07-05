@@ -101,7 +101,7 @@ Class CommandOptions  <a class="header-action link-secondary" title="View source
   <div class="markdown conceptual"></div>
 
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public record CommandOptions : IEquatable&lt;CommandOptions&gt;</code></pre>
+    <pre><code class="lang-csharp hljs">public abstract class CommandOptions</code></pre>
   </div>
 
 
@@ -115,57 +115,52 @@ Class CommandOptions  <a class="header-action link-secondary" title="View source
     </dd>
   </dl>
 
-  <dl class="typelist implements">
-    <dt>Implements</dt>
-    <dd>
-      <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;<a class="xref" href="OpenQA.Selenium.BiDi.Communication.CommandOptions.html">CommandOptions</a>&gt;</div>
-    </dd>
-  </dl>
 
   <dl class="typelist derived">
     <dt>Derived</dt>
     <dd>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Browser.CloseOptions.html">CloseOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Browser.CreateUserContextOptions.html">CreateUserContextOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Browser.GetClientWindowsOptions.html">GetClientWindowsOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Browser.GetUserContextsOptions.html">GetUserContextsOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Browser.RemoveUserContextOptions.html">RemoveUserContextOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.BrowsingContext.ActivateOptions.html">ActivateOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.BrowsingContext.CaptureScreenshotOptions.html">CaptureScreenshotOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.BrowsingContext.CloseOptions.html">CloseOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.BrowsingContext.CreateOptions.html">CreateOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.BrowsingContext.GetTreeOptions.html">GetTreeOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.BrowsingContext.HandleUserPromptOptions.html">HandleUserPromptOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.BrowsingContext.LocateNodesOptions.html">LocateNodesOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.BrowsingContext.NavigateOptions.html">NavigateOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.BrowsingContext.PrintOptions.html">PrintOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.BrowsingContext.ReloadOptions.html">ReloadOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.BrowsingContext.SetViewportOptions.html">SetViewportOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.BrowsingContext.TraverseHistoryOptions.html">TraverseHistoryOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Input.PerformActionsOptions.html">PerformActionsOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Input.ReleaseActionsOptions.html">ReleaseActionsOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Input.SetFilesOptions.html">SetFilesOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Network.AddInterceptOptions.html">AddInterceptOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Network.ContinueRequestOptions.html">ContinueRequestOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Network.ContinueResponseOptions.html">ContinueResponseOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Network.ContinueWithAuthOptions.html">ContinueWithAuthOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Network.FailRequestOptions.html">FailRequestOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Network.ProvideResponseOptions.html">ProvideResponseOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Network.RemoveInterceptOptions.html">RemoveInterceptOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Network.SetCacheBehaviorOptions.html">SetCacheBehaviorOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.AddPreloadScriptOptions.html">AddPreloadScriptOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.CallFunctionOptions.html">CallFunctionOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.EvaluateOptions.html">EvaluateOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.GetRealmsOptions.html">GetRealmsOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Script.RemovePreloadScriptOptions.html">RemovePreloadScriptOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Session.EndOptions.html">EndOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Session.NewOptions.html">NewOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Session.StatusOptions.html">StatusOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Session.SubscribeOptions.html">SubscribeOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Session.UnsubscribeByAttributesOptions.html">UnsubscribeByAttributesOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Session.UnsubscribeByIdOptions.html">UnsubscribeByIdOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Storage.GetCookiesOptions.html">GetCookiesOptions</a></div>
-      <div><a class="xref" href="OpenQA.Selenium.BiDi.Modules.Storage.SetCookieOptions.html">SetCookieOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Browser.CloseOptions.html">CloseOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Browser.CreateUserContextOptions.html">CreateUserContextOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Browser.GetClientWindowsOptions.html">GetClientWindowsOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Browser.GetUserContextsOptions.html">GetUserContextsOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Browser.RemoveUserContextOptions.html">RemoveUserContextOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.BrowsingContext.ActivateOptions.html">ActivateOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.BrowsingContext.CaptureScreenshotOptions.html">CaptureScreenshotOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.BrowsingContext.CloseOptions.html">CloseOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.BrowsingContext.CreateOptions.html">CreateOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.BrowsingContext.GetTreeOptions.html">GetTreeOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.BrowsingContext.HandleUserPromptOptions.html">HandleUserPromptOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.BrowsingContext.LocateNodesOptions.html">LocateNodesOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.BrowsingContext.NavigateOptions.html">NavigateOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.BrowsingContext.PrintOptions.html">PrintOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.BrowsingContext.ReloadOptions.html">ReloadOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.BrowsingContext.SetViewportOptions.html">SetViewportOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.BrowsingContext.TraverseHistoryOptions.html">TraverseHistoryOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Input.PerformActionsOptions.html">PerformActionsOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Input.ReleaseActionsOptions.html">ReleaseActionsOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Input.SetFilesOptions.html">SetFilesOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Network.AddInterceptOptions.html">AddInterceptOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Network.ContinueRequestOptions.html">ContinueRequestOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Network.ContinueResponseOptions.html">ContinueResponseOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Network.ContinueWithAuthOptions.html">ContinueWithAuthOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Network.FailRequestOptions.html">FailRequestOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Network.ProvideResponseOptions.html">ProvideResponseOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Network.RemoveInterceptOptions.html">RemoveInterceptOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Network.SetCacheBehaviorOptions.html">SetCacheBehaviorOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Script.AddPreloadScriptOptions.html">AddPreloadScriptOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Script.CallFunctionOptions.html">CallFunctionOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Script.EvaluateOptions.html">EvaluateOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Script.GetRealmsOptions.html">GetRealmsOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Script.RemovePreloadScriptOptions.html">RemovePreloadScriptOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Session.EndOptions.html">EndOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Session.NewOptions.html">NewOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Session.StatusOptions.html">StatusOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Session.SubscribeOptions.html">SubscribeOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Session.UnsubscribeByAttributesOptions.html">UnsubscribeByAttributesOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Session.UnsubscribeByIdOptions.html">UnsubscribeByIdOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Storage.DeleteCookiesOptions.html">DeleteCookiesOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Storage.GetCookiesOptions.html">GetCookiesOptions</a></div>
+      <div><a class="xref" href="OpenQA.Selenium.BiDi.Storage.SetCookieOptions.html">SetCookieOptions</a></div>
     </dd>
   </dl>
 

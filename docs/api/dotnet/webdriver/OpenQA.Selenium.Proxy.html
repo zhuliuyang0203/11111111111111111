@@ -230,7 +230,7 @@ Class Proxy  <a class="header-action link-secondary" title="View source" href="h
 
   <h3 id="OpenQA_Selenium_Proxy_BypassProxyAddresses" data-uid="OpenQA.Selenium.Proxy.BypassProxyAddresses">
   BypassProxyAddresses
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Proxy.cs/#L276"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Proxy.cs/#L277"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets the list of address for which to bypass the proxy as an array.</p>
@@ -274,6 +274,7 @@ public ReadOnlyCollection&lt;string&gt;? BypassProxyAddresses { get; }</code></p
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">[JsonPropertyName(&quot;ftpProxy&quot;)]
 [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+[Obsolete(&quot;FTP proxy support is deprecated and will be removed in the 4.37 version.&quot;)]
 public string? FtpProxy { get; set; }</code></pre>
   </div>
 
@@ -298,7 +299,7 @@ public string? FtpProxy { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_Proxy_HttpProxy" data-uid="OpenQA.Selenium.Proxy.HttpProxy">
   HttpProxy
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Proxy.cs/#L259"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Proxy.cs/#L260"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the value of the proxy for the HTTP protocol.</p>
@@ -398,7 +399,7 @@ public ProxyKind Kind { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_Proxy_ProxyAutoConfigUrl" data-uid="OpenQA.Selenium.Proxy.ProxyAutoConfigUrl">
   ProxyAutoConfigUrl
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Proxy.cs/#L294"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Proxy.cs/#L295"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the URL used for proxy automatic configuration.</p>
@@ -465,7 +466,7 @@ public string SerializableProxyKind { get; }</code></pre>
 
   <h3 id="OpenQA_Selenium_Proxy_SocksPassword" data-uid="OpenQA.Selenium.Proxy.SocksPassword">
   SocksPassword
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Proxy.cs/#L392"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Proxy.cs/#L393"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the value of password for the SOCKS proxy.</p>
@@ -499,7 +500,7 @@ public string? SocksPassword { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_Proxy_SocksProxy" data-uid="OpenQA.Selenium.Proxy.SocksProxy">
   SocksProxy
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Proxy.cs/#L328"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Proxy.cs/#L329"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the value of the proxy for the SOCKS protocol.</p>
@@ -533,7 +534,7 @@ public string? SocksProxy { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_Proxy_SocksUserName" data-uid="OpenQA.Selenium.Proxy.SocksUserName">
   SocksUserName
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Proxy.cs/#L345"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Proxy.cs/#L346"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the value of username for the SOCKS proxy.</p>
@@ -567,7 +568,7 @@ public string? SocksUserName { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_Proxy_SocksVersion" data-uid="OpenQA.Selenium.Proxy.SocksVersion">
   SocksVersion
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Proxy.cs/#L363"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Proxy.cs/#L364"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the value of the protocol version for the SOCKS proxy.
@@ -602,7 +603,7 @@ public int? SocksVersion { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_Proxy_SslProxy" data-uid="OpenQA.Selenium.Proxy.SslProxy">
   SslProxy
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Proxy.cs/#L311"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Proxy.cs/#L312"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Gets or sets the value of the proxy for the SSL protocol.</p>
@@ -640,7 +641,7 @@ public string? SslProxy { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_Proxy_AddBypassAddress_System_String_" data-uid="OpenQA.Selenium.Proxy.AddBypassAddress(System.String)">
   AddBypassAddress(string)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Proxy.cs/#L410"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Proxy.cs/#L411"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Adds a single address to the list of addresses against which the proxy will not be used.</p>
@@ -673,7 +674,7 @@ public string? SslProxy { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_Proxy_AddBypassAddresses_System_Collections_Generic_IEnumerable_System_String__" data-uid="OpenQA.Selenium.Proxy.AddBypassAddresses(System.Collections.Generic.IEnumerable{System.String})">
   AddBypassAddresses(IEnumerable&lt;string&gt;)
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Proxy.cs/#L433"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Proxy.cs/#L434"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Adds addresses to the list of addresses against which the proxy will not be used.</p>
@@ -706,7 +707,7 @@ public string? SslProxy { get; set; }</code></pre>
 
   <h3 id="OpenQA_Selenium_Proxy_AddBypassAddresses_System_String___" data-uid="OpenQA.Selenium.Proxy.AddBypassAddresses(System.String[])">
   AddBypassAddresses(params string[])
-  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Proxy.cs/#L424"><i class="bi bi-code-slash"></i></a>
+  <a class="header-action link-secondary" title="View source" href="https://github.com/SeleniumHQ/selenium/blob/trunk/dotnet/src/webdriver/Proxy.cs/#L425"><i class="bi bi-code-slash"></i></a>
   </h3>
 
   <div class="markdown level1 summary"><p>Adds addresses to the list of addresses against which the proxy will not be used.</p>
