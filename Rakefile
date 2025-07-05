@@ -96,9 +96,9 @@ task '//java/test/org/openqa/selenium/environment/webserver:webserver:uber' => [
 JAVA_RELEASE_TARGETS = %w[
   //java/src/org/openqa/selenium/chrome:chrome.publish
   //java/src/org/openqa/selenium/chromium:chromium.publish
-  //java/src/org/openqa/selenium/devtools/v134:v134.publish
-  //java/src/org/openqa/selenium/devtools/v132:v132.publish
-  //java/src/org/openqa/selenium/devtools/v133:v133.publish
+  //java/src/org/openqa/selenium/devtools/v137:v137.publish
+  //java/src/org/openqa/selenium/devtools/v138:v138.publish
+  //java/src/org/openqa/selenium/devtools/v136:v136.publish
   //java/src/org/openqa/selenium/edge:edge.publish
   //java/src/org/openqa/selenium/firefox:firefox.publish
   //java/src/org/openqa/selenium/grid/sessionmap/jdbc:jdbc.publish
@@ -166,7 +166,7 @@ end
 desc 'Update Selenium Manager to latest release'
 task :update_manager do |_task, _arguments|
   puts 'Updating Selenium Manager references'
-  Bazel.execute('run', args, '//scripts:selenium_manager')
+  Bazel.execute('run', [], '//scripts:selenium_manager')
 
   @git.add('common/selenium_manager.bzl')
 end
@@ -509,19 +509,23 @@ namespace :node do
   task deploy: :release
 
   desc 'Generate Node documentation'
-  task :docs, [:skip_update] do |_task, arguments|
-    abort('Aborting documentation update: nightly versions should not update docs.') if node_version.include?('nightly')
+  task :docs do |_task, arguments|
+    if node_version.include?('nightly') && !arguments.to_a.include?('force')
+      abort('Aborting documentation update: nightly versions should not update docs.')
+    end
 
     puts 'Generating Node documentation'
     FileUtils.rm_rf('build/docs/api/javascript/')
     begin
-      sh 'npm install --prefix javascript/selenium-webdriver', verbose: true
-      sh 'npm run generate-docs --prefix javascript/selenium-webdriver', verbose: true
+      Dir.chdir('javascript/selenium-webdriver') do
+        sh 'pnpm install', verbose: true
+        sh 'pnpm run generate-docs', verbose: true
+      end
     rescue StandardError => e
       puts "Node documentation generation contains errors; continuing... #{e.message}"
     end
 
-    update_gh_pages unless arguments[:skip_update]
+    update_gh_pages unless arguments.to_a.include?('skip_update')
   end
 
   desc 'Update JavaScript changelog'
@@ -542,12 +546,6 @@ namespace :node do
       File.open(file, 'w') { |f| f.puts text }
       @git.add(file)
     end
-
-    # Update package-lock.json
-    Dir.chdir('javascript/selenium-webdriver') do
-      sh 'npm install --prefix javascript/selenium-webdriver', verbose: true
-    end
-    @git.add('javascript/selenium-webdriver/package-lock.json')
   end
 end
 
@@ -611,8 +609,8 @@ namespace :py do
   end
 
   desc 'Generate Python documentation'
-  task :docs, [:skip_update] do |_task, arguments|
-    if python_version.match?(/^\d+\.\d+\.\d+\.\d+$/)
+  task :docs do |_task, arguments|
+    if python_version.match?(/^\d+\.\d+\.\d+\.\d+$/) && !arguments.to_a.include?('force')
       abort('Aborting documentation update: nightly versions should not update docs.')
     end
     puts 'Generating Python documentation'
@@ -626,7 +624,7 @@ namespace :py do
       raise
     end
 
-    update_gh_pages unless arguments[:skip_update]
+    update_gh_pages unless arguments.to_a.include?('skip_update')
   end
 
   desc 'Install Python wheel locally'
@@ -669,11 +667,6 @@ namespace :py do
     text = File.read(conf).gsub(old_short_version, new_short_version)
     File.open(conf, 'w') { |f| f.puts text }
     @git.add(conf)
-  end
-
-  desc 'Update Python Syntax'
-  task :lint do
-    sh 'tox -c py/tox.ini -e linting'
   end
 
   namespace :test do
@@ -779,8 +772,10 @@ namespace :rb do
   end
 
   desc 'Generate Ruby documentation'
-  task :docs, [:skip_update] do |_task, arguments|
-    abort('Aborting documentation update: nightly versions should not update docs.') if ruby_version.include?('nightly')
+  task :docs do |_task, arguments|
+    if ruby_version.include?('nightly') && !arguments.to_a.include?('force')
+      abort('Aborting documentation update: nightly versions should not update docs.')
+    end
     puts 'Generating Ruby documentation'
 
     FileUtils.rm_rf('build/docs/api/rb/')
@@ -788,7 +783,7 @@ namespace :rb do
     FileUtils.mkdir_p('build/docs/api')
     FileUtils.cp_r('bazel-bin/rb/docs.sh.runfiles/_main/docs/api/rb/.', 'build/docs/api/rb')
 
-    update_gh_pages unless arguments[:skip_update]
+    update_gh_pages unless arguments.to_a.include?('skip_update')
   end
 
   desc 'Update Ruby changelog'
@@ -875,8 +870,8 @@ namespace :dotnet do
   end
 
   desc 'Generate .NET documentation'
-  task :docs, [:skip_update] do |_task, arguments|
-    if dotnet_version.include?('nightly')
+  task :docs do |_task, arguments|
+    if dotnet_version.include?('nightly') && !arguments.to_a.include?('force')
       abort('Aborting documentation update: nightly versions should not update docs.')
     end
 
@@ -905,7 +900,7 @@ namespace :dotnet do
       end
     end
 
-    update_gh_pages unless arguments[:skip_update]
+    update_gh_pages unless arguments.to_a.include?('skip_update')
   end
 
   desc 'Update .NET changelog'
@@ -968,9 +963,9 @@ namespace :java do
     ENV['MAVEN_USER'] ||= ENV.fetch('SEL_M2_USER', nil)
     ENV['MAVEN_PASSWORD'] ||= ENV.fetch('SEL_M2_PASS', nil)
     read_m2_user_pass unless ENV['MAVEN_PASSWORD'] && ENV['MAVEN_USER']
-
-    repo = nightly ? 'content/repositories/snapshots' : 'service/local/staging/deploy/maven2'
-    ENV['MAVEN_REPO'] = "https://oss.sonatype.org/#{repo}"
+    repo_domain = 'central.sonatype.com'
+    repo = nightly ? "#{repo_domain}/repository/maven-snapshots" : "ossrh-staging-api.#{repo_domain}/service/local/staging/deploy/maven2/"
+    ENV['MAVEN_REPO'] = "https://#{repo}"
     ENV['GPG_SIGN'] = (!nightly).to_s
 
     if nightly
@@ -990,15 +985,15 @@ namespace :java do
   task install: :'maven-install'
 
   desc 'Generate Java documentation'
-  task :docs, [:skip_update] do |_task, arguments|
-    if java_version.include?('SNAPSHOT')
+  task :docs do |_task, arguments|
+    if java_version.include?('SNAPSHOT') && !arguments.to_a.include?('force')
       abort('Aborting documentation update: snapshot versions should not update docs.')
     end
 
     puts 'Generating Java documentation'
     Rake::Task['javadocs'].invoke
 
-    update_gh_pages unless arguments[:skip_update]
+    update_gh_pages unless arguments.to_a.include?('skip_update')
   end
 
   desc 'Update Maven dependencies'
@@ -1096,18 +1091,6 @@ namespace :rust do
     @git.add('rust/Cargo.Bazel.lock')
     @git.add('rust/Cargo.lock')
   end
-
-  # Creating a special task for this because Rust version needs to be managed at a different place than
-  # everything else; want to use changelog updates later in process
-  namespace :version do
-    desc 'Commits updates from Rust version changes'
-    task :commit do
-      @git.reset
-      commit!("update Rust version to #{rust_version}",
-              ['rust/BUILD.bazel', 'rust/Cargo.Bazel.lock', 'rust/Cargo.lock', 'rust/Cargo.toml'])
-      commit!('Rust Changelog', ['rust/CHANGELOG.md'])
-    end
-  end
 end
 
 namespace :all do
@@ -1122,7 +1105,7 @@ namespace :all do
 
     ['common/devtools/',
      'dotnet/src/webdriver/DevTools/',
-     'dotnet/src/webdriver/WebDriver.csproj',
+     'dotnet/src/webdriver/Selenium.WebDriver.csproj',
      'dotnet/test/common/DevTools/',
      'dotnet/test/common/CustomDriverConfigs/',
      'dotnet/selenium-dotnet-version.bzl',
@@ -1136,11 +1119,11 @@ namespace :all do
 
   desc 'Update all API Documentation'
   task :docs do
-    Rake::Task['java:docs'].invoke(true)
-    Rake::Task['py:docs'].invoke(true)
-    Rake::Task['rb:docs'].invoke(true)
-    Rake::Task['dotnet:docs'].invoke(true)
-    Rake::Task['node:docs'].invoke(true)
+    Rake::Task['java:docs'].invoke('skip_update')
+    Rake::Task['py:docs'].invoke('skip_update')
+    Rake::Task['rb:docs'].invoke('skip_update')
+    Rake::Task['dotnet:docs'].invoke('skip_update')
+    Rake::Task['node:docs'].invoke('skip_update')
 
     update_gh_pages
   end
@@ -1172,19 +1155,14 @@ namespace :all do
     Rake::Task['rb:release'].invoke(*args)
     Rake::Task['dotnet:release'].invoke(*args)
     Rake::Task['node:release'].invoke(*args)
-
-    unless args.include?('nightly')
-      puts 'bump all versions to nightly'
-      Rake::Task['all:version'].invoke('nightly')
-    end
   end
 
   task :lint do
     ext = /mswin|msys|mingw|cygwin|bccwin|wince|emc/.match?(RbConfig::CONFIG['host_os']) ? 'ps1' : 'sh'
     sh "./scripts/format.#{ext}", verbose: true
-    Rake::Task['py:lint'].invoke
   end
 
+  # Example: `./go all:prepare 4.31.0 early-stable`
   desc 'Update everything in preparation for a release'
   task :prepare, [:version, :channel] do |_task, arguments|
     version = arguments[:version]
@@ -1209,7 +1187,15 @@ namespace :all do
     Rake::Task['dotnet:version'].invoke(version)
     Rake::Task['rust:version'].invoke(version)
 
-    Rake::Task['all:changelogs'] unless version == 'nightly'
+    unless version == 'nightly'
+      major_minor = arguments[:version][/^\d+\.\d+/]
+      file = '.github/ISSUE_TEMPLATE/bug-report.yml'
+      old_version_pattern = /The latest released version of Selenium is (\d+\.\d+)/
+
+      text = File.read(file).gsub(old_version_pattern, "The latest released version of Selenium is #{major_minor}")
+      File.write(file, text)
+      @git.add(file)
+    end
   end
 
   desc 'Update all changelogs'
@@ -1248,8 +1234,8 @@ def update_gh_pages(force: true)
   @git.fetch('https://github.com/seleniumhq/selenium.git', {ref: 'gh-pages'})
 
   unless force
-    puts 'Stashing current changes before checkout...'
-    Git::Stash.new(@git, 'stash wip')
+    puts 'Stash changes that are not docs...'
+    @git.lib.send(:command, 'stash', ['push', '-m', 'stash wip', '--', ':(exclude)build/docs/api/'])
   end
 
   @git.checkout('gh-pages', force: force)
@@ -1317,14 +1303,4 @@ def update_changelog(version, language, path, changelog, header)
   content = File.read(changelog)
   File.write(changelog, "#{header}\n#{commits}\n\n#{content}")
   @git.add(changelog)
-end
-
-def commit!(message, files = [], all: false)
-  files.each do |file|
-    puts "adding: #{file}"
-    @git.add(file)
-  end
-  all ? @git.commit_all(message) : @git.commit(message)
-rescue Git::FailedError => e
-  puts e.message
 end
