@@ -34,7 +34,7 @@ namespace OpenQA.Selenium.BiDi.Communication;
 
 public sealed class Broker : IAsyncDisposable
 {
-    private readonly ILogger _logger = Log.GetLogger<Broker>();
+    private readonly ILogger _logger = Internal.Logging.Log.GetLogger<Broker>();
 
     private readonly BiDi _bidi;
     private readonly ITransport _transport;
@@ -103,6 +103,7 @@ public sealed class Broker : IAsyncDisposable
                 new Json.Converters.Enumerable.GetUserContextsResultConverter(),
                 new Json.Converters.Enumerable.GetClientWindowsResultConverter(),
                 new Json.Converters.Enumerable.GetRealmsResultConverter(),
+                new Json.Converters.Enumerable.GetTreeResultConverter(),
             }
         };
 
@@ -273,7 +274,7 @@ public sealed class Broker : IAsyncDisposable
         }
     }
 
-    public async Task UnsubscribeAsync(Modules.Session.Subscription subscription, EventHandler eventHandler)
+    public async Task UnsubscribeAsync(Session.Subscription subscription, EventHandler eventHandler)
     {
         var eventHandlers = _eventHandlers[eventHandler.EventName];
 

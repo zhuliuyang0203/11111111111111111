@@ -1,13 +1,11 @@
 #!/usr/bin/env python
 
 import argparse
-import hashlib
 import json
 import os
 import re
 import shutil
 import subprocess
-import sys
 from pathlib import Path
 
 import urllib3
@@ -165,7 +163,7 @@ def update_dotnet(chrome_milestone):
 
     files = [
         root_dir / "dotnet/selenium-dotnet-version.bzl",
-        root_dir / "dotnet/src/webdriver/WebDriver.csproj",
+        root_dir / "dotnet/src/webdriver/Selenium.WebDriver.csproj",
         root_dir / "dotnet/src/webdriver/DevTools/DevToolsDomains.cs",
     ]
     for file in files:
