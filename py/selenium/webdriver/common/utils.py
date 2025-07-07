@@ -45,9 +45,13 @@ def free_port() -> int:
             free_socket.bind(("::1", 0))
         except OSError:
             raise RuntimeError("Can't find free port (Unable to bind to IPv4 or IPv6)")
-    free_socket.listen(5)
-    port: int = free_socket.getsockname()[1]
-    free_socket.close()
+    try:
+        free_socket.listen(5)
+        port: int = free_socket.getsockname()[1]
+    except Exception as e:
+        raise RuntimeError(f"Can't find free port ({e})")
+    finally:
+        free_socket.close()
     return port
 
 
