@@ -31,11 +31,14 @@ def free_port() -> int:
 
     First try IPv4, but use IPv6 if it can't bind (IPv6-only system).
     """
+    free_socket = None
     try:
         # IPv4
         free_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         free_socket.bind(("127.0.0.1", 0))
     except OSError:
+        if free_socket:
+            free_socket.close()
         # IPv6
         free_socket = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
         free_socket.bind(("::1", 0))
