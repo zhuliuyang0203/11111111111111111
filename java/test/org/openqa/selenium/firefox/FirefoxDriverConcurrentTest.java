@@ -168,7 +168,7 @@ class FirefoxDriverConcurrentTest extends JupiterTestBase {
 
   @Test
   void multipleFirefoxInstancesWithBiDiEnabledCanRunSimultaneously() {
-    // Create two Firefox instances with BiDi enabled
+    // Create two Firefox instances with BiDi enabled, should use different ports
     FirefoxOptions options1 = new FirefoxOptions().enableBiDi();
     FirefoxOptions options2 = new FirefoxOptions().enableBiDi();
 
@@ -205,5 +205,29 @@ class FirefoxDriverConcurrentTest extends JupiterTestBase {
         driver2.quit();
       }
     }
+  }
+
+  @Test
+  void geckoDriverServiceConnectToExistingFirefox() {
+    GeckoDriverService.Builder builder = new GeckoDriverService.Builder();
+
+    // Test connectToExisting method
+    builder.connectToExisting(2829);
+    GeckoDriverService service = builder.build();
+
+    assertThat(service).isNotNull();
+    service.stop();
+  }
+
+  @Test
+  void geckoDriverServiceCustomWebSocketPort() {
+    GeckoDriverService.Builder builder = new GeckoDriverService.Builder();
+
+    // Test withWebSocketPort method
+    builder.withWebSocketPort(9225);
+    GeckoDriverService service = builder.build();
+
+    assertThat(service).isNotNull();
+    service.stop();
   }
 }
