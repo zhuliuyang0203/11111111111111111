@@ -32,12 +32,12 @@ public static class PortUtilities
     /// Finds a random, free port to be listened on.
     /// </summary>
     /// <returns>A random, free port to be listened on.</returns>
-    /// <exception cref="InvalidOperationException">
-    /// Thrown when a free port cannot be found due to socket binding issues.
-    /// </exception>
     public static int FindFreePort()
     {
         var tcpListener = new TcpListener(IPAddress.IPv6Any, 0);
+
+        // Enable dual-mode to also work with IPv4 connections
+        tcpListener.Server.DualMode = true;
 
         try
         {
