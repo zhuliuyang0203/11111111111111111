@@ -173,13 +173,14 @@ public class NodeFlags implements HasRoles {
       name = "driver-configuration",
       prefixed = true,
       example =
-          "\n"
-              + "display-name = \"Firefox Nightly\"\n"
-              + "webdriver-executable = \"/usr/local/bin/geckodriver\"\n"
-              + "max-sessions = 2\n"
-              + "stereotype = \"{\\\"browserName\\\": \\\"firefox\\\", \\\"browserVersion\\\":"
-              + " \\\"86\\\", \\\"moz:firefoxOptions\\\": {\\\"binary\\\":\\\"/Applications/Firefox"
-              + " Nightly.app/Contents/MacOS/firefox\\\"}}\"")
+        """
+
+          display-name = "Firefox Nightly"
+          webdriver-executable = "/usr/local/bin/geckodriver"
+          max-sessions = 2
+          stereotype = "{\\"browserName\\": \\"firefox\\", \\"browserVersion\\":\
+           \\"86\\", \\"moz:firefoxOptions\\": {\\"binary\\":\\"/Applications/Firefox\
+           Nightly.app/Contents/MacOS/firefox\\"}}\"""")
   public List<String> driverConfiguration;
 
   @Parameter(

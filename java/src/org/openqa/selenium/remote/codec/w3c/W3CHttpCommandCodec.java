@@ -214,9 +214,10 @@ public class W3CHttpCommandCodec extends AbstractHttpCommandCodec {
 
       case GET_PAGE_SOURCE:
         return toScript(
-            "var source = document.documentElement.outerHTML; \n"
-                + "if (!source) { source = new XMLSerializer().serializeToString(document); }\n"
-                + "return source;");
+          """
+            var source = document.documentElement.outerHTML;\s
+            if (!source) { source = new XMLSerializer().serializeToString(document); }
+            return source;""");
 
       case CLEAR_LOCAL_STORAGE:
         return toScript("localStorage.clear()");
@@ -327,15 +328,17 @@ public class W3CHttpCommandCodec extends AbstractHttpCommandCodec {
         }
       case SUBMIT_ELEMENT:
         return toScript(
-            "/* submitForm */var form = arguments[0];\n"
-                + "while (form.nodeName != \"FORM\" && form.parentNode) {\n"
-                + "  form = form.parentNode;\n"
-                + "}\n"
-                + "if (!form) { throw Error('Unable to find containing form element'); }\n"
-                + "if (!form.ownerDocument) { throw Error('Unable to find owning document'); }\n"
-                + "var e = form.ownerDocument.createEvent('Event');\n"
-                + "e.initEvent('submit', true, true);\n"
-                + "if (form.dispatchEvent(e)) { HTMLFormElement.prototype.submit.call(form) }\n",
+          """
+            /* submitForm */var form = arguments[0];
+            while (form.nodeName != "FORM" && form.parentNode) {
+              form = form.parentNode;
+            }
+            if (!form) { throw Error('Unable to find containing form element'); }
+            if (!form.ownerDocument) { throw Error('Unable to find owning document'); }
+            var e = form.ownerDocument.createEvent('Event');
+            e.initEvent('submit', true, true);
+            if (form.dispatchEvent(e)) { HTMLFormElement.prototype.submit.call(form) }
+            """,
             asElement(parameters.get("id")));
 
       default:

@@ -1021,11 +1021,12 @@ public class CdpClientGenerator {
           .get()
           .addStatement(
               String.format(
-                  "return java.util.Arrays.stream(%s.values())\n"
-                      + ".filter(rs -> rs.value.equalsIgnoreCase(s))\n"
-                      + ".findFirst()\n"
-                      + ".orElseThrow(() -> new org.openqa.selenium.devtools.DevToolsException(\n"
-                      + "\"Given value \" + s + \" is not found within %s \"));",
+                """
+                  return java.util.Arrays.stream(%s.values())
+                  .filter(rs -> rs.value.equalsIgnoreCase(s))
+                  .findFirst()
+                  .orElseThrow(() -> new org.openqa.selenium.devtools.DevToolsException(
+                  "Given value " + s + " is not found within %s "));""",
                   name, name));
 
       enumDecl
