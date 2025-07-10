@@ -16,7 +16,6 @@
 # under the License.
 
 import http.server
-import socket
 import socketserver
 import threading
 
@@ -25,13 +24,8 @@ import pytest
 from selenium.webdriver.common.bidi.browser import ClientWindowInfo, ClientWindowState
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.proxy import Proxy, ProxyType
+from selenium.webdriver.common.utils import free_port
 from selenium.webdriver.common.window import WindowTypes
-
-
-def get_free_port():
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.bind(("", 0))
-        return s.getsockname()[1]
 
 
 class FakeProxyHandler(http.server.SimpleHTTPRequestHandler):
@@ -170,7 +164,7 @@ def test_create_user_context_with_direct_proxy(driver):
 def test_create_user_context_with_manual_proxy_all_params(driver):
     """Test creating a user context with manual proxy configuration."""
     # Start a fake proxy server
-    port = get_free_port()
+    port = free_port()
     fake_proxy_server = start_fake_proxy(port=port)
 
     proxy = Proxy()
@@ -210,7 +204,7 @@ def test_create_user_context_with_manual_proxy_all_params(driver):
 def test_create_user_context_with_both_params(driver):
     """Test creating a user context with both acceptInsecureCerts and proxy parameters."""
     # Start fake proxy server
-    port = get_free_port()
+    port = free_port()
     fake_proxy_server = start_fake_proxy(port=port)
 
     proxy = Proxy()
