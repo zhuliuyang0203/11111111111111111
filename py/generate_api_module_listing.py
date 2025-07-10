@@ -82,7 +82,7 @@ Selenium Documentation
             )
             for module in modules:
                 if base_module in module:
-                    if len(module.split(".")) - len(base_module.split(".")) <= 1:
+                    if len(module.split(".")) - len(base_module.split(".")) == 1:
                         f.write(f"   {module}\n")
         f.write(
             """
