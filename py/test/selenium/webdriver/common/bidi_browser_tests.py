@@ -159,6 +159,7 @@ def test_create_user_context_with_direct_proxy(driver):
     driver.browser.remove_user_context(user_context)
 
 
+@pytest.mark.xfail_chrome(reason="Chrome auto upgrades HTTP to HTTPS in untrusted networks like CI environments")
 @pytest.mark.xfail_firefox(reason="Firefox proxy settings are different")
 @pytest.mark.xfail_remote
 def test_create_user_context_with_manual_proxy_all_params(driver):
@@ -199,9 +200,10 @@ def test_create_user_context_with_manual_proxy_all_params(driver):
         fake_proxy_server.server_close()
 
 
+@pytest.mark.xfail_chrome(reason="Chrome auto upgrades HTTP to HTTPS in untrusted networks like CI environments")
 @pytest.mark.xfail_firefox(reason="Firefox proxy settings are different")
 @pytest.mark.xfail_remote
-def test_create_user_context_with_both_params(driver):
+def test_create_user_context_with_proxy_and_accept_insecure_certs(driver):
     """Test creating a user context with both acceptInsecureCerts and proxy parameters."""
     # Start fake proxy server
     port = free_port()
