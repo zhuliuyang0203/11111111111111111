@@ -33,23 +33,21 @@ public static class PortUtilities
     /// <returns>A random, free port to be listened on.</returns>
     public static int FindFreePort()
     {
+        // Locate a free port on the local machine by binding a socket to
+        // an IPEndPoint using IPAddress.Any and port 0. The socket will
+        // select a free port.
         try
         {
-            var listener = new TcpListener(IPAddress.IPv6Any, 0);
-            listener.Server.DualMode = true; // Listen on both IPv4 and IPv6
-            listener.Start();
-            int port = ((IPEndPoint)listener.LocalEndpoint).Port;
-            listener.Stop();
-            return port;
+            using var socket = new Socket(AddressFamily.InterNetworkV6, SocketType.Stream, ProtocolType.Tcp);
+            socket.Bind(new IPEndPoint(IPAddress.IPv6Loopback, 0));
+            return (socket.LocalEndPoint as IPEndPoint)!.Port;
         }
         catch (SocketException)
         {
-            // If IPv6Any is not supported, fallback to IPv4
-            var listener = new TcpListener(IPAddress.Any, 0);
-            listener.Start();
-            int port = ((IPEndPoint)listener.LocalEndpoint).Port;
-            listener.Stop();
-            return port;
+            // If IPv6 is not supported, fallback to IPv4
+            using var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            socket.Bind(new IPEndPoint(IPAddress.Loopback, 0));
+            return (socket.LocalEndPoint as IPEndPoint)!.Port;
         }
     }
 }
