@@ -35,7 +35,7 @@ public static class PortUtilities
     {
         using var socket = new Socket(AddressFamily.InterNetworkV6, SocketType.Stream, ProtocolType.Tcp);
         socket.DualMode = true;
-        socket.Bind(new IPEndPoint(IPAddress.IPv6Loopback, 0));
+        socket.Bind(new IPEndPoint(IPAddress.IPv6Any, 0));
         return (socket.LocalEndPoint as IPEndPoint)!.Port;
 
     }
