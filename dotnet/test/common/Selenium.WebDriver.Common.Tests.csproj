@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>net8.0</TargetFrameworks>
@@ -37,6 +37,7 @@
   <PropertyGroup>
     <Selenium_Manager_BinariesRootPath>..\..\..\bazel-bin\dotnet\src\webdriver\manager</Selenium_Manager_BinariesRootPath>
   </PropertyGroup>
-  <Import Project="..\..\src\webdriver\assets\nuget\Selenium.WebDriver.targets" />
+
+  <Import Project="..\..\src\webdriver\assets\nuget\build\Selenium.WebDriver.targets" />
 
 </Project>
