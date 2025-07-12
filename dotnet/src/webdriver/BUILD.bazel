@@ -163,19 +163,19 @@ csharp_library(
 
 copy_file(
     name = "readme",
-    src = "//dotnet/src/webdriver/assets:README.md",
+    src = "//dotnet/src/webdriver/assets:nuget/README.md",
     out = "README.md",
 )
 
 copy_file(
     name = "props",
-    src = "//dotnet/src/webdriver/assets:Selenium.WebDriver.targets",
+    src = "//dotnet/src/webdriver/assets:nuget/Selenium.WebDriver.targets",
     out = "Selenium.WebDriver.targets",
 )
 
 copy_file(
     name = "transitive-props",
-    src = "//dotnet/src/webdriver/assets:Selenium.WebDriver.targets",
+    src = "//dotnet/src/webdriver/assets:nuget/Selenium.WebDriver.targets",
     out = "transitive.Selenium.WebDriver.targets",
 )
 
