@@ -71,9 +71,9 @@
   </Target>
 
   <ItemGroup>
-    <None Include="$(BaseSeleniumManagerPath)\linux\selenium-manager" Pack="true" PackagePath="runtimes\linux\native" Visible="false" CopyToOutputDirectory="PreserveNewest" />
-    <None Include="$(BaseSeleniumManagerPath)\macos\selenium-manager" Pack="true" PackagePath="runtimes\osx\native" Visible="false" CopyToOutputDirectory="PreserveNewest" />
-    <None Include="$(BaseSeleniumManagerPath)\windows\selenium-manager.exe" Pack="true" PackagePath="runtimes\win\native" Visible="false" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="$(BaseSeleniumManagerPath)\linux\selenium-manager" Pack="true" PackagePath="runtimes\linux\native\" Visible="false" />
+    <None Include="$(BaseSeleniumManagerPath)\macos\selenium-manager" Pack="true" PackagePath="runtimes\osx\native\" Visible="false" />
+    <None Include="$(BaseSeleniumManagerPath)\windows\selenium-manager.exe" Pack="true" PackagePath="runtimes\win\native\" Visible="false" />
   </ItemGroup>
 
   <ItemGroup>
