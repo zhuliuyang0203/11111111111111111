@@ -44,6 +44,7 @@ public static class SeleniumManager
     private static readonly Lazy<string> _lazyBinaryFullPath = new(() =>
     {
         string? binaryFullPath = Environment.GetEnvironmentVariable("SE_MANAGER_PATH");
+
         if (binaryFullPath == null)
         {
             SupportedPlatform? platform = null;
@@ -76,15 +77,20 @@ public static class SeleniumManager
             }
 #endif
 
+            if (platform is null)
+            {
+                throw new PlatformNotSupportedException($"Selenium Manager doesn't support your runtime platform: {RuntimeInformation.OSDescription}");
+            }
+
             var currentDirectory = AppContext.BaseDirectory;
 
             binaryFullPath = platform switch
             {
-                SupportedPlatform.Windows => Path.Combine(currentDirectory, "selenium-manager", "windows", "selenium-manager.exe"),
-                SupportedPlatform.Linux => Path.Combine(currentDirectory, "selenium-manager", "linux", "selenium-manager"),
-                SupportedPlatform.MacOS => Path.Combine(currentDirectory, "selenium-manager", "macos", "selenium-manager"),
+                SupportedPlatform.Windows => Path.Combine(currentDirectory, "runtimes", "win", "native", "selenium-manager.exe"),
+                SupportedPlatform.Linux => Path.Combine(currentDirectory, "runtimes", "linux", "native", "selenium-manager"),
+                SupportedPlatform.MacOS => Path.Combine(currentDirectory, "runtimes", "osx", "native", "selenium-manager"),
                 _ => throw new PlatformNotSupportedException(
-                                        $"Selenium Manager doesn't support your runtime platform: {RuntimeInformation.OSDescription}"),
+                    $"Selenium Manager doesn't support your runtime platform: {RuntimeInformation.OSDescription}"),
             };
         }
 
